@@ -16,7 +16,8 @@ export default function LoginPage() {
     try {
       await signInWithPopup(auth, provider)
       router.push('/')
-    } catch (err) {
+    } 
+    catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } 
@@ -31,7 +32,8 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password)
       router.push('/')
-    } catch (err) {
+    } 
+    catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } 
@@ -64,7 +66,8 @@ export default function LoginPage() {
         />
         <button
           type="submit"
-          className="w-full bg-[var(--color-primary)] text-white p-2 rounded font-semibold"
+          className="w-full bg-[var(--color-accent)] text-white p-2 rounded font-semibold cursor-pointer hover:bg-[var(--color-highlight)] transition-colors"
+          disabled={!email || !password}
         >
           Sign In
         </button>
@@ -74,7 +77,7 @@ export default function LoginPage() {
 
       <button
         onClick={handleGoogleSignIn}
-        className="w-full bg-[var(--color-highlight)] text-white p-2 rounded font-semibold"
+        className="w-full bg-[var(--color-accent)] text-white p-2 rounded font-semibold cursor-pointer hover:bg-[var(--color-highlight)] transition-colors"
       >
         Sign In with Google
       </button>
