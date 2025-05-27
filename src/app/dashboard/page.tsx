@@ -10,7 +10,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!user) router.push('/login')
-  }, [user])
+  }, [user, router])
 
   if (!user) return null
 

@@ -16,8 +16,13 @@ export default function LoginPage() {
     try {
       await signInWithPopup(auth, provider)
       router.push('/')
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } 
+      else {
+        setError('An unknown error occurred')
+      }
     }
   }
 
@@ -26,8 +31,13 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password)
       router.push('/')
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } 
+      else {
+        setError('An unknown error occurred')
+      }
     }
   }
 
