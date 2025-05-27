@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -11,17 +12,17 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         {/* Logo / Brand */}
         <div className="text-xl font-bold">
-          <a href="/" className="hover:text-[var(--color-highlight)]">
+          <Link href="/" className="hover:text-[var(--color-highlight)]">
             FM Tracker
-          </a>
+          </Link>
         </div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6">
-          <a href="#" className="hover:text-[var(--color-highlight)]">Dashboard</a>
-          <a href="#" className="hover:text-[var(--color-highlight)]">Saves</a>
-          <a href="#" className="hover:text-[var(--color-highlight)]">Achievements</a>
-          <a href="#" className="hover:text-[var(--color-highlight)]">Challenges</a>
+          <Link href="#" className="hover:text-[var(--color-highlight)]">Dashboard</Link>
+          <Link href="#" className="hover:text-[var(--color-highlight)]">Saves</Link>
+          <Link href="#" className="hover:text-[var(--color-highlight)]">Achievements</Link>
+          <Link href="#" className="hover:text-[var(--color-highlight)]">Challenges</Link>
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -35,10 +36,10 @@ export default function Navbar() {
       {/* Mobile Menu Dropdown */}
       {open && (
         <div className="md:hidden bg-[var(--color-dark)] px-4 pb-4 space-y-2">
-          <a href="#" className="block hover:text-[var(--color-highlight)]">Dashboard</a>
-          <a href="#" className="block hover:text-[var(--color-highlight)]">Saves</a>
-          <a href="#" className="block hover:text-[var(--color-highlight)]">Achievements</a>
-          <a href="#" className="block hover:text-[var(--color-highlight)]">Challenges</a>
+          <Link href="#" className="block hover:text-[var(--color-highlight)]">Dashboard</Link>
+          <Link href="#" className="block hover:text-[var(--color-highlight)]">Saves</Link>
+          <Link href="#" className="block hover:text-[var(--color-highlight)]">Achievements</Link>
+          <Link href="#" className="block hover:text-[var(--color-highlight)]">Challenges</Link>
         </div>
       )}
     </nav>
