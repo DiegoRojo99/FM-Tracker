@@ -43,11 +43,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >        
         <AuthProvider>
+          {/* Navbar should always be at the top */}
           <Navbar />
-          {children}
+          {/* Main content should take up the remaining space */}
+          <div className="flex-grow">
+            {children}
+          </div>
+          {/* Footer should always be at the bottom */}
           <Footer />
         </AuthProvider>
       </body>
