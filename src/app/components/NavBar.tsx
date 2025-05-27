@@ -19,7 +19,7 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6">
-          <Link href="#" className="hover:text-[var(--color-highlight)]">Dashboard</Link>
+          <Link href="dashboard" className="hover:text-[var(--color-highlight)]">Dashboard</Link>
           <Link href="#" className="hover:text-[var(--color-highlight)]">Saves</Link>
           <Link href="#" className="hover:text-[var(--color-highlight)]">Achievements</Link>
           <Link href="#" className="hover:text-[var(--color-highlight)]">Challenges</Link>
