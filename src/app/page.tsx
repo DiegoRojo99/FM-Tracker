@@ -7,7 +7,7 @@ export default function LandingPage() {
         <h2 className="text-4xl md:text-5xl font-bold mb-4">Track Your Football Manager Legacy</h2>
         <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto">Log your saves, earn achievements, complete challenges, and build your career history — all in one place.</p>
         <a
-          href="#login"
+          href="login"
           className="inline-block bg-[var(--highlight)] text-white px-6 py-3 rounded-lg font-semibold shadow hover:opacity-90 transition"
         >
           Get Started
