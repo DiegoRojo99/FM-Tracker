@@ -3,13 +3,16 @@
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
+import { useAuth } from './AuthProvider';
+import { NavBarProfile } from './NavBarProfile';
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <nav className="bg-[var(--color-dark)] text-[var(--color-foreground)] shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         {/* Logo / Brand */}
         <div className="text-xl font-bold">
           <Link href="/" className="hover:text-[var(--color-highlight)]">
@@ -19,10 +22,17 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6">
-          <Link href="dashboard" className="hover:text-[var(--color-highlight)]">Dashboard</Link>
-          <Link href="#" className="hover:text-[var(--color-highlight)]">Saves</Link>
-          <Link href="#" className="hover:text-[var(--color-highlight)]">Achievements</Link>
-          <Link href="#" className="hover:text-[var(--color-highlight)]">Challenges</Link>
+          {/* <Link href="dashboard" className="flex items-center hover:text-[var(--color-highlight)]">Dashboard</Link> */}
+          <NavBarProfile />
+
+          {/* Uncomment these links when implemented */}
+          {/* <Link href="#" className="hover:text-[var(--color-highlight)]">Saves</Link> */}
+          {/* <Link href="#" className="hover:text-[var(--color-highlight)]">Achievements</Link> */}
+          {/* <Link href="#" className="hover:text-[var(--color-highlight)]">Challenges</Link> */}
+
+          {/* <Link href="#" className="hover:text-[var(--color-highlight)]">Saves</Link> */}
+          {/* <Link href="#" className="hover:text-[var(--color-highlight)]">Achievements</Link> */}
+          {/* <Link href="#" className="hover:text-[var(--color-highlight)]">Challenges</Link> */}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -36,10 +46,19 @@ export default function Navbar() {
       {/* Mobile Menu Dropdown */}
       {open && (
         <div className="md:hidden bg-[var(--color-dark)] px-4 pb-4 space-y-2">
-          <Link href="#" className="block hover:text-[var(--color-highlight)]">Dashboard</Link>
-          <Link href="#" className="block hover:text-[var(--color-highlight)]">Saves</Link>
-          <Link href="#" className="block hover:text-[var(--color-highlight)]">Achievements</Link>
-          <Link href="#" className="block hover:text-[var(--color-highlight)]">Challenges</Link>
+          {/* <Link href="#" className="block hover:text-[var(--color-highlight)]">Dashboard</Link> */}
+          {/* <Link href="#" className="block hover:text-[var(--color-highlight)]">Saves</Link> */}
+          {/* <Link href="#" className="block hover:text-[var(--color-highlight)]">Achievements</Link> */}
+          {/* <Link href="#" className="block hover:text-[var(--color-highlight)]">Challenges</Link> */}
+          { user ? (
+            <Link href="/profile" className="block hover:text-[var(--color-highlight)]">
+              Profile
+            </Link>
+          ) : (
+            <Link href="/login" className="block hover:text-[var(--color-highlight)]">
+              Login
+            </Link>
+          )}
         </div>
       )}
     </nav>
