@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/NavBar";
-import Footer from "./components/Footer";
+import Navbar from "@/app/components/NavBar";
+import Footer from "@/app/components/Footer";
+import { AuthProvider } from '@/app/components/AuthProvider'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,11 +43,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar />
-        {children}
-        <Footer />
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+      >        
+        <AuthProvider>
+          {/* Navbar should always be at the top */}
+          <Navbar />
+          {/* Main content should take up the remaining space */}
+          <div className="flex-grow">
+            {children}
+          </div>
+          {/* Footer should always be at the bottom */}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
