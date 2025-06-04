@@ -1,8 +1,6 @@
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
-import { getApp } from 'firebase/app'
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { User } from 'firebase/auth'
-
-const db = getFirestore(getApp())
+import { db } from '@/lib/firebase'
 
 export async function createUserIfNotExists(user: User) {
   if (!user?.uid) return
