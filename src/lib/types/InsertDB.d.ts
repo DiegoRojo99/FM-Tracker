@@ -1,6 +1,6 @@
 export type CountryInput = {
   name: string
-  code: string // ISO Alpha-2, e.g. "IT", "ENG"
+  code: string
   flag: string
 }
 
@@ -8,7 +8,7 @@ export type CompetitionInput = {
   name: string
   logoUrl: string
   countryCode: string
-  type: 'league' | 'cup' | 'supercup'
+  type: 'League' | 'Cup' | 'Super Cup'
 }
 
 export type TeamInput = {
