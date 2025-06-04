@@ -3,7 +3,6 @@ export type ApiLeagueSeason = {
   start: string;
   end: string;
   current: boolean;
-  coverage: Record<string, any>;
 };
 
 export type APICountry = {
