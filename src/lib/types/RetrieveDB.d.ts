@@ -16,3 +16,9 @@ export type Team = TeamInput & {
 export type Game = GameInput & {
   id: string
 }
+
+export type League = LeagueInput & {
+  id: string
+  country?: Country
+  teams?: Team[]
+}

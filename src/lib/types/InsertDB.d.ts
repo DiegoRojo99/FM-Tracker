@@ -25,3 +25,9 @@ export type GameInput = {
   releaseDate: Date
   coverUrl: string
 }
+
+export type LeagueInput = {
+  name: string
+  logoUrl: string
+  countryCode: string
+}
