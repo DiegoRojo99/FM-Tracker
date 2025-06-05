@@ -31,6 +31,7 @@ async function seedLeagues() {
 
   const filtered = leagues.filter((l: ApiLeague) =>
     fmCountries.includes(l.country.name) &&
+    !seededCountries.includes(l.country.name) &&
     l.seasons.some((s: ApiLeagueSeason) => s.year === targetSeason) &&
     l.league && l.league.name && l.league.logo
   );
