@@ -3,19 +3,13 @@ import { fetchFromApi } from '../lib/apiFootball';
 import { db } from '../lib/firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { ApiTeam } from '@/lib/types/FootballAPI';
-
-const leaguesToSeed = [
-  { id: 39, season: 2023 }, // Premier League
-  { id: 135, season: 2023 }, // Serie A
-  { id: 78, season: 2023 }, // Bundesliga
-  { id: 271, season: 2023 }, // Hungarian NB I
-  { id: 61, season: 2023 }, // La Liga
-  { id: 140, season: 2023 }, // Ligue 1
-  { id: 88, season: 2023 }, // Eredivisie
-];
+import { leaguesToSeed, seededLeagues } from './data/leagues';
 
 async function seedTeams() {
-  for (const league of leaguesToSeed) {
+  const unseededLeagues = leaguesToSeed.filter(
+    league => !seededLeagues.some(l => l.id === league.id)
+  );
+  for (const league of unseededLeagues) {
     console.log(`📥 Fetching teams for league ${league.id} (${league.season})`);
 
     const teams: ApiTeam[] = await fetchFromApi(
