@@ -5,12 +5,23 @@ import { collection, doc, setDoc } from 'firebase/firestore';
 import { ApiLeague, ApiLeagueSeason } from '@/lib/types/FootballAPI';
 
 // List of FM-supported countries (can expand)
-const fmCountries = [
-  'England', 'Italy', 'Germany', 'France', 'Spain', 
-  'Portugal', 'Netherlands', 'Scotland', 'Brazil', 'Argentina', 
-  'USA', 'Mexico', 'Belgium', 'Turkey', 'Greece', 'Switzerland', 
-  'Denmark', 'Sweden', 'Norway',
-  'Hungary', 'Slovenia', 'Czech-Republic',
+const seededCountries = [
+  'England', 'Italy', 'Germany', 'France', 'Spain', // Top 5 leagues
+  'Portugal', 'Netherlands', 'Scotland', 'Belgium', 'Turkey', // Next 5 european leagues
+  'Brazil', 'Argentina', // South America
+  'USA', 'Mexico', // North America
+  'Greece', 'Switzerland', // Other European leagues
+  'Denmark', 'Sweden', 'Norway', // Nordic countries
+  'Hungary', 'Slovenia', 'Czech-Republic', // Coached teams  
+  'Wales', 'Northern-Ireland', 'Ireland', // UK regions
+  'Poland', 'Austria', 'Slovakia', // Central Europe
+  'Finland', 'Iceland', // Nordic countries
+  'South Africa', // Africa
+  'Japan', 'South Korea', // Asia
+  'Australia' // Oceania
+];
+
+const fmCountries: string[] = [
 ];
 
 const targetSeason = 2023; // FM24 season
