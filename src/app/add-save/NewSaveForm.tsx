@@ -2,16 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { serverTimestamp } from 'firebase/firestore';
 import TeamGrid from './TeamGrid';
-import { Country, League } from '@/lib/types/RetrieveDB';
+import { Country, League, Team } from '@/lib/types/RetrieveDB';
 
 export default function NewSaveForm() {
   const { user } = useAuth();
-  const [countries, setCountries] = useState([]);
-  const [leagues, setLeagues] = useState([]);
-  const [teams, setTeams] = useState([]);
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [leagues, setLeagues] = useState<League[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
 
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedLeague, setSelectedLeague] = useState('');
@@ -37,7 +36,8 @@ export default function NewSaveForm() {
       fetch(`/api/teams?leagueId=${selectedLeague}`)
         .then(res => res.json())
         .then(setTeams);
-    } else {
+    } 
+    else {
       setTeams([]);
       setSelectedTeam('');
     }
@@ -55,7 +55,21 @@ export default function NewSaveForm() {
       createdAt: serverTimestamp()
     };
 
-    await addDoc(collection(db, 'saves'), newSave);
+    const userToken = await user.getIdToken();
+    const saveResponse = await fetch('/api/saves', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+      body: JSON.stringify(newSave),
+    });
+
+    if (!saveResponse.ok) {
+      const errorData = await saveResponse.json();
+      alert(`Error creating save: ${errorData.message}`);
+      return;
+    }
+
     alert('✅ Save created!');
     setTimeout(() => {
       window.location.href = '/saves';

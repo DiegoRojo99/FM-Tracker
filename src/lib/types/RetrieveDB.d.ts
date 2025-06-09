@@ -22,3 +22,12 @@ export type League = LeagueInput & {
   country?: Country
   teams?: Team[]
 }
+
+export type Save = {
+  id: string;
+  userId: string;
+  createdAt: Timestamp;
+  countryCode: string;
+  leagueId: number;
+  teamId: number;
+}

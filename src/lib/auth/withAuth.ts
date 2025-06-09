@@ -20,6 +20,7 @@ export async function withAuth(
     return handler(decoded.uid);
   } 
   catch (err) {
+    console.error('Error verifying token:', err);
     return new Response('Unauthorized: Invalid token', { status: 401 });
   }
 }
