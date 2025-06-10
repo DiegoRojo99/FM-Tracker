@@ -54,7 +54,7 @@ export default function NewSaveForm() {
     const newSave = {
       countryCode: selectedCountry,
       leagueId: Number(selectedLeague),
-      teamId: Number(selectedTeam),
+      startingTeamId: Number(selectedTeam),
       createdAt: serverTimestamp()
     };
 

@@ -41,7 +41,7 @@ export default function SavesPage() {
         {saves.map(save => (
           // <Link key={save.id} href={`/saves/${save.id}`}>
             <div key={save.id} className="p-4 rounded-xl border hover:shadow transition-all">
-              <p>Team ID: {save.teamId}, League ID: {save.leagueId}, Country Code: {save.countryCode}</p>
+              <p>Team ID: {save.startingTeamId}, League ID: {save.leagueId}, Country Code: {save.countryCode}</p>
             </div>
           // </Link>
         ))}
