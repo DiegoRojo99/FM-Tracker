@@ -13,6 +13,11 @@ export type Team = TeamInput & {
   country?: Country
 }
 
+export type TeamWithLogo = TeamInput & {
+  id: string
+  logo: string
+}
+
 export type Game = GameInput & {
   id: string
 }
@@ -21,13 +26,4 @@ export type League = LeagueInput & {
   id: string
   country?: Country
   teams?: Team[]
-}
-
-export type Save = {
-  id: string;
-  userId: string;
-  createdAt: Timestamp;
-  countryCode: string;
-  leagueId: number;
-  teamId: number;
 }

@@ -16,21 +16,25 @@ export default function NewSaveForm() {
   const [selectedLeague, setSelectedLeague] = useState('');
   const [selectedTeam, setSelectedTeam] = useState('');
 
+  // Fetch countries on mount
   useEffect(() => {
     fetch('/api/countries').then(res => res.json()).then(setCountries);
   }, []);
 
+  // Fetch leagues when country changes
   useEffect(() => {
     if (selectedCountry) {
       fetch(`/api/leagues?countryCode=${selectedCountry}`)
         .then(res => res.json())
         .then(setLeagues);
-    } else {
+    } 
+    else {
       setLeagues([]);
       setSelectedLeague('');
     }
   }, [selectedCountry]);
 
+  // Fetch teams when league changes
   useEffect(() => {
     if (selectedLeague) {
       fetch(`/api/teams?leagueId=${selectedLeague}`)
@@ -48,10 +52,9 @@ export default function NewSaveForm() {
     if (!user || !selectedTeam || !selectedLeague || !selectedCountry) return;
 
     const newSave = {
-      userId: user.uid,
       countryCode: selectedCountry,
       leagueId: Number(selectedLeague),
-      teamId: Number(selectedTeam),
+      startingTeamId: Number(selectedTeam),
       createdAt: serverTimestamp()
     };
 
@@ -80,10 +83,10 @@ export default function NewSaveForm() {
     <form onSubmit={handleSubmit} className="p-6 space-y-4 w-fit">
       <div>
         <label>Country</label>
-        <select onChange={e => setSelectedCountry(e.target.value)} className="w-full">
-          <option className='text-black' value="">-- Select a country --</option>
+        <select onChange={e => setSelectedCountry(e.target.value)} className="w-full my-2 bg-[var(--color-dark)] disabled:opacity-50" disabled={!countries.length}>
+          <option className='text-black bg-white' value="">-- Select a country --</option>
           {countries.map((c: Country) => (
-            <option className='text-black' key={c.code} value={c.code ?? ''}>
+            <option className='text-black bg-white' key={c.code} value={c.code ?? ''}>
               {c.name}
             </option>
           ))}
@@ -92,10 +95,10 @@ export default function NewSaveForm() {
 
       <div>
         <label>League</label>
-        <select onChange={e => setSelectedLeague(e.target.value)} disabled={!selectedCountry} className="w-full">
-          <option className='text-black' value="">-- Select a league --</option>
+        <select onChange={e => setSelectedLeague(e.target.value)} disabled={!selectedCountry} className="w-full my-2 bg-[var(--color-dark)] disabled:opacity-50">
+          <option className='text-black bg-white' value="">-- Select a league --</option>
           {leagues.map((l: League) => (
-            <option className='text-black' key={l.id} value={l.id}>{l.name}</option>
+            <option className='text-black bg-white' key={l.id} value={l.id}>{l.name}</option>
           ))}
         </select>
       </div>
