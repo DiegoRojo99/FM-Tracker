@@ -1,7 +1,6 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { withAuth } from '@/lib/auth/withAuth';
-
 import type { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
