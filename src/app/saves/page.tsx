@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-// import Link from 'next/link'
+import Link from 'next/link'
 import { Save } from '@/lib/types/RetrieveDB'
 import { useAuth } from '../components/AuthProvider';
 
@@ -39,11 +39,11 @@ export default function SavesPage() {
       <h1 className="text-2xl font-bold mb-4">Your Saves</h1>
       <div className="grid gap-4">
         {saves.map(save => (
-          // <Link key={save.id} href={`/saves/${save.id}`}>
+          <Link key={save.id} href={`/saves/${save.id}`}>
             <div key={save.id} className="p-4 rounded-xl border hover:shadow transition-all">
               <p>Team ID: {save.startingTeamId}, League ID: {save.leagueId}, Country Code: {save.countryCode}</p>
             </div>
-          // </Link>
+          </Link>
         ))}
       </div>
     </div>
