@@ -1,5 +1,3 @@
-import { CareerStint } from "./InsertDB"
-
 export type Country = CountryInput & {
   id: string
 }
