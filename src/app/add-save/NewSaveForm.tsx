@@ -83,10 +83,10 @@ export default function NewSaveForm() {
     <form onSubmit={handleSubmit} className="p-6 space-y-4 w-fit">
       <div>
         <label>Country</label>
-        <select onChange={e => setSelectedCountry(e.target.value)} className="w-full" disabled={!countries.length}>
-          <option className='text-black' value="">-- Select a country --</option>
+        <select onChange={e => setSelectedCountry(e.target.value)} className="w-full my-2 bg-[var(--color-dark)] disabled:opacity-50" disabled={!countries.length}>
+          <option className='text-black bg-white' value="">-- Select a country --</option>
           {countries.map((c: Country) => (
-            <option className='text-black' key={c.code} value={c.code ?? ''}>
+            <option className='text-black bg-white' key={c.code} value={c.code ?? ''}>
               {c.name}
             </option>
           ))}
@@ -95,10 +95,10 @@ export default function NewSaveForm() {
 
       <div>
         <label>League</label>
-        <select onChange={e => setSelectedLeague(e.target.value)} disabled={!selectedCountry} className="w-full">
-          <option className='text-black' value="">-- Select a league --</option>
+        <select onChange={e => setSelectedLeague(e.target.value)} disabled={!selectedCountry} className="w-full my-2 bg-[var(--color-dark)] disabled:opacity-50">
+          <option className='text-black bg-white' value="">-- Select a league --</option>
           {leagues.map((l: League) => (
-            <option className='text-black' key={l.id} value={l.id}>{l.name}</option>
+            <option className='text-black bg-white' key={l.id} value={l.id}>{l.name}</option>
           ))}
         </select>
       </div>
