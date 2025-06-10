@@ -17,6 +17,7 @@ export type TeamInput = {
   countryCode: string
   location: { lat: number; lng: number }
   competitionId: string
+  national: boolean
 }
 
 export type GameInput = {
