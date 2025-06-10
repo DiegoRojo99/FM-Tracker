@@ -15,6 +15,11 @@ export type Team = TeamInput & {
   country?: Country
 }
 
+export type TeamWithLogo = TeamInput & {
+  id: string
+  logo: string
+}
+
 export type Game = GameInput & {
   id: string
 }
