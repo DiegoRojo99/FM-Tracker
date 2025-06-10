@@ -31,3 +31,15 @@ export type LeagueInput = {
   logoUrl: string
   countryCode: string
 }
+
+export type CareerStint = {
+  id?: string;
+  teamId: string;
+  leagueId?: string;            // League where club competes (optional)
+  countryCode: string;          // For convenience/lookup
+  isNationalTeam: boolean;
+  startDate: string;            // ISO date, e.g. "2025-07-01"
+  endDate?: string;             // Null if ongoing
+  seasons: string[];            // e.g. ["2024/25", "2025/26"]
+  notes?: string;               // For things like 'got fired', 'won league'
+};

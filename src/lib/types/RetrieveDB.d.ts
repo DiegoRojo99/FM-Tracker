@@ -1,3 +1,5 @@
+import { CareerStint } from "./InsertDB"
+
 export type Country = CountryInput & {
   id: string
 }
@@ -29,5 +31,6 @@ export type Save = {
   createdAt: Timestamp;
   countryCode: string;
   leagueId: number;
-  teamId: number;
+  startingTeamId: number;
+  career?: CareerStint[];
 }
