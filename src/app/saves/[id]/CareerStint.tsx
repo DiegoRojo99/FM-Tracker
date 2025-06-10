@@ -1,4 +1,5 @@
 'use client';
+import FootballLoader from "@/app/components/FootBallLoader";
 import { CareerStint } from "@/lib/types/InsertDB";
 import { TeamWithLogo } from "@/lib/types/RetrieveDB";
 import Image from "next/image";
@@ -19,7 +20,7 @@ const CareerStintUI: React.FC<CareerStintProps> = ({ careerStint }) => {
     fetchTeamById(careerStint.teamId).then(setTeam);
   }, [careerStint.teamId]);
 
-  if (!team) return <div>Loading...</div>;
+  if (!team) return <FootballLoader />;
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
       {team.logo && ( <Image src={team.logo} alt={team.name} width={128} height={128} /> )}

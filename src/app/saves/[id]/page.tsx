@@ -5,6 +5,7 @@ import { notFound, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import CareerStintUI from './CareerStint';
 import { SaveWithCareer } from '@/lib/types/Save';
+import FootballLoader from '@/app/components/FootBallLoader';
 
 export default function SavePage() {
   const params = useParams();
@@ -46,13 +47,8 @@ export default function SavePage() {
     fetchData();
   }, [id, user]);
 
-  if (loading) {
-    return <div className="p-6">Loading...</div>;
-  }
-
-  if (!saveDetails) {
-    notFound();
-  }
+  if (loading) return <FootballLoader />;
+  if (!saveDetails) notFound();
 
   return (
     <div className="p-6">

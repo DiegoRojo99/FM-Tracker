@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '../components/AuthProvider';
 import { SaveWithDetails } from '@/lib/types/Save';
 import Image from 'next/image';
+import FootballLoader from '../components/FootBallLoader';
 
 export default function SavesPage() {
   const { user } = useAuth();
@@ -32,7 +33,7 @@ export default function SavesPage() {
   }, [user])
 
   if (loading) {
-    return <div className="p-6">Loading...</div>
+    return <FootballLoader />;
   }
 
   return (
