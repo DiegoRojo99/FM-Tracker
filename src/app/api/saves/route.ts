@@ -32,7 +32,6 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    console.log('Received body:', body);
 
     // Validate required fields
     if (!body.teamId) {
@@ -42,7 +41,6 @@ export async function POST(req: NextRequest) {
 
     // Reference user's saves subcollection
     const savesRef = collection(db, 'users', uid, 'saves');
-    console.log('Saving data to Firestore:', savesRef.path);
 
     // Add userId to the document explicitly for easier querying
     const saveData = {
