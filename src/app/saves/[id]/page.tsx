@@ -1,16 +1,16 @@
 'use client';
 import { useAuth } from '@/app/components/AuthProvider';
 import { CareerStint } from '@/lib/types/InsertDB';
-import { Save } from '@/lib/types/RetrieveDB';
 import { notFound, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import CareerStintUI from './CareerStint';
+import { SaveWithCareer } from '@/lib/types/Save';
 
 export default function SavePage() {
   const params = useParams();
   const id = params?.id;
   const { user } = useAuth();
-  const [saveDetails, setSaveDetails] = useState<Save | null>(null);
+  const [saveDetails, setSaveDetails] = useState<SaveWithCareer | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
