@@ -18,10 +18,12 @@ const seededCountries = [
   'Finland', 'Iceland', // Nordic countries
   'South Africa', // Africa
   'Japan', 'South Korea', // Asia
-  'Australia' // Oceania
+  'Australia',  // Oceania
+  'World'
 ];
 
 const fmCountries: string[] = [
+  
 ];
 
 const targetSeason = 2023; // FM24 season
