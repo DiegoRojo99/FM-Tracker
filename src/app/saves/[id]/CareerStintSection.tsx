@@ -6,6 +6,7 @@ import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 import { SaveWithCareer } from '@/lib/types/Save';
 import { useAuth } from '@/app/components/AuthProvider';
+import { TeamWithLogo } from '@/lib/types/RetrieveDB';
 
 type Props = {
   saveDetails: SaveWithCareer;
@@ -13,7 +14,7 @@ type Props = {
 
 export default function CareerStintsSection({ saveDetails }: Props) {
   const { user } = useAuth();
-  const [teamData, setTeamData] = useState<Record<string, any>>({});
+  const [teamData, setTeamData] = useState<Record<string, TeamWithLogo>>({});
   const [isOpen, setIsOpen] = useState(false);
 
   // Form fields
@@ -31,7 +32,7 @@ export default function CareerStintsSection({ saveDetails }: Props) {
         fetch(`/api/teams/${s.teamId}`).then((res) => res.json())
       );
       const results = await Promise.all(promises);
-      const map: Record<string, any> = {};
+      const map: Record<string, TeamWithLogo> = {};
       results.forEach((team) => {
         map[team.id] = team;
       });
