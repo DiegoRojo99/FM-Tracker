@@ -1,5 +1,4 @@
 'use client';
-import FootballLoader from "@/app/components/FootBallLoader";
 import { CareerStint } from "@/lib/types/InsertDB";
 import { TeamWithLogo } from "@/lib/types/RetrieveDB";
 import Image from "next/image";
