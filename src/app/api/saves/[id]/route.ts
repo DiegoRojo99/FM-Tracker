@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
       return new Response('Unauthorized', { status: 401 });
     }
 
-     // Extract the save ID from the URL
+    // Extract the save ID from the URL
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
 
@@ -32,6 +32,6 @@ export async function GET(req: NextRequest) {
       careerData = careersSnapshot.docs.map(doc => doc.data()) as CareerStint[];
     }
 
-    return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData }), { status: 200 });
+    return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData, id: saveId }), { status: 200 });
   });
 }

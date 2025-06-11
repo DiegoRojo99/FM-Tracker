@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.4",
     "dotenv": "^16.5.0",
     "firebase": "^11.8.1",
     "firebase-admin": "^13.4.0",
