@@ -1,0 +1,173 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import CareerStintUI from './CareerStint';
+import { Dialog } from '@headlessui/react';
+import { X } from 'lucide-react';
+import { SaveWithCareer } from '@/lib/types/Save';
+import { useAuth } from '@/app/components/AuthProvider';
+
+type Props = {
+  saveDetails: SaveWithCareer;
+};
+
+export default function CareerStintsSection({ saveDetails }: Props) {
+  const { user } = useAuth();
+  const [teamData, setTeamData] = useState<Record<string, any>>({});
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Form fields
+  const [form, setForm] = useState({
+    teamId: '',
+    startDate: '',
+    endDate: '',
+    isNational: false,
+  });
+
+  useEffect(() => {
+    async function fetchTeams() {
+      if (!saveDetails.career?.length) return;
+      const promises = saveDetails.career?.map((s) =>
+        fetch(`/api/teams/${s.teamId}`).then((res) => res.json())
+      );
+      const results = await Promise.all(promises);
+      const map: Record<string, any> = {};
+      results.forEach((team) => {
+        map[team.id] = team;
+      });
+      setTeamData(map);
+    }
+
+    fetchTeams();
+  }, [saveDetails.career]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const checked = type === 'checkbox' && 'checked' in e.target ? (e.target as HTMLInputElement).checked : undefined;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    if (!user) {
+      console.error('User is not authenticated');
+      return;
+    }
+    const token = await user.getIdToken();
+    if (!token) {
+      console.error('User is not authenticated');
+      return;
+    }
+
+    await fetch(`/api/saves/${saveDetails.id}/career`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        teamId: form.teamId,
+        startDate: form.startDate,
+        endDate: form.endDate,
+        isNational: form.isNational,
+      }),
+    });
+
+    setIsOpen(false);
+
+    // Reset form
+    setForm({ teamId: '', startDate: '', endDate: '', isNational: false });
+  };
+
+  return (
+    <section className="w-full">
+      <div className="mb-6 flex flex-row items-center justify-between">
+        <h3 className="text-l font-bold">Career Stints</h3>
+        <button
+          className="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+          onClick={() => setIsOpen(true)}
+        >
+          +
+        </button>
+      </div>
+
+      {saveDetails.career?.length ? (
+        <ul className="space-y-4">
+          {saveDetails.career.sort((a, b) => (a.startDate < b.startDate ? -1 : 1)).map((stint, idx) => (
+            <CareerStintUI key={idx} careerStint={stint} teamData={teamData[stint.teamId]} />
+          ))}
+        </ul>
+      ) : (
+        <div>No career stints found.</div>
+      )}
+
+      {/* Modal */}
+      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="fixed z-50 inset-0 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen px-4">
+          <Dialog.Panel className="w-full max-w-md bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-xl relative">
+            <button
+              className="absolute top-4 right-4 text-zinc-500 hover:text-zinc-800 dark:hover:text-white"
+              onClick={() => setIsOpen(false)}
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <Dialog.Title className="text-xl font-bold mb-4">Add Career Stint</Dialog.Title>
+
+            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+              <div>
+                <label className="block text-sm mb-1">Team ID</label>
+                <input
+                  name="teamId"
+                  value={form.teamId}
+                  onChange={handleChange}
+                  className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
+                  placeholder="Enter team ID"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm mb-1">Start Date</label>
+                <input
+                  type="date"
+                  name="startDate"
+                  value={form.startDate}
+                  onChange={handleChange}
+                  className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm mb-1">End Date (optional)</label>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={form.endDate}
+                  onChange={handleChange}
+                  className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  name="isNational"
+                  checked={form.isNational}
+                  onChange={handleChange}
+                />
+                <label className="text-sm">National Team</label>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded p-2"
+              >
+                Save
+              </button>
+            </form>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+    </section>
+  );
+}

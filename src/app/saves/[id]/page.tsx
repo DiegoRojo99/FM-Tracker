@@ -1,11 +1,10 @@
 'use client';
 import { useAuth } from '@/app/components/AuthProvider';
-import { CareerStint } from '@/lib/types/InsertDB';
 import { notFound, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import CareerStintUI from './CareerStint';
 import { SaveWithCareer } from '@/lib/types/Save';
 import FootballLoader from '@/app/components/FootBallLoader';
+import CareerStintsSection from './CareerStintSection';
 
 export default function SavePage() {
   const params = useParams();
@@ -52,14 +51,7 @@ export default function SavePage() {
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-semibold mb-2">Career Stints</h2>
-      {Array.isArray(saveDetails.career) && saveDetails.career.length > 0 ? (
-        <ul className="space-y-4">
-          {saveDetails.career.map((stint: CareerStint, idx: number) =>  <CareerStintUI key={idx} careerStint={stint} />)}
-        </ul>
-      ) : (
-        <div>No career stints found.</div>
-      )}
+      <CareerStintsSection saveDetails={saveDetails} />
     </div>
   );
 }
