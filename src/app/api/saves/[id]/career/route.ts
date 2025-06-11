@@ -1,7 +1,6 @@
 import { db } from '@/lib/firebase';
 import { withAuth } from '@/lib/auth/withAuth';
 import {
-  doc,
   collection,
   addDoc,
   Timestamp
