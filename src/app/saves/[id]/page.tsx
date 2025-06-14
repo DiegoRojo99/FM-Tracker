@@ -50,7 +50,7 @@ export default function SavePage() {
   if (!saveDetails) notFound();
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <CareerStintsSection saveDetails={saveDetails} />
     </div>
   );
