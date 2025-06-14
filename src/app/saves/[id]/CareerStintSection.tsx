@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import CareerStintUI from './CareerStint';
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 import { SaveWithCareer } from '@/lib/types/Save';
 import { useAuth } from '@/app/components/AuthProvider';
 import { TeamWithLogo } from '@/lib/types/RetrieveDB';
+import CareerTimeline from './CareerTimeline';
 
 type Props = {
   saveDetails: SaveWithCareer;
@@ -81,7 +81,7 @@ export default function CareerStintsSection({ saveDetails }: Props) {
 
   return (
     <section className="w-full">
-      <div className="mb-6 flex flex-row items-center justify-between">
+      <div className="mb-2 sm:mb-6 flex flex-row items-center justify-between">
         <h3 className="text-l font-bold">Career Stints</h3>
         <button
           className="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
@@ -92,11 +92,10 @@ export default function CareerStintsSection({ saveDetails }: Props) {
       </div>
 
       {saveDetails.career?.length ? (
-        <ul className="space-y-4">
-          {saveDetails.career.sort((a, b) => (a.startDate < b.startDate ? -1 : 1)).map((stint, idx) => (
-            <CareerStintUI key={idx} careerStint={stint} teamData={teamData[stint.teamId]} />
-          ))}
-        </ul>
+        <CareerTimeline
+          stints={saveDetails.career}
+          teamData={teamData}
+        />
       ) : (
         <div>No career stints found.</div>
       )}
