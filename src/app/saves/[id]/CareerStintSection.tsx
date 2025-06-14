@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import CareerStintUI from './CareerStint';
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 import { SaveWithCareer } from '@/lib/types/Save';
