@@ -82,7 +82,7 @@ export default function CareerStintsSection({ saveDetails }: Props) {
 
   return (
     <section className="w-full">
-      <div className="mb-6 flex flex-row items-center justify-between">
+      <div className="mb-2 sm:mb-6 flex flex-row items-center justify-between">
         <h3 className="text-l font-bold">Career Stints</h3>
         <button
           className="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"

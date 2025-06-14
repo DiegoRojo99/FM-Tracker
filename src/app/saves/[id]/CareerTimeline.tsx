@@ -40,10 +40,10 @@ export default function CareerTimeline({ stints, teamData }: Props) {
 
   return (
     <div className="overflow-auto py-6">
-      <div className="relative flex flex-col gap-8 md:flex-row md:gap-12 md:min-w-max">
+      <div className="relative flex flex-col gap-8 md:flex-row md:gap-12 md:min-w-max items-center">
 
         {/* Timeline Line */}
-        <div className="absolute top-0 left-1/8 -translate-x-1/2 h-full w-0.5 bg-purple-500 md:top-4 md:left-0 md:h-0.5 md:w-full z-0" />
+        <div className="absolute top-0 left-2/7 -translate-x-1/2 h-full w-0.5 bg-purple-500 md:top-4 md:left-0 md:h-0.5 md:w-full z-0" />
 
         {grouped.map(({ startDate, entries }, idx) => (
           <div
@@ -64,13 +64,13 @@ export default function CareerTimeline({ stints, teamData }: Props) {
                 return (
                   <div
                     key={sIdx}
-                    className="bg-purple-50 dark:bg-purple-900 border border-purple-600 rounded-lg shadow p-3 w-48 flex flex-col items-center text-center"
+                    className="bg-purple-50 dark:bg-purple-900 border border-purple-600 rounded-lg shadow p-3 w-60 flex flex-col items-center text-center"
                   >
                     {team?.logo && (
                       <img
                         src={team.logo}
                         alt={team.name}
-                        className="h-12 w-12 object-contain mb-2"
+                        className="h-20 w-20 object-contain mb-2"
                       />
                     )}
                     <div className="font-semibold">{team?.name}</div>
