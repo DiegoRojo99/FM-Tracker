@@ -1,10 +1,12 @@
 'use client';
 
 import { CareerStint } from '@/lib/types/InsertDB';
+import { TeamWithLogo } from '@/lib/types/RetrieveDB';
+import Image from 'next/image';
 
 type Props = {
   stints: CareerStint[];
-  teamData: Record<string, any>;
+  teamData: Record<string, TeamWithLogo>;
 };
 
 function groupStintsByStart(stints: CareerStint[]) {
@@ -24,12 +26,8 @@ function groupStintsByStart(stints: CareerStint[]) {
     }));
 }
 
-function formatDate(date: any): string {
-  if (typeof date === 'object' && date?.seconds) {
-    date = new Date(date.seconds * 1000);
-  } else if (typeof date === 'string') {
-    date = new Date(date);
-  }
+function formatDate(datePassed: string): string {
+  const date = new Date(datePassed);
   const month = date.toLocaleString(undefined, { month: 'long' });
   const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
   return `${capitalizedMonth} ${date.getFullYear()}`;
@@ -67,7 +65,9 @@ export default function CareerTimeline({ stints, teamData }: Props) {
                     className="bg-purple-50 dark:bg-purple-900 border border-purple-600 rounded-lg shadow p-3 w-60 flex flex-col items-center text-center"
                   >
                     {team?.logo && (
-                      <img
+                      <Image
+                        width={128}
+                        height={128}
                         src={team.logo}
                         alt={team.name}
                         className="h-20 w-20 object-contain mb-2"
