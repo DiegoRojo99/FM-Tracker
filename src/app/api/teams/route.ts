@@ -4,10 +4,30 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const leagueId = req.nextUrl.searchParams.get('leagueId');
-  if (!leagueId) return NextResponse.json([], { status: 400 });
+  const nameParam = req.nextUrl.searchParams.get('name');
+  if (leagueId) {
+    if (isNaN(Number(leagueId))) return NextResponse.json([], { status: 400 });
+    const teams = await searchTeamsByLeague(leagueId);
+    return NextResponse.json(teams, { status: 200 });
+  }
+  else if (nameParam) {
+    if (!nameParam) return NextResponse.json([], { status: 400 });
+    const teams = await searchTeamsByName(nameParam);
+    console.log('Teams found:', teams);
+    return NextResponse.json(teams, { status: 200 });
+  }
+}
 
-  const q = query(collection(db, 'teams'), where('leagueId', '==', Number(leagueId)));
-  const snapshot = await getDocs(q);
-  const data = snapshot.docs.map(doc => doc.data());
-  return NextResponse.json(data);
+async function searchTeamsByLeague(leagueId: string) {
+    const q = query(collection(db, 'teams'), where('leagueId', '==', Number(leagueId)));
+    const snapshot = await getDocs(q);
+    const data = snapshot.docs.map(doc => doc.data());
+    return data;
+}
+
+async function searchTeamsByName(name: string) {
+    const q = query(collection(db, 'teams'), where('name', 'array-contains', name));
+    const snapshot = await getDocs(q);
+    const data = snapshot.docs.map(doc => doc.data());
+    return data;
 }
