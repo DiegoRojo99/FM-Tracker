@@ -41,7 +41,7 @@ export default function CareerTimeline({ stints, teamData }: Props) {
       <div className="relative flex flex-col gap-8 md:flex-row md:gap-12 md:min-w-max items-center">
 
         {/* Timeline Line */}
-        <div className="absolute top-0 left-2/7 -translate-x-1/2 h-full w-0.5 bg-purple-500 md:top-4 md:left-0 md:h-0.5 md:w-full z-0" />
+        <div className="absolute top-0 left-2/7 -translate-x-1/2 h-full w-0.5 bg-purple-500 md:top-4 md:h-0.5 md:w-full z-0" />
 
         {grouped.map(({ startDate, entries }, idx) => (
           <div
