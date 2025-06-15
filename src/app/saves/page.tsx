@@ -48,12 +48,12 @@ export default function SavesPage() {
         {saves.map(save => (
           <Link key={save.id} href={`/saves/${save.id}`}>
             <div className="p-4 rounded-xl border hover:shadow transition-all w-full flex flex-col items-center gap-4 
-            cursor-pointer hover:border-purple-600 hover:bg-purple-50 hover:dark:bg-purple-900">
+            cursor-pointer hover:border-purple-600 bg-purple-50 dark:bg-purple-900">
               <Image
                 src={save.team?.logo}
                 alt={save.team?.name}
                 width={128}
-                height={128}
+                height={160}
               />
               <h2 className="text-xl font-semibold">{save.team?.name}</h2>
               <Image
@@ -61,6 +61,7 @@ export default function SavesPage() {
                 alt={save.league?.name}
                 width={128}
                 height={128}
+                className='h-16 w-auto max-w-32 object-contain'
               />
             </div>
           </Link>
