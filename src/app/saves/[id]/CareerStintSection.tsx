@@ -5,8 +5,9 @@ import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 import { SaveWithCareer } from '@/lib/types/Save';
 import { useAuth } from '@/app/components/AuthProvider';
-import { TeamWithLogo } from '@/lib/types/RetrieveDB';
+import { Team, TeamWithLogo } from '@/lib/types/RetrieveDB';
 import CareerTimeline from './CareerTimeline';
+import TeamSearchDropdown from './TeamSearchDropdown';
 
 type Props = {
   saveDetails: SaveWithCareer;
@@ -62,7 +63,7 @@ export default function CareerStintsSection({ saveDetails }: Props) {
       return;
     }
 
-    await fetch(`/api/saves/${saveDetails.id}/career`, {
+    const response = await fetch(`/api/saves/${saveDetails.id}/career`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({
@@ -73,10 +74,12 @@ export default function CareerStintsSection({ saveDetails }: Props) {
       }),
     });
 
-    setIsOpen(false);
+    if (!response.ok) {
+      console.error('Failed to save career stint');
+      return;
+    }
 
-    // Reset form
-    setForm({ teamId: '', startDate: '', endDate: '', isNational: false });
+    window.location.reload();
   };
 
   return (
@@ -114,8 +117,14 @@ export default function CareerStintsSection({ saveDetails }: Props) {
 
             <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
               <div>
-                <label className="block text-sm mb-1">Team ID</label>
+                <label className="block text-sm mb-1">Team</label>
+                <TeamSearchDropdown
+                  onTeamSelect={(team: Team) => setForm((prev) => ({ ...prev, teamId: team.id }))}
+                />
+              </div>
+              <div>
                 <input
+                  hidden
                   name="teamId"
                   value={form.teamId}
                   onChange={handleChange}
