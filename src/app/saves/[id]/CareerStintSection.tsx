@@ -7,7 +7,7 @@ import { SaveWithCareer } from '@/lib/types/Save';
 import { useAuth } from '@/app/components/AuthProvider';
 import { Team, TeamWithLogo } from '@/lib/types/RetrieveDB';
 import CareerTimeline from './CareerTimeline';
-import TeamSearchDropdown from './TeamSearchDropdown';
+import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
 
 type Props = {
   saveDetails: SaveWithCareer;
@@ -87,7 +87,7 @@ export default function CareerStintsSection({ saveDetails }: Props) {
       <div className="mb-2 sm:mb-6 flex flex-row items-center justify-between">
         <h3 className="text-l font-bold">Career Stints</h3>
         <button
-          className="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+          className="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition cursor-pointer"
           onClick={() => setIsOpen(true)}
         >
           +
@@ -169,7 +169,7 @@ export default function CareerStintsSection({ saveDetails }: Props) {
 
               <button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded p-2"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded p-2 cursor-pointer"
               >
                 Save
               </button>
