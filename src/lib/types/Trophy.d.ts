@@ -2,8 +2,8 @@ type Trophy = {
   id: string; // Firestore auto-id
   name: string;
   competitionId: string;
-  competitionType: 'League' | 'Cup' | 'Continental' | 'International';
-  national: boolean;
+  // competitionType: 'League' | 'Cup' | 'Continental' | 'International';
+  // national: boolean;
   logo?: string;
 }
 
