@@ -1,12 +1,12 @@
 'use client';
 
 import { useAuth } from '@/app/components/AuthProvider';
-import { Team } from '@/lib/types/RetrieveDB';
 import { useEffect, useState } from 'react';
 import AddTrophyModal from './AddTrophyModal';
 import { Trophy } from '@/lib/types/Trophy';
 import { SaveWithCareer } from '@/lib/types/Save';
 import { CareerStint } from '@/lib/types/InsertDB';
+import Image from 'next/image';
 
 type Props = {
   save: SaveWithCareer;
@@ -63,13 +63,13 @@ export default function TrophyCase({ save }: Props) {
               <div key={i} className="border rounded-lg p-4 bg-gradient-to-br from-purple-50 to-white dark:from-purple-900 shadow">
                 <div className="flex items-center gap-2 mb-2">
                   {team?.logo && (
-                    <img src={team.logo} alt={team.name} className="w-6 h-6 object-contain" />
+                    <Image src={team.logo} alt={team.name} width={128} height={128} className="w-6 h-6 object-contain" />
                   )}
                   <span className="font-semibold">{team?.name || 'Unknown Team'}</span>
                 </div>
                 <div className="flex items-center gap-2 mb-2">
                   {trophyWin?.competitionLogo && (
-                    <img src={trophyWin.competitionLogo} alt={trophyWin.competitionName} className="w-6 h-6 object-contain" />
+                    <Image src={trophyWin.competitionLogo} alt={trophyWin.competitionName} width={128} height={128} className="w-6 h-6 object-contain" />
                   )}
                   <span className="font-semibold">{trophyWin.competitionName || 'Unknown Competition'}</span>
                 </div>
