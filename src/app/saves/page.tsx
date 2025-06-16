@@ -56,13 +56,19 @@ export default function SavesPage() {
                 height={160}
               />
               <h2 className="text-xl font-semibold">{save.team?.name}</h2>
-              <Image
-                src={save.league?.logo}
-                alt={save.league?.name}
-                width={128}
-                height={128}
-                className='h-16 w-auto max-w-32 object-contain'
-              />
+              {
+                save.league?.logo ? (
+                  <Image
+                    src={save.league?.logo}
+                    alt={save.league?.name}
+                    width={128}
+                    height={128}
+                    className='h-16 w-auto max-w-32 object-contain'
+                  />
+                ) : (
+                  <span className="text-gray-500">{save.league?.name || 'No League'}</span>
+                )}
+
             </div>
           </Link>
         ))}
