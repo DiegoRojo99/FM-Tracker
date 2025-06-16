@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { SaveWithCareer } from '@/lib/types/Save';
 import FootballLoader from '@/app/components/FootBallLoader';
 import CareerStintsSection from './CareerStintSection';
+import TrophyCase from './TrophyCase';
 
 export default function SavePage() {
   const params = useParams();
@@ -52,6 +53,7 @@ export default function SavePage() {
   return (
     <div className="p-4 sm:p-6">
       <CareerStintsSection saveDetails={saveDetails} />
+      <TrophyCase save={saveDetails} />
     </div>
   );
 }
