@@ -1,7 +1,7 @@
 'use client';
 
 import { InstantSearch, useHits, useSearchBox } from 'react-instantsearch';
-import { algoliaClient } from '@/lib/algolia';
+import { algoliaClient } from '@/lib/algolia/algolia';
 import { Team } from '@/lib/types/RetrieveDB';
 import { useState } from 'react';
 
