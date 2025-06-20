@@ -3,6 +3,7 @@ import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { CareerStint } from '@/lib/types/Career';
+import { Trophy } from '@/lib/types/Trophy';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -27,11 +28,12 @@ export async function GET(req: NextRequest) {
 
     // Fetch the career data associated with the save
     const careersSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'career'));
-    const careerData: CareerStint[] = [];
-    if (!careersSnapshot.empty) {
-      careerData.push(...careersSnapshot.docs.map(doc => doc.data()) as CareerStint[]);
-    }
+    const careerData: CareerStint[] = careersSnapshot.docs.map(doc => doc.data() as CareerStint);
 
-    return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData, id: saveId }), { status: 200 });
+    // Fetch the trophies data associated with the save
+    const trophiesSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'trophies'));
+    const trophiesData: Trophy[] = trophiesSnapshot.docs.map(doc => doc.data() as Trophy);
+
+    return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData, trophies: trophiesData, id: saveId }), { status: 200 });
   });
 }
