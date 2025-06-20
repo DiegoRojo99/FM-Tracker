@@ -86,7 +86,7 @@ export default function NewSaveForm() {
         <label>Country</label>
         <select onChange={e => setSelectedCountry(e.target.value)} className="w-full my-2 bg-[var(--color-dark)] disabled:opacity-50" disabled={!countries.length}>
           <option className='text-black bg-white' value="">-- Select a country --</option>
-          {countries.map((c: Country) => (
+          {countries.sort((a, b) => a.name.localeCompare(b.name)).map((c: Country) => (
             <option className='text-black bg-white' key={c.code} value={c.code ?? ''}>
               {c.name}
             </option>
