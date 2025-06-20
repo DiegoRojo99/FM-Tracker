@@ -16,7 +16,29 @@
       "has": [
         {
           "type": "host",
+          "value": "www.fm-tracker.site"
+        }
+      ],
+      "destination": "https://fm-tracker.xyz/$1",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
           "value": "fmtracker.site"
+        }
+      ],
+      "destination": "https://fm-tracker.xyz/$1",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.fmtracker.site"
         }
       ],
       "destination": "https://fm-tracker.xyz/$1",
