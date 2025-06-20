@@ -9,8 +9,19 @@ export type SaveInput = {
   startingTeamId: number;
 }
 
-export type Save = SaveInput & {
+export type SaveTeam = {
+  id: number;
+  name: string;
+  logo: string;
+}
+
+export type Save = {
   id: string;
+  userId: string;
+  countryCode: string;
+  leagueId: number;
+  currentClub: SaveTeam | null;
+  currentNT: SaveTeam | null;
   createdAt: Timestamp;
 }
 
@@ -19,15 +30,8 @@ export type SaveWithCareer = SaveInput & {
   createdAt: Timestamp;
   career: CareerStint[];
 }
-  
-export type SaveWithDetails = SaveInput & {
-  id: string;
-  createdAt: Timestamp;
-  team?: Team;
-  league?: League;
-}
 
-export type SaveWithChildren = SaveWithDetails & {
+export type SaveWithChildren = Save & {
   career?: CareerStint[];
   trophies?: Trophy[];
   challenges?: CareerChallenge[];

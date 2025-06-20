@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../components/AuthProvider';
-import { SaveWithDetails } from '@/lib/types/Save';
+import { Save } from '@/lib/types/Save';
 import Image from 'next/image';
 import FootballLoader from '../components/FootBallLoader';
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
-  const [saves, setSaves] = useState<SaveWithDetails[]>([]);
+  const [saves, setSaves] = useState<Save[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -69,25 +69,12 @@ export default function SavesPage() {
             <div className="p-4 rounded-xl border hover:shadow transition-all w-full flex flex-col items-center gap-4 
             cursor-pointer hover:border-purple-600 bg-purple-50 dark:bg-purple-900">
               <Image
-                src={save.team?.logo}
-                alt={save.team?.name}
+                src={save.currentClub?.logo ?? save.currentNT?.logo ?? '/Free-Agent.png'}
+                alt={save.currentClub?.name ?? save.currentNT?.name ?? 'No Team'}
                 width={128}
                 height={160}
               />
-              <h2 className="text-xl font-semibold">{save.team?.name}</h2>
-              {
-                save.league?.logo ? (
-                  <Image
-                    src={save.league?.logo}
-                    alt={save.league?.name}
-                    width={128}
-                    height={128}
-                    className='h-16 w-auto max-w-32 object-contain'
-                  />
-                ) : (
-                  <span className="text-gray-500">{save.league?.name || 'No League'}</span>
-                )}
-
+              <h2 className="text-xl font-semibold">{save.currentClub?.name ?? save.currentNT?.name ?? 'No Team'}</h2>
             </div>
           </Link>
         ))}
