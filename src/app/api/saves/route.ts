@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
 
 async function addSaveDetails(save: Save): Promise<SaveWithDetails> {
   const teamData = save.startingTeamId ? await GetTeamData(String(save.startingTeamId)) : null;
-  const leagueData = save.leagueId ? await GetLeagueData(String(save.leagueId)) : null;
+  const leagueData = (save.countryCode && save.leagueId) ? await GetLeagueData(String(save.countryCode), String(save.leagueId)) : null;
   return {...save, team: teamData, league: leagueData };
 }
 

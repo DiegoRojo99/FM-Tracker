@@ -17,7 +17,7 @@ function getSeasonFromDate(dateInput: string | Date): string {
 export async function POST(req: NextRequest) {
   return withAuth(req, async (uid) => {
     const url = new URL(req.url);
-    const saveId = url.pathname.split('/')[4];
+    const saveId = url.pathname.split('/')[3];
 
     if (!uid || !saveId) {
       return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
     const url = new URL(req.url);
-    const saveId = url.pathname.split('/')[4];
+    const saveId = url.pathname.split('/')[3];
 
     if (!uid || !saveId) {
       return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });

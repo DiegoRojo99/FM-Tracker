@@ -22,31 +22,40 @@ export default function LandingPage() {
             {
               title: 'Save Tracker',
               desc: 'Log each club and season you manage, with full stats and trophies.',
+              available: true,
             },
             {
               title: 'Achievements',
               desc: 'Unlock milestones like unbeaten runs, treble wins, and promotions.',
+              available: false,
             },
             {
               title: 'Completeness Map',
               desc: 'Track countries and continents you’ve conquered.',
+              available: false,
             },
             {
               title: 'Challenges',
               desc: 'Take on legendary FM challenges like the Pentagon or Youth Only.',
+              available: false,
             },
             {
               title: 'Stats Dashboard',
               desc: 'Visualize your total matches, goals, and club history over time.',
+              available: false,
             },
             {
               title: 'Career Archive',
               desc: 'Build a timeline of your entire Football Manager journey.',
+              available: false,
             },
-          ].map(({ title, desc }) => (
+          ].map(({ title, desc, available }) => (
             <div key={title} className="bg-[var(--surface)] rounded-xl p-6 shadow hover:shadow-md transition">
               <h4 className="text-xl font-semibold mb-2">{title}</h4>
               <p className="text-[var(--text-muted)]">{desc}</p>
+              {!available && (
+                <p className="text-red-500 mt-2">Coming Soon!</p>
+              )}
             </div>
           ))}
         </div>

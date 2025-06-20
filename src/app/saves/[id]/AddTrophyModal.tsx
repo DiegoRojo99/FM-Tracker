@@ -1,6 +1,5 @@
 'use client';
 
-import { Competition, Team } from '@/lib/types/RetrieveDB';
 import { Trophy } from '@/lib/types/Trophy';
 import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
@@ -9,6 +8,8 @@ import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
 import CompetitionSearchDropdown from '@/app/components/algolia/CompetitionSearchDropdown';
 import FootballLoader from '@/app/components/FootBallLoader';
 import { useAuth } from '@/app/components/AuthProvider';
+import { Competition } from '@/lib/types/Country&Competition';
+import { Team } from '@/lib/types/Team';
 
 type Props = {
   open: boolean;
@@ -101,7 +102,7 @@ export default function AddTrophyModal({ open, onClose, saveId, onSuccess }: Pro
               <div>
                 <label className="block text-sm mb-1">Team</label>
                 <TeamSearchDropdown
-                  onTeamSelect={(team: Team) => setTeamId(team.id)}
+                  onTeamSelect={(team: Team) => setTeamId(team.id.toString())}
                 />
               </div>
               <div>

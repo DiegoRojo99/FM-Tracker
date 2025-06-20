@@ -2,11 +2,11 @@
 
 import { InstantSearch, useHits, useSearchBox } from 'react-instantsearch';
 import { algoliaClient } from '@/lib/algolia/algolia';
-import { Competition } from '@/lib/types/RetrieveDB';
 import { useState } from 'react';
+import { AlgoliaCompetition } from '@/lib/types/Algolia';
 
 interface SearchDropdownProps {
-  onCompetitionSelect: (competition: Competition) => void;
+  onCompetitionSelect: (competition: AlgoliaCompetition) => void;
 }
 
 export default function SearchDropdown({ onCompetitionSelect }: SearchDropdownProps) {
@@ -62,8 +62,8 @@ function CustomSearchBox({
   );
 }
 
-function CustomHits({ onCompetitionSelect }: { onCompetitionSelect: (competition: Competition) => void }) {
-  const { hits } = useHits();
+function CustomHits({ onCompetitionSelect }: { onCompetitionSelect: (competition: AlgoliaCompetition) => void }) {
+  const { hits }: { hits: AlgoliaCompetition[] } = useHits();
   if (!hits.length) return null;
 
   return (
@@ -82,7 +82,7 @@ function CustomHits({ onCompetitionSelect }: { onCompetitionSelect: (competition
       }}
     >
       {hits.map((hit) => {
-        const competition = hit as Competition;
+        const competition = hit as AlgoliaCompetition;
         return (
           <li
             key={competition.id}

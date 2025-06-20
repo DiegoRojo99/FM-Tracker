@@ -1,9 +1,9 @@
 import 'dotenv/config';
-import { fetchFromApi } from '../lib/apiFootball';
-import { db } from '../lib/firebase';
+import { fetchFromApi } from '@/lib/apiFootball';
+import { db } from '@/lib/firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { ApiTeam } from '@/lib/types/FootballAPI';
-import { leaguesToSeed, seededLeagues } from './data/leagues';
+import { leaguesToSeed, seededLeagues } from '../data/leagues';
 
 async function seedTeams() {
   const unseededLeagues = leaguesToSeed.filter(
