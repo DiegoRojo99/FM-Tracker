@@ -4,12 +4,12 @@ import { useAuth } from '@/app/components/AuthProvider';
 import { useEffect, useState } from 'react';
 import AddTrophyModal from './AddTrophyModal';
 import { Trophy } from '@/lib/types/Trophy';
-import { SaveWithCareer } from '@/lib/types/Save';
-import { CareerStint } from '@/lib/types/InsertDB';
+import { SaveWithChildren } from '@/lib/types/Save';
 import Image from 'next/image';
+import { CareerStint } from '@/lib/types/Career';
 
 type Props = {
-  save: SaveWithCareer;
+  save: SaveWithChildren;
 };
 
 export default function TrophyCase({ save }: Props) {

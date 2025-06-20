@@ -2,7 +2,7 @@
 import { useAuth } from '@/app/components/AuthProvider';
 import { notFound, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { SaveWithCareer } from '@/lib/types/Save';
+import { SaveWithChildren } from '@/lib/types/Save';
 import FootballLoader from '@/app/components/FootBallLoader';
 import CareerStintsSection from './CareerStintSection';
 import TrophyCase from './TrophyCase';
@@ -11,7 +11,7 @@ export default function SavePage() {
   const params = useParams();
   const id = params?.id;
   const { user } = useAuth();
-  const [saveDetails, setSaveDetails] = useState<SaveWithCareer | null>(null);
+  const [saveDetails, setSaveDetails] = useState<SaveWithChildren | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {

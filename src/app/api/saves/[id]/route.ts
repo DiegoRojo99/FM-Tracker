@@ -2,7 +2,7 @@ import { db } from '@/lib/firebase';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
-import { CareerStint } from '@/lib/types/InsertDB';
+import { CareerStint } from '@/lib/types/Career';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -27,9 +27,9 @@ export async function GET(req: NextRequest) {
 
     // Fetch the career data associated with the save
     const careersSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'career'));
-    let careerData: CareerStint[] = [];
+    const careerData: CareerStint[] = [];
     if (!careersSnapshot.empty) {
-      careerData = careersSnapshot.docs.map(doc => doc.data()) as CareerStint[];
+      careerData.push(...careersSnapshot.docs.map(doc => doc.data()) as CareerStint[]);
     }
 
     return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData, id: saveId }), { status: 200 });

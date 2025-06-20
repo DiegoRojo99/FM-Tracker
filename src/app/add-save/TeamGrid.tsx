@@ -1,6 +1,6 @@
 'use client'
 
-import { Team } from "@/lib/types/RetrieveDB";
+import { Team } from "@/lib/types/Team";
 import Image from "next/image";
 
 type Props = {

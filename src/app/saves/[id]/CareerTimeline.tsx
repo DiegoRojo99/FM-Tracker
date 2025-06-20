@@ -1,12 +1,12 @@
 'use client';
 
-import { CareerStint } from '@/lib/types/InsertDB';
-import { TeamWithLogo } from '@/lib/types/RetrieveDB';
+import { CareerStint } from '@/lib/types/Career';
+import { Team } from '@/lib/types/Team';
 import Image from 'next/image';
 
 type Props = {
   stints: CareerStint[];
-  teamData: Record<string, TeamWithLogo>;
+  teamData: Record<string, Team>;
 };
 
 function groupStintsByStart(stints: CareerStint[]) {

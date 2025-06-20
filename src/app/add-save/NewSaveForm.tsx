@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import { serverTimestamp } from 'firebase/firestore';
 import TeamGrid from './TeamGrid';
-import { Country, League, Team } from '@/lib/types/RetrieveDB';
+import { Competition, Country } from '@/lib/types/Country&Competition';
+import { Team } from '@/lib/types/Team';
 
 export default function NewSaveForm() {
   const { user } = useAuth();
   const [countries, setCountries] = useState<Country[]>([]);
-  const [leagues, setLeagues] = useState<League[]>([]);
+  const [leagues, setLeagues] = useState<Competition[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
 
   const [selectedCountry, setSelectedCountry] = useState('');
@@ -97,7 +98,7 @@ export default function NewSaveForm() {
         <label>League</label>
         <select onChange={e => setSelectedLeague(e.target.value)} disabled={!selectedCountry} className="w-full my-2 bg-[var(--color-dark)] disabled:opacity-50">
           <option className='text-black bg-white' value="">-- Select a league --</option>
-          {leagues.map((l: League) => (
+          {leagues.map((l: Competition) => (
             <option className='text-black bg-white' key={l.id} value={l.id}>{l.name}</option>
           ))}
         </select>

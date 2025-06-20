@@ -1,24 +1,24 @@
 'use client';
-import { CareerStint } from "@/lib/types/InsertDB";
-import { TeamWithLogo } from "@/lib/types/RetrieveDB";
+import { CareerStint } from "@/lib/types/Career";
+import { Team } from "@/lib/types/Team";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 interface CareerStintProps {
   careerStint: CareerStint;
-  teamData?: Record<string, TeamWithLogo>;
+  teamData?: Record<string, Team>;
 }
 
-async function fetchTeamById(id: string): Promise<TeamWithLogo | null> {
+async function fetchTeamById(id: string): Promise<Team | null> {
   return fetch(`/api/teams/${id}`).then(res => res.json());
 }
 
 const CareerStintUI: React.FC<CareerStintProps> = ({ careerStint, teamData }) => {
-  const [team, setTeam] = useState<TeamWithLogo | null>(null);
+  const [team, setTeam] = useState<Team | null>(null);
 
   useEffect(() => {
     if (teamData) {
-      setTeam(teamData);
+      setTeam(teamData[careerStint.teamId] || null);
     } 
     else {
       fetchTeamById(careerStint.teamId).then(setTeam);
