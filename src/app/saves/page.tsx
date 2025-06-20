@@ -8,13 +8,16 @@ import Image from 'next/image';
 import FootballLoader from '../components/FootBallLoader';
 
 export default function SavesPage() {
-  const { user } = useAuth();
-  
+  const { user, userLoading } = useAuth();
   const [saves, setSaves] = useState<SaveWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user && userLoading) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const fetchSaves = async () => {
       const token = await user.getIdToken();
@@ -30,10 +33,26 @@ export default function SavesPage() {
     };
 
     fetchSaves();
-  }, [user])
+  }, [user, userLoading]);
 
   if (loading) {
     return <FootballLoader />;
+  }
+
+  if (!user) {
+    return (
+      <div className='p-6'>
+        <p className='text-gray-500'>Please log in to view your saves.</p>
+      </div>
+    );
+  }
+
+  if (!saves || saves.length === 0) {
+    return (
+      <div className='p-6'>
+        <p className='text-gray-500'>No saves found.</p>
+      </div>
+    );
   }
 
   return (

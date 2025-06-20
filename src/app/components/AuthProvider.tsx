@@ -5,15 +5,17 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { createUserIfNotExists } from '@/lib/firestore';
 
-const AuthContext = createContext<{ user: User | null }>({ user: null })
+const AuthContext = createContext<{ user: User | null, userLoading: boolean }>({ user: null, userLoading: true })
 
 export const useAuth = () => useContext(AuthContext)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(null);
+  const [userLoading, setUserLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
+      setUserLoading(false);
       if (firebaseUser) {
         await createUserIfNotExists(firebaseUser)
       }
@@ -22,5 +24,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribe()
   }, [])
 
-  return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, userLoading }}>{children}</AuthContext.Provider>
 }
