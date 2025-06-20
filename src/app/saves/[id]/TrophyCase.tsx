@@ -6,7 +6,6 @@ import AddTrophyModal from './AddTrophyModal';
 import { Trophy } from '@/lib/types/Trophy';
 import { SaveWithChildren } from '@/lib/types/Save';
 import Image from 'next/image';
-import { CareerStint } from '@/lib/types/Career';
 
 type Props = {
   save: SaveWithChildren;
@@ -14,7 +13,7 @@ type Props = {
 
 export default function TrophyCase({ save }: Props) {
   const { user } = useAuth();
-  const [trophies, setTrophies] = useState<Trophy[]>([]);
+  const [trophies, setTrophies] = useState<Trophy[]>(save.trophies || []);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
