@@ -22,7 +22,6 @@ export default function CareerStintsSection({ saveDetails }: Props) {
     teamId: '',
     startDate: '',
     endDate: '',
-    isNational: false,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -52,7 +51,6 @@ export default function CareerStintsSection({ saveDetails }: Props) {
         teamId: form.teamId,
         startDate: form.startDate,
         endDate: form.endDate,
-        isNational: form.isNational,
       }),
     });
 
@@ -136,16 +134,6 @@ export default function CareerStintsSection({ saveDetails }: Props) {
                   onChange={handleChange}
                   className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
                 />
-              </div>
-
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="isNational"
-                  checked={form.isNational}
-                  onChange={handleChange}
-                />
-                <label className="text-sm">National Team</label>
               </div>
 
               <button
