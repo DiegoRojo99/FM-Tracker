@@ -39,7 +39,6 @@ export default function SavePage() {
       if (!data) notFound();
 
       // Set the save details state
-      console.log('Fetched save details:', data);
       setSaveDetails(data);
       setLoading(false);
     };

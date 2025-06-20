@@ -13,7 +13,6 @@ export async function GET(req: NextRequest) {
   else if (nameParam) {
     if (!nameParam) return NextResponse.json([], { status: 400 });
     const teams = await searchTeamsByName(nameParam);
-    console.log('Teams found:', teams);
     return NextResponse.json(teams, { status: 200 });
   }
 }
