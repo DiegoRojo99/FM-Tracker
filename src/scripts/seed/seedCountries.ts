@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import { fetchFromApi } from '../lib/apiFootball';
-import { db } from '../lib/firebase';
+import { fetchFromApi } from '@/lib/apiFootball';
+import { db } from '@/lib/firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
 
 async function seedCountries() {

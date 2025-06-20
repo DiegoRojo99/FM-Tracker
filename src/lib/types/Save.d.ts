@@ -1,3 +1,7 @@
+import { CareerChallenge } from "./Challenge";
+import { CareerStint } from "./InsertDB";
+import { Trophy } from "./Trophy";
+
 export type SaveInput = {
   userId: string;
   countryCode: string;
@@ -13,7 +17,7 @@ export type Save = SaveInput & {
 export type SaveWithCareer = SaveInput & {
   id: string;
   createdAt: Timestamp;
-  career?: CareerStint[];
+  career: CareerStint[];
 }
   
 export type SaveWithDetails = SaveInput & {
@@ -21,4 +25,10 @@ export type SaveWithDetails = SaveInput & {
   createdAt: Timestamp;
   team?: Team;
   league?: League;
+}
+
+export type SaveWithChildren = SaveWithDetails & {
+  career?: CareerStint[];
+  trophies?: Trophy[];
+  challenges?: CareerChallenge[];
 }

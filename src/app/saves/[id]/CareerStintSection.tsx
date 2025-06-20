@@ -1,21 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
-import { SaveWithCareer } from '@/lib/types/Save';
+import { SaveWithChildren } from '@/lib/types/Save';
 import { useAuth } from '@/app/components/AuthProvider';
-import { Team, TeamWithLogo } from '@/lib/types/RetrieveDB';
 import CareerTimeline from './CareerTimeline';
 import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
+import { Team } from '@/lib/types/Team';
 
 type Props = {
-  saveDetails: SaveWithCareer;
+  saveDetails: SaveWithChildren;
 };
 
 export default function CareerStintsSection({ saveDetails }: Props) {
   const { user } = useAuth();
-  const [teamData, setTeamData] = useState<Record<string, TeamWithLogo>>({});
   const [isOpen, setIsOpen] = useState(false);
 
   // Form fields
@@ -25,23 +24,6 @@ export default function CareerStintsSection({ saveDetails }: Props) {
     endDate: '',
     isNational: false,
   });
-
-  useEffect(() => {
-    async function fetchTeams() {
-      if (!saveDetails.career?.length) return;
-      const promises = saveDetails.career?.map((s) =>
-        fetch(`/api/teams/${s.teamId}`).then((res) => res.json())
-      );
-      const results = await Promise.all(promises);
-      const map: Record<string, TeamWithLogo> = {};
-      results.forEach((team) => {
-        map[team.id] = team;
-      });
-      setTeamData(map);
-    }
-
-    fetchTeams();
-  }, [saveDetails.career]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -97,7 +79,6 @@ export default function CareerStintsSection({ saveDetails }: Props) {
       {saveDetails.career?.length ? (
         <CareerTimeline
           stints={saveDetails.career}
-          teamData={teamData}
         />
       ) : (
         <div>No career stints found.</div>
@@ -119,7 +100,7 @@ export default function CareerStintsSection({ saveDetails }: Props) {
               <div>
                 <label className="block text-sm mb-1">Team</label>
                 <TeamSearchDropdown
-                  onTeamSelect={(team: Team) => setForm((prev) => ({ ...prev, teamId: team.id }))}
+                  onTeamSelect={(team: Team) => setForm((prev) => ({ ...prev, teamId: String(team.id) }))}
                 />
               </div>
               <div>

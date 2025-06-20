@@ -4,17 +4,16 @@ import { useAuth } from '@/app/components/AuthProvider';
 import { useEffect, useState } from 'react';
 import AddTrophyModal from './AddTrophyModal';
 import { Trophy } from '@/lib/types/Trophy';
-import { SaveWithCareer } from '@/lib/types/Save';
-import { CareerStint } from '@/lib/types/InsertDB';
+import { SaveWithChildren } from '@/lib/types/Save';
 import Image from 'next/image';
 
 type Props = {
-  save: SaveWithCareer;
+  save: SaveWithChildren;
 };
 
 export default function TrophyCase({ save }: Props) {
   const { user } = useAuth();
-  const [trophies, setTrophies] = useState<Trophy[]>([]);
+  const [trophies, setTrophies] = useState<Trophy[]>(save.trophies || []);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -58,26 +57,23 @@ export default function TrophyCase({ save }: Props) {
       ) : (
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {trophies.map((trophyWin, i) => {
-            const team = save.career?.find((t: CareerStint) => t.teamId === trophyWin.teamId);
             return (
-              <div key={i} className="border rounded-lg p-4 bg-gradient-to-br from-purple-50 to-white dark:from-purple-900 shadow">
-                <div className="flex items-center gap-2 mb-2">
-                  {team?.logo && (
-                    <Image src={team.logo} alt={team.name} width={128} height={128} className="w-6 h-6 object-contain" />
-                  )}
-                  <span className="font-semibold">{team?.name || 'Unknown Team'}</span>
+              <div key={i} className="bg-purple-50 dark:bg-purple-900 border border-purple-600 rounded-lg p-4 flex flex-col items-center shadow">
+                {trophyWin.competitionLogo && (
+                  <Image
+                    src={trophyWin.competitionLogo}
+                    alt={trophyWin.competitionName}
+                    width={96}
+                    height={96}
+                    className="w-24 h-24 object-contain mb-2"
+                  />
+                )}
+                <div className="text-lg font-bold text-center mb-2">{trophyWin.competitionName}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 text-center mb-1">
+                  Season: {trophyWin.season}
                 </div>
-                <div className="flex items-center gap-2 mb-2">
-                  {trophyWin?.competitionLogo && (
-                    <Image src={trophyWin.competitionLogo} alt={trophyWin.competitionName} width={128} height={128} className="w-6 h-6 object-contain" />
-                  )}
-                  <span className="font-semibold">{trophyWin.competitionName || 'Unknown Competition'}</span>
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  {trophyWin.competitionName || 'Unknown Competition'}
-                </div>
-                <div className="text-xs mt-1 text-gray-500">
-                  {trophyWin.season} — {new Date(trophyWin.dateWon).toLocaleDateString()}
+                <div className="text-xs text-gray-500 dark:text-gray-300 text-center">
+                  {trophyWin.teamName}
                 </div>
               </div>
             );

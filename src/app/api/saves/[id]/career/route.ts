@@ -3,9 +3,13 @@ import { withAuth } from '@/lib/auth/withAuth';
 import {
   collection,
   addDoc,
-  Timestamp
+  Timestamp,
+  doc,
+  getDoc
 } from 'firebase/firestore';
 import { NextRequest } from 'next/server';
+import { CareerStintInput } from '@/lib/types/InsertDB';
+import { Team } from '@/lib/types/Team';
 
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   return withAuth(req, async (uid) => {
@@ -22,6 +26,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     }
 
     const body = await req.json();
+
     // Validate required fields
     if (!body.teamId || !body.startDate) {
       return new Response('Missing required fields', { status: 400 });
@@ -42,11 +47,23 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       const day = String(date.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
     }
-    const newStint = {
+
+    
+    const teamSnapshot = await getDoc(doc(db, 'users', uid, 'teams', body.teamId));
+    if (!teamSnapshot.exists()) {
+      return new Response('Team not found', { status: 404 });
+    }
+    const teamData = teamSnapshot.data() as Team;
+
+    const newStint: CareerStintInput = {
       teamId: body.teamId,
+      teamLogo: teamData.logo,
+      teamName: teamData.name,
+      leagueId: String(teamData.leagueId),
       startDate: formatDate(new Date(body.startDate)),
       endDate: body.endDate ? formatDate(new Date(body.endDate)) : null,
-      isNational: body.isNational || false,
+      isNational: teamData.national || false,
+      countryCode: teamData.countryCode || 'Unknown',
       createdAt: Timestamp.now(),
     };
 

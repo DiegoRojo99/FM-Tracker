@@ -2,8 +2,9 @@
 
 import { InstantSearch, useHits, useSearchBox } from 'react-instantsearch';
 import { algoliaClient } from '@/lib/algolia/algolia';
-import { Team } from '@/lib/types/RetrieveDB';
 import { useState } from 'react';
+import { Team } from '@/lib/types/Team';
+import { AlgoliaTeam } from '@/lib/types/Algolia';
 
 interface SearchDropdownProps {
   onTeamSelect: (team: Team) => void;
@@ -63,8 +64,24 @@ function CustomSearchBox({
 }
 
 function CustomHits({ onTeamSelect }: { onTeamSelect: (team: Team) => void }) {
-  const { hits } = useHits();
+  const { hits }: { hits: AlgoliaTeam[] } = useHits();
   if (!hits.length) return null;
+
+  function parseTeam(hit: AlgoliaTeam): Team {
+    return {
+      id: hit.id,
+      name: hit.name,
+      logo: hit.logo,
+      countryCode: hit.countryCode,
+      leagueId: hit.leagueId,
+      season: hit.season,
+      national: hit.national,
+      coordinates: {
+        lat: (hit.coordinates && typeof hit.coordinates.lat === 'number' ? hit.coordinates.lat : null),
+        lng: (hit.coordinates && typeof hit.coordinates.lng === 'number' ? hit.coordinates.lng : null),
+      },
+    };
+  }
 
   return (
     <ul
@@ -82,12 +99,12 @@ function CustomHits({ onTeamSelect }: { onTeamSelect: (team: Team) => void }) {
       }}
     >
       {hits.map((hit) => {
-        const team = hit as Team;
+        const team = hit as AlgoliaTeam;
         return (
           <li
             key={team.id}
             style={{ padding: '8px', cursor: 'pointer' }}
-            onMouseDown={() => onTeamSelect(team)} // prevents input blur interruption
+            onMouseDown={() => onTeamSelect(parseTeam(team))} // prevents input blur interruption
           >
             {team.name}
           </li>
