@@ -49,7 +49,7 @@ async function seedLeagues() {
       season: targetSeason
     };
 
-    await setDoc(doc(collection(db, 'competitions'), data.id.toString()), data);
+    await setDoc(doc(collection(db, 'countries', data.countryCode, 'competitions'), data.id.toString()), data);
     console.log(`✅ Added: ${data.name} (${data.countryName})`);
   }
 
