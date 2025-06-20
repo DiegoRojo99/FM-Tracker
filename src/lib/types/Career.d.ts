@@ -8,6 +8,6 @@ export type CareerStint = {
   endDate: string | null;
   isNational: boolean;
   createdAt: Timestamp;
-  teamLogo?: string; // Optional, for convenience
-  teamName?: string; // Optional, for convenience
+  teamLogo: string;
+  teamName: string;
 };

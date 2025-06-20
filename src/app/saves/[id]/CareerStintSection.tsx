@@ -15,7 +15,6 @@ type Props = {
 
 export default function CareerStintsSection({ saveDetails }: Props) {
   const { user } = useAuth();
-  const [teamData, setTeamData] = useState<Record<string, Team>>({});
   const [isOpen, setIsOpen] = useState(false);
 
   // Form fields
@@ -25,23 +24,6 @@ export default function CareerStintsSection({ saveDetails }: Props) {
     endDate: '',
     isNational: false,
   });
-
-  useEffect(() => {
-    async function fetchTeams() {
-      if (!saveDetails.career?.length) return;
-      const promises = saveDetails.career?.map((s) =>
-        fetch(`/api/teams/${s.teamId}`).then((res) => res.json())
-      );
-      const results = await Promise.all(promises);
-      const map: Record<string, Team> = {};
-      results.forEach((team) => {
-        map[team.id] = team;
-      });
-      setTeamData(map);
-    }
-
-    fetchTeams();
-  }, [saveDetails.career]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -97,7 +79,6 @@ export default function CareerStintsSection({ saveDetails }: Props) {
       {saveDetails.career?.length ? (
         <CareerTimeline
           stints={saveDetails.career}
-          teamData={teamData}
         />
       ) : (
         <div>No career stints found.</div>

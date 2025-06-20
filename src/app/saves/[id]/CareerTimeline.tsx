@@ -1,12 +1,10 @@
 'use client';
 
 import { CareerStint } from '@/lib/types/Career';
-import { Team } from '@/lib/types/Team';
 import Image from 'next/image';
 
 type Props = {
   stints: CareerStint[];
-  teamData: Record<string, Team>;
 };
 
 function groupStintsByStart(stints: CareerStint[]) {
@@ -33,7 +31,7 @@ function formatDate(datePassed: string): string {
   return `${capitalizedMonth} ${date.getFullYear()}`;
 }
 
-export default function CareerTimeline({ stints, teamData }: Props) {
+export default function CareerTimeline({ stints }: Props) {
   const grouped = groupStintsByStart(stints);
 
   return (
@@ -58,22 +56,21 @@ export default function CareerTimeline({ stints, teamData }: Props) {
               </div>
 
               {entries.map((stint, sIdx) => {
-                const team = teamData[stint.teamId];
                 return (
                   <div
                     key={sIdx}
                     className="bg-purple-50 dark:bg-purple-900 border border-purple-600 rounded-lg shadow p-3 w-60 flex flex-col items-center text-center"
                   >
-                    {team?.logo && (
+                    {stint.teamLogo && (
                       <Image
                         width={128}
                         height={128}
-                        src={team.logo}
-                        alt={team.name}
+                        src={stint.teamLogo}
+                        alt={stint.teamName}
                         className="h-20 w-20 object-contain mb-2"
                       />
                     )}
-                    <div className="font-semibold">{team?.name}</div>
+                    <div className="font-semibold">{stint.teamName}</div>
                     <div className="text-xs text-gray-500">
                       {formatDate(stint.startDate)} —{' '}
                       {stint.endDate ? formatDate(stint.endDate) : 'Present'}
