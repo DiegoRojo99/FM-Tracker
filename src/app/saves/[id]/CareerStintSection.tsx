@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 import { SaveWithChildren } from '@/lib/types/Save';
