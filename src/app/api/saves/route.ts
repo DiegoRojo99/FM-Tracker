@@ -1,10 +1,9 @@
-import { db } from '@/lib/firebase';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
-import { GetTeamData } from '../teams/[id]/GetTeamData';
-import { GetLeagueData } from '../leagues/GetLeagueData';
-import { Save, SaveWithDetails } from '@/lib/types/Save';
+import { Save, SaveTeam } from '@/lib/types/Save';
+import { Team } from '@/lib/types/Team';
+import { Timestamp } from 'firebase-admin/firestore';
+import { adminDB } from '@/lib/auth/firebase-admin';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -13,8 +12,8 @@ export async function GET(req: NextRequest) {
     }
 
     // Reference user's saves subcollection
-    const savesRef = collection(db, 'users', uid, 'saves');
-    const savesSnapshot = await getDocs(savesRef);
+    const savesRef = adminDB.collection('users').doc(uid).collection('saves');
+    const savesSnapshot = await savesRef.get();
 
     if (savesSnapshot.empty) {
       return new Response('No saves found', { status: 404 });
@@ -22,56 +21,75 @@ export async function GET(req: NextRequest) {
 
     // Map docs to JSON
     const saves = savesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Save[];
-    
-    // Add team and league details to each save
-    const savesWithDetails = await Promise.all(saves.map(addSaveDetails));
-    return new Response(JSON.stringify(savesWithDetails), { status: 200 });
+    return new Response(JSON.stringify(saves), { status: 200 });
   });
-}
-
-async function addSaveDetails(save: Save): Promise<SaveWithDetails> {
-  const teamData = save.startingTeamId ? await GetTeamData(String(save.startingTeamId)) : null;
-  const leagueData = (save.countryCode && save.leagueId) ? await GetLeagueData(String(save.countryCode), String(save.leagueId)) : null;
-  return {...save, team: teamData, league: leagueData };
 }
 
 export async function POST(req: NextRequest) {
   return withAuth(req, async (uid) => {
-    if (!uid) {
-      console.error('Unauthorized access attempt');
-      return new Response('Unauthorized', { status: 401 });
-    }
+    if (!uid) return new Response('Unauthorized', { status: 401 });
 
     const body = await req.json();
+    const { countryCode, leagueId, startingTeamId } = body;
+    if (!countryCode || !leagueId) {
+      return new Response('Missing required fields', { status: 400 });
+    }
 
-    // Reference user's saves subcollection
-    const savesRef = collection(db, 'users', uid, 'saves');
+    let currentClub: SaveTeam | null = null;
+    let currentNT: SaveTeam | null = null;
 
-    // Add userId to the document explicitly for easier querying
-    const saveData = {
-      ...body,
-      userId: uid,
-      createdAt: new Date().toISOString(),
-    };
+    if (startingTeamId) {
+      console.log(`Fetching starting team with ID: ${startingTeamId}`);
+      const teamDoc = adminDB.collection('teams').doc(String(startingTeamId));
+      if (!teamDoc) return new Response('Invalid team ID', { status: 400 });
+      console.log(`Fetching team document: ${teamDoc.path}`);
+      const teamSnapshot = await teamDoc.get();
+      if (!teamSnapshot.exists) return new Response('Starting team not found', { status: 404 });
 
-    const docRef = await addDoc(savesRef, saveData);
-
-    // Create a starting career stint if a startingTeamId is provided
-    if (body.startingTeamId) {
-      const careerStintData = {
-        teamId: body.startingTeamId,
-        leagueId: body.leagueId,
-        countryCode: body.countryCode,
-        startDate: '2023-07-01',
-        endDate: null,
+      const teamData = teamSnapshot.data() as Team;
+      const saveTeam: SaveTeam = {
+        id: teamData.id,
+        name: teamData.name,
+        logo: teamData.logo,
       };
 
-      // Reference user's career stints subcollection
-      const careerStintsRef = collection(db, 'users', uid, 'saves', docRef.id, 'career');
-      await addDoc(careerStintsRef, careerStintData);
+      if (teamData.national) {
+        currentNT = saveTeam;
+      } else {
+        currentClub = saveTeam;
+      }
     }
-    
-    // Return the created save with its ID
+
+    const saveData = {
+      userId: uid,
+      countryCode,
+      leagueId,
+      currentClub,
+      currentNT,
+      createdAt: Timestamp.now(),
+    };
+
+    const savesRef = adminDB.collection('users').doc(uid).collection('saves');
+    const docRef = await savesRef.add(saveData);
+
+    // Create a starting career stint if a startingTeamId is provided
+    if (startingTeamId) {
+      const careerStintData = {
+        teamId: startingTeamId,
+        leagueId,
+        countryCode,
+        startDate: '2023-07-01',
+        endDate: null,
+        createdAt: Timestamp.now(),
+        isNational: !!currentNT,
+        teamName: currentClub?.name || currentNT?.name,
+        teamLogo: currentClub?.logo || currentNT?.logo,
+      };
+
+      const stintsRef = adminDB.collection('users').doc(uid).collection('saves').doc(docRef.id).collection('career');
+      stintsRef.add(careerStintData);
+    }
+
     return new Response(JSON.stringify({ id: docRef.id, ...saveData }), { status: 201 });
   });
 }
