@@ -39,7 +39,7 @@ async function seedLeagues() {
     l.league && l.league.name && l.league.logo
   );
 
-  let algoliaCompetitions = [];
+  const algoliaCompetitions = [];
   for (const league of filtered) {
     const data = {
       id: league.league.id,
@@ -50,19 +50,18 @@ async function seedLeagues() {
       countryName: league.country.name,
       season: targetSeason
     };
-    algoliaCompetitions.push(data);
+
+    algoliaCompetitions.push({
+      objectID: data.id.toString(),
+      ...data
+    });
 
     await setDoc(doc(collection(db, 'countries', data.countryCode, 'competitions'), data.id.toString()), data);
     console.log(`✅ Added: ${data.name} (${data.countryName})`);
   }
 
   // Add seeded countries to Algolia
-  algoliaCompetitions = algoliaCompetitions.map((c) => ({
-    objectID: c.id.toString(),
-    ...c
-  }));
   await competitionIndex.saveObjects(algoliaCompetitions);
-  
   console.log('🏁 Done seeding leagues.');
 }
 

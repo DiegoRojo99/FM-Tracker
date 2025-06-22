@@ -18,7 +18,7 @@ async function seedTeams() {
       `/teams?league=${league.id}&season=${league.season}`
     );
 
-    let algoliaTeams = [];
+    const algoliaTeams = [];
     for (const team of teams) {
       const data = {
         id: team.team.id,
