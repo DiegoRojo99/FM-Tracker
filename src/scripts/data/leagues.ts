@@ -11,7 +11,7 @@ const seededLeagues = seededLeaguesIds.map(id => {
   };
 });
 
-const ids: number[] = [];
+const ids: number[] = [218, 71, 72, 98, 99, 100];
 const leaguesToSeed = ids.map(id => {
   return {
     id,
