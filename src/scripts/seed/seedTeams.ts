@@ -4,7 +4,9 @@ import { db } from '@/lib/firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { ApiTeam } from '@/lib/types/FootballAPI';
 import { leaguesToSeed, seededLeagues } from '../data/leagues';
+import { algoliaWriteClient } from '@/lib/algolia/algolia';
 
+const teamsIndex = algoliaWriteClient.initIndex('teams_index');
 async function seedTeams() {
   const unseededLeagues = leaguesToSeed.filter(
     league => !seededLeagues.some(l => l.id === league.id)
@@ -16,6 +18,7 @@ async function seedTeams() {
       `/teams?league=${league.id}&season=${league.season}`
     );
 
+    const algoliaTeams = [];
     for (const team of teams) {
       const data = {
         id: team.team.id,
@@ -30,10 +33,13 @@ async function seedTeams() {
           lng: team.venue?.lng ?? null,
         },
       };
+      algoliaTeams.push({objectID: data.id, ...data});
 
       await setDoc(doc(collection(db, 'teams'), data.id.toString()), data);
       console.log(`✅ Added: ${data.name}`);
     }
+
+    await teamsIndex.saveObjects(algoliaTeams);
   }
 
   console.log('🏁 All teams seeded.');

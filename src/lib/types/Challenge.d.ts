@@ -27,8 +27,18 @@ export type CareerChallenge = {
   completedAt?: string;
 };
 
+export type ChallengeGoalInputData = {
+  id: string;
+  description: string;
+  teamId?: string;
+  competitionId?: string;
+  countryId?: string;
+  teamGroup?: string[];
+};
+
 export type {
   ChallengeGoal,
   Challenge,
-  CareerChallenge
+  CareerChallenge,
+  ChallengeGoalInputData
 }

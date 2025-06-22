@@ -3,6 +3,7 @@ import { fetchFromApi } from '@/lib/apiFootball';
 import { db } from '@/lib/firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { ApiLeague, ApiLeagueSeason } from '@/lib/types/FootballAPI';
+import { algoliaWriteClient } from '@/lib/algolia/algolia';
 
 // List of FM-supported countries (can expand)
 const seededCountries = [
@@ -19,14 +20,16 @@ const seededCountries = [
   'South Africa', // Africa
   'Japan', 'South Korea', // Asia
   'Australia',  // Oceania
-  'World'
+  'World',  
+  'Belgium', 'Belarus', 'Chile', 'China', 'Hong Kong', 'Bulgaria',
+  'India', 'Indonesia', 'Israel', 'Peru', 'Singapore', 'Uruguay',
+  'Canada', 'Croatia', 'Colombia', 'Latvia', 'Malaysia'
 ];
 
-const fmCountries: string[] = [
-  
-];
+const fmCountries: string[] = [];
 
 const targetSeason = 2023; // FM24 season
+const competitionIndex = algoliaWriteClient.initIndex('competitions_index');
 
 async function seedLeagues() {
   const leagues: ApiLeague[] = await fetchFromApi('/leagues');
@@ -38,6 +41,7 @@ async function seedLeagues() {
     l.league && l.league.name && l.league.logo
   );
 
+  const algoliaCompetitions = [];
   for (const league of filtered) {
     const data = {
       id: league.league.id,
@@ -49,10 +53,17 @@ async function seedLeagues() {
       season: targetSeason
     };
 
+    algoliaCompetitions.push({
+      objectID: data.id.toString(),
+      ...data
+    });
+
     await setDoc(doc(collection(db, 'countries', data.countryCode, 'competitions'), data.id.toString()), data);
     console.log(`✅ Added: ${data.name} (${data.countryName})`);
   }
 
+  // Add seeded countries to Algolia
+  await competitionIndex.saveObjects(algoliaCompetitions);
   console.log('🏁 Done seeding leagues.');
 }
 
