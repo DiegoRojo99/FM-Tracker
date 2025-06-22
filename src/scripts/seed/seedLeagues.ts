@@ -20,11 +20,13 @@ const seededCountries = [
   'South Africa', // Africa
   'Japan', 'South Korea', // Asia
   'Australia',  // Oceania
-  'World'
+  'World',  
+  'Belgium', 'Belarus', 'Chile', 'China', 'Hong Kong', 'Bulgaria',
+  'India', 'Indonesia', 'Israel', 'Peru', 'Singapore', 'Uruguay',
+  'Canada', 'Croatia', 'Colombia', 'Latvia', 'Malaysia'
 ];
 
-const fmCountries: string[] = [
-];
+const fmCountries: string[] = [];
 
 const targetSeason = 2023; // FM24 season
 const competitionIndex = algoliaWriteClient.initIndex('competitions_index');
