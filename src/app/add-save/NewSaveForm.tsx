@@ -27,7 +27,7 @@ export default function NewSaveForm() {
     if (selectedCountry) {
       fetch(`/api/competitions?countryCode=${selectedCountry}`)
         .then(res => res.json())
-        .then(setLeagues);
+        .then(comps => setLeagues(comps.filter((c: Competition) => c.inFootballManager)));
     } 
     else {
       setLeagues([]);
