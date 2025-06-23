@@ -4,7 +4,6 @@ export type ChallengeGoal = {
 
   // Optional identifiers for matching trophies
   competitionId?: string;
-  teamId?: string;
   teamGroup?: string[]; 
   countryId?: string;
 };
@@ -14,6 +13,7 @@ export type Challenge = {
   name: string;
   description: string;
   goals: ChallengeGoal[];
+  bonus?: string; // Optional bonus description
 };
 
 export type CareerChallenge = {
@@ -30,7 +30,6 @@ export type CareerChallenge = {
 export type ChallengeGoalInputData = {
   id: string;
   description: string;
-  teamId?: string;
   competitionId?: string;
   countryId?: string;
   teamGroup?: string[];

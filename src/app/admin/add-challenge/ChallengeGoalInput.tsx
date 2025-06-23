@@ -42,14 +42,24 @@ export default function ChallengeGoalInput({
           onTeamSelect={(team) =>
             onChange({
               ...data,
-              teamId: team?.id !== undefined ? String(team.id) : undefined,
+              teamGroup: [...(data.teamGroup || []), String(team.id)],
             })
           }
         />
-        {data.teamId && (
-          <button onClick={() => onChange({ ...data, teamId: undefined })} className="text-xs text-red-500">
-            ✕
-          </button>
+        {data.teamGroup?.length && (
+          <div className="flex flex-wrap gap-1">
+            {data.teamGroup.map((teamId) => (
+              <div key={teamId} className="flex items-center gap-1">
+                {/* Display team ID or name here */}
+                <span className="bg-gray-200 px-2 py-1 rounded text-xs">
+                  {teamId}
+                </span>
+                <button onClick={() => onChange({ ...data, teamGroup: data.teamGroup?.filter(id => id !== teamId) ?? [] })} className="text-xs text-red-500">
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
