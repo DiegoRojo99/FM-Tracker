@@ -13,6 +13,7 @@ export type Competition = {
   season: number;            // e.g., 2023
   countryCode: string;       // e.g., "DE"
   countryName: string;       // e.g., "Germany"
+  inFootballManager: boolean; // Indicates if the competition is in Football Manager
 };
 
 export type CountryWithCompetitions = Country & {

@@ -46,7 +46,7 @@ export default function VerifyFMCompetitionsPage() {
     }
 
     fetchData();
-  }, []);
+  }, [db]);
 
   async function handleToggle(countryId: string, competitionId: string) {
     const newData = { ...data };

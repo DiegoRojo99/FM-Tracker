@@ -8,7 +8,6 @@ import { Trophy } from '@/lib/types/Trophy';
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
     if (!uid) {
-      console.error('Unauthorized access attempt');
       return new Response('Unauthorized', { status: 401 });
     }
 
