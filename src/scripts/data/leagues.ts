@@ -2,7 +2,8 @@
 
 const seededLeaguesIds = [
   39, 135, 78, 271, 61, 140, 88, 113, 180, 40, 183, 144, 41, 42, 62, 253, 272, 179, 43, 94,
-  141, 95, 136, 207, 197, 119, 203, 15, 22, 36, 6, 7, 960, 563, 564, 79, 80
+  141, 95, 136, 207, 197, 119, 203, 15, 22, 36, 6, 7, 960, 563, 564, 79, 80, 218, 71, 72, 98, 99, 100,
+  219, 332, 506, 286, 287
 ];
 const seededLeagues = seededLeaguesIds.map(id => {
   return {
@@ -11,7 +12,7 @@ const seededLeagues = seededLeaguesIds.map(id => {
   };
 });
 
-const ids: number[] = [218, 71, 72, 98, 99, 100];
+const ids: number[] = [];
 const leaguesToSeed = ids.map(id => {
   return {
     id,

@@ -23,7 +23,7 @@ const seededCountries = [
   'World',  
   'Belgium', 'Belarus', 'Chile', 'China', 'Hong Kong', 'Bulgaria',
   'India', 'Indonesia', 'Israel', 'Peru', 'Singapore', 'Uruguay',
-  'Canada', 'Croatia', 'Colombia', 'Latvia', 'Malaysia'
+  'Canada', 'Croatia', 'Colombia', 'Latvia', 'Malaysia', 'Serbia'
 ];
 
 const fmCountries: string[] = [];
