@@ -9,6 +9,7 @@ export type AlgoliaCompetition = {
   countryCode: string; // e.g., "JP"
   countryName: string; // e.g., "Japan"
   season: number; // e.g., 2023
+  inFootballManager: boolean; // e.g., false
 };
 
 export type AlgoliaTeam = {
