@@ -9,6 +9,7 @@ import { ChallengeGoalInputData } from '@/lib/types/Challenge';
 export default function AddChallengePage() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [bonus, setBonus] = useState('');
   const [goals, setGoals] = useState<ChallengeGoalInputData[]>([]);
 
   function handleAddGoal() {
@@ -22,12 +23,13 @@ export default function AddChallengePage() {
   function resetForm() {
     setName('');
     setDescription('');
+    setBonus('');
     setGoals([]);
   }
 
   async function handleSubmit() {
     if (!name || !description || goals.length === 0) {
-      alert('Fill everything');
+      alert('Need to input name, description and at least one goal');
       return;
     }
 
@@ -36,6 +38,7 @@ export default function AddChallengePage() {
       name,
       description,
       goals,
+      ...(bonus ? { bonus } : {}),
     };
 
     await addDoc(collection(db, 'challenges'), challenge);
@@ -59,6 +62,13 @@ export default function AddChallengePage() {
         placeholder="Challenge description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+      />
+      
+      <textarea
+        className="px-3 py-2 border rounded bg-white placeholder-gray-400"
+        placeholder="Challenge bonus (optional)"
+        value={bonus}
+        onChange={(e) => setBonus(e.target.value)}
       />
 
       <div className="space-y-4">
