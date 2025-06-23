@@ -2,9 +2,11 @@
 
 import { CountryWithCompetitions } from '@/lib/types/Country&Competition';
 import { Trophy } from '@/lib/types/Trophy';
-import { useEffect, useState, useMemo } from 'react';
-import { useAuth } from '../components/AuthProvider';
-import FootballLoader from '../components/FootBallLoader';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/app/components/AuthProvider';
+import FootballLoader from '@/app/components/FootBallLoader';
+import CircleProgress from '@/app/components/progress/CircleProgress';
+import Image from 'next/image';
 
 
 export default function TrophiesPage() {
@@ -60,23 +62,26 @@ export default function TrophiesPage() {
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">🏆 Trophies Checklist</h1>
 
-      {countries.map((country) => {
+      {countries.sort((a, b) => a.name.localeCompare(b.name)).map((country) => {
         const comps = country.competitions || [];
         const total = comps.length;
         const won = comps.filter((c) => hasWon(c.id)).length;
-        const percentage = total > 0 ? Math.round((won / total) * 100) : 0;
 
         return (
           <div key={country.code} className="border rounded-lg bg-white shadow p-4 text-black">
             <details className="space-y-2">
               <summary className="cursor-pointer flex items-center justify-between mb-0">
                 <div className="flex items-center gap-2">
-                  <img src={country.flag} alt={country.name} className="w-5 h-5" />
+                  <Image 
+                    src={country.flag} 
+                    alt={country.name} 
+                    width={20}
+                    height={20}
+                    className="w-5 h-5" 
+                  />
                   <span className="font-semibold">{country.name}</span>
                 </div>
-                <span className="text-sm text-gray-500">
-                  {won}/{total} ({percentage}%)
-                </span>
+                <CircleProgress completed={won} total={total} size={48} strokeWidth={6} />
               </summary>
 
               <ul className="pl-4 space-y-1 pt-4">
@@ -87,7 +92,13 @@ export default function TrophiesPage() {
                       hasWon(comp.id) ? 'text-green-600 font-semibold' : 'text-gray-500'
                     }`}
                   >
-                    <img src={comp.logo} alt={comp.name} className="w-4 h-4" />
+                    <Image 
+                      src={comp.logo} 
+                      alt={comp.name} 
+                      width={16}
+                      height={16}
+                      className="w-4 h-4"
+                    />
                     <span>{comp.name}</span>
                     {hasWon(comp.id) && <span>🏆</span>}
                   </li>
