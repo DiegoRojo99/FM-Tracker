@@ -4,6 +4,7 @@ import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { CareerStint } from '@/lib/types/Career';
 import { Trophy } from '@/lib/types/Trophy';
+import { SeasonSummary } from '@/lib/types/Season';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -33,6 +34,10 @@ export async function GET(req: NextRequest) {
     const trophiesSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'trophies'));
     const trophiesData: Trophy[] = trophiesSnapshot.docs.map(doc => doc.data() as Trophy);
 
-    return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData, trophies: trophiesData, id: saveId }), { status: 200 });
+    // Fetch the seasons data associated with the save
+    const seasonsSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'seasons'));
+    const seasonsData: SeasonSummary[] = seasonsSnapshot.docs.map(doc => doc.data() as SeasonSummary);
+
+    return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData, trophies: trophiesData, seasons: seasonsData, id: saveId }), { status: 200 });
   });
 }
