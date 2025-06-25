@@ -34,5 +34,6 @@ export type SaveWithCareer = SaveInput & {
 export type SaveWithChildren = Save & {
   career?: CareerStint[];
   trophies?: Trophy[];
+  seasons?: SeasonSummary[];
   challenges?: CareerChallenge[];
 }
