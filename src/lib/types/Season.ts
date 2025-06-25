@@ -1,5 +1,8 @@
 export type LeagueResult = {
-  finish?: number;
+  competitionId: string;
+  competitionName?: string;
+  competitionLogo?: string;
+  position?: number;
   promoted?: boolean;
   relegated?: boolean;
 };
@@ -7,6 +10,12 @@ export type LeagueResult = {
 export type CupResult = {
   competitionId: string;
   competitionName: string;
+  competitionLogo: string;
+  reachedRound: CupRound;
+};
+
+export type CupResultInput = {
+  competitionId: string;
   reachedRound: CupRound;
 };
 
@@ -45,11 +54,23 @@ export type SeasonSummary = {
   season: string;              // "2026/27"
   teamId: string;
   teamName: string;
+  teamLogo: string;
 
-  leagueId?: string;
-  leagueName?: string;
   leagueResult?: LeagueResult;
 
-  cups?: CupResult[];
+  cupResults?: CupResult[];
+  isCurrent?: boolean;
+};
+
+export type SeasonInput = {
+  season: string;              // "2026/27"
+  teamId: string;
+
+  leagueId?: string;
+  leaguePosition?: number;
+  promoted?: boolean;
+  relegated?: boolean;
+
+  cupResults?: CupResultInput[];
   isCurrent?: boolean;
 };
