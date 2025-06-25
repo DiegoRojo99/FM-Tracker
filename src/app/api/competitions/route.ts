@@ -1,13 +1,43 @@
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query } from 'firebase/firestore';
-import { NextRequest, NextResponse } from 'next/server';
+import { adminDB } from '@/lib/auth/firebase-admin';
+import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const countryCode = req.nextUrl.searchParams.get('countryCode');
-  if (!countryCode) return NextResponse.json([], { status: 400 });
+  const { searchParams } = new URL(req.url);
+  const country = searchParams.get('country');
+  const compType = searchParams.get('type');
 
-  const q = query(collection(db, 'countries', countryCode, 'competitions'),);
-  const snapshot = await getDocs(q);
-  const data = snapshot.docs.map(doc => doc.data());
-  return NextResponse.json(data);
+  let countriesToQuery: string[] = [];
+
+  if (country) {
+    countriesToQuery = [country];
+  } else {
+    // Fetch all country codes
+    const countriesSnap = await adminDB.collection('countries')
+      .where('inFootballManager', '==', true)
+      .get();
+
+    countriesToQuery = countriesSnap.docs.map(doc => doc.id);
+  }
+
+  const competitions: any[] = [];
+  for (const code of countriesToQuery) {
+    const ref = adminDB.collection(`countries/${code}/competitions`);
+    let query = ref.where('inFootballManager', '==', true);
+
+    if (compType) {
+      const normalizedType = compType.charAt(0).toUpperCase() + compType.slice(1).toLowerCase();
+      query = query.where('type', '==', normalizedType);
+    }
+
+    const snapshot = await query.get();
+    snapshot.forEach(doc => {
+      competitions.push({
+        id: doc.id,
+        countryCode: code,
+        ...doc.data(),
+      });
+    });
+  }
+
+  return new Response(JSON.stringify(competitions), { status: 200 });
 }
