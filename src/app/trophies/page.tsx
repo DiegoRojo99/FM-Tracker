@@ -31,9 +31,6 @@ export default function TrophiesPage() {
       const compsData = await compsRes.json();
       const trophiesData = await trophiesRes.json();
 
-      console.log('Fetched competitions:', compsData);
-      console.log('Fetched trophies:', trophiesData);
-
       setCountries(compsData);
       setTrophies(trophiesData);
       setLoading(false);
