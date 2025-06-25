@@ -1,4 +1,5 @@
 import { adminDB } from '@/lib/auth/firebase-admin';
+import { Competition } from '@/lib/types/Country&Competition';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -10,7 +11,8 @@ export async function GET(req: NextRequest) {
 
   if (country) {
     countriesToQuery = [country];
-  } else {
+  } 
+  else {
     // Fetch all country codes
     const countriesSnap = await adminDB.collection('countries')
       .where('inFootballManager', '==', true)
@@ -19,7 +21,7 @@ export async function GET(req: NextRequest) {
     countriesToQuery = countriesSnap.docs.map(doc => doc.id);
   }
 
-  const competitions: any[] = [];
+  const competitions: Competition[] = [];
   for (const code of countriesToQuery) {
     const ref = adminDB.collection(`countries/${code}/competitions`);
     let query = ref.where('inFootballManager', '==', true);
@@ -32,9 +34,8 @@ export async function GET(req: NextRequest) {
     const snapshot = await query.get();
     snapshot.forEach(doc => {
       competitions.push({
-        id: doc.id,
+        ...doc.data() as Competition,
         countryCode: code,
-        ...doc.data(),
       });
     });
   }
