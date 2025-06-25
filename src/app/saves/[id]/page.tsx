@@ -6,6 +6,7 @@ import { SaveWithChildren } from '@/lib/types/Save';
 import FootballLoader from '@/app/components/FootBallLoader';
 import CareerStintsSection from './CareerStintSection';
 import TrophyCase from './TrophyCase';
+import SeasonSection from './SeasonSection';
 
 export default function SavePage() {
   const params = useParams();
@@ -13,6 +14,7 @@ export default function SavePage() {
   const { user } = useAuth();
   const [saveDetails, setSaveDetails] = useState<SaveWithChildren | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,18 +43,20 @@ export default function SavePage() {
       // Set the save details state
       setSaveDetails(data);
       setLoading(false);
+      setRefresh(false);
     };
 
     fetchData();
-  }, [id, user]);
+  }, [id, user, refresh]);
 
-  if (loading) return <FootballLoader />;
+  if (loading || refresh) return <FootballLoader />;
   if (!saveDetails) notFound();
 
   return (
     <div className="p-4 sm:p-6">
-      <CareerStintsSection saveDetails={saveDetails} />
-      <TrophyCase save={saveDetails} />
+      <CareerStintsSection saveDetails={saveDetails} setRefresh={setRefresh} />
+      <SeasonSection saveDetails={saveDetails} setRefresh={setRefresh} />
+      <TrophyCase save={saveDetails} setRefresh={setRefresh} />
     </div>
   );
 }

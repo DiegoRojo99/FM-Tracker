@@ -11,9 +11,10 @@ import { Team } from '@/lib/types/Team';
 
 type Props = {
   saveDetails: SaveWithChildren;
+  setRefresh: (refresh: boolean) => void; // Optional prop for refreshing
 };
 
-export default function CareerStintsSection({ saveDetails }: Props) {
+export default function CareerStintsSection({ saveDetails, setRefresh }: Props) {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -59,7 +60,7 @@ export default function CareerStintsSection({ saveDetails }: Props) {
       return;
     }
 
-    window.location.reload();
+    setRefresh(true); // Call refresh if provided
   };
 
   return (

@@ -2,16 +2,17 @@
 
 import { useAuth } from '@/app/components/AuthProvider';
 import { useEffect, useState } from 'react';
-import AddTrophyModal from './AddTrophyModal';
+import AddTrophyModal from '@/app/components/modals/AddTrophyModal';
 import { Trophy } from '@/lib/types/Trophy';
 import { SaveWithChildren } from '@/lib/types/Save';
 import Image from 'next/image';
 
 type Props = {
   save: SaveWithChildren;
+  setRefresh: (refresh: boolean) => void; // Prop for refreshing
 };
 
-export default function TrophyCase({ save }: Props) {
+export default function TrophyCase({ save, setRefresh }: Props) {
   const { user } = useAuth();
   const [trophies, setTrophies] = useState<Trophy[]>(save.trophies || []);
   const [showModal, setShowModal] = useState(false);
@@ -85,7 +86,10 @@ export default function TrophyCase({ save }: Props) {
         open={showModal}
         onClose={() => setShowModal(false)}
         saveId={save.id}
-        onSuccess={(newTrophy) => setTrophies((prev) => [...prev, newTrophy])}
+        onSuccess={(newTrophy) => {
+          setTrophies((prev) => [...prev, newTrophy]);
+          setRefresh(true);
+        }}
       />
     </section>
   );
