@@ -2,7 +2,7 @@
 
 import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
 import CompetitionSearchDropdown from '@/app/components/algolia/CompetitionSearchDropdown';
-import CountryDropdown from '@/app/components/CountryDropdown';
+import CountryDropdown from '@/app/components/dropdowns/CountryDropdown';
 import { ChallengeGoalInputData } from '@/lib/types/Challenge';
 
 export default function ChallengeGoalInput({
