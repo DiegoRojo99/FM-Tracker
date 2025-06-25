@@ -1,0 +1,99 @@
+import { withAuth } from '@/lib/auth/withAuth';
+import { db } from '@/lib/firebase';
+import { SeasonInput, SeasonSummary } from '@/lib/types/Season';
+import { collection, addDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(req: NextRequest) {
+  return withAuth(req, async (uid) => {
+    const url = new URL(req.url);
+    const saveId = url.pathname.split('/')[3];
+
+    if (!uid || !saveId) {
+      return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
+    }
+    
+    const body = await req.json() as SeasonInput;
+    // Validate required fields
+    if (!body.teamId || !body.leagueId || !body.leaguePosition || !body.season) {
+      return new Response('Missing required fields', { status: 400 });
+    }
+
+    // Fetch team data
+    const teamSnap = await getDoc(doc(db, 'teams', body.teamId));
+    if (!teamSnap.exists()) throw new Error('Team not found');
+    const teamData = teamSnap.data();
+
+    // Fetch competition data
+    const teamCountryName = teamData.countryCode;
+    if (!teamCountryName) {
+      return new Response('Team does not have a country code', { status: 400 });
+    }
+
+    // Fetch country code from team data
+    const countryQuery = query(collection(db, 'countries'), where('name', '==', teamCountryName));
+    const querySnapshot = await getDocs(countryQuery);
+    if (querySnapshot.empty) {
+      return new Response('Country not found', { status: 404 });
+    }
+
+    const countryCode = querySnapshot.docs[0].data().code;
+    if (!countryCode) {
+      return new Response('Country code not found in team data', { status: 400 });
+    }
+
+    const leagueSnap = await getDoc(doc(db, 'countries', countryCode, 'competitions', body.leagueId));
+    if (!leagueSnap.exists()) throw new Error('League not found');
+    const leagueData = leagueSnap.data();
+
+    const cupIds = body.cupResults?.map(cup => cup.competitionId) || [];
+    const cupPromises = cupIds.map(id => getDoc(doc(db, 'countries', countryCode, 'competitions', id)));
+    const cupSnapshots = await Promise.all(cupPromises);
+    const cupResults = cupSnapshots.filter(snap => snap.exists()).map(snap => ({
+      competitionId: snap.id,
+      competitionName: snap.data().name,
+      competitionLogo: snap.data().logo,
+      reachedRound: body.cupResults?.find(cup => cup.competitionId === snap.id)?.reachedRound || 'Group Stage',
+    }));
+
+    const newSeason: SeasonSummary = {
+      season: body.season,
+
+      teamId: body.teamId,
+      teamName: teamData.name,
+      teamLogo: teamData.logo,
+      
+      leagueResult: {
+        competitionId: body.leagueId,
+        competitionName: leagueData.name,
+        competitionLogo: leagueData.logo,
+        position: body.leaguePosition,
+        promoted: body.promoted,
+        relegated: body.relegated,
+      },
+
+      cupResults: cupResults,
+    };
+
+    const seasonsRef = collection(db, 'users', uid, 'saves', saveId, 'seasons');
+    const docRef = await addDoc(seasonsRef, newSeason);
+    return NextResponse.json({ id: docRef.id, ...newSeason }, { status: 201 });
+  });
+}
+
+export async function GET(req: NextRequest) {
+  return withAuth(req, async (uid) => {
+    const url = new URL(req.url);
+    const saveId = url.pathname.split('/')[3];
+
+    if (!uid || !saveId) {
+      return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
+    }
+
+    const seasonsRef = collection(db, 'users', uid, 'saves', saveId, 'seasons');
+    const snapshot = await getDocs(seasonsRef);
+
+    const seasons = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return NextResponse.json(seasons);
+  });
+}
