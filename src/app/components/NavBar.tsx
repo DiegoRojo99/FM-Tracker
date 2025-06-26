@@ -31,8 +31,10 @@ export default function Navbar() {
           <Link href="/trophies" className="flex hover:text-[var(--color-highlight)]">
             <p className='h-fit my-auto'>Trophies</p>
           </Link>
+          <Link href="/challenges" className="flex hover:text-[var(--color-highlight)]">
+            <p className='h-fit my-auto'>Challenges</p>
+          </Link>
           {/* <Link href="#" className="hover:text-[var(--color-highlight)]">Achievements</Link> */}
-          <Link href="#" className="hover:text-[var(--color-highlight)]">Challenges</Link>
           
           <NavBarProfile />
         </div>
@@ -52,7 +54,7 @@ export default function Navbar() {
           <Link href="/saves" className="block hover:text-[var(--color-highlight)]">Saves</Link>
           <Link href="/trophies" className="block hover:text-[var(--color-highlight)]">Trophies</Link>
           {/* <Link href="#" className="block hover:text-[var(--color-highlight)]">Achievements</Link> */}
-          <Link href="#" className="block hover:text-[var(--color-highlight)]">Challenges</Link>
+          <Link href="/challenges" className="block hover:text-[var(--color-highlight)]">Challenges</Link>
           { user ? (
             <Link href="/profile" className="block hover:text-[var(--color-highlight)]">
               Profile
