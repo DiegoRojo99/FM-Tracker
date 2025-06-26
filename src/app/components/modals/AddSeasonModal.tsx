@@ -5,6 +5,7 @@ import TeamSearchDropdown from "../algolia/TeamSearchDropdown";
 import { Team } from "@/lib/types/Team";
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
+import { Competition } from "@/lib/types/Country&Competition";
 
 type AddSeasonModalProps = {
   open: boolean;
@@ -19,7 +20,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
 }) => {
   const [season, setSeason] = useState("");
   const [team, setTeam] = useState<Team | null>(null);
-  const [leagueId, setLeagueId] = useState("");
+  const [league, setLeague] = useState<Competition | null>(null);
   const [leaguePosition, setLeaguePosition] = useState<number | "">("");
   const [promoted, setPromoted] = useState(false);
   const [relegated, setRelegated] = useState(false);
@@ -29,21 +30,23 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   const handleAddCup = () => {
     setCupResults([
       ...cupResults,
-      { competitionId: "", reachedRound: CUP_ROUNDS[0] },
+      { competitionId: "", countryCode: "", reachedRound: CUP_ROUNDS[0] },
     ]);
   };
 
   const handleCupChange = (
     idx: number,
-    field: keyof CupResult,
-    value: string
+    field: "reachedRound" | "competition",
+    value: Competition | CupRound | string
   ) => {
     const updated = [...cupResults];
     if (field === "reachedRound") {
       updated[idx][field] = value as CupRound;
     } 
-    else if (field === "competitionId") {
-      updated[idx][field] = value;
+    else if (field === "competition") {
+      const competition = value as Competition;
+      updated[idx]["competitionId"] = String(competition.id);
+      updated[idx]["countryCode"] = competition.countryCode;
     }
     setCupResults(updated);
   };
@@ -53,7 +56,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   };
 
   const handleSave = () => {
-    if (!leagueId && leaguePosition !== "") {
+    if (!league?.id && leaguePosition !== "") {
       alert("Please select a league if you want to specify a league position.");
       return;
     }
@@ -61,7 +64,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
     const seasonResult: SeasonInput = {
       season,
       teamId: team?.id ? String(team.id) : "",
-      leagueId,
+      leagueId: String(league?.id) || "",
       leaguePosition: Number(leaguePosition),
       promoted,
       relegated,
@@ -106,10 +109,10 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
 
             <div>
               <label className="block text-sm mb-1">League</label>
-              <CompetitionDropdown type="League" value={leagueId} onChange={setLeagueId} />
+              <CompetitionDropdown type="League" value={league?.id ? String(league.id) : undefined} onChange={setLeague} />
             </div>
 
-            {leagueId && (
+            {league?.id && (
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm mb-1">League Position</label>
@@ -153,7 +156,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                   <CompetitionDropdown
                     type="Cup"
                     value={cup.competitionId}
-                    onChange={(value) => handleCupChange(idx, "competitionId", value)}
+                    onChange={(value) => handleCupChange(idx, "competition", value)}
                   />
                   <label className="block text-sm mt-2 mb-1">Round Reached</label>
                   <select

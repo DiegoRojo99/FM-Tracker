@@ -16,6 +16,7 @@ export type CupResult = {
 
 export type CupResultInput = {
   competitionId: string;
+  countryCode: string;
   reachedRound: CupRound;
 };
 

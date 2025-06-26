@@ -5,7 +5,7 @@ interface CompetitionDropdownProps {
   country?: string;
   type?: string;
   value?: string;
-  onChange?: (competitionId: string) => void;
+  onChange?: (competition: Competition) => void;
   placeholder?: string;
 }
 
@@ -43,7 +43,11 @@ const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({
   return (
     <select
       value={value || ''}
-      onChange={e => onChange?.(e.target.value)}
+      onChange={e => {
+        const selectedComp = competitions.find(comp => comp.id === Number(e.target.value));
+        if (!selectedComp) return;
+        onChange?.(selectedComp);
+      }}
       disabled={loading}
     >
       <option value="">{placeholder}</option>
