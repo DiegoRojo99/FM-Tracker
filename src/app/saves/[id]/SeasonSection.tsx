@@ -3,6 +3,7 @@ import AddSeasonModal from "@/app/components/modals/AddSeasonModal";
 import { SeasonInput } from "@/lib/types/Season";
 import { useAuth } from "@/app/components/AuthProvider";
 import { SaveWithChildren } from "@/lib/types/Save";
+import { SeasonCard } from "./SeasonCard";
 
 interface SeasonSectionProps {
   saveDetails: SaveWithChildren;
@@ -62,19 +63,10 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
           <p>No seasons available.</p>
         ) : (
           saveDetails.seasons.map((season) => (
-            <div
-              key={season.season}
-              style={{
-                marginBottom: "8px",
-                padding: "16px",
-                border: "1px solid #ccc",
-                borderRadius: "8px"
-              }}
-            >
-              <span>
-                {season.season} - {season.teamName}
-              </span>
-            </div>
+            <SeasonCard
+              key={`${String(season.teamId)}-${String(season.season)}`}
+              season={season}
+            />
           ))
         )}
       </div>
