@@ -46,8 +46,8 @@ export async function POST(req: NextRequest) {
     if (!leagueSnap.exists()) throw new Error('League not found');
     const leagueData = leagueSnap.data();
 
-    const cupIds = body.cupResults?.map(cup => cup.competitionId) || [];
-    const cupPromises = cupIds.map(id => getDoc(doc(db, 'countries', countryCode, 'competitions', id)));
+    const cups = body.cupResults || [];
+    const cupPromises = cups.map(cup => getDoc(doc(db, 'countries', cup.countryCode, 'competitions', cup.competitionId)));
     const cupSnapshots = await Promise.all(cupPromises);
     const cupResults = cupSnapshots.filter(snap => snap.exists()).map(snap => ({
       competitionId: snap.id,
