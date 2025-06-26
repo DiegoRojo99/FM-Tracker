@@ -24,15 +24,12 @@ export default function TrophiesPage() {
       };
 
       const [compsRes, trophiesRes] = await Promise.all([
-        fetch('/api/competitions/fm-only', { headers }),
+        fetch('/api/competitions', { headers }),
         fetch('/api/trophies', { headers }),
       ]);
 
       const compsData = await compsRes.json();
       const trophiesData = await trophiesRes.json();
-
-      console.log('Fetched competitions:', compsData);
-      console.log('Fetched trophies:', trophiesData);
 
       setCountries(compsData);
       setTrophies(trophiesData);

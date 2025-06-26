@@ -1,5 +1,6 @@
 import { CareerChallenge } from "./Challenge";
 import { CareerStint } from "./InsertDB";
+import { SeasonSummary } from "./Season";
 import { Trophy } from "./Trophy";
 
 export type SaveInput = {
@@ -34,5 +35,6 @@ export type SaveWithCareer = SaveInput & {
 export type SaveWithChildren = Save & {
   career?: CareerStint[];
   trophies?: Trophy[];
+  seasons?: SeasonSummary[];
   challenges?: CareerChallenge[];
 }

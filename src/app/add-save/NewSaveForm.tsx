@@ -25,9 +25,9 @@ export default function NewSaveForm() {
   // Fetch leagues when country changes
   useEffect(() => {
     if (selectedCountry) {
-      fetch(`/api/competitions?countryCode=${selectedCountry}`)
+      fetch(`/api/competitions?country=${selectedCountry}&type=League`)
         .then(res => res.json())
-        .then(comps => setLeagues(comps.filter((c: Competition) => c.inFootballManager)));
+        .then(setLeagues);
     } 
     else {
       setLeagues([]);
