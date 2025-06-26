@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CUP_ROUNDS, CupRound, CupResult, SeasonInput, CupResultInput } from "@/lib/types/Season";
+import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput } from "@/lib/types/Season";
 import CompetitionDropdown from "../dropdowns/CompetitionDropdown";
 import TeamSearchDropdown from "../algolia/TeamSearchDropdown";
 import { Team } from "@/lib/types/Team";
