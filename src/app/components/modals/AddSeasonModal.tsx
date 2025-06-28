@@ -91,13 +91,15 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
 
           <form className="space-y-4 overflow-y-auto max-h-[70vh]" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
             <div>
-              <label className="block text-sm mb-1">Season (e.g. 2026/27)</label>
+              <label className="block text-sm mb-1">Season (e.g. 2023/24)</label>
               <input
                 type="text"
                 value={season}
                 onChange={(e) => setSeason(e.target.value)}
-                placeholder="2026/27"
+                placeholder="2023/24"
                 className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
+                pattern="^\d{4}/\d{2}$"
+                title="Season must be in the format YYYY/YY (e.g., 2023/24)"
                 required
               />
             </div>
