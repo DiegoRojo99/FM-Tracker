@@ -9,7 +9,6 @@ type Trophy = {
   competitionLogo: string;
   competitionType: string; // e.g., "League", "Cup", "Continental"
 
-  dateWon: string;          // YYYY-MM-DD
   season: string;           // "2024/25"
   createdAt: string;        // ISO string
 };
