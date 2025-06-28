@@ -9,9 +9,7 @@ export async function GET(req: NextRequest) {
 
   let countriesToQuery: string[] = [];
 
-  if (country) {
-    countriesToQuery = [country];
-  } 
+  if (country) countriesToQuery = [country];
   else {
     // Fetch all country codes
     const countriesSnap = await adminDB.collection('countries')
