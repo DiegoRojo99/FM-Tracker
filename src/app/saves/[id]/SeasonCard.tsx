@@ -23,7 +23,7 @@ export function SeasonCard({ season }: SeasonCardProps) {
           {season.leagueResult.competitionName}: {season.leagueResult.position}º
         </div>
       )}
-      {season.cupResults?.length && (
+      {season.cupResults?.length ? (
         <div className="">
           <ul className="list-none text-gray-600 dark:text-gray-400">
             {season.cupResults.map((cup) => (
@@ -33,7 +33,7 @@ export function SeasonCard({ season }: SeasonCardProps) {
             ))}
           </ul>
         </div>
-      )}
+      ) : ( <></> )}
       <h3 className="text-lg font-semibold mt-2">{season.season}</h3>
     </div>
   )
