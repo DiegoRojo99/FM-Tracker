@@ -5,7 +5,6 @@ import {
   addDoc,
   Timestamp,
   doc,
-  getDoc,
   updateDoc,
   query,
   where,
@@ -16,6 +15,7 @@ import {
 import { NextRequest } from 'next/server';
 import { CareerStintInput } from '@/lib/types/InsertDB';
 import { fetchTeam } from '@/lib/db/teams';
+import { fetchCompetition } from '@/lib/db/competitions';
 
 function formatDate(date: Date): string {
   const year = date.getFullYear();
@@ -75,6 +75,11 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
     const docRef = await addDoc(stintsRef, newStint);
 
+    const competitionData = await fetchCompetition(teamData.countryCode, String(teamData.leagueId));
+    if (!competitionData) {
+      console.warn(`⚠️ Skipping team ${teamData.name} — no competition found for country "${teamData.countryCode}" and league "${teamData.leagueId}"`);
+    }
+
     // Update save doc with current team
     const saveRef = doc(db, 'users', uid, 'saves', id);
     const saveUpdateField = isNational ? 'currentNT' : 'currentClub';
@@ -83,6 +88,11 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         id: teamData.id,
         name: teamData.name,
         logo: teamData.logo,
+      },
+      currentLeague: {
+        id: competitionData?.id || teamData.leagueId,
+        name: competitionData?.name || '',
+        logo: competitionData?.logo || '',
       },
       updatedAt: Timestamp.now(),
     });
