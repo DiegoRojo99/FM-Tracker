@@ -21,7 +21,12 @@ export default function LandingPage() {
           {[
             {
               title: 'Save Tracker',
-              desc: 'Log each club and season you manage, with full stats and trophies.',
+              desc: 'Log each club and season you manage, with trophies.',
+              available: true,
+            },
+            {
+              title: 'Trophy Checklist',
+              desc: 'See which trophies you’ve won and which are still pending.',
               available: true,
             },
             {
@@ -29,21 +34,26 @@ export default function LandingPage() {
               desc: 'Unlock milestones like unbeaten runs, treble wins, and promotions.',
               available: false,
             },
-            {
-              title: 'Completeness Map',
-              desc: 'Track countries and continents you’ve conquered.',
-              available: false,
-            },
+            // {
+            //   title: 'Completeness Map',
+            //   desc: 'Track countries and competitions you’ve conquered.',
+            //   available: true,
+            // },
             {
               title: 'Challenges',
               desc: 'Take on legendary FM challenges like the Pentagon or Youth Only.',
               available: false,
             },
             {
-              title: 'Stats Dashboard',
-              desc: 'Visualize your total matches, goals, and club history over time.',
+              title: 'Friend Leaderboard',
+              desc: 'Compete with friends to see who can achieve the most in FM.',
               available: false,
             },
+            // {
+            //   title: 'Stats Dashboard',
+            //   desc: 'Visualize your total matches, goals, and club history over time.',
+            //   available: false,
+            // },
             {
               title: 'Career Archive',
               desc: 'Build a timeline of your entire Football Manager journey.',
