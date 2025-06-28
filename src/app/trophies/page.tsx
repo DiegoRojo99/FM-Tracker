@@ -24,7 +24,7 @@ export default function TrophiesPage() {
       };
 
       const [compsRes, trophiesRes] = await Promise.all([
-        fetch('/api/competitions', { headers }),
+        fetch('/api/competitions/grouped', { headers }),
         fetch('/api/trophies', { headers }),
       ]);
 
