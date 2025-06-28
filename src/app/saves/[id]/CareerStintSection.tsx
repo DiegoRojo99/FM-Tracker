@@ -8,6 +8,8 @@ import { useAuth } from '@/app/components/AuthProvider';
 import CareerTimeline from './CareerTimeline';
 import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
 import { Team } from '@/lib/types/Team';
+import CompetitionDropdown from '@/app/components/dropdowns/CompetitionDropdown';
+import { Competition } from '@/lib/types/Country&Competition';
 
 type Props = {
   saveDetails: SaveWithChildren;
@@ -17,10 +19,12 @@ type Props = {
 export default function CareerStintsSection({ saveDetails, setRefresh }: Props) {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [countryCode, setCountryCode] = useState<string | null>(null);
 
   // Form fields
   const [form, setForm] = useState({
     teamId: '',
+    leagueId: '',
     startDate: '',
     endDate: '',
   });
@@ -52,6 +56,7 @@ export default function CareerStintsSection({ saveDetails, setRefresh }: Props) 
         teamId: form.teamId,
         startDate: form.startDate,
         endDate: form.endDate,
+        leagueId: form.leagueId,
       }),
     });
 
@@ -99,7 +104,7 @@ export default function CareerStintsSection({ saveDetails, setRefresh }: Props) 
               <div>
                 <label className="block text-sm mb-1">Team</label>
                 <TeamSearchDropdown
-                  onTeamSelect={(team: Team) => setForm((prev) => ({ ...prev, teamId: String(team.id) }))}
+                  onTeamSelect={(team: Team) => {setForm((prev) => ({ ...prev, teamId: String(team.id) })); setCountryCode(team.countryCode);}}
                 />
               </div>
               <div>
@@ -111,6 +116,28 @@ export default function CareerStintsSection({ saveDetails, setRefresh }: Props) 
                   className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
                   placeholder="Enter team ID"
                   required
+                />
+              </div>
+              
+              {form.teamId && countryCode ? (
+                <div>
+                  <label className="block text-sm mb-1">League</label>
+                  <CompetitionDropdown
+                    onChange={(competition: Competition) => setForm((prev) => ({ ...prev, leagueId: String(competition.id) }))}
+                    type='League'
+                    country={countryCode}
+                    value={form.leagueId}
+                  />
+                </div>
+              ) : (<div className="text-sm text-gray-500">Select a team to view leagues</div>)}
+              <div>
+                <input
+                  hidden
+                  name="leagueId"
+                  value={form.leagueId}
+                  onChange={handleChange}
+                  className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
+                  placeholder="Enter league ID"
                 />
               </div>
 
