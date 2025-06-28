@@ -1,31 +1,40 @@
 import React, { useState } from "react";
 import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput } from "@/lib/types/Season";
 import CompetitionDropdown from "../dropdowns/CompetitionDropdown";
-import TeamSearchDropdown from "../algolia/TeamSearchDropdown";
-import { Team } from "@/lib/types/Team";
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 import { Competition } from "@/lib/types/Country&Competition";
+import { SaveLeague, SaveTeam, SaveWithChildren } from "@/lib/types/Save";
 
 type AddSeasonModalProps = {
   open: boolean;
   onClose: () => void;
   onSave: (season: SeasonInput) => void;
+  saveDetails: SaveWithChildren;
 };
+
+function getNextSeason(season: string): string {
+  if (!season) return "2023/24";
+  const [year, nextYear] = season.split("/");
+  if (!year || !nextYear) return "";
+  const nextSeason = parseInt(nextYear) + 1;
+  return `${parseInt(year) + 1}/${String(nextSeason).slice(-2)}`;
+}
 
 export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   open,
   onClose,
   onSave,
+  saveDetails,
 }) => {
-  const [season, setSeason] = useState("");
-  const [team, setTeam] = useState<Team | null>(null);
-  const [league, setLeague] = useState<Competition | null>(null);
+  const [season, setSeason] = useState(getNextSeason(saveDetails.season));
   const [leaguePosition, setLeaguePosition] = useState<number | "">("");
   const [promoted, setPromoted] = useState(false);
   const [relegated, setRelegated] = useState(false);
   const [cupResults, setCupResults] = useState<CupResultInput[]>([]);
-  const [isCurrent, setIsCurrent] = useState(false);
+
+  const team: SaveTeam | null = saveDetails.currentClub;
+  const league: SaveLeague | null = saveDetails.currentLeague ?? null;
 
   const handleAddCup = () => {
     setCupResults([
@@ -56,20 +65,22 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   };
 
   const handleSave = () => {
-    if (!league?.id && leaguePosition !== "") {
-      alert("Please select a league if you want to specify a league position.");
+    if (!team) return;
+    if (!season || leaguePosition === "") {
+      alert("Please fill in all required fields.");
       return;
     }
 
+    const leagueId = league?.id ? String(league.id) : String(saveDetails.leagueId);
+
     const seasonResult: SeasonInput = {
       season,
-      teamId: team?.id ? String(team.id) : "",
-      leagueId: String(league?.id) || "",
+      teamId: String(team.id),
+      leagueId,
       leaguePosition: Number(leaguePosition),
       promoted,
       relegated,
       cupResults,
-      isCurrent,
     };
 
     onSave(seasonResult);
@@ -91,28 +102,28 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
 
           <form className="space-y-4 overflow-y-auto max-h-[70vh]" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
             <div>
-              <label className="block text-sm mb-1">Season (e.g. 2026/27)</label>
+              <label className="block text-sm mb-1">Season (e.g. 2023/24)</label>
               <input
                 type="text"
                 value={season}
                 onChange={(e) => setSeason(e.target.value)}
-                placeholder="2026/27"
+                placeholder="2023/24"
                 className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
+                pattern="^\d{4}/\d{2}$"
+                title="Season must be in the format YYYY/YY (e.g., 2023/24)"
                 required
               />
             </div>
 
-            <div>
+            {/* Display team and league information */}
+            <div className="flex flex-col space-y-2">
               <label className="block text-sm mb-1">Team</label>
-              <TeamSearchDropdown onTeamSelect={setTeam} />
-            </div>
-
-            <div>
+              <div> {team?.name} </div>
               <label className="block text-sm mb-1">League</label>
-              <CompetitionDropdown type="League" value={league?.id ? String(league.id) : undefined} onChange={setLeague} />
+              <div> {league?.name} </div>
             </div>
 
-            {league?.id && (
+            {league?.id ? (
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm mb-1">League Position</label>
@@ -145,7 +156,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                   </label>
                 </div>
               </div>
-            )}
+            ) : (<></>)}
 
             <div>
               <h3 className="font-semibold text-sm mb-2">Cup Results</h3>
@@ -185,15 +196,6 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
               >
                 + Add Cup Result
               </button>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={isCurrent}
-                onChange={(e) => setIsCurrent(e.target.checked)}
-              />
-              <span className="text-sm">Is Current Season</span>
             </div>
 
             <button

@@ -1,6 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
-import { db } from '@/lib/firebase';
-import { collection, addDoc, doc, getDoc, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/db/firebase';
+import { addTrophyToSave } from '@/lib/db/trophies';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Auto-season inference if missing
@@ -32,32 +33,20 @@ export async function POST(req: NextRequest) {
     // Fetch team data
     const teamSnap = await getDoc(doc(db, 'teams', body.teamId));
     if (!teamSnap.exists()) throw new Error('Team not found');
-    const teamData = teamSnap.data();
 
     // Fetch competition data
     const compSnap = await getDoc(doc(db, 'countries', body.countryCode, 'competitions', body.competitionId));
     if (!compSnap.exists()) throw new Error('Competition not found');
-    const compData = compSnap.data();
 
+    // Add trophy to save
     const season = getSeasonFromDate(body.dateWon);
-    const dateWonString = typeof body.dateWon === 'string' ? body.dateWon : body.dateWon.toISOString().split('T')[0];
+    const newTrophyId = await addTrophyToSave({teamId: body.teamId, competitionId: body.competitionId, countryCode: body.countryCode, uid, season, saveId});
 
-    const newTrophy = {
-      teamId: body.teamId,
-      teamName: teamData.name,
-      teamLogo: teamData.logo,
+    if (!newTrophyId) {
+      return NextResponse.json({ error: 'Failed to add trophy' }, { status: 500 });
+    }
 
-      competitionId: body.competitionId,
-      competitionName: compData.name,
-      competitionLogo: compData.logo,
-
-      dateWon: dateWonString,
-      season,
-      createdAt: new Date().toISOString(),
-    };
-
-    const docRef = await addDoc(collection(db, 'users', uid, 'saves', saveId, 'trophies'), newTrophy);
-    return NextResponse.json({ id: docRef.id, ...newTrophy }, { status: 201 }); 
+    return NextResponse.json({ id: newTrophyId }, { status: 201 });
   });
 }
 

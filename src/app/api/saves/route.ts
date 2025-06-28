@@ -1,9 +1,10 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
-import { Save, SaveTeam } from '@/lib/types/Save';
+import { Save, SaveTeam, SaveWithoutId } from '@/lib/types/Save';
 import { Team } from '@/lib/types/Team';
 import { Timestamp } from 'firebase-admin/firestore';
 import { adminDB } from '@/lib/auth/firebase-admin';
+import { fetchCompetition } from '@/lib/db/competitions';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -39,10 +40,11 @@ export async function POST(req: NextRequest) {
     let currentNT: SaveTeam | null = null;
 
     if (startingTeamId) {
-      console.log(`Fetching starting team with ID: ${startingTeamId}`);
+      // Validate startingTeamId
       const teamDoc = adminDB.collection('teams').doc(String(startingTeamId));
       if (!teamDoc) return new Response('Invalid team ID', { status: 400 });
-      console.log(`Fetching team document: ${teamDoc.path}`);
+
+      // Fetch the team document
       const teamSnapshot = await teamDoc.get();
       if (!teamSnapshot.exists) return new Response('Starting team not found', { status: 404 });
 
@@ -53,19 +55,28 @@ export async function POST(req: NextRequest) {
         logo: teamData.logo,
       };
 
-      if (teamData.national) {
-        currentNT = saveTeam;
-      } else {
-        currentClub = saveTeam;
-      }
+      if (teamData.national) currentNT = saveTeam;
+      else currentClub = saveTeam;
     }
 
-    const saveData = {
+    const currentLeagueData = await fetchCompetition(countryCode, String(leagueId));
+    if (!currentLeagueData) {
+      return new Response('Invalid league ID or country code', { status: 404 });
+    }
+    const currentLeague: SaveTeam = {
+      id: currentLeagueData.id,
+      name: currentLeagueData.name,
+      logo: currentLeagueData.logo || '',
+    };
+
+    const saveData: SaveWithoutId = {
       userId: uid,
       countryCode,
       leagueId,
       currentClub,
       currentNT,
+      currentLeague,
+      season: "2023/24",
       createdAt: Timestamp.now(),
     };
 

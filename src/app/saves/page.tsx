@@ -75,6 +75,7 @@ export default function SavesPage() {
                 height={160}
               />
               <h2 className="text-xl font-semibold">{save.currentClub?.name ?? save.currentNT?.name ?? 'No Team'}</h2>
+              <p className="text-gray-500">{save.currentLeague?.name ?? 'No League'}</p>
             </div>
           </Link>
         ))}

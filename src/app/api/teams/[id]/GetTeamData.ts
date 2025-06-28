@@ -1,4 +1,4 @@
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/db/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
 export async function GetTeamData(teamId: string) {

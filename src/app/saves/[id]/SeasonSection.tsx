@@ -71,7 +71,12 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
         )}
       </div>
 
-      <AddSeasonModal open={modalOpen} onClose={() => setModalOpen(false)} onSave={handleAddSeason} />
+      <AddSeasonModal 
+        open={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+        onSave={handleAddSeason} 
+        saveDetails={saveDetails}
+      />
     </div>
   );
 };
