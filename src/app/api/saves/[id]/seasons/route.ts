@@ -1,5 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
-import { db } from '@/lib/firebase';
+import { db } from '@/lib/db/firebase';
+import { updateSaveSeason } from '@/lib/db/saves';
+import { addTrophyToSave } from '@/lib/db/trophies';
 import { SeasonInput, SeasonSummary } from '@/lib/types/Season';
 import { collection, addDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
@@ -77,6 +79,38 @@ export async function POST(req: NextRequest) {
 
     const seasonsRef = collection(db, 'users', uid, 'saves', saveId, 'seasons');
     const docRef = await addDoc(seasonsRef, newSeason);
+    if (!docRef.id) {
+      return NextResponse.json({ error: 'Failed to create season' }, { status: 500 });
+    }
+
+    if (body.leaguePosition === 1) {
+      await addTrophyToSave({
+        uid,
+        saveId,
+        competitionId: body.leagueId,
+        teamId: body.teamId,
+        countryCode,
+        season: body.season,
+      });
+    }
+
+    // If the season is a cup win, add the trophy
+    for (const cup of cups) {
+      if (cup.reachedRound === 'Winners') {
+        await addTrophyToSave({
+          uid,
+          saveId,
+          competitionId: cup.competitionId,
+          teamId: body.teamId,
+          countryCode: cup.countryCode,
+          season: body.season,
+        });
+      }
+    }
+
+    // Update the season in the save
+    await updateSaveSeason(uid, saveId, body.season);
+
     return NextResponse.json({ id: docRef.id, ...newSeason }, { status: 201 });
   });
 }
