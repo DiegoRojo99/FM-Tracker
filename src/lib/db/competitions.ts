@@ -1,8 +1,8 @@
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { Competition } from "../types/Country&Competition";
+import { db } from "./firebase";
 
 export async function fetchCompetition(countryCode: string, competitionId: string) {
-  const db = getFirestore();
   const competitionRef = doc(db, `countries/${countryCode}/competitions/${competitionId}`);
   const competitionSnap = await getDoc(competitionRef);
 
