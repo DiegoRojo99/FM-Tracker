@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { fetchFromApi } from '@/lib/apiFootball';
-import { db } from '@/lib/firebase';
+import { db } from '@/lib/db/firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { ApiLeague, ApiLeagueSeason } from '@/lib/types/FootballAPI';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';

@@ -4,7 +4,7 @@ import { useAuth } from '@/app/components/AuthProvider'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { signOut } from 'firebase/auth'
-import { auth } from '@/lib/firebase'
+import { auth } from '@/lib/db/firebase'
 
 export default function Profile() {
   const { user } = useAuth()

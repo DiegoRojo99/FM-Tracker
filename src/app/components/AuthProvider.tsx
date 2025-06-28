@@ -2,8 +2,8 @@
 
 import { createContext, useEffect, useState, useContext } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import { createUserIfNotExists } from '@/lib/firestore';
+import { auth } from '@/lib/db/firebase';
+import { createUserIfNotExists } from '@/lib/db/firestore';
 
 const AuthContext = createContext<{ user: User | null, userLoading: boolean }>({ user: null, userLoading: true })
 

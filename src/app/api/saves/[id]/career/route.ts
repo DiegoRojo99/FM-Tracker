@@ -1,4 +1,4 @@
-import { db } from '@/lib/firebase';
+import { db } from '@/lib/db/firebase';
 import { withAuth } from '@/lib/auth/withAuth';
 import {
   collection,

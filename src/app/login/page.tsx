@@ -1,7 +1,7 @@
 'use client'
 
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '@/lib/firebase'
+import { auth } from '@/lib/db/firebase'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 

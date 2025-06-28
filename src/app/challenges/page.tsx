@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/db/firebase";
 import { Challenge } from "@/lib/types/Challenge";
 import FootballLoader from "../components/FootBallLoader";
 
