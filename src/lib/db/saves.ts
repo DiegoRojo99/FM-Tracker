@@ -1,4 +1,4 @@
-import { getFirestore, doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { fetchCompetition } from "./competitions";
 import { Competition } from "../types/Country&Competition";

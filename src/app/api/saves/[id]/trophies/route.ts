@@ -33,7 +33,6 @@ export async function POST(req: NextRequest) {
     // Fetch team data
     const teamSnap = await getDoc(doc(db, 'teams', body.teamId));
     if (!teamSnap.exists()) throw new Error('Team not found');
-    const teamData = teamSnap.data();
 
     // Fetch competition data
     const compSnap = await getDoc(doc(db, 'countries', body.countryCode, 'competitions', body.competitionId));
