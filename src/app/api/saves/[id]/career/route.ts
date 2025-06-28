@@ -15,7 +15,7 @@ import {
 } from 'firebase/firestore';
 import { NextRequest } from 'next/server';
 import { CareerStintInput } from '@/lib/types/InsertDB';
-import { Team } from '@/lib/types/Team';
+import { fetchTeam } from '@/lib/db/teams';
 
 function formatDate(date: Date): string {
   const year = date.getFullYear();
@@ -39,12 +39,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     const startDate = new Date(body.startDate);
     const formattedStartDate = formatDate(startDate);
 
-    const teamSnapshot = await getDoc(doc(db, 'teams', body.teamId));
-    if (!teamSnapshot.exists()) {
-      return new Response('Team not found', { status: 404 });
-    }
-
-    const teamData = teamSnapshot.data() as Team;
+    const teamData = await fetchTeam(body.teamId);
+    if (!teamData) return new Response('Team not found', { status: 404 });
     const isNational = teamData.national ?? false;
 
     // Find latest stint of the same type (club/national) with no endDate
