@@ -22,6 +22,8 @@ export type SaveLeague = {
   logo: string;
 }
 
+export type SaveWithoutId = Omit<Save, 'id'>;
+
 export type Save = {
   id: string;
   userId: string;
@@ -29,7 +31,7 @@ export type Save = {
   leagueId: number;
   currentClub: SaveTeam | null;
   currentNT: SaveTeam | null;
-  currentLeague?: SaveLeague;
+  currentLeague: SaveLeague;
   season: string; // e.g., "2026/27"
   createdAt: Timestamp;
 }
