@@ -74,7 +74,8 @@ export default function TrophiesPage() {
                     alt={country.name} 
                     width={20}
                     height={20}
-                    className="w-5 h-5" 
+                    className="w-5 h-5"
+                    unoptimized
                   />
                   <span className="font-semibold">{country.name}</span>
                 </div>
@@ -95,6 +96,7 @@ export default function TrophiesPage() {
                       width={16}
                       height={16}
                       className="w-4 h-4"
+                      unoptimized
                     />
                     <span>{comp.name}</span>
                     {hasWon(comp.id) && <span>🏆</span>}
