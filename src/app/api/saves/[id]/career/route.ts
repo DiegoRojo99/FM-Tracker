@@ -41,7 +41,11 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
     const teamData = await fetchTeam(body.teamId);
     if (!teamData) return new Response('Team not found', { status: 404 });
+
     const isNational = teamData.national ?? false;
+    if (!isNational && !teamData.leagueId) {
+      return new Response('Club teams must have a leagueId', { status: 400 });
+    }
 
     // Find latest stint of the same type (club/national) with no endDate
     const stintsRef = collection(db, 'users', uid, 'saves', id, 'career');
@@ -61,11 +65,12 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       });
     }
 
+    const leagueId = body.leagueId && !isNational ? String(body.leagueId) : String(teamData.leagueId);
     const newStint: CareerStintInput = {
       teamId: body.teamId,
       teamLogo: teamData.logo,
       teamName: teamData.name,
-      leagueId: String(teamData.leagueId),
+      leagueId,
       startDate: formattedStartDate,
       endDate: body.endDate ? formatDate(new Date(body.endDate)) : null,
       isNational,
@@ -75,28 +80,34 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
     const docRef = await addDoc(stintsRef, newStint);
 
-    const competitionData = await fetchCompetition(teamData.countryCode, String(teamData.leagueId));
+    const competitionData = !isNational ? await fetchCompetition(teamData.countryCode, leagueId) : null;
     if (!competitionData) {
-      console.warn(`⚠️ Skipping team ${teamData.name} — no competition found for country "${teamData.countryCode}" and league "${teamData.leagueId}"`);
+      console.warn(`⚠️ Skipping team ${teamData.name} — no competition found for country "${teamData.countryCode}" and league "${leagueId}"`);
     }
 
     // Update save doc with current team
     const saveRef = doc(db, 'users', uid, 'saves', id);
     const saveUpdateField = isNational ? 'currentNT' : 'currentClub';
-    await updateDoc(saveRef, {
+    
+    const updateData: Record<string, any> = {
       [saveUpdateField]: {
         id: teamData.id,
         name: teamData.name,
         logo: teamData.logo,
       },
-      currentLeague: {
-        id: competitionData?.id || teamData.leagueId,
-        name: competitionData?.name || '',
-        logo: competitionData?.logo || '',
-      },
       updatedAt: Timestamp.now(),
-    });
+    };
 
+    // Only add `currentLeague` if `competitionData` exists and not national team
+    if (competitionData && !isNational) {
+      updateData.currentLeague = {
+        id: competitionData.id,
+        name: competitionData.name,
+        logo: competitionData.logo || '',
+      };
+    }
+
+    await updateDoc(saveRef, updateData);
     return new Response(JSON.stringify({ id: docRef.id, ...newStint }), {
       status: 201,
     });
