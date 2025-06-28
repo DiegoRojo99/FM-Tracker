@@ -10,12 +10,14 @@ import {
   where,
   orderBy,
   limit,
-  getDocs
+  getDocs,
+  PartialWithFieldValue
 } from 'firebase/firestore';
 import { NextRequest } from 'next/server';
 import { CareerStintInput } from '@/lib/types/InsertDB';
 import { fetchTeam } from '@/lib/db/teams';
 import { fetchCompetition } from '@/lib/db/competitions';
+import { Save } from '@/lib/types/Save';
 
 function formatDate(date: Date): string {
   const year = date.getFullYear();
@@ -89,13 +91,12 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     const saveRef = doc(db, 'users', uid, 'saves', id);
     const saveUpdateField = isNational ? 'currentNT' : 'currentClub';
     
-    const updateData: Record<string, any> = {
+    const updateData: PartialWithFieldValue<Save> = {
       [saveUpdateField]: {
         id: teamData.id,
         name: teamData.name,
         logo: teamData.logo,
       },
-      updatedAt: Timestamp.now(),
     };
 
     // Only add `currentLeague` if `competitionData` exists and not national team
