@@ -16,6 +16,12 @@ export type SaveTeam = {
   logo: string;
 }
 
+export type SaveLeague = {
+  id: number;
+  name: string;
+  logo: string;
+}
+
 export type Save = {
   id: string;
   userId: string;
@@ -23,6 +29,8 @@ export type Save = {
   leagueId: number;
   currentClub: SaveTeam | null;
   currentNT: SaveTeam | null;
+  currentLeague?: SaveLeague;
+  season: string; // e.g., "2026/27"
   createdAt: Timestamp;
 }
 
