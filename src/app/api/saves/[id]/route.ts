@@ -5,6 +5,8 @@ import type { NextRequest } from 'next/server';
 import { CareerStint } from '@/lib/types/Career';
 import { Trophy } from '@/lib/types/Trophy';
 import { SeasonSummary } from '@/lib/types/Season';
+import { getChallengesForSave } from '@/lib/db/challenges';
+import { Challenge } from '@/lib/types/Challenge';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -38,6 +40,9 @@ export async function GET(req: NextRequest) {
     const seasonsSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'seasons'));
     const seasonsData: SeasonSummary[] = seasonsSnapshot.docs.map(doc => doc.data() as SeasonSummary);
 
-    return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData, trophies: trophiesData, seasons: seasonsData, id: saveId }), { status: 200 });
+    // Fetch challenges associated with the save
+    const challenges: Challenge[] = await getChallengesForSave(uid, saveId);
+
+    return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData, trophies: trophiesData, seasons: seasonsData, challenges, id: saveId }), { status: 200 });
   });
 }
