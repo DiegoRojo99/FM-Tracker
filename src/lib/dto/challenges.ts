@@ -61,5 +61,6 @@ export function getCareerChallengeFromChallengeAndTrophies(challenge: Challenge,
 
 export function getChallengeWithoutStartingAt(challenge: CareerChallenge): Omit<CareerChallenge, 'startedAt'> {
   const { startedAt, ...rest } = challenge;
+  console.log('Career challenge started at:', startedAt);
   return rest;
 }
