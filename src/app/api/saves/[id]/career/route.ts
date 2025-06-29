@@ -18,7 +18,7 @@ import { CareerStintInput } from '@/lib/types/InsertDB';
 import { fetchTeam } from '@/lib/db/teams';
 import { fetchCompetition } from '@/lib/db/competitions';
 import { Save } from '@/lib/types/Save';
-import { addChallengeForTeam } from '@/lib/db/challenges';
+import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
 
 function formatDate(date: Date): string {
   const year = date.getFullYear();
@@ -111,6 +111,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
     // Check if the team has any matching challenges
     await addChallengeForTeam(uid, id, String(body.teamId));
+    await addChallengeForCountry(uid, id, teamData.countryCode);
 
     await updateDoc(saveRef, updateData);
     return new Response(JSON.stringify({ id: docRef.id, ...newStint }), {

@@ -125,3 +125,23 @@ export async function addChallengeForTeam(
     }
   }
 }
+
+export async function addChallengeForCountry(
+  uid: string,
+  saveId: string,
+  countryCode: string
+): Promise<void> {
+  const userChallenges = await getChallengesForSave(uid, saveId);
+  const matchingChallenges = await getCountryMatchingChallenges(String(countryCode));
+
+  for (const challenge of matchingChallenges) {
+    // Check if the challenge is already in the user's save
+    const userHasChallenge = userChallenges.some(c => c.id === challenge.id);
+    
+    if (!userHasChallenge) {
+      // Add the challenge to the user's save
+      const careerChallenge = getCareerChallengeFromChallengeAndTrophy(challenge, null);
+      await addChallengeForSave(uid, saveId, careerChallenge);
+    }
+  }
+}

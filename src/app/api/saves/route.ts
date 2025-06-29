@@ -5,7 +5,7 @@ import { Team } from '@/lib/types/Team';
 import { Timestamp } from 'firebase-admin/firestore';
 import { adminDB } from '@/lib/auth/firebase-admin';
 import { fetchCompetition } from '@/lib/db/competitions';
-import { addChallengeForTeam } from '@/lib/db/challenges';
+import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -103,6 +103,7 @@ export async function POST(req: NextRequest) {
       
       // Check if the team has any matching challenges
       await addChallengeForTeam(uid, docRef.id, String(startingTeamId));
+      await addChallengeForCountry(uid, docRef.id, countryCode);
     }
 
     return new Response(JSON.stringify({ id: docRef.id, ...saveData }), { status: 201 });
