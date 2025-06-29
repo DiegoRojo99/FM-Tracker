@@ -3,7 +3,7 @@ import { db } from '@/lib/db/firebase';
 import { updateSaveSeason } from '@/lib/db/saves';
 import { addTrophyToSave } from '@/lib/db/trophies';
 import { SeasonInput, SeasonSummary } from '@/lib/types/Season';
-import { collection, addDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, getDocs } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
