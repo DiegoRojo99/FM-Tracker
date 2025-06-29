@@ -27,21 +27,9 @@ export async function POST(req: NextRequest) {
     const teamData = teamSnap.data();
 
     // Fetch competition data
-    const teamCountryName = teamData.countryCode;
-    if (!teamCountryName) {
-      return new Response('Team does not have a country code', { status: 400 });
-    }
-
-    // Fetch country code from team data
-    const countryQuery = query(collection(db, 'countries'), where('name', '==', teamCountryName));
-    const querySnapshot = await getDocs(countryQuery);
-    if (querySnapshot.empty) {
-      return new Response('Country not found', { status: 404 });
-    }
-
-    const countryCode = querySnapshot.docs[0].data().code;
+    const countryCode = teamData.countryCode;
     if (!countryCode) {
-      return new Response('Country code not found in team data', { status: 400 });
+      return new Response('Team does not have a country code', { status: 400 });
     }
 
     const leagueSnap = await getDoc(doc(db, 'countries', countryCode, 'competitions', body.leagueId));
