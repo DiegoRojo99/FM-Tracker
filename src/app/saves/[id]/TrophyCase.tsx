@@ -6,6 +6,7 @@ import AddTrophyModal from '@/app/components/modals/AddTrophyModal';
 import { Trophy } from '@/lib/types/Trophy';
 import { SaveWithChildren } from '@/lib/types/Save';
 import Image from 'next/image';
+import BlurredCard from '@/app/components/BlurredCard';
 
 type Props = {
   save: SaveWithChildren;
@@ -59,11 +60,12 @@ export default function TrophyCase({ save, setRefresh }: Props) {
         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {trophies.map((trophyWin, i) => {
             return (
-              <div key={i} className="bg-purple-50 dark:bg-purple-900 border border-purple-600 rounded-lg p-4 flex flex-col items-center shadow">
-                {trophyWin.competitionLogo && (
-                  <Image
-                    src={trophyWin.competitionLogo}
-                    alt={trophyWin.competitionName}
+              <BlurredCard key={i} blurSize='2xs'>
+                <div className="flex flex-col items-center p-4">
+                  {trophyWin.competitionLogo && (
+                    <Image
+                      src={trophyWin.competitionLogo}
+                      alt={trophyWin.competitionName}
                     width={96}
                     height={96}
                     className="w-24 h-24 object-contain mb-2"
@@ -77,6 +79,7 @@ export default function TrophyCase({ save, setRefresh }: Props) {
                   {trophyWin.teamName}
                 </div>
               </div>
+              </BlurredCard>
             );
           })}
         </div>
