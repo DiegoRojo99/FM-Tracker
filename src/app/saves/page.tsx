@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../components/AuthProvider';
 import { Save } from '@/lib/types/Save';
-import Image from 'next/image';
 import FootballLoader from '../components/FootBallLoader';
+import { SaveCard } from './SaveCard';
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
@@ -64,21 +64,7 @@ export default function SavesPage() {
         </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {saves.map(save => (
-          <Link key={save.id} href={`/saves/${save.id}`}>
-            <div className="p-4 rounded-xl border hover:shadow transition-all w-full flex flex-col items-center gap-4 
-            cursor-pointer hover:border-purple-600 bg-purple-50 dark:bg-purple-900">
-              <Image
-                src={save.currentClub?.logo ?? save.currentNT?.logo ?? '/Free-Agent.png'}
-                alt={save.currentClub?.name ?? save.currentNT?.name ?? 'No Team'}
-                width={128}
-                height={160}
-              />
-              <h2 className="text-xl font-semibold">{save.currentClub?.name ?? save.currentNT?.name ?? 'No Team'}</h2>
-              <p className="text-gray-500">{save.currentLeague?.name ?? 'No League'}</p>
-            </div>
-          </Link>
-        ))}
+        {saves.map(save => ( <SaveCard key={save.id} save={save} /> ))}
       </div>
     </div>
   )
