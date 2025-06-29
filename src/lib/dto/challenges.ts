@@ -7,13 +7,13 @@ export function getCareerChallengeFromChallengeAndTrophy(challenge: Challenge, t
   if (trophy) {
     // If a trophy is provided, we can assume the challenge is completed
     completedGoals = challenge.goals.filter(goal => {
-      if (goal.competitionId && goal.competitionId === trophy.competitionId) {
+      if (goal.competitionId && String(goal.competitionId) === String(trophy.competitionId)) {
         return true;
       }
-      if (goal.teamGroup && goal.teamGroup.includes(trophy.teamId)) {
+      if (goal.teamGroup && goal.teamGroup.includes(String(trophy.teamId))) {
         return true;
       }
-      if (goal.countryId && goal.countryId === trophy.countryCode) {
+      if (goal.countryId && String(goal.countryId) === String(trophy.countryCode)) {
         return true;
       }
       return false;
@@ -25,7 +25,7 @@ export function getCareerChallengeFromChallengeAndTrophy(challenge: Challenge, t
     name: challenge.name,
     description: challenge.description,
     goals: challenge.goals,
-    completedGoals: [],
+    completedGoals: completedGoals,
     startedAt: new Date().toISOString(),
   };
 }
@@ -36,13 +36,13 @@ export function getCareerChallengeFromChallengeAndTrophies(challenge: Challenge,
   if (trophies.length) {
     // If trophies are provided, we can assume the challenge is completed
     completedGoals = challenge.goals.filter(goal => {
-      if (goal.competitionId && trophies.some(trophy => trophy.competitionId === goal.competitionId)) {
+      if (goal.competitionId && trophies.some(trophy => String(trophy.competitionId) === String(goal.competitionId))) {
         return true;
       }
-      if (goal.teamGroup && trophies.some(trophy => trophy.teamId && goal.teamGroup?.includes(trophy.teamId))) {
+      if (goal.teamGroup && trophies.some(trophy => String(trophy.teamId) === String(goal.teamGroup))) {
         return true;
       }
-      if (goal.countryId && trophies.some(trophy => trophy.countryCode && goal.countryId === trophy.countryCode)) {
+      if (goal.countryId && trophies.some(trophy => String(trophy.countryCode) === String(goal.countryId))) {
         return true;
       }
       return false;
@@ -54,7 +54,7 @@ export function getCareerChallengeFromChallengeAndTrophies(challenge: Challenge,
     name: challenge.name,
     description: challenge.description,
     goals: challenge.goals,
-    completedGoals: [],
+    completedGoals: completedGoals,
     startedAt: new Date().toISOString(),
   };
 }

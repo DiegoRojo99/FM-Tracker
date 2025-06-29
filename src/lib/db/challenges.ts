@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { db } from './firebase';
 import { CareerChallenge, Challenge } from '../types/Challenge';
 import { Trophy } from '../types/Trophy';
@@ -59,14 +59,25 @@ export async function addChallengeForSave(userId: string, saveId: string, challe
 }
 
 export async function updateChallengeForSave(userId: string, saveId: string, challenge: CareerChallenge) {
-  const challengesCol = collection(db, 'users', userId, 'saves', saveId, 'challenges');
-  const challengeSnapshot = await getDocs(challengesCol);
-  const challengeDoc = challengeSnapshot.docs.find(doc => doc.id === challenge.id);
-  if (!challengeDoc) return null;
+  const challengesRef = collection(db, 'users', userId, 'saves', saveId, 'challenges');
+  
+  // Look for existing document with the same challenge.id
+  const existingQuery = query(challengesRef, where('id', '==', challenge.id));
+  const existingSnap = await getDocs(existingQuery);
 
-  const challengeWithoutStartedAt = getChallengeWithoutStartingAt(challenge);
-  await updateDoc(challengeDoc.ref, challengeWithoutStartedAt);
-  return challengeDoc.id;
+  if (!existingSnap.empty) {
+    // Update the first match
+    const docRef = existingSnap.docs[0].ref;
+
+    // Remove the startedAt field to avoid overwriting it
+    const updatedChallenge = getChallengeWithoutStartingAt(challenge);
+    await updateDoc(docRef, updatedChallenge);
+  } 
+  else {
+    // Add new document with auto-generated ID
+    await addDoc(challengesRef, challenge);
+  }
+  return challenge.id;
 }
 
 export async function checkForMatchingChallenges(trophyData: Trophy) {
@@ -87,22 +98,18 @@ export async function addChallengeForTrophy(
 ): Promise<void> {
   const userChallenges = await getChallengesForSave(uid, saveId);
   const matchingChallenges = await checkForMatchingChallenges(trophyData);
-  const saveTrophies = await getTrophiesForSave(uid, saveId);
+  console.log('Matching challenges found:', matchingChallenges.length);
+  let saveTrophies = await getTrophiesForSave(uid, saveId);
+  if (!saveTrophies.includes(trophyData)) saveTrophies.push(trophyData);
 
   for (const challenge of matchingChallenges) {
     // Check if the challenge is already in the user's save
     const userHasChallenge = userChallenges.some(c => c.id === challenge.id);
-    
-    if (!userHasChallenge) {
-      // Add the challenge to the user's save
-      const careerChallenge = getCareerChallengeFromChallengeAndTrophy(challenge, trophyData);
-      await addChallengeForSave(uid, saveId, careerChallenge);
-    } 
-    else {
-      // Update the existing challenge if needed
-      const updatedCareerChallenge = getCareerChallengeFromChallengeAndTrophies(challenge, saveTrophies);
-      await updateChallengeForSave(uid, saveId, updatedCareerChallenge);
-    }
+    console.log(`Checking challenge ${challenge.id} for user ${uid} in save ${saveId}`);
+    console.log(`User has challenge: ${userHasChallenge}`);
+
+    const updatedCareerChallenge = getCareerChallengeFromChallengeAndTrophies(challenge, saveTrophies);
+    await updateChallengeForSave(uid, saveId, updatedCareerChallenge);
   }
 }
 
