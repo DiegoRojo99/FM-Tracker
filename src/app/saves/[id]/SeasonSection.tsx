@@ -58,11 +58,11 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
           +
         </button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="flex flex-row gap-4 overflow-x-auto">
         {!saveDetails.seasons?.length ? (
           <p>No seasons available.</p>
         ) : (
-          saveDetails.seasons.map((season) => (
+          saveDetails.seasons.sort((a, b) => a.season.localeCompare(b.season)).map((season) => (
             <SeasonCard
               key={`${String(season.teamId)}-${String(season.season)}`}
               season={season}
