@@ -20,6 +20,7 @@ type Trophy = {
 
   season: string;           // "2024/25"
   createdAt: string;        // ISO string
+  countryCode: string;     // Optional, if needed for filtering or display
 };
 
 type TrophyInput = {
