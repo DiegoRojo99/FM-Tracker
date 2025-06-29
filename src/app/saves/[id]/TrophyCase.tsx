@@ -3,10 +3,11 @@
 import { useAuth } from '@/app/components/AuthProvider';
 import { useEffect, useState } from 'react';
 import AddTrophyModal from '@/app/components/modals/AddTrophyModal';
-import { Trophy } from '@/lib/types/Trophy';
+import { TrophyGroup } from '@/lib/types/Trophy';
 import { SaveWithChildren } from '@/lib/types/Save';
 import Image from 'next/image';
 import BlurredCard from '@/app/components/BlurredCard';
+import { groupTrophies } from '@/lib/dto/trophies';
 
 type Props = {
   save: SaveWithChildren;
@@ -15,7 +16,7 @@ type Props = {
 
 export default function TrophyCase({ save, setRefresh }: Props) {
   const { user } = useAuth();
-  const [trophies, setTrophies] = useState<Trophy[]>(save.trophies || []);
+  const [trophies, setTrophies] = useState<TrophyGroup[]>(groupTrophies(save.trophies || []));
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -57,27 +58,45 @@ export default function TrophyCase({ save, setRefresh }: Props) {
       {trophies.length === 0 ? (
         <p className="text-sm text-gray-500">No trophies yet. Start winning!</p>
       ) : (
-        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {trophies.map((trophyWin, i) => {
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {trophies.map((trophy, i) => {
+            if (!trophy?.trophies?.length) {
+              return (
+                <BlurredCard key={i} blurSize='2xs'>
+                  <div className="flex flex-col items-center p-4">
+                    <div className="text-sm text-gray-500">No trophies won</div>
+                  </div>
+                </BlurredCard>
+              );
+            }
+
             return (
               <BlurredCard key={i} blurSize='2xs'>
-                <div className="flex flex-col items-center p-4">
-                  {trophyWin.competitionLogo && (
+                <div className="flex flex-col items-center">
+                  {trophy.competitionLogo && (
                     <Image
-                      src={trophyWin.competitionLogo}
-                      alt={trophyWin.competitionName}
+                      src={trophy.competitionLogo}
+                      alt={trophy.competitionName}
                     width={96}
                     height={96}
                     className="w-24 h-24 object-contain mb-2"
                   />
                 )}
-                <div className="text-lg font-bold text-center mb-2">{trophyWin.competitionName}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 text-center mb-1">
-                  Season: {trophyWin.season}
-                </div>
-                <div className="text-xs text-gray-500 dark:text-gray-300 text-center">
-                  {trophyWin.teamName}
-                </div>
+                <div className="text-lg font-bold text-center mb-2">{trophy.competitionName}</div>
+                {trophy.trophies.length ? (
+                  <ul className="list-none text-sm text-gray-700 dark:text-gray-300">
+                    {trophy.trophies.map((trophyItem, j) => (
+                      <li key={`trophy-${i}-${j}`} className="mb-1">
+                        <span className="font-semibold">{trophyItem.season}</span>:
+                        <span className="ml-1">{trophyItem.teamName}</span>
+                      </li>
+                    ))}
+                  </ul>                  
+                ) : (
+                  <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                    No trophies won
+                  </div>
+                )}
               </div>
               </BlurredCard>
             );
@@ -89,8 +108,7 @@ export default function TrophyCase({ save, setRefresh }: Props) {
         open={showModal}
         onClose={() => setShowModal(false)}
         saveId={save.id}
-        onSuccess={(newTrophy) => {
-          setTrophies((prev) => [...prev, newTrophy]);
+        onSuccess={() => {
           setRefresh(true);
         }}
       />

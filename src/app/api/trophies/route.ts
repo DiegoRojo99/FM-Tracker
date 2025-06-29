@@ -2,7 +2,7 @@ import { withAuth } from '@/lib/auth/withAuth';
 import { NextRequest } from 'next/server';
 import { adminDB } from '@/lib/auth/firebase-admin';
 import { SaveWithChildren } from '@/lib/types/Save';
-import { Trophy } from '@/lib/types/Trophy';
+import { Trophy, TrophyGroup } from '@/lib/types/Trophy';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
       ...doc.data(),
     })) as SaveWithChildren[];
 
-    const allTrophies: Trophy[] = [];
+    const groupedTrophies: TrophyGroup[] = [];
     await Promise.all(
       saves.map(async (save) => {
         const saveRef = adminDB.collection('users').doc(uid).collection('saves').doc(save.id);
@@ -30,10 +30,24 @@ export async function GET(req: NextRequest) {
           ...doc.data(),
         })) as Trophy[];
 
-        allTrophies.push(...saveTrophies);
+        saveTrophies.forEach((trophy) => {
+          const group = groupedTrophies.find((g) => g.competitionId === trophy.competitionId);
+          if (group) {
+            group.trophies.push(trophy);
+          } 
+          else {
+            groupedTrophies.push({
+              competitionId: trophy.competitionId,
+              competitionName: trophy.competitionName,
+              competitionLogo: trophy.competitionLogo,
+              competitionType: trophy.competitionType,
+              trophies: [trophy],
+            });
+          }
+        });
       })
     );
 
-    return new Response(JSON.stringify(allTrophies), { status: 200 });
+    return new Response(JSON.stringify(groupedTrophies), { status: 200 });
   });
 }

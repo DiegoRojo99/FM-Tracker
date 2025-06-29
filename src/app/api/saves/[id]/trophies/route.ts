@@ -1,6 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { db } from '@/lib/db/firebase';
 import { addTrophyToSave } from '@/lib/db/trophies';
+import { Trophy, TrophyGroup } from '@/lib/types/Trophy';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -62,7 +63,24 @@ export async function GET(req: NextRequest) {
     const trophiesRef = collection(db, 'users', uid, 'saves', saveId, 'trophies');
     const snapshot = await getDocs(trophiesRef);
 
-    const trophies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return NextResponse.json(trophies);
+    const trophies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as Omit<Trophy, 'id'> })) as Trophy[];
+    
+    const groupedTrophies: TrophyGroup[] = [];
+    trophies.forEach((trophy) => {
+      const group = groupedTrophies.find((g) => g.competitionId === trophy.competitionId);
+      if (group) {
+        group.trophies.push(trophy);
+      } 
+      else {
+        groupedTrophies.push({
+          competitionId: trophy.competitionId,
+          competitionName: trophy.competitionName,
+          competitionLogo: trophy.competitionLogo,
+          competitionType: trophy.competitionType,
+          trophies: [trophy],
+        });
+      }
+    });
+    return NextResponse.json(groupedTrophies);
   });
 }

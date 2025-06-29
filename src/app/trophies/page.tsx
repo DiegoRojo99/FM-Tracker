@@ -1,7 +1,7 @@
 'use client';
 
 import { CountryWithCompetitions } from '@/lib/types/Country&Competition';
-import { Trophy } from '@/lib/types/Trophy';
+import { TrophyGroup } from '@/lib/types/Trophy';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import FootballLoader from '@/app/components/FootBallLoader';
@@ -12,7 +12,7 @@ import Image from 'next/image';
 export default function TrophiesPage() {
   const { user, userLoading } = useAuth();
   const [countries, setCountries] = useState<CountryWithCompetitions[]>([]);
-  const [trophies, setTrophies] = useState<Trophy[]>([]);
+  const [trophies, setTrophies] = useState<TrophyGroup[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
