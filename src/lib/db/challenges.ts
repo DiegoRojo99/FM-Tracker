@@ -4,6 +4,7 @@ import { CareerChallenge, Challenge } from '../types/Challenge';
 import { Trophy } from '../types/Trophy';
 import { getCareerChallengeFromChallengeAndTrophies, getCareerChallengeFromChallengeAndTrophy, getChallengeWithoutStartingAt } from '../dto/challenges';
 import { getTrophiesForSave } from './trophies';
+import { Save } from '../types/Save';
 
 export async function getAllChallenges() {
   const challengesCol = collection(db, 'challenges');
@@ -19,6 +20,22 @@ export async function getChallengeById(challengeId: string) {
   if (!challengeDoc) return null;
   
   return { id: challengeDoc.id, ...challengeDoc.data() } as Challenge;
+}
+
+export async function getUserChallenges(userId: string) {
+  const savesCol = collection(db, 'users', userId, 'saves');
+  const savesSnapshot = await getDocs(savesCol);
+  const saves = savesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Save[];
+
+  const userChallenges: CareerChallenge[] = [];
+  for (const save of saves) {
+    const challengesCol = collection(db, 'users', userId, 'saves', save.id, 'challenges');
+    const challengeSnapshot = await getDocs(challengesCol);
+    const challenges = challengeSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as CareerChallenge[];
+    userChallenges.push(...challenges);
+  }
+
+  return userChallenges;
 }
 
 export async function getTeamMatchingChallenges(teamId: string) {
