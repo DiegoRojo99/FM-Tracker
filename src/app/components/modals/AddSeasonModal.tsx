@@ -89,9 +89,9 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
 
   if (!open) return null;
   return (
-    <Dialog open={open} onClose={onClose} className="fixed z-50 inset-0 overflow-y-auto">
+    <Dialog open={open} onClose={onClose} className="fixed z-50 inset-0 overflow-y-auto bg-black/70">
       <div className="flex items-center justify-center min-h-screen px-4">
-        <Dialog.Panel className="w-full max-w-2xl h-[80vh] bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-xl relative">
+        <Dialog.Panel className="w-full max-w-2xl max-h-[80vh] h-fit my-auto bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-xl relative">
           <button
             className="absolute top-4 right-4 text-zinc-500 hover:text-zinc-800 dark:hover:text-white"
             onClick={onClose}
