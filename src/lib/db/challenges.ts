@@ -96,18 +96,11 @@ export async function addChallengeForTrophy(
   saveId: string,
   trophyData: Trophy
 ): Promise<void> {
-  const userChallenges = await getChallengesForSave(uid, saveId);
   const matchingChallenges = await checkForMatchingChallenges(trophyData);
-  console.log('Matching challenges found:', matchingChallenges.length);
-  let saveTrophies = await getTrophiesForSave(uid, saveId);
+  const saveTrophies = await getTrophiesForSave(uid, saveId);
   if (!saveTrophies.includes(trophyData)) saveTrophies.push(trophyData);
 
   for (const challenge of matchingChallenges) {
-    // Check if the challenge is already in the user's save
-    const userHasChallenge = userChallenges.some(c => c.id === challenge.id);
-    console.log(`Checking challenge ${challenge.id} for user ${uid} in save ${saveId}`);
-    console.log(`User has challenge: ${userHasChallenge}`);
-
     const updatedCareerChallenge = getCareerChallengeFromChallengeAndTrophies(challenge, saveTrophies);
     await updateChallengeForSave(uid, saveId, updatedCareerChallenge);
   }
