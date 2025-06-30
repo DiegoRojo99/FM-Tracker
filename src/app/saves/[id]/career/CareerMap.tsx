@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -25,13 +25,12 @@ type TeamLocationPickerProps = {
 export default function TeamLocationPicker({
   saveDetails,
 }: TeamLocationPickerProps) {
-  const career = saveDetails.career || [];
+  const career = useMemo(() => {
+    return saveDetails.career || [];
+  }, [saveDetails]);
+
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
-
-  if (career.length === 0) {
-    return <div className="text-center text-gray-500">No career data available.</div>;
-  }
   
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<Map | null>(null);
@@ -172,6 +171,10 @@ export default function TeamLocationPicker({
       map.setTarget(undefined);
     };
   }, [career, teams]);
+  
+  if (career.length === 0) {
+    return <div className="text-center text-gray-500">No career data available.</div>;
+  }
 
   if (loading) {
     return <FootballLoader />;
