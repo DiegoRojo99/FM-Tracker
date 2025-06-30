@@ -8,6 +8,7 @@ import CareerStintsSection from './CareerStintSection';
 import TrophyCase from './TrophyCase';
 import SeasonSection from './SeasonSection';
 import ChallengeSection from './ChallengeSection';
+import CareerMap from './career/CareerMap';
 
 export default function SavePage() {
   const params = useParams();
@@ -53,14 +54,13 @@ export default function SavePage() {
   if (loading || refresh) return <FootballLoader />;
   if (!saveDetails) notFound();
 
-  console.log('Save details:', saveDetails);
-
   return (
     <div className="p-4 sm:p-6">
       <CareerStintsSection saveDetails={saveDetails} setRefresh={setRefresh} />
       <SeasonSection saveDetails={saveDetails} setRefresh={setRefresh} />
       <TrophyCase save={saveDetails} setRefresh={setRefresh} />
       <ChallengeSection challenges={saveDetails.challenges ?? []} />
+      <CareerMap saveDetails={saveDetails} />
     </div>
   );
 }
