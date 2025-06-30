@@ -42,7 +42,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     const startDate = new Date(body.startDate);
     const formattedStartDate = formatDate(startDate);
 
-    const teamData = await fetchTeam(body.teamId);
+    const teamData = await fetchTeam(String(body.teamId));
     if (!teamData) return new Response('Team not found', { status: 404 });
 
     const isNational = teamData.national ?? false;
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
     const leagueId = body.leagueId && !isNational ? String(body.leagueId) : String(teamData.leagueId);
     const newStint: CareerStintInput = {
-      teamId: body.teamId,
+      teamId: String(teamData.id),
       teamLogo: teamData.logo,
       teamName: teamData.name,
       leagueId,

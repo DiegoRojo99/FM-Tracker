@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     // Create a starting career stint if a startingTeamId is provided
     if (startingTeamId) {
       const careerStintData = {
-        teamId: startingTeamId,
+        teamId: String(startingTeamId),
         leagueId,
         countryCode,
         startDate: '2023-07-01',
