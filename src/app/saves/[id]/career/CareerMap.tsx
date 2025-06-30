@@ -13,8 +13,8 @@ import { SaveWithChildren } from '@/lib/types/Save';
 import FootballLoader from '@/app/components/FootBallLoader';
 import { Team } from '@/lib/types/Team';
 import { Feature } from 'ol';
-import { Point } from 'ol/geom';
-import { Style, Icon } from 'ol/style';
+import { LineString, Point } from 'ol/geom';
+import { Style, Icon, Stroke } from 'ol/style';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 
@@ -112,6 +112,40 @@ export default function TeamLocationPicker({
     const vectorSource = new VectorSource({
       features,
     });
+    
+    // Create an arrow for between teams
+    if (careerTeamsNumber > 1) {
+      const arrowFeatures = careerTeamsWithCoords.map((team, index) => {
+        if (index === careerTeamsNumber - 1) return null;
+
+        const nextTeam = careerTeamsWithCoords[index + 1];
+        if (!nextTeam) return null;
+
+        if (!team.coordinates?.lat || !team.coordinates?.lng) return null;
+        if (!nextTeam.coordinates?.lat || !nextTeam.coordinates?.lng) return null;
+
+        const arrow = new Feature({
+          geometry: new LineString([
+            fromLonLat([team.coordinates.lng, team.coordinates.lat]),
+            fromLonLat([nextTeam.coordinates.lng, nextTeam.coordinates.lat]),
+          ]),
+        });
+
+        arrow.setStyle(
+          new Style({
+            stroke: new Stroke({
+              color: 'blue',
+              width: 2,
+            }),
+          })
+        );
+
+        return arrow;
+      }).filter(feature => feature !== null) as Feature[];
+
+      // Add arrow features to the vector source
+      vectorSource.addFeatures(arrowFeatures);
+    }
 
     const vectorLayer = new VectorLayer({
       source: vectorSource,
