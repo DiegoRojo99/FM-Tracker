@@ -6,9 +6,9 @@ import Link from "next/link";
 
 export default function AdminPage() {
   const { user, userLoading } = useAuth();
-  const adminUID = process.env.NEXT_PUBLIC_ADMIN_UID;
   
   useEffect(() => {
+    const adminUID = process.env.NEXT_PUBLIC_ADMIN_UID;
     if (userLoading) return;
     if (!user || user.uid !== adminUID) {
       window.location.href = "/";
