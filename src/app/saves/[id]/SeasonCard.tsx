@@ -25,9 +25,10 @@ export function SeasonCard({ season }: SeasonCardProps) {
         <Image
           src={season.teamLogo}
           alt={season.teamName}
-          className="w-16 h-16 mr-2"
+          className="h-16 w-auto object-contain"
           width={128}
           height={128}
+          unoptimized
         />
         <span className="font-medium">{season.teamName}</span>
       </div>
@@ -41,9 +42,10 @@ export function SeasonCard({ season }: SeasonCardProps) {
               <Image
                 src={leagueResult.competitionLogo}
                 alt={leagueResult.competitionName ?? 'League Logo'}
-                className="h-auto w-12"
-                width={24}
-                height={24}
+                className="h-10 w-auto"
+                width={150}
+                height={150}
+                unoptimized
               />
             )}
             <p className="text-sm font-medium ml-1">{leagueResult.competitionName}</p>
@@ -67,9 +69,9 @@ export function SeasonCard({ season }: SeasonCardProps) {
                 <Image
                   src={cup.competitionLogo}
                   alt={cup.competitionName}
-                  className="h-auto w-10"
-                  width={40}
-                  height={40}
+                  className="h-10 w-auto"
+                  width={150}
+                  height={150}
                   unoptimized
                 />
                 <div className="flex flex-col ml-2">
