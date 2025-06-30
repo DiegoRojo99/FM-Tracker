@@ -30,6 +30,11 @@ export default function LandingPage() {
               available: true,
             },
             {
+              title: 'Challenges',
+              desc: 'Take on legendary FM challenges like the Pentagon or Youth Only.',
+              available: true,
+            },
+            {
               title: 'Achievements',
               desc: 'Unlock milestones like unbeaten runs, treble wins, and promotions.',
               available: false,
@@ -39,11 +44,6 @@ export default function LandingPage() {
             //   desc: 'Track countries and competitions you’ve conquered.',
             //   available: true,
             // },
-            {
-              title: 'Challenges',
-              desc: 'Take on legendary FM challenges like the Pentagon or Youth Only.',
-              available: false,
-            },
             {
               title: 'Friend Leaderboard',
               desc: 'Compete with friends to see who can achieve the most in FM.',
