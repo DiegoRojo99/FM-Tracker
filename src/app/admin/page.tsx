@@ -16,12 +16,13 @@ export default function AdminPage() {
   }, [user, userLoading]);
 
   return (
-    <div>
-      <h1>Admin Page</h1>
+    <div className="flex flex-col items-center min-h-screen mx-8 p-6">
+      <h1 className="text-2xl font-bold mb-8">Admin Page</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <AdminBox title="Challenges" link="/admin/add-challenge" />
         <AdminBox title="Verify Competitions" link="/admin/verify-competitions" />
         <AdminBox title="Team Coords" link="/admin/team-coords" />
+        <AdminBox title="Teams" link="/admin/teams" />
       </div>
     </div>
   );
@@ -29,9 +30,9 @@ export default function AdminPage() {
 
 function AdminBox({ title, link }: { title: string; link: string; }) {
   return (
-    <Link href={link} className="block">
+    <Link href={link} className="w-full h-full">
       <div className="bg-purple-500 p-4 rounded shadow">
-        <h2 className="text-xl font-bold mb-2">{title}</h2>
+        <h2 className="text-xl font-bold p-2 text-white text-center">{title}</h2>
       </div>
     </Link>
   );
