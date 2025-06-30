@@ -29,7 +29,7 @@ function TeamCordsPage() {
       <h1 className="text-4xl font-bold my-8">Team Coordinates</h1>
 
       {/* Team Selection */}
-      <div className="w-full">
+      <div className="w-full mb-4">
         <label className="text-2xl font-bold mb-4"> Team </label>
         <SearchDropdown onTeamSelect={setTeam} />
       </div>
