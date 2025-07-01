@@ -17,16 +17,18 @@ const seededCountries = [
   'Wales', 'Northern-Ireland', 'Ireland', // UK regions
   'Poland', 'Austria', 'Slovakia', // Central Europe
   'Finland', 'Iceland', // Nordic countries
-  'South Africa', // Africa
-  'Japan', 'South Korea', // Asia
+  'South-Africa', // Africa
+  'Japan', 'South-Korea', 'Hong-Kong', 'China', // Asia
   'Australia',  // Oceania
   'World',  
-  'Belgium', 'Belarus', 'Chile', 'China', 'Hong Kong', 'Bulgaria',
+  'Belgium', 'Belarus', 'Chile', 'Bulgaria',
   'India', 'Indonesia', 'Israel', 'Peru', 'Singapore', 'Uruguay',
-  'Canada', 'Croatia', 'Colombia', 'Latvia', 'Malaysia', 'Serbia'
+  'Canada', 'Croatia', 'Colombia', 'Latvia', 'Malaysia', 'Serbia',
+  'Romania', 'Russia', 'Gibraltar',
 ];
 
-const fmCountries: string[] = [];
+const fmCountries: string[] = [
+];
 
 const targetSeason = 2023; // FM24 season
 const competitionIndex = algoliaWriteClient.initIndex('competitions_index');
