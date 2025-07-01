@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
-import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/db/firebase';
 import { ApiTeam } from '@/lib/types/FootballAPI';
 import { fetchFromApi } from '@/lib/apiFootball';
