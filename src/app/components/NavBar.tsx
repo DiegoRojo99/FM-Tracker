@@ -9,6 +9,7 @@ import { NavBarProfile } from './NavBarProfile';
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
+  const adminUID = process.env.NEXT_PUBLIC_ADMIN_UID;
 
   return (
     <nav className="bg-[var(--color-dark)] text-[var(--color-foreground)] shadow-md">
@@ -35,7 +36,11 @@ export default function Navbar() {
             <p className='h-fit my-auto'>Challenges</p>
           </Link>
           {/* <Link href="#" className="hover:text-[var(--color-highlight)]">Achievements</Link> */}
-          
+          {user && user.uid === adminUID && (
+            <Link href="/admin" className="hover:text-[var(--color-highlight)]">
+              Admin
+            </Link>
+          )}
           <NavBarProfile />
         </div>
 
@@ -55,7 +60,13 @@ export default function Navbar() {
           <Link href="/trophies" className="block hover:text-[var(--color-highlight)]">Trophies</Link>
           {/* <Link href="#" className="block hover:text-[var(--color-highlight)]">Achievements</Link> */}
           <Link href="/challenges" className="block hover:text-[var(--color-highlight)]">Challenges</Link>
-          { user ? (
+          {user && user.uid === adminUID && (
+            <Link href="/admin" className="block hover:text-[var(--color-highlight)]">
+              Admin
+            </Link>
+          )}
+          {/* Profile or Login Link */}
+          {user ? (
             <Link href="/profile" className="block hover:text-[var(--color-highlight)]">
               Profile
             </Link>

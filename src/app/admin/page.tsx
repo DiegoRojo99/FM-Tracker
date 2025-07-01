@@ -22,6 +22,7 @@ export default function AdminPage() {
         <AdminBox title="Challenges" link="/admin/add-challenge" />
         <AdminBox title="Verify Competitions" link="/admin/verify-competitions" />
         <AdminBox title="Coords Picker" link="/admin/teams/coords-picker" />
+        <AdminBox title="Leagues" link="/admin/leagues" />
         <AdminBox title="Teams" link="/admin/teams" />
         <AdminBox title="Teams with Coords" link="/admin/teams/has-coords" />
       </div>

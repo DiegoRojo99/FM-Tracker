@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/db/firebase';
@@ -6,7 +6,7 @@ import { ApiTeam } from '@/lib/types/FootballAPI';
 import { fetchFromApi } from '@/lib/apiFootball';
 
 const teamsIndex = algoliaWriteClient.initIndex('teams_index');
-export async function POST(context: { params: Promise<{ id: string }> }) {
+export async function POST(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
     const teams: ApiTeam[] = await fetchFromApi(
