@@ -1,7 +1,6 @@
 'use client';
 
-import { Competition, Country } from "@/lib/types/Country&Competition";
-import { SaveTeam } from "@/lib/types/Save";
+import { Competition } from "@/lib/types/Country&Competition";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -13,10 +12,8 @@ export default function TeamsPage() {
     const fetchTeams = async () => {
       const response = await fetch("/api/admin/leagues");
       const {
-        countries,
         leaguesPulled,
         leaguesNotPulled,
-        teams,
       } = await response.json();
       
       setLeaguesPulled(leaguesPulled);

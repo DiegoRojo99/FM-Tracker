@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/lib/db/firebase';
 import { Team } from '@/lib/types/Team';
 import { Competition, Country } from '@/lib/types/Country&Competition';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     // Fetch countries where inFootballManager is true
     const countriesSnap = await getDocs(
@@ -46,6 +46,7 @@ export async function GET(req: NextRequest) {
       leaguesNotPulled,
     });
   } catch (error) {
+    console.error('Error fetching leagues:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
