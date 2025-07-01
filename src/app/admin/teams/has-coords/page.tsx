@@ -1,10 +1,10 @@
 'use client';
 
-import { GroupedTeamsByLeague, Team } from "@/lib/types/Team";
+import { GroupedTeamsByLeagueWithCoords, Team } from "@/lib/types/Team";
 import { useEffect, useState } from "react";
 
 function TeamCordsPage() {
-  const [groupedTeams, setGroupedTeams] = useState<GroupedTeamsByLeague[] | null>(null);
+  const [groupedTeams, setGroupedTeams] = useState<GroupedTeamsByLeagueWithCoords[] | null>(null);
 
   useEffect(() => {
     async function fetchTeamsWithCoordinates() {
@@ -22,20 +22,22 @@ function TeamCordsPage() {
 
       {/* Teams Section */}
       <div className="mt-4 w-full flex flex-col gap-4">
-        {groupedTeams && groupedTeams.map((group) => (
-          <LeagueCard key={group.leagueId} leagueId={group.leagueId} teams={group.teams} />
+        {groupedTeams && groupedTeams.sort((a, b) => b.teamsWithCoords - a.teamsWithCoords).map((group) => (
+          <LeagueCard key={group.leagueId} group={group} />
         ))}
       </div>
     </div>
   );
 }
 
-function LeagueCard({ leagueId, teams }: { leagueId: number; teams: Team[] }) {
+function LeagueCard({ group }: { group: GroupedTeamsByLeagueWithCoords }) {
   return (
     <div className="border p-4 rounded-lg shadow-md">
-      <h2 className="text-lg font-bold mb-2">League ID: {leagueId}</h2>
+      <h2 className="text-lg font-bold mb-2">League ID: {group.leagueId}</h2>
+      <p className="text-sm text-gray-600 mb-4">Total Teams: {group.teams.length}</p>
+      <p className="text-sm text-gray-600 mb-4">Teams with Coordinates: {group.teamsWithCoords}</p>
       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-        {teams.map((team) => (
+        {group.teams.map((team) => (
           <TeamCard key={team.id} team={team} />
         ))}
       </div>

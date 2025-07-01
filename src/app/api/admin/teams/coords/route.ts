@@ -1,5 +1,5 @@
 import { getAllTeams } from "@/lib/db/teams";
-import { GroupedTeamsByLeague } from "@/lib/types/Team";
+import { GroupedTeamsByLeagueWithCoords } from "@/lib/types/Team";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -13,14 +13,17 @@ export async function GET(req: NextRequest) {
      teams.filter((team) => !team.coordinates.lat || !team.coordinates.lng);
   }
 
-  const groupedTeams: GroupedTeamsByLeague[] = [];
+  const groupedTeams: GroupedTeamsByLeagueWithCoords[] = [];
   for (const team of teams) {
     let group = groupedTeams.find((g) => g.leagueId === team.leagueId);
     if (!group) {
-      group = { leagueId: team.leagueId, teams: [] };
+      group = { leagueId: team.leagueId, teams: [], teamsWithCoords: 0 };
       groupedTeams.push(group);
     }
     group.teams.push(team);
+    if (team.coordinates.lat && team.coordinates.lng) {
+      group.teamsWithCoords++;
+    }
   }
 
   return new Response(JSON.stringify(groupedTeams), {

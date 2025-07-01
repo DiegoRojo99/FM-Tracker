@@ -26,3 +26,9 @@ export type GroupedTeamsByLeague = {
   leagueId: number;
   teams: Team[];
 }
+
+export type GroupedTeamsByLeagueWithCoords = {
+  leagueId: number;
+  teams: Team[];
+  teamsWithCoords: number;
+}
