@@ -38,6 +38,7 @@ export default function TeamsPage() {
               unoptimized
             />
             <h2 className="text-l font-semibold h-fit pt-2">{league.name}</h2>
+            <h5 className="text-sm">{league.countryCode}</h5>
           </div>
         ))}
       </div>
@@ -56,6 +57,7 @@ export default function TeamsPage() {
               unoptimized
             />
             <h2 className="text-l font-semibold h-fit pt-2">{league.name}</h2>
+            <h5 className='text-sm'>{league.countryCode}</h5>
           </div>
         ))}
       </div>
