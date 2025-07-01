@@ -21,3 +21,8 @@ export type TeamWithDetails = TeamInput & {
   competition?: Competition
   country?: Country
 }
+
+export type GroupedTeamsByLeague = {
+  leagueId: number;
+  teams: Team[];
+}
