@@ -18,7 +18,10 @@ export async function GET() {
       const competitionsSnap = await getDocs(
         query(
           collection(db, `countries/${country.id}/competitions`), 
-          where('inFootballManager', '==', true)
+          where('inFootballManager', '==', true),
+          
+          where
+            ('type', '==', 'League'),
         )
       );
       leagues.push(...competitionsSnap.docs.map(doc => ({  ...doc.data() as Competition})));
