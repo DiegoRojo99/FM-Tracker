@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/db/firebase';
 import { ApiTeam } from '@/lib/types/FootballAPI';
 import { fetchFromApi } from '@/lib/apiFootball';
+import { Country } from '@/lib/types/Country&Competition';
 
 const teamsIndex = algoliaWriteClient.initIndex('teams_index');
 export async function POST(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -19,13 +20,24 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
       });
     }
 
+    const countriesCollection = collection(db, 'countries');
+    const countriesDocs = await getDocs(countriesCollection);
+    const countries = countriesDocs.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data() as Country,
+    }));
+
     const algoliaTeams = [];
     for (const team of teams) {
+      const countryDoc = countries.find(
+        (doc) => doc.name === team.team.country
+      );
       const data = {
         id: team.team.id,
         name: team.team.name,
         logo: team.team.logo,
-        countryCode: team.team.country || '',
+        countryName: team.team.country || '',
+        countryCode: countryDoc ? countryDoc.code : '',
         leagueId: id,
         season: 2023,
         national: team.team.national || false,
