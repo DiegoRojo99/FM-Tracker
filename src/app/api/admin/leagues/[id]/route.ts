@@ -38,7 +38,7 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
         logo: team.team.logo,
         countryName: team.team.country || '',
         countryCode: countryDoc ? countryDoc.code : '',
-        leagueId: id,
+        leagueId: Number(id),
         season: 2023,
         national: team.team.national || false,
         coordinates: {
