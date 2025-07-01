@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
-import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/db/firebase';
 import { ApiTeam } from '@/lib/types/FootballAPI';
 import { fetchFromApi } from '@/lib/apiFootball';
@@ -38,7 +38,7 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
         logo: team.team.logo,
         countryName: team.team.country || '',
         countryCode: countryDoc ? countryDoc.code : '',
-        leagueId: id,
+        leagueId: Number(id),
         season: 2023,
         national: team.team.national || false,
         coordinates: {
