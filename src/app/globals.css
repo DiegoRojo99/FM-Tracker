@@ -47,3 +47,7 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.white-image {
+  filter: invert(1);
+}

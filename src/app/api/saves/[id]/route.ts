@@ -1,5 +1,5 @@
 import { db } from '@/lib/db/firebase';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore';
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { CareerStint } from '@/lib/types/Career';
@@ -48,5 +48,26 @@ export async function GET(req: NextRequest) {
     const challenges: Challenge[] = await getChallengesForSave(uid, saveId);
 
     return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData, trophies: trophiesData, seasons: seasonsData, challenges, id: saveId }), { status: 200 });
+  });
+}
+
+export async function DELETE(req: NextRequest) {
+  return withAuth(req, async (uid) => {
+    if (!uid) {
+      return new Response('Unauthorized', { status: 401 });
+    }
+
+    // Extract the save ID from the URL
+    const url = new URL(req.url);
+    const saveId = url.pathname.split('/')[3];
+
+    if (!saveId) {
+      return new Response('Save ID is required', { status: 400 });
+    }
+
+    // Delete the save document from Firestore
+    await deleteDoc(doc(db, 'users', uid, 'saves', saveId));
+
+    return new Response('Save deleted successfully', { status: 200 });
   });
 }
