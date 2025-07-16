@@ -70,3 +70,19 @@ export async function getTrophiesForSave(userId: string, saveId: string): Promis
   const trophySnapshot = await getDocs(trophiesCol);
   return trophySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Trophy[];
 }
+
+export async function getAllTrophiesForUser(userId: string): Promise<Trophy[]> {
+  const savesCol = collection(db, 'users', userId, 'saves');
+  const savesSnapshot = await getDocs(savesCol);
+  
+  const trophies: Trophy[] = [];
+  for (const saveDoc of savesSnapshot.docs) {
+    const trophiesCol = collection(saveDoc.ref, 'trophies');
+    const trophySnapshot = await getDocs(trophiesCol);
+    trophySnapshot.forEach(doc => {
+      trophies.push({ id: doc.id, ...doc.data() } as Trophy);
+    });
+  }
+  
+  return trophies;
+}

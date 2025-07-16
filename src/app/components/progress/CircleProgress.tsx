@@ -19,7 +19,7 @@ export default function CircleProgress({
   const offset = circumference * (1 - progress);
 
   return (
-    <svg width={size} height={size} className="text-gray-200">
+    <svg width={size} height={size}>
       {/* Background circle */}
       <circle
         className="stroke-current"
@@ -51,6 +51,7 @@ export default function CircleProgress({
         dominantBaseline="middle"
         textAnchor="middle"
         className="text-sm"
+        fill="currentColor"
       >
         {completed}/{total}
       </text>
