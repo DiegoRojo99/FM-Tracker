@@ -37,8 +37,8 @@ export default function Navbar() {
           </Link>
           {/* <Link href="#" className="hover:text-[var(--color-highlight)]">Achievements</Link> */}
           {user && user.uid === adminUID && (
-            <Link href="/admin" className="hover:text-[var(--color-highlight)]">
-              Admin
+            <Link href="/admin" className="flex hover:text-[var(--color-highlight)]">
+              <p className='h-fit my-auto'>Admin</p>
             </Link>
           )}
           <NavBarProfile />
