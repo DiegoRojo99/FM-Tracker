@@ -17,6 +17,10 @@ async function normalizeSavesCurrentLeaguesFromCareer() {
       const saveData = saveDoc.data() as Save;
       const leagueId = saveData.leagueId;
       const countryCode = saveData.countryCode;
+      if (!leagueId || !countryCode) {
+        console.warn(`⚠️ Save ${saveId} for user ${userId} is missing leagueId or countryCode`);
+        continue;
+      }
 
       const currentLeagueData = await fetchCompetition(countryCode, String(leagueId));
       if (!currentLeagueData) {
