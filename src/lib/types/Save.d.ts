@@ -27,11 +27,11 @@ export type SaveWithoutId = Omit<Save, 'id'>;
 export type Save = {
   id: string;
   userId: string;
-  countryCode: string;
-  leagueId: number;
+  countryCode: string | null;
+  leagueId: number | null;
   currentClub: SaveTeam | null;
   currentNT: SaveTeam | null;
-  currentLeague: SaveLeague;
+  currentLeague: SaveLeague | null;
   season: string; // e.g., "2026/27"
   createdAt: Timestamp;
 }

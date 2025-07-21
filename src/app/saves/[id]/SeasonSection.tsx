@@ -49,8 +49,8 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-        <h2 style={{ margin: 0 }}>Seasons</h2>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", marginTop: "16px" }}>
+        <h2 className="text-xl font-semibold" style={{ margin: 0 }}>Seasons</h2>
         <button
           className="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition cursor-pointer"
           onClick={() => setModalOpen(true)}
@@ -60,7 +60,7 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
       </div>
       <div className="flex flex-row gap-4 overflow-x-auto">
         {!saveDetails.seasons?.length ? (
-          <p>No seasons available.</p>
+          <p className='text-sm text-gray-500'>No seasons available.</p>
         ) : (
           saveDetails.seasons.sort((a, b) => a.season.localeCompare(b.season)).map((season) => (
             <SeasonCard

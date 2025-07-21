@@ -11,13 +11,15 @@ export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (ev
           {/* Header */}
           <div className="flex flex-row w-full mb-2 justify-between items-center gap-2">
             <h1 className="text-l text-gray-200">{`${save.season ?? '2023/24'}`}</h1>
-            <Image
-                src={save.currentLeague.logo}
-                alt={save.currentLeague.name}
+            {save.currentLeague && (
+              <Image
+                src={save.currentLeague?.logo}
+                alt={save.currentLeague?.name}
                 width={128}
                 height={128}
                 className="h-12 w-auto max-w-32 object-contain"
               />
+            )}
           </div>
 
           {/* Team */}

@@ -71,7 +71,7 @@ export default function CareerStintsSection({ saveDetails, setRefresh }: Props) 
   return (
     <section className="w-full">
       <div className="mb-2 sm:mb-6 flex flex-row items-center justify-between">
-        <h3 className="text-l font-bold">Career Stints</h3>
+        <h3 className="text-xl font-semibold">Career Stints</h3>
         <button
           className="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition cursor-pointer"
           onClick={() => setIsOpen(true)}
@@ -85,7 +85,7 @@ export default function CareerStintsSection({ saveDetails, setRefresh }: Props) 
           stints={saveDetails.career}
         />
       ) : (
-        <div>No career stints found.</div>
+        <div className='text-sm text-gray-500 mt-4'>No career stints found.</div>
       )}
 
       {/* Modal */}
