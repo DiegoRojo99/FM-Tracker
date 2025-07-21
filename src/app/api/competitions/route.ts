@@ -1,5 +1,5 @@
 import { adminDB } from '@/lib/auth/firebase-admin';
-import { Competition } from '@/lib/types/Country&Competition';
+import { Competition, Country } from '@/lib/types/Country&Competition';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -19,7 +19,38 @@ export async function GET(req: NextRequest) {
     countriesToQuery = countriesSnap.docs.map(doc => doc.id);
   }
 
+  const allCountriesSnap = await adminDB.collection('countries')
+    .where('inFootballManager', '==', true)
+    .get();    
+  const allCountries = allCountriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as Country }));
+
   const competitions: Competition[] = [];
+  // Country code check
+  for (const code of countriesToQuery) {
+    let ref = adminDB.collection(`countries/${code}/competitions`);
+    let query = ref.where('inFootballManager', '==', true);
+    let snapshot = await query.get();
+    if (!snapshot.size) {
+      const nameCheck = allCountries.find(c => c.name === code);
+      if(!nameCheck) continue;
+      ref = adminDB.collection(`countries/${nameCheck.code}/competitions`);
+      query = ref.where('inFootballManager', '==', true);
+    }
+
+    if (compType) {
+      const normalizedType = compType.charAt(0).toUpperCase() + compType.slice(1).toLowerCase();
+      query = query.where('type', '==', normalizedType);
+    }
+    snapshot = await query.get();
+    snapshot.forEach(doc => {
+      competitions.push({
+        ...doc.data() as Competition,
+        countryCode: code,
+      });
+    });
+  }
+
+  // Country name check
   for (const code of countriesToQuery) {
     const ref = adminDB.collection(`countries/${code}/competitions`);
     let query = ref.where('inFootballManager', '==', true);
