@@ -50,24 +50,5 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  // Country name check
-  for (const code of countriesToQuery) {
-    const ref = adminDB.collection(`countries/${code}/competitions`);
-    let query = ref.where('inFootballManager', '==', true);
-
-    if (compType) {
-      const normalizedType = compType.charAt(0).toUpperCase() + compType.slice(1).toLowerCase();
-      query = query.where('type', '==', normalizedType);
-    }
-
-    const snapshot = await query.get();
-    snapshot.forEach(doc => {
-      competitions.push({
-        ...doc.data() as Competition,
-        countryCode: code,
-      });
-    });
-  }
-
   return new Response(JSON.stringify(competitions), { status: 200 });
 }
