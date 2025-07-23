@@ -166,7 +166,7 @@ export default function Profile() {
                 <div className="bg-[var(--color-accent)]/20 border border-[var(--color-accent)] rounded-lg p-6 text-center">
                   <div className="text-4xl mb-4">🚀</div>
                   <h3 className="text-xl font-bold text-white mb-2">Ready to Start Your Journey?</h3>
-                  <p className="text-gray-300 mb-4">You haven't created any saves yet. Start your Football Manager career!</p>
+                  <p className="text-gray-300 mb-4">You haven&apos;t created any saves yet. Start your Football Manager career!</p>
                   <button
                     onClick={() => router.push('/add-save')}
                     className="bg-[var(--color-accent)] text-white px-6 py-3 rounded-lg hover:bg-[var(--color-highlight)] transition-all duration-200 font-medium"

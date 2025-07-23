@@ -57,9 +57,9 @@ export async function GET(request: NextRequest) {
       const teamUsage: { [key: string]: number } = {};
       
       for (const save of saves) {
-        const saveData = save as any;
+        const saveData = save as Record<string, unknown>;
         // Check both currentClub and currentNT for team information
-        const currentTeam = saveData.currentClub || saveData.currentNT;
+        const currentTeam = (saveData.currentClub as { name?: string } | null) || (saveData.currentNT as { name?: string } | null);
         if (currentTeam && currentTeam.name) {
           teamUsage[currentTeam.name] = (teamUsage[currentTeam.name] || 0) + 1;
         }
@@ -72,9 +72,9 @@ export async function GET(request: NextRequest) {
       // Get longest save name
       let longestSaveName: string | undefined;
       if (longestSaveId) {
-        const longestSave = saves.find((save: any) => save.id === longestSaveId) as any;
+        const longestSave = saves.find((save: Record<string, unknown>) => save.id === longestSaveId) as Record<string, unknown>;
         if (longestSave) {
-          const currentTeam = longestSave.currentClub || longestSave.currentNT;
+          const currentTeam = (longestSave.currentClub as { name?: string } | null) || (longestSave.currentNT as { name?: string } | null);
           if (currentTeam && currentTeam.name) {
             longestSaveName = currentTeam.name;
           } else {
