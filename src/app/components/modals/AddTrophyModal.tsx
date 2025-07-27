@@ -9,7 +9,7 @@ import { Team } from '@/lib/types/Team';
 import { SaveWithChildren } from '@/lib/types/Save';
 import BaseModal from './BaseModal';
 import GradientButton from '../GradientButton';
-import CompetitionDropdown from '../dropdowns/CompetitionDropdown';
+import CompetitionWithWorldDropdown from '../dropdowns/CompetitionWithWorldDropdown';
 
 type Props = {
   open: boolean;
@@ -74,32 +74,13 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
         <div>
           <label className="block text-sm mb-3 font-medium text-gray-200">Competition</label>
           {selectedTeam ? (
-            <div className="space-y-3">
-              {/* Team's country competitions */}
-              <div className="bg-[var(--color-darker)] border border-[var(--color-primary)] rounded-lg p-3">
-                <label className="block text-xs mb-2 font-medium text-gray-300 uppercase tracking-wide">
-                  National Competitions
-                </label>
-                <CompetitionDropdown
-                  country={selectedTeam.countryCode}
-                  value={competition?.id ? String(competition.id) : ""}
-                  onChange={(comp: Competition) => setCompetition(comp)}
-                  placeholder="Select national competition"
-                />
-              </div>
-              
-              {/* International competitions */}
-              <div className="bg-[var(--color-darker)] border border-[var(--color-primary)] rounded-lg p-3">
-                <label className="block text-xs mb-2 font-medium text-gray-300 uppercase tracking-wide">
-                  International Competitions
-                </label>
-                <CompetitionDropdown
-                  country="WOR"
-                  value={competition?.id ? String(competition.id) : ""}
-                  onChange={(comp: Competition) => setCompetition(comp)}
-                  placeholder="Select international competition"
-                />
-              </div>
+            <div>
+              <CompetitionWithWorldDropdown
+                country={selectedTeam.countryCode}
+                value={competition?.id ? String(competition.id) : ""}
+                onChange={(comp: Competition) => setCompetition(comp)}
+                placeholder="Select competition"
+              />
             </div>
           ) : (
             <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-4 border border-[var(--color-primary)] text-center">

@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
 
     // Fetch competition data
     const countryCode = teamData.countryCode;
+    console.log("Country code:", countryCode);
     if (!countryCode) {
       return new Response('Team does not have a country code', { status: 400 });
     }

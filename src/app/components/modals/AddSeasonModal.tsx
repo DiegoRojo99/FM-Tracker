@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput } from "@/lib/types/Season";
 import CompetitionDropdown from "../dropdowns/CompetitionDropdown";
+import CompetitionWithWorldDropdown from "../dropdowns/CompetitionWithWorldDropdown";
 import { Competition } from "@/lib/types/Country&Competition";
 import { SaveLeague, SaveTeam, SaveWithChildren } from "@/lib/types/Save";
 import BaseModal from "./BaseModal";
@@ -38,9 +39,6 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   // New state for team and league selection
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [selectedLeague, setSelectedLeague] = useState<Competition | null>(null);
-
-  const team: SaveTeam | null = saveDetails.currentClub;
-  const league: SaveLeague | null = saveDetails.currentLeague ?? null;
 
   const handleAddCup = () => {
     setCupResults([
@@ -230,15 +228,29 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
 
         <div>
           <h3 className="font-semibold text-lg mb-3 text-white">Cup Results</h3>
-          <div className="overflow-y-auto max-h-60 space-y-3">
+          {!selectedTeam && cupResults.length === 0 && (
+            <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-4 border border-[var(--color-primary)] text-center mb-3">
+              <div className="text-gray-500 mb-1">🏆</div>
+              Select a team to add cup results
+            </div>
+          )}
+          <div className="space-y-3">
           {cupResults.map((cup, idx) => (
             <div key={idx} className="border-2 border-[var(--color-primary)] rounded-lg p-4 bg-[var(--color-darker)]">
               <label className="block text-sm mb-2 font-medium text-gray-200">Cup</label>
-              <CompetitionDropdown
-                type="Cup"
-                value={cup.competitionId}
-                onChange={(value) => handleCupChange(idx, "competition", value)}
-              />
+              {selectedTeam ? (
+                <CompetitionWithWorldDropdown
+                  type="Cup"
+                  country={selectedTeam.countryCode}
+                  value={cup.competitionId}
+                  onChange={(value) => handleCupChange(idx, "competition", value)}
+                  placeholder="Select cup competition"
+                />
+              ) : (
+                <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-3 border border-[var(--color-primary)] text-center">
+                  Select a team first to choose cup competitions
+                </div>
+              )}
               <label className="block text-sm mt-4 mb-2 font-medium text-gray-200">Round Reached</label>
               <select
                 value={cup.reachedRound}
@@ -262,7 +274,12 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
           <button
             type="button"
             onClick={handleAddCup}
-            className="text-[var(--color-accent)] hover:text-[var(--color-highlight)] text-sm mt-3 transition-colors duration-200"
+            disabled={!selectedTeam}
+            className={`text-sm mt-3 transition-colors duration-200 ${
+              selectedTeam 
+                ? 'text-[var(--color-accent)] hover:text-[var(--color-highlight)]' 
+                : 'text-gray-500 cursor-not-allowed'
+            }`}
           >
             + Add Cup Result
           </button>

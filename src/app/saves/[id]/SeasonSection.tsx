@@ -19,6 +19,8 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
       if (!user) throw new Error("User is not authenticated");
       if (!saveDetails.id) throw new Error("Save ID is not available");
 
+      console.log("Adding season:", season);
+
       const token = await user.getIdToken();
       await fetch(`/api/saves/${saveDetails.id}/seasons`, {
         method: "POST",
