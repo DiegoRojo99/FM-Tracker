@@ -3,11 +3,11 @@ import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput } from "@/lib/types/S
 import CompetitionDropdown from "../dropdowns/CompetitionDropdown";
 import CompetitionWithWorldDropdown from "../dropdowns/CompetitionWithWorldDropdown";
 import { Competition } from "@/lib/types/Country&Competition";
-import { SaveLeague, SaveTeam, SaveWithChildren } from "@/lib/types/Save";
+import { SaveWithChildren } from "@/lib/types/Save";
 import BaseModal from "./BaseModal";
 import GradientButton from "../GradientButton";
-import TeamSearchDropdown from "../algolia/TeamSearchDropdown";
 import { Team } from "@/lib/types/Team";
+import Image from "next/image";
 
 type AddSeasonModalProps = {
   open: boolean;
@@ -15,14 +15,6 @@ type AddSeasonModalProps = {
   onSave: (season: SeasonInput) => void;
   saveDetails: SaveWithChildren;
 };
-
-function getNextSeason(season: string): string {
-  if (!season) return "2023/24";
-  const [year, nextYear] = season.split("/");
-  if (!year || !nextYear) return "";
-  const nextSeason = parseInt(nextYear) + 1;
-  return `${parseInt(year) + 1}/${String(nextSeason).slice(-2)}`;
-}
 
 export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   open,
@@ -158,7 +150,14 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
           )}
           {selectedTeam && (
             <div className="mt-2 p-3 bg-[var(--color-darker)] rounded-lg border border-[var(--color-primary)] flex items-center space-x-3">
-              <img src={selectedTeam.logo} alt={selectedTeam.name} className="h-8 w-8 object-contain" />
+              <Image 
+                src={selectedTeam.logo} 
+                alt={selectedTeam.name} 
+                width={32} 
+                height={32} 
+                className="h-8 w-8 object-contain" 
+                unoptimized 
+              />
               <span className="text-white font-semibold">{selectedTeam.name}</span>
             </div>
           )}

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { adminDB } from '@/lib/auth/firebase-admin';
 import { Country } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/Team';

@@ -36,8 +36,14 @@ export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (ev
           {/* Footer */}
           <div className="flex flex-row items-center justify-between gap-2">
             <div></div>
-            <img src={'trash.svg'} alt="Trash Icon" onClick={(event) => handleDelete(event, save.id)}
-            className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform" />
+            <Image 
+              src="/trash.svg" 
+              alt="Trash Icon" 
+              width={16} 
+              height={16} 
+              onClick={(event) => handleDelete(event as React.MouseEvent<HTMLImageElement>, save.id)}
+              className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform" 
+            />
           </div>
         </div>
       </BlurredCard>

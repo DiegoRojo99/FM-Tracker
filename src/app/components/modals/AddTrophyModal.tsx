@@ -10,6 +10,7 @@ import { SaveWithChildren } from '@/lib/types/Save';
 import BaseModal from './BaseModal';
 import GradientButton from '../GradientButton';
 import CompetitionWithWorldDropdown from '../dropdowns/CompetitionWithWorldDropdown';
+import Image from 'next/image';
 
 type Props = {
   open: boolean;
@@ -146,7 +147,14 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
           )}
           {selectedTeam && (
             <div className="mt-3 p-3 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-lg border border-[var(--color-highlight)] flex items-center space-x-3">
-              <img src={selectedTeam.logo} alt={selectedTeam.name} className="h-8 w-8 object-contain rounded-full bg-white p-1" />
+              <Image 
+                src={selectedTeam.logo} 
+                alt={selectedTeam.name} 
+                width={32} 
+                height={32} 
+                className="h-8 w-8 object-contain rounded-full bg-white p-1" 
+                unoptimized 
+              />
               <span className="text-white font-semibold">{selectedTeam.name}</span>
             </div>
           )}

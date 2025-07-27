@@ -30,9 +30,11 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
       {/* Delete button */}
       {onDelete && (
         <div className="flex justify-end">
-          <img 
+          <Image 
             src="/trash.svg" 
             alt="Delete season" 
+            width={16} 
+            height={16} 
             onClick={handleDelete}
             className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform" 
           />
