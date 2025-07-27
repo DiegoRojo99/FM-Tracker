@@ -65,9 +65,41 @@ export async function DELETE(req: NextRequest) {
       return new Response('Save ID is required', { status: 400 });
     }
 
-    // Delete the save document from Firestore
-    await deleteDoc(doc(db, 'users', uid, 'saves', saveId));
+    try {
+      // Delete all subcollections first
+      const saveRef = doc(db, 'users', uid, 'saves', saveId);
+      
+      // Delete career subcollection
+      const careerSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'career'));
+      const careerDeletePromises = careerSnapshot.docs.map(doc => deleteDoc(doc.ref));
+      
+      // Delete trophies subcollection
+      const trophiesSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'trophies'));
+      const trophiesDeletePromises = trophiesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+      
+      // Delete seasons subcollection
+      const seasonsSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'seasons'));
+      const seasonsDeletePromises = seasonsSnapshot.docs.map(doc => deleteDoc(doc.ref));
+      
+      // Delete challenges subcollection
+      const challengesSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'challenges'));
+      const challengesDeletePromises = challengesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+      
+      // Wait for all subcollection deletions to complete
+      await Promise.all([
+        ...careerDeletePromises,
+        ...trophiesDeletePromises,
+        ...seasonsDeletePromises,
+        ...challengesDeletePromises
+      ]);
+      
+      // Finally, delete the save document itself
+      await deleteDoc(saveRef);
 
-    return new Response('Save deleted successfully', { status: 200 });
+      return new Response('Save and all associated data deleted successfully', { status: 200 });
+    } catch (error) {
+      console.error('Error deleting save:', error);
+      return new Response('Failed to delete save', { status: 500 });
+    }
   });
 }
