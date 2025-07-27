@@ -5,6 +5,8 @@ import { Competition } from "@/lib/types/Country&Competition";
 import { SaveLeague, SaveTeam, SaveWithChildren } from "@/lib/types/Save";
 import BaseModal from "./BaseModal";
 import GradientButton from "../GradientButton";
+import TeamSearchDropdown from "../algolia/TeamSearchDropdown";
+import { Team } from "@/lib/types/Team";
 
 type AddSeasonModalProps = {
   open: boolean;
@@ -32,6 +34,10 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   const [promoted, setPromoted] = useState(false);
   const [relegated, setRelegated] = useState(false);
   const [cupResults, setCupResults] = useState<CupResultInput[]>([]);
+  
+  // New state for team and league selection
+  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+  const [selectedLeague, setSelectedLeague] = useState<Competition | null>(null);
 
   const team: SaveTeam | null = saveDetails.currentClub;
   const league: SaveLeague | null = saveDetails.currentLeague ?? null;
@@ -65,18 +71,19 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   };
 
   const handleSave = () => {
-    if (!team) return;
+    if (!selectedTeam || !selectedLeague) {
+      alert("Please select both a team and a league.");
+      return;
+    }
     if (!season || leaguePosition === "") {
       alert("Please fill in all required fields.");
       return;
     }
 
-    const leagueId = league?.id ? String(league.id) : String(saveDetails.leagueId);
-
     const seasonResult: SeasonInput = {
       season,
-      teamId: String(team.id),
-      leagueId,
+      teamId: String(selectedTeam.id),
+      leagueId: String(selectedLeague.id),
       leaguePosition: Number(leaguePosition),
       promoted,
       relegated,
@@ -106,22 +113,83 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
           />
         </div>
 
-        {/* Display team and league information */}
-        <div className="bg-[var(--color-darker)] rounded-lg p-4 border border-[var(--color-primary)]">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm mb-1 font-medium text-gray-200">Team</label>
-              <div className="text-white font-semibold"> {team?.name} </div>
+        {/* Team Selection - from save's career stints */}
+        <div>
+          <label className="block text-sm mb-2 font-medium text-gray-200">Team</label>
+          {saveDetails.career && saveDetails.career.length > 0 ? (
+            <select
+              value={selectedTeam ? selectedTeam.id : ''}
+              onChange={(e) => {
+                const teamId = e.target.value;
+                if (teamId) {
+                  const careerStint = saveDetails.career?.find(stint => stint.teamId === teamId);
+                  if (careerStint) {
+                    // Create a Team object from career stint data
+                    const team: Team = {
+                      id: parseInt(careerStint.teamId),
+                      name: careerStint.teamName || '',
+                      logo: careerStint.teamLogo || '',
+                      countryCode: careerStint.countryCode,
+                      national: careerStint.isNational || false,
+                      leagueId: parseInt(careerStint.leagueId),
+                      season: 2024, // Default season as number
+                      coordinates: { lat: null, lng: null }
+                    };
+                    setSelectedTeam(team);
+                    setSelectedLeague(null); // Reset league when team changes
+                  }
+                } else {
+                  setSelectedTeam(null);
+                  setSelectedLeague(null);
+                }
+              }}
+              className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+            >
+              <option value="">-- Select a team --</option>
+              {/* Get unique teams from career stints */}
+              {Array.from(new Map(saveDetails.career.map(stint => [stint.teamId, stint])).values()).map((stint) => (
+                <option key={stint.teamId} value={stint.teamId}>
+                  {stint.teamName}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-3 border border-[var(--color-primary)]">
+              No teams found in your career history. Add a career stint first.
             </div>
-            <div>
-              <label className="block text-sm mb-1 font-medium text-gray-200">League</label>
-              <div className="text-white font-semibold"> {league?.name} </div>
+          )}
+          {selectedTeam && (
+            <div className="mt-2 p-3 bg-[var(--color-darker)] rounded-lg border border-[var(--color-primary)] flex items-center space-x-3">
+              <img src={selectedTeam.logo} alt={selectedTeam.name} className="h-8 w-8 object-contain" />
+              <span className="text-white font-semibold">{selectedTeam.name}</span>
             </div>
-          </div>
+          )}
         </div>
 
-        {league?.id ? (
-          <div className="grid grid-cols-2 gap-4">
+        {/* League Selection - only show if team is selected */}
+        {selectedTeam ? (
+          <div>
+            <label className="block text-sm mb-2 font-medium text-gray-200">League</label>
+            <CompetitionDropdown
+              type="League"
+              country={selectedTeam.countryCode}
+              value={selectedLeague?.id ? String(selectedLeague.id) : ""}
+              onChange={(competition: Competition) => setSelectedLeague(competition)}
+            />
+            {selectedLeague && (
+              <div className="mt-2 p-3 bg-[var(--color-darker)] rounded-lg border border-[var(--color-primary)]">
+                <span className="text-white font-semibold">{selectedLeague.name}</span>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-3 border border-[var(--color-primary)]">
+            Select a team to choose a league
+          </div>
+        )}
+
+        {selectedLeague ? (
+          <div className="space-y-4">
             <div>
               <label className="block text-sm mb-2 font-medium text-gray-200">League Position</label>
               <input
@@ -132,9 +200,12 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                   setLeaguePosition(e.target.value === "" ? "" : Number(e.target.value))
                 }
                 className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+                required
               />
             </div>
-            <div className="flex items-end space-x-4 pb-3">
+            
+            {/* Checkboxes - responsive layout */}
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
               <label className="flex items-center space-x-2 text-gray-200">
                 <input
                   type="checkbox"
@@ -201,7 +272,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
           type="submit"
           width="full"
           size="lg"
-          disabled={!season || !team?.id}
+          disabled={!season || !selectedTeam || !selectedLeague || leaguePosition === ""}
         >
           Save Season
         </GradientButton>
