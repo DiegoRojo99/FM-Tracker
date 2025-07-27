@@ -47,7 +47,7 @@ export const GradientButton: React.FC<GradientButtonProps> = ({
     transition-all duration-300 transform
     hover:scale-[1.02] cursor-pointer
     disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
-    shadow-lg
+    shadow-lg border-1 border-white
   `.trim();
 
   const gradientClasses = destructive
