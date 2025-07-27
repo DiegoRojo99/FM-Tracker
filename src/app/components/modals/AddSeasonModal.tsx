@@ -30,7 +30,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   onSave,
   saveDetails,
 }) => {
-  const [season, setSeason] = useState(getNextSeason(saveDetails.season));
+  const [season, setSeason] = useState('');
   const [leaguePosition, setLeaguePosition] = useState<number | "">("");
   const [promoted, setPromoted] = useState(false);
   const [relegated, setRelegated] = useState(false);
