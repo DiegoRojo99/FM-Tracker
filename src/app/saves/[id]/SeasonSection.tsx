@@ -4,6 +4,7 @@ import { SeasonInput } from "@/lib/types/Season";
 import { useAuth } from "@/app/components/AuthProvider";
 import { SaveWithChildren } from "@/lib/types/Save";
 import { SeasonCard } from "./SeasonCard";
+import GradientButton from "@/app/components/GradientButton";
 
 interface SeasonSectionProps {
   saveDetails: SaveWithChildren;
@@ -53,12 +54,11 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", marginTop: "16px" }}>
         <h2 className="text-xl font-semibold" style={{ margin: 0 }}>Seasons</h2>
-        <button
-          className="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition cursor-pointer"
+        <GradientButton
           onClick={() => setModalOpen(true)}
         >
-          +
-        </button>
+          + Add season
+        </GradientButton>
       </div>
       <div className="flex flex-row gap-4 overflow-x-auto">
         {!saveDetails.seasons?.length ? (

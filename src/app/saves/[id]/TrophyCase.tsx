@@ -8,6 +8,7 @@ import { SaveWithChildren } from '@/lib/types/Save';
 import Image from 'next/image';
 import BlurredCard from '@/app/components/BlurredCard';
 import { groupTrophies } from '@/lib/dto/trophies';
+import GradientButton from '@/app/components/GradientButton';
 
 type Props = {
   save: SaveWithChildren;
@@ -47,12 +48,11 @@ export default function TrophyCase({ save, setRefresh }: Props) {
     <section className="mt-8">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Trophy Case</h2>
-        <button
-          className="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition cursor-pointer"
+        <GradientButton
           onClick={() => setShowModal(true)}
         >
-          +
-        </button>
+          + Add Trophy
+        </GradientButton>
       </div>
 
       {trophies.length === 0 ? (
