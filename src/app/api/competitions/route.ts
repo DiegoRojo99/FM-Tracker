@@ -26,13 +26,14 @@ export async function GET(req: NextRequest) {
 
   const competitions: Competition[] = [];
   // Country code check
-  for (const code of countriesToQuery) {
+  for (let code of countriesToQuery) {
     let ref = adminDB.collection(`countries/${code}/competitions`);
     let query = ref.where('inFootballManager', '==', true);
     let snapshot = await query.get();
     if (!snapshot.size) {
       const nameCheck = allCountries.find(c => c.name === code);
-      if(!nameCheck) continue;
+      if(!nameCheck?.code) continue;
+      code = nameCheck.code;
       ref = adminDB.collection(`countries/${nameCheck.code}/competitions`);
       query = ref.where('inFootballManager', '==', true);
     }
@@ -41,6 +42,7 @@ export async function GET(req: NextRequest) {
       const normalizedType = compType.charAt(0).toUpperCase() + compType.slice(1).toLowerCase();
       query = query.where('type', '==', normalizedType);
     }
+    
     snapshot = await query.get();
     snapshot.forEach(doc => {
       competitions.push({
