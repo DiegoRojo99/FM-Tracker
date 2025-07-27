@@ -98,6 +98,9 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         name: teamData.name,
         logo: teamData.logo,
       },
+      ...(competitionData && !isNational ? { 
+        countryCode: teamData.countryCode,
+      } : {})
     };
 
     // Only add `currentLeague` if `competitionData` exists and not national team
