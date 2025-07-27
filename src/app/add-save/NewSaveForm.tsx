@@ -82,7 +82,7 @@ export default function NewSaveForm() {
   };
 
   return (
-    <div className="w-3xl mx-auto rounded-lg">
+    <div className="max-w-3xl mx-auto rounded-lg">
       <h1 className="text-3xl font-bold text-white mb-8 text-center">Create New Save</h1>
       
       <form onSubmit={handleSubmit} className="bg-[var(--color-dark)] rounded-xl shadow-2xl p-8 space-y-6">
@@ -146,14 +146,14 @@ export default function NewSaveForm() {
                   : 'bg-[var(--color-darker)] text-gray-300 border border-[var(--color-primary)]'
               }`}
             >
-              🆓 Free Agent (No Team)
+              Unemployed
             </button>
           </div>
 
           {isNoTeam ? (
             <div className="bg-[var(--color-darker)] rounded-lg p-6 border-2 border-dashed border-[var(--color-accent)] text-center">
               <div className="text-6xl mb-4">🆓</div>
-              <h3 className="text-xl font-bold text-white mb-2">Free Agent Mode</h3>
+              <h3 className="text-xl font-bold text-white mb-2">Unemployed Mode</h3>
               <p className="text-gray-300">Start your career without being tied to any specific team. Perfect for a challenging journey!</p>
             </div>
           ) : (
@@ -182,7 +182,7 @@ export default function NewSaveForm() {
           transition-all duration-300 transform hover:scale-[1.02] 
           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
         >
-          {isNoTeam ? '🆓 Create Free Agent Save' : '⚽ Create Save'}
+          {isNoTeam ? '🆓 Create Unemployed Save' : '⚽ Create Save'}
         </button>
       </form>
     </div>

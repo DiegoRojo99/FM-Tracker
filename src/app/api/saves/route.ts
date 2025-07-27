@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     let currentNT: SaveTeam | null = null;
 
     if (!startingTeamId) {
-      // If no starting team, we can create a free agent save
+      // If no starting team, we can create an unemployed save
       const saveData: SaveWithoutId = {
         userId: uid,
         countryCode: null,

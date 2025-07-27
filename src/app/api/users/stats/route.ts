@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
           if (currentTeam && currentTeam.name) {
             longestSaveName = currentTeam.name;
           } else {
-            longestSaveName = 'Free Agent Career';
+            longestSaveName = 'Unemployed Career';
           }
         }
       }
