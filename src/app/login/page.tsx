@@ -44,7 +44,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto py-20">
+    <div className="max-w-md mx-4 md:mx-auto py-20">
       <h2 className="text-2xl font-bold mb-6 text-center">Login to FM Tracker</h2>
 
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
