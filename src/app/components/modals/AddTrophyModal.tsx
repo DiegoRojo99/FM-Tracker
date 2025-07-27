@@ -2,14 +2,13 @@
 
 import { Trophy } from '@/lib/types/Trophy';
 import { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { X } from 'lucide-react';
 import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
 import CompetitionSearchDropdown from '@/app/components/algolia/CompetitionSearchDropdown';
 import FootballLoader from '@/app/components/FootBallLoader';
 import { useAuth } from '@/app/components/AuthProvider';
 import { Competition } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/Team';
+import BaseModal from './BaseModal';
 
 type Props = {
   open: boolean;
@@ -67,78 +66,63 @@ export default function AddTrophyModal({ open, onClose, saveId, onSuccess }: Pro
   else if (loading) return <FootballLoader />;
 
   return (
-    <>
-      {/* Modal */}
-      <Dialog open={open} onClose={onClose} className="fixed z-50 inset-0 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen px-4">
-          <Dialog.Panel className="w-full max-w-md bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-xl relative">
-            <button
-              className="absolute top-4 right-4 text-zinc-500 hover:text-zinc-800 dark:hover:text-white"
-              onClick={onClose}
-            >
-              <X className="w-5 h-5 cursor-pointer" />
-            </button>
-            <Dialog.Title className="text-xl font-bold mb-4">Add Trophy</Dialog.Title>
-
-            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-              <div>
-                <label className="block text-sm mb-1">Competition</label>
-                <CompetitionSearchDropdown
-                  onCompetitionSelect={(competition) => setCompetition(competition)}
-                />
-              </div>
-              <div>
-                <input
-                  hidden
-                  name="competitionId"
-                  value={competition ? competition.id : ''}
-                  readOnly
-                  className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
-                  placeholder="Enter competition ID"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm mb-1">Team</label>
-                <TeamSearchDropdown
-                  onTeamSelect={(team: Team) => setTeamId(team.id.toString())}
-                />
-              </div>
-              <div>
-                <input
-                  hidden
-                  name="teamId"
-                  value={teamId}
-                  onChange={(e) => setTeamId(e.target.value)}
-                  className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
-                  placeholder="Enter team ID"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm mb-1">Won Date</label>
-                <input
-                  type="date"
-                  name="dateWon"
-                  value={dateWon}
-                  onChange={(e) => setDateWon(e.target.value)}
-                  className="w-full border rounded p-2 bg-zinc-100 dark:bg-zinc-800"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded p-2"
-              >
-                Save
-              </button>
-            </form>
-          </Dialog.Panel>
+    <BaseModal open={open} onClose={onClose} title="Add Trophy" maxWidth="max-w-md">
+      <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+        <div>
+          <label className="block text-sm mb-2 font-medium text-gray-200">Competition</label>
+          <CompetitionSearchDropdown
+            onCompetitionSelect={(competition) => setCompetition(competition)}
+          />
         </div>
-      </Dialog>
-    </>
+        <div>
+          <input
+            hidden
+            name="competitionId"
+            value={competition ? competition.id : ''}
+            readOnly
+            className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white"
+            placeholder="Enter competition ID"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm mb-2 font-medium text-gray-200">Team</label>
+          <TeamSearchDropdown
+            onTeamSelect={(team: Team) => setTeamId(team.id.toString())}
+          />
+        </div>
+        <div>
+          <input
+            hidden
+            name="teamId"
+            value={teamId}
+            onChange={(e) => setTeamId(e.target.value)}
+            className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white"
+            placeholder="Enter team ID"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm mb-2 font-medium text-gray-200">Won Date</label>
+          <input
+            type="date"
+            name="dateWon"
+            value={dateWon}
+            onChange={(e) => setDateWon(e.target.value)}
+            className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white font-bold py-3 px-6 rounded-lg hover:from-[var(--color-highlight)] hover:to-[var(--color-accent)] transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
+        >
+          Save Trophy
+        </button>
+      </form>
+    </BaseModal>
   )
 }
