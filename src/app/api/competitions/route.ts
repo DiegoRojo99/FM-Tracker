@@ -4,12 +4,12 @@ import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const country = searchParams.get('country');
+  const countries = searchParams.getAll('country');
   const compType = searchParams.get('type');
 
   let countriesToQuery: string[] = [];
 
-  if (country) countriesToQuery = [country];
+  if (countries) countriesToQuery = countries
   else {
     // Fetch all country codes
     const countriesSnap = await adminDB.collection('countries')
