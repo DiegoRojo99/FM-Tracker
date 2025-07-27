@@ -9,6 +9,7 @@ import { useAuth } from '@/app/components/AuthProvider';
 import { Competition } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/Team';
 import BaseModal from './BaseModal';
+import GradientButton from '../GradientButton';
 
 type Props = {
   open: boolean;
@@ -116,12 +117,13 @@ export default function AddTrophyModal({ open, onClose, saveId, onSuccess }: Pro
           />
         </div>
 
-        <button
+        <GradientButton
           type="submit"
-          className="w-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white font-bold py-3 px-6 rounded-lg hover:from-[var(--color-highlight)] hover:to-[var(--color-accent)] transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
+          width="full"
+          size="lg"
         >
           Save Trophy
-        </button>
+        </GradientButton>
       </form>
     </BaseModal>
   )
