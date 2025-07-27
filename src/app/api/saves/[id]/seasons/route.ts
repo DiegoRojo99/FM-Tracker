@@ -3,7 +3,7 @@ import { db } from '@/lib/db/firebase';
 import { updateSaveSeason } from '@/lib/db/saves';
 import { addTrophyToSave } from '@/lib/db/trophies';
 import { SeasonInput, SeasonSummary } from '@/lib/types/Season';
-import { collection, addDoc, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, getDocs, query, where, deleteDoc } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -118,5 +118,44 @@ export async function GET(req: NextRequest) {
 
     const seasons = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     return NextResponse.json(seasons);
+  });
+}
+
+export async function DELETE(req: NextRequest) {
+  return withAuth(req, async (uid) => {
+    const url = new URL(req.url);
+    const saveId = url.pathname.split('/')[3];
+
+    if (!uid || !saveId) {
+      return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
+    }
+    
+    const body = await req.json() as { season: string; teamId: string };
+    
+    // Validate required fields
+    if (!body.season || !body.teamId) {
+      return new Response('Missing season or teamId', { status: 400 });
+    }
+
+    try {
+      // Find the existing season document
+      const seasonsRef = collection(db, 'users', uid, 'saves', saveId, 'seasons');
+      const q = query(seasonsRef, where('season', '==', body.season), where('teamId', '==', body.teamId));
+      const existingSeasons = await getDocs(q);
+      
+      if (existingSeasons.empty) {
+        return NextResponse.json({ error: 'Season not found' }, { status: 404 });
+      }
+
+      const seasonDoc = existingSeasons.docs[0];
+      
+      // Delete the document
+      await deleteDoc(seasonDoc.ref);
+
+      return NextResponse.json({ message: 'Season deleted successfully' }, { status: 200 });
+    } catch (error) {
+      console.error('Error deleting season:', error);
+      return NextResponse.json({ error: 'Failed to delete season' }, { status: 500 });
+    }
   });
 }

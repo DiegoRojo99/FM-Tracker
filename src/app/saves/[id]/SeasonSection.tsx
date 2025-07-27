@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AddSeasonModal from "@/app/components/modals/AddSeasonModal";
-import { SeasonInput } from "@/lib/types/Season";
+import { SeasonInput, SeasonSummary } from "@/lib/types/Season";
 import { useAuth } from "@/app/components/AuthProvider";
 import { SaveWithChildren } from "@/lib/types/Save";
 import { SeasonCard } from "./SeasonCard";
@@ -50,6 +50,35 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
     setModalOpen(false);
   };
 
+  const handleDeleteSeason = async (season: SeasonSummary) => {
+    try {
+      if (!user) throw new Error("User is not authenticated");
+      if (!saveDetails.id) throw new Error("Save ID is not available");
+
+      const token = await user.getIdToken();
+      const response = await fetch(`/api/saves/${saveDetails.id}/seasons`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          season: season.season,
+          teamId: season.teamId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete season");
+      }
+
+      setRefresh(true);
+    } catch (error) {
+      alert("Error deleting season. Please try again.");
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", marginTop: "16px" }}>
@@ -68,6 +97,7 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
             <SeasonCard
               key={`${String(season.teamId)}-${String(season.season)}`}
               season={season}
+              onDelete={handleDeleteSeason}
             />
           ))
         )}

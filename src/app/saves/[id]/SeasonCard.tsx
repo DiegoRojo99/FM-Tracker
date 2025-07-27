@@ -4,6 +4,7 @@ import Image from "next/image";
 
 type SeasonCardProps = {
   season: SeasonSummary;
+  onDelete?: (season: SeasonSummary) => void;
 };
 
 function getOrdinal(n: number): string {
@@ -13,13 +14,31 @@ function getOrdinal(n: number): string {
 }
 
 
-export function SeasonCard({ season }: SeasonCardProps) {
+export function SeasonCard({ season, onDelete }: SeasonCardProps) {
   const leagueResult = season.leagueResult;
   const cupResults = season.cupResults;
+
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete the ${season.season} season for ${season.teamName}?`)) {
+      onDelete?.(season);
+    }
+  };
 
   return (
     <BlurredCard className="min-w-[320px]">
       <div className="flex flex-col h-full w-full p-2 gap-4">
+      {/* Delete button */}
+      {onDelete && (
+        <div className="flex justify-end">
+          <img 
+            src="/trash.svg" 
+            alt="Delete season" 
+            onClick={handleDelete}
+            className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform" 
+          />
+        </div>
+      )}
+      
       {/* Team information */}
       <div className="flex flex-col items-center mb-2">
         <Image
