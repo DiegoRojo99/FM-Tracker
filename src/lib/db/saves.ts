@@ -46,7 +46,6 @@ export async function updateSaveCurrentLeague(
 export async function getSaveById(userId: string, saveId: string) {
   const saveRef = doc(db, `users/${userId}/saves/${saveId}`);
   const saveSnapshot = await getDoc(saveRef);
-  console.log("Fetched save:", saveSnapshot.data());
   if (!saveSnapshot.exists()) return null;
   return { ...saveSnapshot.data(), id: saveSnapshot.id } as Save;
 }

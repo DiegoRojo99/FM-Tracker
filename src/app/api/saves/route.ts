@@ -42,7 +42,6 @@ export async function POST(req: NextRequest) {
       const saveData: SaveWithoutId = {
         userId: uid,
         countryCode: null,
-        leagueId: null,
         currentClub: null,
         currentNT: null,
         currentLeague: null,
@@ -87,7 +86,6 @@ export async function POST(req: NextRequest) {
     const saveData: SaveWithoutId = {
       userId: uid,
       countryCode,
-      leagueId,
       currentClub,
       currentNT,
       currentLeague,

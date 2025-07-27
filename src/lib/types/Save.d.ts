@@ -28,7 +28,6 @@ export type Save = {
   id: string;
   userId: string;
   countryCode: string | null;
-  leagueId: number | null;
   currentClub: SaveTeam | null;
   currentNT: SaveTeam | null;
   currentLeague: SaveLeague | null;

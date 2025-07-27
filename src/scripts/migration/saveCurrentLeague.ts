@@ -15,14 +15,13 @@ async function normalizeSavesCurrentLeaguesFromCareer() {
       const saveRef = adminDB.collection('users').doc(userId).collection('saves').doc(saveId);
 
       const saveData = saveDoc.data() as Save;
-      const leagueId = saveData.leagueId;
       const countryCode = saveData.countryCode;
-      if (!leagueId || !countryCode) {
-        console.warn(`⚠️ Save ${saveId} for user ${userId} is missing leagueId or countryCode`);
+      if (!countryCode) {
+        console.warn(`⚠️ Save ${saveId} for user ${userId} is missing countryCode`);
         continue;
       }
 
-      const currentLeagueData = await fetchCompetition(countryCode, String(leagueId));
+      const currentLeagueData = await fetchCompetition(countryCode, String(saveData.currentLeague?.id));
       if (!currentLeagueData) {
         console.warn(`⚠️ No league found for save ${saveId} in user ${userId}`);
         continue;
