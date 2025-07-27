@@ -74,7 +74,7 @@ export const BaseModal: React.FC<BaseModalProps> = ({
           </div>
 
           {/* Modal content */}
-          <div className="overflow-y-auto max-h-[calc(80vh-8rem)]">
+          <div className="overflow-y-auto max-h-[calc(80vh-8rem)] px-2">
             {children}
           </div>
         </Dialog.Panel>

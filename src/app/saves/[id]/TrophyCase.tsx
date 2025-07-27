@@ -108,6 +108,7 @@ export default function TrophyCase({ save, setRefresh }: Props) {
         open={showModal}
         onClose={() => setShowModal(false)}
         saveId={save.id}
+        saveDetails={save}
         onSuccess={() => {
           setRefresh(true);
         }}

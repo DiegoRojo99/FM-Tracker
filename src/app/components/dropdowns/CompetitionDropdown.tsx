@@ -49,10 +49,11 @@ const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({
         onChange?.(selectedComp);
       }}
       disabled={loading}
+      className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      <option value="">{placeholder}</option>
+      <option value="" className="bg-[var(--color-darker)] text-white">{loading ? 'Loading...' : placeholder}</option>
       {competitions.map(comp => (
-        <option key={comp.id} value={comp.id} className='text-black'>
+        <option key={comp.id} value={comp.id} className="bg-[var(--color-darker)] text-white">
           {comp.name}
         </option>
       ))}
