@@ -56,22 +56,22 @@ export default function Navbar() {
       {open && (
         <div className="md:hidden bg-[var(--color-dark)] px-4 pb-4 space-y-2">
           {/* <Link href="#" className="block hover:text-[var(--color-highlight)]">Dashboard</Link> */}
-          <Link href="/saves" className="block hover:text-[var(--color-highlight)]">Saves</Link>
-          <Link href="/trophies" className="block hover:text-[var(--color-highlight)]">Trophies</Link>
+          <Link href="/saves" className="block hover:text-[var(--color-highlight)]" onClick={() => setOpen(false)}>Saves</Link>
+          <Link href="/trophies" className="block hover:text-[var(--color-highlight)]" onClick={() => setOpen(false)}>Trophies</Link>
           {/* <Link href="#" className="block hover:text-[var(--color-highlight)]">Achievements</Link> */}
-          <Link href="/challenges" className="block hover:text-[var(--color-highlight)]">Challenges</Link>
+          <Link href="/challenges" className="block hover:text-[var(--color-highlight)]" onClick={() => setOpen(false)}>Challenges</Link>
           {user && user.uid === adminUID && (
-            <Link href="/admin" className="block hover:text-[var(--color-highlight)]">
+            <Link href="/admin" className="block hover:text-[var(--color-highlight)]" onClick={() => setOpen(false)}>
               Admin
             </Link>
           )}
           {/* Profile or Login Link */}
           {user ? (
-            <Link href="/profile" className="block hover:text-[var(--color-highlight)]">
+            <Link href="/profile" className="block hover:text-[var(--color-highlight)]" onClick={() => setOpen(false)}>
               Profile
             </Link>
           ) : (
-            <Link href="/login" className="block hover:text-[var(--color-highlight)]">
+            <Link href="/login" className="block hover:text-[var(--color-highlight)]" onClick={() => setOpen(false)}>
               Login
             </Link>
           )}
