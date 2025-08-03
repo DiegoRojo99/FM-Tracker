@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { db } from '@/lib/db/firebase';
 import { collection, getDocs, collectionGroup } from 'firebase/firestore';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     // Get total number of users
     const usersSnapshot = await getDocs(collection(db, 'users'));
