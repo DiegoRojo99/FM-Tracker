@@ -28,6 +28,10 @@ export type CupRound =
   | 'Fourth Qualifying Round'
   | 'Playoff Round'
   | 'Group Stage'
+  | 'First Round'
+  | 'Second Round'
+  | 'Third Round'
+  | 'Fourth Round'
   | 'Round of 32'
   | 'Round of 16'
   | 'Quarter-Final'
@@ -43,12 +47,16 @@ export const CUP_ROUNDS: CupRound[] = [
   'Fourth Qualifying Round',
   'Playoff Round',
   'Group Stage',
+  'First Round',
+  'Second Round',
+  'Third Round',
+  'Fourth Round',
   'Round of 32',
   'Round of 16',
   'Quarter-Final',
   'Semi-Final',
   'Final',
-  'Winners',
+  'Winners'
 ];
 
 export type SeasonSummary = {
