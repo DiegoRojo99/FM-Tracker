@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
 import { Team } from '@/lib/types/Team';
+import { CareerStint } from '@/lib/types/Career';
 import CompetitionDropdown from '@/app/components/dropdowns/CompetitionDropdown';
 import { Competition } from '@/lib/types/Country&Competition';
 import BaseModal from './BaseModal';
@@ -12,6 +13,7 @@ interface AddCareerStintModalProps {
   onClose: () => void;
   saveId: string;
   onSuccess: () => void;
+  editingStint?: CareerStint | null;
 }
 
 export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
@@ -19,9 +21,11 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
   onClose,
   saveId,
   onSuccess,
+  editingStint,
 }) => {
   const { user } = useAuth();
   const [countryCode, setCountryCode] = useState<string | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
 
   // Form fields
   const [form, setForm] = useState({
@@ -30,6 +34,29 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
     startDate: '',
     endDate: '',
   });
+
+  // Populate form when editing
+  useEffect(() => {
+    if (editingStint && open) {
+      setForm({
+        teamId: editingStint.teamId,
+        leagueId: editingStint.leagueId,
+        startDate: editingStint.startDate,
+        endDate: editingStint.endDate || '',
+      });
+      setCountryCode(editingStint.countryCode);
+      setSelectedTeam({
+        id: parseInt(editingStint.teamId),
+        name: editingStint.teamName,
+        logo: editingStint.teamLogo,
+        countryCode: editingStint.countryCode,
+        national: editingStint.isNational,
+        leagueId: parseInt(editingStint.leagueId),
+        season: 2024,
+        coordinates: { lat: null, lng: null }
+      });
+    }
+  }, [editingStint, open]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -51,19 +78,29 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
       return;
     }
 
-    const response = await fetch(`/api/saves/${saveId}/career`, {
-      method: 'POST',
+    const isEditing = !!editingStint;
+    const url = isEditing 
+      ? `/api/saves/${saveId}/career/${editingStint.id}` 
+      : `/api/saves/${saveId}/career`;
+    const method = isEditing ? 'PUT' : 'POST';
+
+    const response = await fetch(url, {
+      method,
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({
         teamId: form.teamId,
         startDate: form.startDate,
-        endDate: form.endDate,
+        endDate: form.endDate || null,
         leagueId: form.leagueId,
+        teamName: selectedTeam?.name,
+        teamLogo: selectedTeam?.logo,
+        countryCode: countryCode,
+        isNational: selectedTeam?.national || false,
       }),
     });
 
     if (!response.ok) {
-      console.error('Failed to save career stint');
+      console.error(`Failed to ${isEditing ? 'update' : 'save'} career stint`);
       return;
     }
 
@@ -75,6 +112,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
       endDate: '',
     });
     setCountryCode(null);
+    setSelectedTeam(null);
     
     onSuccess();
     onClose();
@@ -89,11 +127,12 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
       endDate: '',
     });
     setCountryCode(null);
+    setSelectedTeam(null);
     onClose();
   };
 
   return (
-    <BaseModal open={open} onClose={handleClose} title="Add Career Stint" maxWidth="max-w-md">
+    <BaseModal open={open} onClose={handleClose} title={editingStint ? "Edit Career Stint" : "Add Career Stint"} maxWidth="max-w-md">
       <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
         <div>
           <label className="block text-sm mb-2 font-medium text-gray-200">Team</label>
@@ -101,6 +140,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
             onTeamSelect={(team: Team) => {
               setForm((prev) => ({ ...prev, teamId: String(team.id) })); 
               setCountryCode(team.countryCode);
+              setSelectedTeam(team);
             }}
           />
         </div>
@@ -173,7 +213,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
           size="lg"
           disabled={!form.teamId || !form.startDate}
         >
-          Save Career Stint
+          {editingStint ? 'Update Career Stint' : 'Save Career Stint'}
         </GradientButton>
       </form>
     </BaseModal>

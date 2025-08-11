@@ -30,7 +30,10 @@ export async function GET(req: NextRequest) {
 
     // Fetch the career data associated with the save
     const careersSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'career'));
-    const careerData: CareerStint[] = careersSnapshot.docs.map(doc => doc.data() as CareerStint)
+    const careerData: CareerStint[] = careersSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as CareerStint))
       .sort((a, b) => {
         // Sort by start date, assuming startDate is a string
         return (a.startDate as string).localeCompare(b.startDate as string);

@@ -2,9 +2,12 @@
 
 import { CareerStint } from '@/lib/types/Career';
 import Image from 'next/image';
+import { useState } from 'react';
 
 type Props = {
   stints: CareerStint[];
+  onUpdateStint?: (stint: CareerStint) => void;
+  onDeleteStint?: (stintId: string) => void;
 };
 
 function groupStintsByStart(stints: CareerStint[]) {
@@ -31,7 +34,7 @@ function formatDate(datePassed: string): string {
   return `${capitalizedMonth} ${date.getFullYear()}`;
 }
 
-export default function CareerTimeline({ stints }: Props) {
+export default function CareerTimeline({ stints, onUpdateStint, onDeleteStint }: Props) {
   const grouped = groupStintsByStart(stints);
 
   return (
@@ -55,32 +58,103 @@ export default function CareerTimeline({ stints }: Props) {
                 {formatDate(startDate)}
               </div>
 
-              {entries.map((stint, sIdx) => {
-                return (
-                  <div
-                    key={sIdx}
-                    className="bg-purple-50 dark:bg-purple-900 border border-purple-600 rounded-lg shadow p-3 w-60 flex flex-col items-center text-center"
-                  >
-                    {stint.teamLogo && (
-                      <Image
-                        width={128}
-                        height={128}
-                        src={stint.teamLogo}
-                        alt={stint.teamName}
-                        className="h-20 w-20 object-contain mb-2"
-                      />
-                    )}
-                    <div className="font-semibold">{stint.teamName}</div>
-                    <div className="text-xs text-gray-500">
-                      {formatDate(stint.startDate)} —{' '}
-                      {stint.endDate ? formatDate(stint.endDate) : 'Present'}
-                    </div>
-                  </div>
-                );
-              })}
+              {entries.map((stint, sIdx) => (
+                <CareerStintCard 
+                  key={sIdx} 
+                  stint={stint} 
+                  onUpdate={onUpdateStint}
+                  onDelete={onDeleteStint}
+                />
+              ))}
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+
+function CareerStintCard({ 
+  stint, 
+  onUpdate, 
+  onDelete 
+}: { 
+  stint: CareerStint;
+  onUpdate?: (stint: CareerStint) => void;
+  onDelete?: (stintId: string) => void;
+}) {
+  const [showActions, setShowActions] = useState(false);
+
+  const handleDelete = () => {
+    console.log('Deleting career stint:', stint);
+    if (!stint.id) return;
+    const deleteConfirmed = window.confirm(`Are you sure you want to delete the career stint at ${stint.teamName}?`);
+    if (deleteConfirmed) {
+      onDelete?.(stint.id);
+    }
+  };
+
+  const handleUpdate = () => {
+    if (!stint.id) return;
+    onUpdate?.(stint);
+  };
+
+  return (
+    <div 
+      className="bg-purple-50 dark:bg-purple-900 border border-purple-600 rounded-lg shadow p-3 w-60 flex flex-col items-center text-center relative group"
+      onMouseEnter={() => setShowActions(true)}
+      onMouseLeave={() => setShowActions(false)}
+    >
+      {/* Action buttons */}
+      {(onUpdate || onDelete) && (
+        <div className={`absolute top-2 right-2 flex gap-1 transition-opacity duration-200 ${showActions ? 'opacity-100' : 'opacity-0'}`}>
+          {onUpdate && (
+            <button
+              onClick={handleUpdate}
+              className="p-1 text-white rounded text-xs transition-colors"
+              title="Edit career stint"
+            >
+              <Image
+                src="/pencil.svg"
+                alt="Edit Icon"
+                width={16}
+                height={16}
+                className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform"
+              />
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={handleDelete}
+              className="p-1 text-white rounded text-xs transition-colors"
+              title="Delete career stint"
+            >
+              <Image
+                src="/trash.svg"
+                alt="Trash Icon"
+                width={16}
+                height={16}
+                className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform"
+              />
+            </button>
+          )}
+        </div>
+      )}
+
+      {stint.teamLogo && (
+        <Image
+          width={128}
+          height={128}
+          src={stint.teamLogo}
+          alt={stint.teamName}
+          className="h-20 w-20 object-contain mb-2"
+        />
+      )}
+      <div className="font-semibold">{stint.teamName}</div>
+      <div className="text-xs text-gray-500">
+        {formatDate(stint.startDate)} —{' '}
+        {stint.endDate ? formatDate(stint.endDate) : 'Present'}
       </div>
     </div>
   );
