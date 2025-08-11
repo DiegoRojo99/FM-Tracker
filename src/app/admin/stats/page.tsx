@@ -1,5 +1,6 @@
 'use client';
 
+import FootballLoader from '@/app/components/FootBallLoader';
 import { useEffect, useState } from 'react';
 
 interface Stats {
@@ -42,10 +43,7 @@ export default function AdminStatsPage() {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-8 text-center">FM Tracker Admin Stats</h1>
         {loading ? (
-          <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
-            <p className="mt-2 text-[var(--text-muted)]">Loading stats...</p>
-          </div>
+          <FootballLoader />
         ) : stats ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className={boxClass}>
