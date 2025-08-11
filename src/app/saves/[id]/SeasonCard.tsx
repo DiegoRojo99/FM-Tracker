@@ -1,5 +1,7 @@
 import BlurredCard from "@/app/components/BlurredCard";
+import ConfirmationModal from "@/app/components/modals/ConfirmationModal";
 import { SeasonSummary } from "@/lib/types/Season";
+import { useState } from "react";
 import Image from "next/image";
 
 type SeasonCardProps = {
@@ -15,13 +17,17 @@ function getOrdinal(n: number): string {
 
 
 export function SeasonCard({ season, onDelete }: SeasonCardProps) {
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const leagueResult = season.leagueResult;
   const cupResults = season.cupResults;
 
   const handleDelete = () => {
-    if (window.confirm(`Are you sure you want to delete the ${season.season} season for ${season.teamName}?`)) {
-      onDelete?.(season);
-    }
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDelete = () => {
+    onDelete?.(season);
+    setShowDeleteConfirmation(false);
   };
 
   return (
@@ -114,6 +120,16 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
       <div className="flex-grow w-full h-full" />
       <h3 className="text-lg font-semibold text-center">{season.season}</h3>
       </div>
+
+      <ConfirmationModal
+        open={showDeleteConfirmation}
+        onClose={() => setShowDeleteConfirmation(false)}
+        onConfirm={confirmDelete}
+        title="Delete Season"
+        message={`Are you sure you want to delete the ${season.season} season for ${season.teamName}? This action cannot be undone.`}
+        confirmText="Delete"
+        destructive={true}
+      />
     </BlurredCard>
   )
 }
