@@ -8,7 +8,7 @@ import { Competition } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/Team';
 import { SaveWithChildren } from '@/lib/types/Save';
 import BaseModal from './BaseModal';
-import GradientButton from '../GradientButton';
+import LoadingButton from '../LoadingButton';
 import CompetitionWithWorldDropdown from '../dropdowns/CompetitionWithWorldDropdown';
 import Image from 'next/image';
 
@@ -25,11 +25,11 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [dateWon, setDateWon] = useState('');
   const [competition, setCompetition] = useState<Competition | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const handleSubmit = async () => {
     if (!selectedTeam || !dateWon || !competition) return;
-    setLoading(true);
+    setSaving(true);
 
     if (!user) return;
     const userToken = await user.getIdToken();
@@ -60,13 +60,13 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
       console.error('Error adding trophy:', error);
     })
     .finally(() => {
-      setLoading(false);
+      setSaving(false);
       onClose();
     });
   }
 
   if (!open) return <></>;
-  else if (loading) return <FootballLoader />;
+  else if (saving) return <FootballLoader />;
 
   return (
     <BaseModal open={open} onClose={onClose} title="Add Trophy" maxWidth="max-w-md">
@@ -172,14 +172,16 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
           />
         </div>
 
-        <GradientButton
+        <LoadingButton
           type="submit"
           width="full"
           size="lg"
           disabled={!selectedTeam || !competition || !dateWon}
+          isLoading={saving}
+          loadingText="Saving Trophy..."
         >
           Save Trophy
-        </GradientButton>
+        </LoadingButton>
       </form>
     </BaseModal>
   )

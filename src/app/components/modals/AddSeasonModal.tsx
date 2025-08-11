@@ -5,7 +5,7 @@ import CompetitionWithWorldDropdown from "../dropdowns/CompetitionWithWorldDropd
 import { Competition } from "@/lib/types/Country&Competition";
 import { SaveWithChildren } from "@/lib/types/Save";
 import BaseModal from "./BaseModal";
-import GradientButton from "../GradientButton";
+import LoadingButton from "../LoadingButton";
 import { Team } from "@/lib/types/Team";
 import Image from "next/image";
 
@@ -27,6 +27,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   const [promoted, setPromoted] = useState(false);
   const [relegated, setRelegated] = useState(false);
   const [cupResults, setCupResults] = useState<CupResultInput[]>([]);
+  const [saving, setSaving] = useState(false);
   
   // New state for team and league selection
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
@@ -60,7 +61,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
     setCupResults(cupResults.filter((_, i) => i !== idx));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!selectedTeam || !selectedLeague) {
       alert("Please select both a team and a league.");
       return;
@@ -70,18 +71,26 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
       return;
     }
 
-    const seasonResult: SeasonInput = {
-      season,
-      teamId: String(selectedTeam.id),
-      leagueId: String(selectedLeague.id),
-      leaguePosition: Number(leaguePosition),
-      promoted,
-      relegated,
-      cupResults,
-    };
+    setSaving(true);
+    try {
+      const seasonResult: SeasonInput = {
+        season,
+        teamId: String(selectedTeam.id),
+        leagueId: String(selectedLeague.id),
+        leaguePosition: Number(leaguePosition),
+        promoted,
+        relegated,
+        cupResults,
+      };
 
-    onSave(seasonResult);
-    onClose();
+      await onSave(seasonResult);
+      onClose();
+    } catch (error) {
+      console.error('Error saving season:', error);
+      alert('Failed to save season. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (!open) return null;
@@ -284,14 +293,16 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
           </button>
         </div>
 
-        <GradientButton
+        <LoadingButton
           type="submit"
           width="full"
           size="lg"
-          disabled={!season || !selectedTeam || !selectedLeague || leaguePosition === ""}
+          disabled={!season || !selectedTeam || !selectedLeague || leaguePosition === "" || saving}
+          isLoading={saving}
+          loadingText="Saving Season..."
         >
           Save Season
-        </GradientButton>
+        </LoadingButton>
       </form>
     </BaseModal>
   );

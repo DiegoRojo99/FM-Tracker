@@ -6,7 +6,7 @@ import { CareerStint } from '@/lib/types/Career';
 import CompetitionDropdown from '@/app/components/dropdowns/CompetitionDropdown';
 import { Competition } from '@/lib/types/Country&Competition';
 import BaseModal from './BaseModal';
-import GradientButton from '../GradientButton';
+import LoadingButton from '../LoadingButton';
 
 interface AddCareerStintModalProps {
   open: boolean;
@@ -26,6 +26,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
   const { user } = useAuth();
   const [countryCode, setCountryCode] = useState<string | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+  const [saving, setSaving] = useState(false);
 
   // Form fields
   const [form, setForm] = useState({
@@ -68,54 +69,65 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
   };
 
   const handleSubmit = async () => {
+    console.log('Submit 1');
     if (!user) {
       console.error('User is not authenticated');
       return;
     }
-    const token = await user.getIdToken();
-    if (!token) {
-      console.error('User is not authenticated');
-      return;
-    }
-
-    const isEditing = !!editingStint;
-    const url = isEditing 
-      ? `/api/saves/${saveId}/career/${editingStint.id}` 
-      : `/api/saves/${saveId}/career`;
-    const method = isEditing ? 'PUT' : 'POST';
-
-    const response = await fetch(url, {
-      method,
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({
-        teamId: form.teamId,
-        startDate: form.startDate,
-        endDate: form.endDate || null,
-        leagueId: form.leagueId,
-        teamName: selectedTeam?.name,
-        teamLogo: selectedTeam?.logo,
-        countryCode: countryCode,
-        isNational: selectedTeam?.national || false,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error(`Failed to ${isEditing ? 'update' : 'save'} career stint`);
-      return;
-    }
-
-    // Reset form
-    setForm({
-      teamId: '',
-      leagueId: '',
-      startDate: '',
-      endDate: '',
-    });
-    setCountryCode(null);
-    setSelectedTeam(null);
     
-    onSuccess();
-    onClose();
+    setSaving(true);
+    console.log('Submit 2');
+
+    try {
+      const token = await user.getIdToken();
+      if (!token) {
+        console.error('User is not authenticated');
+        return;
+      }
+
+      const isEditing = !!editingStint;
+      const url = isEditing 
+        ? `/api/saves/${saveId}/career/${editingStint.id}` 
+        : `/api/saves/${saveId}/career`;
+      const method = isEditing ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          teamId: form.teamId,
+          startDate: form.startDate,
+          endDate: form.endDate || null,
+          leagueId: form.leagueId,
+          teamName: selectedTeam?.name,
+          teamLogo: selectedTeam?.logo,
+          countryCode: countryCode,
+          isNational: selectedTeam?.national || false,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error(`Failed to ${isEditing ? 'update' : 'save'} career stint`);
+        return;
+      }
+
+      // Reset form
+      setForm({
+        teamId: '',
+        leagueId: '',
+        startDate: '',
+        endDate: '',
+      });
+      setCountryCode(null);
+      setSelectedTeam(null);
+      
+      onSuccess();
+      onClose();
+    } catch (error) {
+      console.error('Error saving career stint:', error);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleClose = () => {
@@ -207,14 +219,16 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
           />
         </div>
 
-        <GradientButton
+        <LoadingButton
           type="submit"
           width="full"
           size="lg"
           disabled={!form.teamId || !form.startDate}
+          isLoading={saving}
+          loadingText={editingStint ? 'Updating Career Stint...' : 'Saving Career Stint...'}
         >
           {editingStint ? 'Update Career Stint' : 'Save Career Stint'}
-        </GradientButton>
+        </LoadingButton>
       </form>
     </BaseModal>
   );

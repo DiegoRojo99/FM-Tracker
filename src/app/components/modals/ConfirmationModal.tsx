@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BaseModal from './BaseModal';
-import GradientButton from '../GradientButton';
+import LoadingButton from '../LoadingButton';
 
 interface ConfirmationModalProps {
   /** Whether the modal is open */
   open: boolean;
   /** Function to call when modal should close */
   onClose: () => void;
-  /** Function to call when user confirms */
-  onConfirm: () => void;
+  /** Function to call when user confirms (can be async) */
+  onConfirm: () => void | Promise<void>;
   /** Modal title */
   title: string;
   /** Confirmation message */
@@ -31,9 +31,18 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   cancelText = 'Cancel',
   destructive = false,
 }) => {
-  const handleConfirm = () => {
-    onConfirm();
-    onClose();
+  const [isConfirming, setIsConfirming] = useState(false);
+
+  const handleConfirm = async () => {
+    setIsConfirming(true);
+    try {
+      await onConfirm();
+      onClose();
+    } catch (error) {
+      console.error('Confirmation action failed:', error);
+    } finally {
+      setIsConfirming(false);
+    }
   };
 
   return (
@@ -53,18 +62,20 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           <button
             onClick={onClose}
             className="flex-1 bg-[var(--color-darker)] text-gray-300 font-medium py-3 px-6 rounded-lg border-2 border-[var(--color-primary)] hover:border-[var(--color-accent)] hover:text-white transition-all duration-200"
+            disabled={isConfirming}
           >
             {cancelText}
           </button>
           
-          <GradientButton
+          <LoadingButton
             onClick={handleConfirm}
-            destructive={destructive}
             className="flex-1"
             size="lg"
+            isLoading={isConfirming}
+            loadingText={`${confirmText}ing...`}
           >
             {confirmText}
-          </GradientButton>
+          </LoadingButton>
         </div>
       </div>
     </BaseModal>
