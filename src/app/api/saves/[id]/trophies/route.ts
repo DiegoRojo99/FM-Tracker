@@ -63,10 +63,14 @@ export async function GET(req: NextRequest) {
     const trophiesRef = collection(db, 'users', uid, 'saves', saveId, 'trophies');
     const snapshot = await getDocs(trophiesRef);
 
-    const trophies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as Omit<Trophy, 'id'> })) as Trophy[];
-    
+    const trophiesData: Trophy[] = snapshot.docs.map(doc => {
+      const data = doc.data() as Omit<Trophy, 'id'>;
+      return { ...data, id: doc.id };
+    });
+    console.log('Only Trophies Data:', trophiesData);
+
     const groupedTrophies: TrophyGroup[] = [];
-    trophies.forEach((trophy) => {
+    trophiesData.forEach((trophy) => {
       const group = groupedTrophies.find((g) => g.competitionId === trophy.competitionId);
       if (group) {
         group.trophies.push(trophy);

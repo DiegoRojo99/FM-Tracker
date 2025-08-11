@@ -41,7 +41,11 @@ export async function GET(req: NextRequest) {
 
     // Fetch the trophies data associated with the save
     const trophiesSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'trophies'));
-    const trophiesData: Trophy[] = trophiesSnapshot.docs.map(doc => doc.data() as Trophy);
+    const trophiesData: Trophy[] = trophiesSnapshot.docs.map(doc => {
+      const data = doc.data() as Omit<Trophy, 'id'>;
+      return { ...data, id: doc.id };
+    });
+    console.log('Trophies Data:', trophiesData);
 
     // Fetch the seasons data associated with the save
     const seasonsSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'seasons'));

@@ -1,5 +1,5 @@
 import { db } from '@/lib/db/firebase';
-import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, where, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { Trophy } from '../types/Trophy';
 import { fetchCompetition } from './competitions';
 import { fetchTeam } from './teams';
@@ -40,7 +40,6 @@ export async function addTrophyToSave(
     
     const ref = doc(trophiesRef); 
     const trophyData: Trophy = {
-      id: competitionId,
       teamId: teamId,
       teamName: team.name,
       teamLogo: team.logo,
@@ -85,4 +84,73 @@ export async function getAllTrophiesForUser(userId: string): Promise<Trophy[]> {
   }
   
   return trophies;
+}
+
+export async function updateTrophy(
+  uid: string,
+  saveId: string,
+  trophyId: string,
+  updates: { teamId?: string; season?: string; countryCode?: string; competitionId?: string }
+): Promise<boolean> {
+  try {
+    const trophyRef = doc(db, 'users', uid, 'saves', saveId, 'trophies', trophyId);
+    
+    // Get current trophy data
+    const trophyDoc = await getDoc(trophyRef);
+    if (!trophyDoc.exists()) {
+      throw new Error('Trophy not found');
+    }
+
+    const currentTrophy = trophyDoc.data() as Trophy;
+    
+    // Prepare updated data
+    const updateData: Partial<Trophy> = {};
+    
+    // If team is being updated, fetch new team data
+    if (updates.teamId && updates.teamId !== currentTrophy.teamId) {
+      const team = await fetchTeam(updates.teamId);
+      if (!team) throw new Error('Team not found');
+      updateData.teamId = updates.teamId;
+      updateData.teamName = team.name;
+      updateData.teamLogo = team.logo;
+    }
+    
+    // If competition is being updated, fetch new competition data
+    if (updates.competitionId && updates.competitionId !== currentTrophy.competitionId) {
+      const countryCode = updates.countryCode || currentTrophy.countryCode;
+      const competition = await fetchCompetition(countryCode, updates.competitionId);
+      if (!competition) throw new Error('Competition not found');
+      updateData.competitionId = updates.competitionId;
+      updateData.competitionName = competition.name;
+      updateData.competitionLogo = competition.logo;
+      updateData.competitionType = competition.type;
+    }
+    
+    // Update season if provided
+    if (updates.season && updates.season !== currentTrophy.season) {
+      updateData.season = updates.season;
+    }
+    
+    // Update country code if provided
+    if (updates.countryCode && updates.countryCode !== currentTrophy.countryCode) {
+      updateData.countryCode = updates.countryCode;
+    }
+
+    await updateDoc(trophyRef, updateData);
+    return true;
+  } catch (error) {
+    console.error('Error updating trophy:', error);
+    return false;
+  }
+}
+
+export async function deleteTrophy(uid: string, saveId: string, trophyId: string): Promise<boolean> {
+  try {
+    const trophyRef = doc(db, 'users', uid, 'saves', saveId, 'trophies', trophyId);
+    await deleteDoc(trophyRef);
+    return true;
+  } catch (error) {
+    console.error('Error deleting trophy:', error);
+    return false;
+  }
 }

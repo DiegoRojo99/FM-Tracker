@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
+import Image from 'next/image';
 
 interface ConfirmationModalProps {
   /** Whether the modal is open */
@@ -29,7 +30,6 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   message,
   confirmText = 'Confirm',
   cancelText = 'Cancel',
-  destructive = false,
 }) => {
   const [isConfirming, setIsConfirming] = useState(false);
 
@@ -54,6 +54,14 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       showCloseButton={false}
     >
       <div className="space-y-6">
+        <Image
+          src="/circle-alert.svg"
+          alt="Alert Icon"
+          width={128}
+          height={128}
+          className="mx-auto white-image"
+        />
+
         <p className="text-gray-200 text-center leading-relaxed">
           {message}
         </p>
@@ -72,7 +80,11 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             className="flex-1"
             size="lg"
             isLoading={isConfirming}
-            loadingText={`${confirmText}ing...`}
+            loadingText={
+              confirmText.endsWith('e')
+                ? `${confirmText.slice(0, -1)}ing...`
+                : `${confirmText}ing...`
+            }
           >
             {confirmText}
           </LoadingButton>
