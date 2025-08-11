@@ -89,7 +89,7 @@ function CustomHits({ onTeamSelect }: { onTeamSelect: (team: Team) => void }) {
         position: 'absolute',
         zIndex: 10,
         width: '100%',
-        background: 'var(--background)',
+        background: 'white',
         border: '1px solid #ccc',
         margin: 0,
         padding: 0,
@@ -103,10 +103,15 @@ function CustomHits({ onTeamSelect }: { onTeamSelect: (team: Team) => void }) {
         return (
           <li
             key={team.id}
-            style={{ padding: '8px', cursor: 'pointer' }}
+            style={{ padding: '8px', cursor: 'pointer', borderBottom: '1px solid #eee' }}
             onMouseDown={() => onTeamSelect(parseTeam(team))} // prevents input blur interruption
           >
             {team.name}
+            {team.countryCode && (
+              <span style={{ marginLeft: '8px', fontSize: '12px', color: '#666' }}>
+                ({team.countryCode})
+              </span>
+            )}
           </li>
         );
       })}

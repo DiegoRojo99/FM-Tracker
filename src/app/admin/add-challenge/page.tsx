@@ -82,11 +82,11 @@ export default function AddChallengePage() {
       </div>
 
       <div className="flex flex-wrap gap-4 pt-4">
-        <button className="btn" onClick={handleAddGoal}>
+        <button className="btn" onClick={handleAddGoal} style={{ backgroundColor: 'var(--color-accent)', color: 'white', padding: '8px 16px', borderRadius: '4px' }}>
           ➕ Add Goal
         </button>
 
-        <button className="btn btn-primary" onClick={handleSubmit}>
+        <button className="btn btn-primary" onClick={handleSubmit} style={{ backgroundColor: 'var(--color-primary)', color: 'white', padding: '8px 16px', borderRadius: '4px' }}>
           💾 Save Challenge
         </button>
       </div>

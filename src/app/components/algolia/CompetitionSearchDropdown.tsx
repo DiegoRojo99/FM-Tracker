@@ -72,7 +72,7 @@ function CustomHits({ onCompetitionSelect }: { onCompetitionSelect: (competition
         position: 'absolute',
         zIndex: 10,
         width: '100%',
-        background: 'var(--background)',
+        background: 'white',
         border: '1px solid #ccc',
         margin: 0,
         padding: 0,
@@ -86,10 +86,15 @@ function CustomHits({ onCompetitionSelect }: { onCompetitionSelect: (competition
         return (
           <li
             key={competition.id}
-            style={{ padding: '8px', cursor: 'pointer' }}
+            style={{ padding: '8px', cursor: 'pointer', borderBottom: '1px solid #eee' }}
             onMouseDown={() => onCompetitionSelect(competition)} // prevents input blur interruption
           >
             {competition.name}
+            {competition.countryName && (
+              <span style={{ marginLeft: '8px', fontSize: '12px', color: '#666' }}>
+                ({competition.countryName})
+              </span>
+            )}
           </li>
         );
       })}
