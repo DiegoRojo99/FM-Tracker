@@ -49,7 +49,7 @@ export default function ChallengesPage() {
   if (loading) return <FootballLoader />;
 
   return (
-    <div className="p-6 max-w-3xl mx-auto space-y-6">
+    <div className="p-6 mx-auto space-y-6">
       <h1 className="text-2xl font-bold m-4 text-white">Challenges</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {challenges.map(challenge => (
