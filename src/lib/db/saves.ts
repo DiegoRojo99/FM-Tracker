@@ -4,6 +4,7 @@ import { fetchCompetition } from "./competitions";
 import { Competition } from "../types/Country&Competition";
 import { Save, SaveLeague } from "../types/Save";
 import { CareerStint } from "../types/Career";
+import { Timestamp } from "firebase-admin/firestore";
 
 /**
  * Updates the 'season' attribute of a save document for a user in Firestore.
@@ -13,7 +14,7 @@ import { CareerStint } from "../types/Career";
  */
 export async function updateSaveSeason(userId: string, saveId: string, season: string) {
   const saveRef = doc(db, `users/${userId}/saves/${saveId}`);
-  await updateDoc(saveRef, { season });
+  await updateDoc(saveRef, { season, updatedAt: Timestamp.now() });
 }
 
 /**
@@ -38,7 +39,8 @@ export async function updateSaveCurrentLeague(
   };
 
   await updateDoc(saveRef, { 
-    currentLeague: currentLeagueData
+    currentLeague: currentLeagueData,
+    updatedAt: Timestamp.now()
   });
   return true;
 }

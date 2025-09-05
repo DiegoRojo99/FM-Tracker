@@ -73,6 +73,18 @@ export default function SavesPage() {
     setDeletingSave(null);
   }
 
+  function getLatestDate(save: Save) {
+    const updatedAtTime = save.updatedAt ? save.updatedAt._seconds * 1000 + Math.floor(save.updatedAt._nanoseconds / 1000000) : 0;
+    const createdAtTime = save.createdAt ? save.createdAt._seconds * 1000 + Math.floor(save.createdAt._nanoseconds / 1000000) : 0;
+    return updatedAtTime || createdAtTime;
+  }
+
+  function sortSavesByDate(a: Save, b: Save) {
+    const dateA = getLatestDate(a);
+    const dateB = getLatestDate(b);
+    return dateB - dateA;
+  }
+
   if (loading) {
     return <FootballLoader />;
   }
@@ -104,7 +116,7 @@ export default function SavesPage() {
         </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {saves.map(save => ( <SaveCard key={save.id} save={save} handleDelete={handleDelete} /> ))}
+        {saves.sort(sortSavesByDate).map(save => ( <SaveCard key={save.id} save={save} handleDelete={handleDelete} /> ))}
       </div>
 
       <ConfirmationModal

@@ -67,7 +67,6 @@ export async function GET(req: NextRequest) {
       const data = doc.data() as Omit<Trophy, 'id'>;
       return { ...data, id: doc.id };
     });
-    console.log('Only Trophies Data:', trophiesData);
 
     const groupedTrophies: TrophyGroup[] = [];
     trophiesData.forEach((trophy) => {

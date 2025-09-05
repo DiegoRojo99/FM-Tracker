@@ -33,6 +33,7 @@ export type Save = {
   currentLeague: SaveLeague | null;
   season: string; // e.g., "2026/27"
   createdAt: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 export type SaveWithCareer = SaveInput & {

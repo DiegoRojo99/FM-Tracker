@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
         currentLeague: null,
         season: "2023/24",
         createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
       };
 
       const savesRef = adminDB.collection('users').doc(uid).collection('saves');
@@ -91,6 +92,7 @@ export async function POST(req: NextRequest) {
       currentLeague,
       season: "2023/24",
       createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
     };
 
     const savesRef = adminDB.collection('users').doc(uid).collection('saves');

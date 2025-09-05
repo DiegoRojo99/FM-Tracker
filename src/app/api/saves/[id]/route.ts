@@ -45,7 +45,6 @@ export async function GET(req: NextRequest) {
       const data = doc.data() as Omit<Trophy, 'id'>;
       return { ...data, id: doc.id };
     });
-    console.log('Trophies Data:', trophiesData);
 
     // Fetch the seasons data associated with the save
     const seasonsSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'seasons'));

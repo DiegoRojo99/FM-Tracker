@@ -103,7 +103,7 @@ function CustomHits({ onTeamSelect }: { onTeamSelect: (team: Team) => void }) {
         return (
           <li
             key={team.id}
-            style={{ padding: '8px', cursor: 'pointer', borderBottom: '1px solid #eee' }}
+            style={{ padding: '8px', cursor: 'pointer', borderBottom: '1px solid #eee', color: '#000' }}
             onMouseDown={() => onTeamSelect(parseTeam(team))} // prevents input blur interruption
           >
             {team.name}
