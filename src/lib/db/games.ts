@@ -38,17 +38,21 @@ export async function getGame(gameId: string): Promise<Game | null> {
 
 export async function getAllGames(): Promise<Game[]> {
   try {
-    const q = query(
-      collection(db, COLLECTION_NAME), 
-      orderBy('sortOrder', 'asc'),
-      orderBy('releaseDate', 'desc')
-    );
+    const q = query(collection(db, COLLECTION_NAME));
     const querySnapshot = await getDocs(q);
     
-    return querySnapshot.docs.map(doc => ({
+    const games = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     })) as Game[];
+    
+    // Sort in memory: first by sortOrder, then by releaseDate descending
+    return games.sort((a, b) => {
+      if (a.sortOrder !== b.sortOrder) {
+        return a.sortOrder - b.sortOrder;
+      }
+      return b.releaseDate.toMillis() - a.releaseDate.toMillis();
+    });
   } catch (error) {
     console.error('Error getting all games:', error);
     throw error;
@@ -57,18 +61,21 @@ export async function getAllGames(): Promise<Game[]> {
 
 export async function getActiveGames(): Promise<Game[]> {
   try {
-    const q = query(
-      collection(db, COLLECTION_NAME), 
-      where('isActive', '==', true),
-      orderBy('sortOrder', 'asc'),
-      orderBy('releaseDate', 'desc')
-    );
+    const q = query(collection(db, COLLECTION_NAME), where('isActive', '==', true));
     const querySnapshot = await getDocs(q);
     
-    return querySnapshot.docs.map(doc => ({
+    const games = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     })) as Game[];
+    
+    // Sort in memory: first by sortOrder, then by releaseDate descending
+    return games.sort((a, b) => {
+      if (a.sortOrder !== b.sortOrder) {
+        return a.sortOrder - b.sortOrder;
+      }
+      return b.releaseDate.toMillis() - a.releaseDate.toMillis();
+    });
   } catch (error) {
     console.error('Error getting active games:', error);
     throw error;
