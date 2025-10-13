@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     if (!uid) return new Response('Unauthorized', { status: 401 });
 
     const body = await req.json();
-    const { countryCode, leagueId, startingTeamId } = body;
+    const { countryCode, leagueId, startingTeamId, gameId } = body;
 
     let currentClub: SaveTeam | null = null;
     let currentNT: SaveTeam | null = null;
@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
       // If no starting team, we can create an unemployed save
       const saveData: SaveWithoutId = {
         userId: uid,
+        gameId: gameId || 'fm24', // Default to FM24 if not provided
         countryCode: null,
         currentClub: null,
         currentNT: null,
@@ -86,6 +87,7 @@ export async function POST(req: NextRequest) {
 
     const saveData: SaveWithoutId = {
       userId: uid,
+      gameId: gameId || 'fm24', // Default to FM24 if not provided
       countryCode,
       currentClub,
       currentNT,

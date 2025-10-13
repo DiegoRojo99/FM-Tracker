@@ -10,7 +10,14 @@ export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (ev
         <div className="h-full flex flex-col justify-between p-1">
           {/* Header */}
           <div className="flex flex-row w-full mb-2 justify-between items-center gap-2">
-            <h1 className="text-l text-gray-200">{`${save.season ?? '2023/24'}`}</h1>
+            <div className="flex flex-col">
+              <h1 className="text-l text-gray-200">{`${save.season ?? '2023/24'}`}</h1>
+              {save.gameId && (
+                <span className="text-xs text-gray-400 uppercase tracking-wider">
+                  {save.gameId.replace('fm', 'FM').replace('-touch', ' Touch')}
+                </span>
+              )}
+            </div>
             {save.currentLeague && (
               <Image
                 src={save.currentLeague?.logo}

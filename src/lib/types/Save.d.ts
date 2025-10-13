@@ -5,6 +5,7 @@ import { Trophy } from "./Trophy";
 
 export type SaveInput = {
   userId: string;
+  gameId: string;
   countryCode: string;
   leagueId: number;
   startingTeamId: number;
@@ -27,6 +28,7 @@ export type SaveWithoutId = Omit<Save, 'id'>;
 export type Save = {
   id: string;
   userId: string;
+  gameId: string; // Reference to the game (e.g., "fm24", "fm26")
   countryCode: string | null;
   currentClub: SaveTeam | null;
   currentNT: SaveTeam | null;
