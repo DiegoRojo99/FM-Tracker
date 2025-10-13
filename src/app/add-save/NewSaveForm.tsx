@@ -7,20 +7,30 @@ import TeamGrid from './TeamGrid';
 import { Competition, Country } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/Team';
 
+type Game = {
+  id: string;
+  name: string;
+  shortName: string;
+  isActive: boolean;
+};
+
 export default function NewSaveForm() {
   const { user } = useAuth();
   const [countries, setCountries] = useState<Country[]>([]);
   const [leagues, setLeagues] = useState<Competition[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
 
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedLeague, setSelectedLeague] = useState('');
   const [selectedTeam, setSelectedTeam] = useState('');
+  const [selectedGame, setSelectedGame] = useState('fm24'); // Default to FM24
   const [isNoTeam, setIsNoTeam] = useState(false);
 
-  // Fetch countries on mount
+  // Fetch countries and games on mount
   useEffect(() => {
     fetch('/api/countries').then(res => res.json()).then(setCountries);
+    fetch('/api/games?active=true').then(res => res.json()).then(data => setGames(data.games || []));
   }, []);
 
   // Fetch leagues when country changes
@@ -54,6 +64,7 @@ export default function NewSaveForm() {
     if (!user || (!selectedTeam && !isNoTeam)) return;
 
     const newSave = {
+      gameId: selectedGame,
       countryCode: isNoTeam ? null : selectedCountry,
       leagueId: isNoTeam ? null : Number(selectedLeague),
       startingTeamId: isNoTeam ? null : Number(selectedTeam),
@@ -86,6 +97,21 @@ export default function NewSaveForm() {
       <h1 className="text-3xl font-bold text-white mb-8 text-center">Create New Save</h1>
       
       <form onSubmit={handleSubmit} className="bg-[var(--color-dark)] rounded-xl shadow-2xl p-8 space-y-6">
+        <div className="space-y-2">
+          <label className="block text-lg font-semibold text-white">Game Version</label>
+          <select 
+            value={selectedGame}
+            onChange={e => setSelectedGame(e.target.value)} 
+            className="w-full p-3 rounded-lg bg-[var(--color-darker)] text-white border-2 border-[var(--color-primary)] focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+          >
+            {games.map((game: Game) => (
+              <option key={game.id} value={game.id}>
+                {game.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="space-y-2">
           <label className="block text-lg font-semibold text-white">Country</label>
           <select 
@@ -175,7 +201,7 @@ export default function NewSaveForm() {
 
         <button
           type="submit"
-          disabled={(!selectedTeam && !isNoTeam)}
+          disabled={!selectedGame || (!selectedTeam && !isNoTeam)}
           className="w-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] 
           text-white font-bold py-4 px-6 rounded-lg cursor-pointer
           hover:from-[var(--color-highlight)] hover:to-[var(--color-accent)] 
