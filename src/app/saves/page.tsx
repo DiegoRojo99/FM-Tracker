@@ -10,7 +10,6 @@ import { SaveCard } from './SaveCard';
 import GradientButton from '../components/GradientButton';
 import { Game } from '@/lib/types/Game';
 
-
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
   const [saves, setSaves] = useState<Save[]>([]);
@@ -141,27 +140,26 @@ export default function SavesPage() {
         </Link>
       </div>
       
-      {/* Game Filter */}
-      <div className="mb-6 flex flex-row items-center gap-4">
-        <label htmlFor="gameFilter" className="text-sm font-medium text-gray-300">
-          Filter by Game:
-        </label>
-        <select
-          id="gameFilter"
-          value={selectedGameFilter}
-          onChange={(e) => setSelectedGameFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg bg-[var(--color-darker)] text-white border-2 border-[var(--color-primary)] focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
-        >
-          <option value="all">All Games</option>
-          {games.map((game) => (
-            <option key={game.id} value={game.id}>
-              {game.name}
-            </option>
-          ))}
-        </select>
-        <span className="text-sm text-gray-400">
-          ({filteredSaves.length} save{filteredSaves.length !== 1 ? 's' : ''})
-        </span>
+      {/* Game Filter - Responsive for mobile */}
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 w-full">
+        <div className="flex flex-col w-full sm:w-auto">
+          <label htmlFor="gameFilter" className="text-sm font-medium text-gray-300 mb-1 sm:mb-0">
+            Filter by Game:
+          </label>
+          <select
+            id="gameFilter"
+            value={selectedGameFilter}
+            onChange={(e) => setSelectedGameFilter(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg bg-[var(--color-darker)] text-white border-2 border-[var(--color-primary)] focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+          >
+            <option value="all">All Games</option>
+            {games.map((game) => (
+              <option key={game.id} value={game.id}>
+                {game.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {filteredSaves.length === 0 ? (
