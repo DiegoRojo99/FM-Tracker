@@ -8,10 +8,14 @@ import { Save } from '@/lib/types/Save';
 import FootballLoader from '../components/FootBallLoader';
 import { SaveCard } from './SaveCard';
 import GradientButton from '../components/GradientButton';
+import { Game } from '@/lib/types/Game';
+
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
   const [saves, setSaves] = useState<Save[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
+  const [selectedGameFilter, setSelectedGameFilter] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const [deletingSave, setDeletingSave] = useState<Save | null>(null);
 
@@ -22,19 +26,26 @@ export default function SavesPage() {
       return;
     }
 
-    const fetchSaves = async () => {
+    const fetchData = async () => {
       const token = await user.getIdToken();
-      fetch('/api/saves', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(res => res.json())
-      .then(setSaves)
-      .finally(() => setLoading(false));
+      
+      // Fetch saves and games in parallel
+      const [savesResponse, gamesResponse] = await Promise.all([
+        fetch('/api/saves', {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch('/api/games?active=true')
+      ]);
+
+      const savesData = await savesResponse.json();
+      const gamesData = await gamesResponse.json();
+      
+      setSaves(savesData);
+      setGames(gamesData.games || []);
+      setLoading(false);
     };
 
-    fetchSaves();
+    fetchData().catch(() => setLoading(false));
   }, [user, userLoading]);
 
   
@@ -85,6 +96,12 @@ export default function SavesPage() {
     return dateB - dateA;
   }
 
+  // Filter saves based on selected game
+  const filteredSaves = saves.filter(save => {
+    if (selectedGameFilter === 'all') return true;
+    return save.gameId === selectedGameFilter;
+  });
+
   if (loading) {
     return <FootballLoader />;
   }
@@ -100,6 +117,14 @@ export default function SavesPage() {
   if (!saves || saves.length === 0) {
     return (
       <div className='p-6'>
+        <div className='mb-6 flex flex-row items-center justify-between'>
+          <h1 className="text-2xl font-bold">Your Saves</h1>
+          <Link href="/add-save" className="inline-block">
+            <GradientButton>
+              Create New Save
+            </GradientButton>
+          </Link>
+        </div>
         <p className='text-gray-500'>No saves found.</p>
       </div>
     );
@@ -115,9 +140,46 @@ export default function SavesPage() {
           </GradientButton>
         </Link>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {saves.sort(sortSavesByDate).map(save => ( <SaveCard key={save.id} save={save} handleDelete={handleDelete} /> ))}
+      
+      {/* Game Filter */}
+      <div className="mb-6 flex flex-row items-center gap-4">
+        <label htmlFor="gameFilter" className="text-sm font-medium text-gray-300">
+          Filter by Game:
+        </label>
+        <select
+          id="gameFilter"
+          value={selectedGameFilter}
+          onChange={(e) => setSelectedGameFilter(e.target.value)}
+          className="px-3 py-2 rounded-lg bg-[var(--color-darker)] text-white border-2 border-[var(--color-primary)] focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+        >
+          <option value="all">All Games</option>
+          {games.map((game) => (
+            <option key={game.id} value={game.id}>
+              {game.name}
+            </option>
+          ))}
+        </select>
+        <span className="text-sm text-gray-400">
+          ({filteredSaves.length} save{filteredSaves.length !== 1 ? 's' : ''})
+        </span>
       </div>
+
+      {filteredSaves.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-gray-400">
+            {selectedGameFilter === 'all' 
+              ? 'No saves found.' 
+              : `No saves found for ${games.find(g => g.id === selectedGameFilter)?.name || 'selected game'}.`
+            }
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredSaves.sort(sortSavesByDate).map(save => ( 
+            <SaveCard key={save.id} save={save} handleDelete={handleDelete} /> 
+          ))}
+        </div>
+      )}
 
       <ConfirmationModal
         open={!!deletingSave}
