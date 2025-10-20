@@ -2,43 +2,39 @@ import { adminDB } from '../../lib/auth/firebase-admin';
 import { fetchFromApi } from '../../lib/apiFootball';
 import { rateLimiter } from '../../lib/utils/rateLimiter';
 import { Timestamp } from 'firebase-admin/firestore';
+import dotenv from 'dotenv';
 
-// Optimized migration based on actual data analysis
-export async function optimizedMigration(targetSeason: number = 2024) {
-  console.log(`🚀 Starting optimized migration for season ${targetSeason}...`);
+// Load environment variables
+dotenv.config({ path: '.env' });
+dotenv.config({ path: '.env.local' });
+
+// Fetch 2025 season data for missing competitions
+export async function fetch2025Data() {
+  console.log(`🚀 Fetching 2025 season data for competitions...`);
   
-  // First, test if target season is available
-  console.log('\n🔍 Testing season availability...');
-  const seasonAvailable = await testSeasonAvailability(targetSeason);
+  // First, test if 2025 season is available
+  console.log('\n🔍 Testing 2025 season availability...');
+  const seasonAvailable = await testSeasonAvailability(2025);
   
   if (!seasonAvailable) {
-    console.log(`⚠️  Season ${targetSeason} not available. Falling back to existing data linking.`);
+    console.log(`❌ Season 2025 not available. Exiting.`);
+    return;
   }
   
-  // Phase 1: Link existing teams to competitions (0 API calls)
-  console.log('\n📋 Phase 1: Linking existing teams to competitions...');
-  await linkExistingTeamsToCompetitions();
-  
-  // Phase 2: Identify missing competitions (smart API usage)
-  console.log('\n🎯 Phase 2: Finding competitions that need team data...');
+  // Find competitions that need 2025 data
+  console.log('\n🎯 Finding competitions that need 2025 team data...');
   const missingCompetitions = await findCompetitionsNeedingTeams();
   
-  // Phase 3: Strategic API calls for missing data (only if season is available)
-  if (seasonAvailable) {
-    console.log(`\n📡 Phase 3: Fetching teams for missing competitions (season ${targetSeason})...`);
-    await fetchTeamsForMissingCompetitions(missingCompetitions, targetSeason);
-  } else {
-    console.log('\n⏭️  Skipping Phase 3: Target season not available in free tier');
-    console.log('💡 Suggestion: Use existing data or manually update key competitions');
-  }
+  // Fetch teams for missing competitions
+  console.log(`\n📡 Fetching teams for missing competitions (season 2025)...`);
+  await fetchTeamsForMissingCompetitions(missingCompetitions, 2025);
   
-  console.log('✅ Optimized migration complete!');
+  console.log('✅ 2025 data fetch complete!');
 }
 
-// Test if a specific season is available in the API
+// Test if 2025 season is available in the API
 async function testSeasonAvailability(season: number): Promise<boolean> {
   try {
-    // Test with Premier League (ID: 39) - always available if season is supported
     console.log(`🔍 Testing season ${season} availability...`);
     const response = await fetchFromApi(`/teams?league=39&season=${season}`);
     const available = response && response.length > 0;
@@ -50,109 +46,7 @@ async function testSeasonAvailability(season: number): Promise<boolean> {
   }
 }
 
-// Phase 1: Link existing 2,324 teams to their competitions
-async function linkExistingTeamsToCompetitions(): Promise<void> {
-  console.log('📎 Linking existing teams to API competitions...');
-  
-  // Get all existing teams
-  const teamsSnapshot = await adminDB.collection('teams').get();
-  console.log(`Found ${teamsSnapshot.size} existing teams`);
-  
-  // Group teams by leagueId
-  const teamsByLeague: Record<number, any[]> = {};
-  teamsSnapshot.docs.forEach(doc => {
-    const team = doc.data();
-    const leagueId = team.leagueId;
-    if (!teamsByLeague[leagueId]) {
-      teamsByLeague[leagueId] = [];
-    }
-    teamsByLeague[leagueId].push({ id: doc.id, ...team });
-  });
-  
-  console.log(`Teams grouped into ${Object.keys(teamsByLeague).length} leagues`);
-  
-  // Create ApiCompetition records and link teams
-  let linkedCompetitions = 0;
-  let linkedTeams = 0;
-  
-  for (const [leagueIdStr, teams] of Object.entries(teamsByLeague)) {
-    const leagueId = parseInt(leagueIdStr);
-    
-    // Find competition info from existing structure
-    const competitionInfo = await findCompetitionInfo(leagueId);
-    
-    if (competitionInfo) {
-      // Create ApiCompetition record
-      await adminDB
-        .collection('apiCompetitions')
-        .doc(leagueId.toString())
-        .set({
-          id: leagueId,
-          name: competitionInfo.name,
-          logo: competitionInfo.logo || '',
-          countryCode: competitionInfo.countryCode,
-          countryName: competitionInfo.countryName,
-          type: competitionInfo.type || 'League',
-          season: teams[0].season || 2023,
-          inFootballManager: true,
-          apiSource: 'api-sports',
-          createdAt: Timestamp.now(),
-          lastUpdated: Timestamp.now()
-        });
-      
-      // Create season record with existing teams
-      await adminDB
-        .collection('apiCompetitions')
-        .doc(leagueId.toString())
-        .collection('seasons')
-        .doc(teams[0].season?.toString() || '2023')
-        .set({
-          season: teams[0].season || 2023,
-          teams: teams,
-          dataComplete: true,
-          totalTeams: teams.length,
-          lastUpdated: Timestamp.now()
-        });
-      
-      linkedCompetitions++;
-      linkedTeams += teams.length;
-      
-      console.log(`✅ Linked ${teams.length} teams to competition: ${competitionInfo.name}`);
-    } else {
-      console.log(`⚠️  No competition info found for league ${leagueId} (${teams.length} teams)`);
-    }
-  }
-  
-  console.log(`\n📊 Phase 1 Results:`);
-  console.log(`- Competitions created: ${linkedCompetitions}`);
-  console.log(`- Teams linked: ${linkedTeams}`);
-}
-
-// Find competition info from existing countries/competitions structure
-async function findCompetitionInfo(leagueId: number): Promise<any> {
-  const countriesSnapshot = await adminDB.collection('countries').get();
-  
-  for (const countryDoc of countriesSnapshot.docs) {
-    const competitionsSnapshot = await adminDB
-      .collection('countries')
-      .doc(countryDoc.id)
-      .collection('competitions')
-      .where('id', '==', leagueId)
-      .get();
-    
-    if (!competitionsSnapshot.empty) {
-      const compData = competitionsSnapshot.docs[0].data();
-      return {
-        ...compData,
-        countryCode: countryDoc.id
-      };
-    }
-  }
-  
-  return null;
-}
-
-// Phase 2: Find competitions that still need team data
+// Find competitions that still need team data (excluding cups)
 async function findCompetitionsNeedingTeams() {
   console.log('🔍 Finding competitions that need team data...');
   
@@ -170,17 +64,47 @@ async function findCompetitionsNeedingTeams() {
     for (const compDoc of competitionsSnapshot.docs) {
       const comp = compDoc.data();
       
-      // Check if this competition already has teams in apiCompetitions
+      // Skip cup competitions
+      if (isCupCompetition(comp.name)) {
+        continue;
+      }
+      
+      // Check if this competition already has 2025 season data
       const apiCompDoc = await adminDB
         .collection('apiCompetitions')
         .doc(comp.id.toString())
         .get();
       
-      if (!apiCompDoc.exists && !isCupCompetition(comp.name)) {
-        // This competition needs team data from API (only leagues, not cups)
+      if (apiCompDoc.exists) {
+        // Check if it has 2025 season data
+        const season2025Doc = await adminDB
+          .collection('apiCompetitions')
+          .doc(comp.id.toString())
+          .collection('seasons')
+          .doc('2025')
+          .get();
+        
+        if (!season2025Doc.exists) {
+          // This competition exists but needs 2025 data
+          let priority = 0;
+          
+          // Priority calculation
+          if (isTopTierLeague(comp.name, countryDoc.id)) priority += 500;
+          if (['GB-ENG', 'ES', 'DE', 'IT', 'FR', 'BR', 'AR', 'NL', 'PT'].includes(countryDoc.id)) priority += 100;
+          if (comp.type === 'League') priority += 50;
+          
+          missingCompetitions.push({
+            id: comp.id,
+            name: comp.name,
+            countryCode: countryDoc.id,
+            priority,
+            season: 2025
+          });
+        }
+      } else {
+        // Competition doesn't exist at all, add it
         let priority = 0;
         
-        // Priority calculation
         if (isTopTierLeague(comp.name, countryDoc.id)) priority += 500;
         if (['GB-ENG', 'ES', 'DE', 'IT', 'FR', 'BR', 'AR', 'NL', 'PT'].includes(countryDoc.id)) priority += 100;
         if (comp.type === 'League') priority += 50;
@@ -190,7 +114,7 @@ async function findCompetitionsNeedingTeams() {
           name: comp.name,
           countryCode: countryDoc.id,
           priority,
-          season: comp.season || 2023
+          season: 2025
         });
       }
     }
@@ -199,7 +123,7 @@ async function findCompetitionsNeedingTeams() {
   // Sort by priority
   missingCompetitions.sort((a, b) => b.priority - a.priority);
   
-  console.log(`Found ${missingCompetitions.length} competitions needing team data`);
+  console.log(`Found ${missingCompetitions.length} competitions needing 2025 team data`);
   console.log('\n🎯 Top priorities:');
   missingCompetitions.slice(0, 10).forEach((comp, index) => {
     console.log(`  ${index + 1}. ${comp.name} (${comp.countryCode}) - Priority: ${comp.priority}`);
@@ -242,13 +166,13 @@ function isCupCompetition(name: string): boolean {
   return cupPatterns.some(pattern => nameLower.includes(pattern));
 }
 
-// Phase 3: Strategic API calls for missing competitions
-async function fetchTeamsForMissingCompetitions(missingCompetitions: any[], targetSeason: number = 2024) {
-  const maxApiCalls = 80; // Reserve calls for daily operations
+// Fetch teams for missing competitions
+async function fetchTeamsForMissingCompetitions(missingCompetitions: any[], targetSeason: number = 2025) {
+  const maxApiCalls = Math.min(500, missingCompetitions.length); // Process many more with Pro subscription
   let apiCallsUsed = 0;
   
-  console.log(`🎯 Processing up to ${maxApiCalls} competitions with rate limiting...`);
-  console.log(`⚡ Rate limits: 9 calls/minute, 95 calls/day`);
+  console.log(`🎯 Processing up to ${maxApiCalls} competitions with Pro subscription rate limits...`);
+  console.log(`⚡ Rate limits: ~100 calls/minute, 7500 calls/day (Pro subscription)`);
   
   for (const comp of missingCompetitions) {
     // Check rate limits
@@ -266,7 +190,7 @@ async function fetchTeamsForMissingCompetitions(missingCompetitions: any[], targ
     }
     
     if (apiCallsUsed >= maxApiCalls) {
-      console.log(`\n⚠️  Reached migration session limit (${maxApiCalls} calls)`);
+      console.log(`\n⚠️  Reached session limit (${maxApiCalls} calls)`);
       console.log(`📊 Processed ${apiCallsUsed} competitions`);
       console.log(`📈 Remaining competitions: ${missingCompetitions.length - apiCallsUsed}`);
       break;
@@ -282,16 +206,18 @@ async function fetchTeamsForMissingCompetitions(missingCompetitions: any[], targ
       apiCallsUsed++;
       
       if (teams && teams.length > 0) {
-        // Create ApiCompetition record
-        await adminDB
-          .collection('apiCompetitions')
-          .doc(comp.id.toString())
-          .set({
+        // Create or update ApiCompetition record
+        const competitionRef = adminDB.collection('apiCompetitions').doc(comp.id.toString());
+        const competitionDoc = await competitionRef.get();
+        
+        if (!competitionDoc.exists) {
+          // Create new competition
+          await competitionRef.set({
             id: comp.id,
             name: comp.name,
             logo: '', // Will be filled when available
             countryCode: comp.countryCode,
-            countryName: comp.countryCode, // Update this with proper country name
+            countryName: comp.countryCode,
             type: 'League',
             season: targetSeason,
             inFootballManager: true,
@@ -299,11 +225,10 @@ async function fetchTeamsForMissingCompetitions(missingCompetitions: any[], targ
             createdAt: Timestamp.now(),
             lastUpdated: Timestamp.now()
           });
+        }
         
-        // Create season record
-        await adminDB
-          .collection('apiCompetitions')
-          .doc(comp.id.toString())
+        // Create 2025 season record
+        await competitionRef
           .collection('seasons')
           .doc(targetSeason.toString())
           .set({
@@ -314,7 +239,7 @@ async function fetchTeamsForMissingCompetitions(missingCompetitions: any[], targ
             lastUpdated: Timestamp.now()
           });
         
-        // Update teams collection
+        // Update teams collection with 2025 data
         for (const team of teams) {
           if (team?.team?.id) {
             await adminDB
@@ -323,18 +248,20 @@ async function fetchTeamsForMissingCompetitions(missingCompetitions: any[], targ
               .set({
                 ...team.team,
                 venue: team.venue,
+                season: targetSeason,
+                leagueId: comp.id,
                 updatedAt: Timestamp.now()
               }, { merge: true });
           }
         }
         
-        console.log(`✅ Added ${teams.length} teams for ${comp.name}`);
+        console.log(`✅ Added ${teams.length} teams for ${comp.name} (2025 season)`);
       } else {
-        console.log(`⚠️  No teams found for ${comp.name}`);
+        console.log(`⚠️  No teams found for ${comp.name} in 2025`);
       }
       
-      // Small buffer between requests (rate limiter handles main timing)
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Small buffer between requests (minimal with Pro subscription)
+      await new Promise(resolve => setTimeout(resolve, 50));
       
     } catch (error) {
       console.error(`❌ Error fetching ${comp.name}:`, error);
@@ -343,28 +270,25 @@ async function fetchTeamsForMissingCompetitions(missingCompetitions: any[], targ
   }
   
   const finalRemaining = rateLimiter.getRemainingCalls();
-  console.log(`\n📊 Phase 3 Results:`);
+  console.log(`\n📊 2025 Data Fetch Results:`);
   console.log(`- API calls used this session: ${apiCallsUsed}/${maxApiCalls}`);
   console.log(`- Competitions processed: ${apiCallsUsed}`);
   console.log(`- Remaining today: ${finalRemaining.daily} calls`);
   console.log(`- Remaining competitions: ${Math.max(0, missingCompetitions.length - apiCallsUsed)}`);
   
   if (missingCompetitions.length > apiCallsUsed) {
-    console.log(`\n💡 To continue tomorrow, run the same command again.`);
+    console.log(`\n💡 To continue, run the script again.`);
   }
 }
 
 if (require.main === module) {
-  // Allow season parameter from command line
-  const targetSeason = process.argv[2] ? parseInt(process.argv[2]) : 2024;
-  
-  optimizedMigration(targetSeason)
+  fetch2025Data()
     .then(() => {
-      console.log('\n🎉 Optimized migration completed successfully!');
+      console.log('\n🎉 2025 data fetch completed successfully!');
       process.exit(0);
     })
     .catch((error) => {
-      console.error('❌ Migration failed:', error);
+      console.error('❌ 2025 data fetch failed:', error);
       process.exit(1);
     });
 }

@@ -5,8 +5,8 @@ export class ApiRateLimiter {
   private lastResetDate = new Date().toDateString();
   private minuteResetTime = Date.now();
   
-  private readonly MAX_DAILY_CALLS = 95; // Buffer for safety
-  private readonly MAX_MINUTE_CALLS = 9;  // Buffer for safety  
+  private readonly MAX_DAILY_CALLS = 7400; // Pro subscription: 7500 with buffer
+  private readonly MAX_MINUTE_CALLS = 100; // Much more generous for Pro
   private readonly MINUTE_WINDOW = 60 * 1000; // 60 seconds
 
   async waitIfNeeded(): Promise<void> {
