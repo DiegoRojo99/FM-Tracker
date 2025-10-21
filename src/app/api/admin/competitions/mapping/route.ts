@@ -1,14 +1,13 @@
 import { adminDB } from '@/lib/auth/firebase-admin';
-import { NextRequest } from 'next/server';
 
 type AdminCompetition = {
   id: string;
   isGrouped: boolean;
   groupName?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const snapshot = await adminDB.collection('adminCompetitions').get();
     const competitions: AdminCompetition[] = snapshot.docs.map(doc => ({

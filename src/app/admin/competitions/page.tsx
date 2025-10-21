@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/app/components/AuthProvider';
 
 type AdminCompetition = {
   id: string;
@@ -17,7 +16,6 @@ type AdminCompetition = {
 };
 
 export default function CompetitionsAdmin() {
-  const { user } = useAuth();
   const [competitions, setCompetitions] = useState<AdminCompetition[]>([]);
   const [filteredCompetitions, setFilteredCompetitions] = useState<AdminCompetition[]>([]);
   const [loading, setLoading] = useState(true);
@@ -102,7 +100,7 @@ export default function CompetitionsAdmin() {
     }
   };
 
-  const bulkUpdate = (field: keyof AdminCompetition, value: any) => {
+  const bulkUpdate = (field: keyof AdminCompetition, value: boolean | string | number) => {
     const updates = filteredCompetitions.map(comp => ({
       ...comp,
       [field]: value
@@ -132,7 +130,7 @@ export default function CompetitionsAdmin() {
         <div className="mb-8">
           <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Competition Management</h1>
-            <p className="text-gray-600 mb-4">Control which competitions are visible to users and how they're organized</p>
+            <p className="text-gray-600 mb-4">Control which competitions are visible to users and how they are organized</p>
             
             <details className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <summary className="cursor-pointer font-semibold text-blue-800 hover:text-blue-900">
@@ -155,7 +153,7 @@ export default function CompetitionsAdmin() {
                   <strong className="text-blue-800">🔗 Grouping System:</strong>
                   <ul className="ml-4 mt-1 space-y-1">
                     <li>• <strong>Individual:</strong> Competition appears separately in dropdowns</li>
-                    <li>• <strong>Grouped:</strong> Competition is grouped with others (e.g., "Spanish Regional Leagues")</li>
+                    <li>• <strong>Grouped:</strong> Competition is grouped with others (e.g., &quot;Spanish Regional Leagues&quot;)</li>
                     <li>• <strong>Group Name:</strong> The name shown for the group (only active when grouped)</li>
                   </ul>
                 </div>
@@ -176,7 +174,7 @@ export default function CompetitionsAdmin() {
                 <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mt-3">
                   <strong className="text-yellow-800">💡 Tips:</strong>
                   <ul className="ml-4 mt-1 text-yellow-700 space-y-1">
-                    <li>• Start by hiding competitions you don't want (cups, lower divisions)</li>
+                    <li>• Start by hiding competitions you don&apos;t want (cups, lower divisions)</li>
                     <li>• Group similar competitions (e.g., all Spanish regional groups)</li>
                     <li>• Higher priority numbers appear first in dropdowns</li>
                     <li>• Red rows indicate hidden competitions</li>

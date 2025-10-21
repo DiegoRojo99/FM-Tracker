@@ -8,6 +8,14 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env' });
 dotenv.config({ path: '.env.local' });
 
+type MissingCompetition = {
+  id: string;
+  name: string;
+  countryCode: string;
+  priority: number;
+  season: number;
+};
+
 // Fetch 2025 season data for missing competitions
 export async function fetch2025Data() {
   console.log(`🚀 Fetching 2025 season data for competitions...`);
@@ -49,8 +57,8 @@ async function testSeasonAvailability(season: number): Promise<boolean> {
 // Find competitions that still need team data (excluding cups)
 async function findCompetitionsNeedingTeams() {
   console.log('🔍 Finding competitions that need team data...');
-  
-  const missingCompetitions = [];
+
+  const missingCompetitions: MissingCompetition[] = [];
   const countriesSnapshot = await adminDB.collection('countries').get();
   
   for (const countryDoc of countriesSnapshot.docs) {
@@ -89,7 +97,7 @@ async function findCompetitionsNeedingTeams() {
           let priority = 0;
           
           // Priority calculation
-          if (isTopTierLeague(comp.name, countryDoc.id)) priority += 500;
+          if (isTopTierLeague(comp.name)) priority += 500;
           if (['GB-ENG', 'ES', 'DE', 'IT', 'FR', 'BR', 'AR', 'NL', 'PT'].includes(countryDoc.id)) priority += 100;
           if (comp.type === 'League') priority += 50;
           
@@ -105,7 +113,7 @@ async function findCompetitionsNeedingTeams() {
         // Competition doesn't exist at all, add it
         let priority = 0;
         
-        if (isTopTierLeague(comp.name, countryDoc.id)) priority += 500;
+        if (isTopTierLeague(comp.name)) priority += 500;
         if (['GB-ENG', 'ES', 'DE', 'IT', 'FR', 'BR', 'AR', 'NL', 'PT'].includes(countryDoc.id)) priority += 100;
         if (comp.type === 'League') priority += 50;
         
@@ -132,7 +140,7 @@ async function findCompetitionsNeedingTeams() {
   return missingCompetitions;
 }
 
-function isTopTierLeague(name: string, countryCode: string): boolean {
+function isTopTierLeague(name: string): boolean {
   const topTierPatterns = [
     'Premier League', 'Championship', 'League One', 'League Two', // England
     'La Liga', 'Segunda División', 'Primera RFEF', 'Segunda RFEF', // Spain  
@@ -167,7 +175,7 @@ function isCupCompetition(name: string): boolean {
 }
 
 // Fetch teams for missing competitions
-async function fetchTeamsForMissingCompetitions(missingCompetitions: any[], targetSeason: number = 2025) {
+async function fetchTeamsForMissingCompetitions(missingCompetitions: MissingCompetition[], targetSeason: number = 2025) {
   const maxApiCalls = Math.min(500, missingCompetitions.length); // Process many more with Pro subscription
   let apiCallsUsed = 0;
   

@@ -70,7 +70,7 @@ export async function createAdminCompetitionsFromApi() {
 }
 
 // Calculate priority based on competition characteristics
-function calculatePriority(apiComp: any): number {
+function calculatePriority(apiComp: FirebaseFirestore.DocumentData): number {
   let priority = 0;
 
   // Top countries get higher priority
@@ -184,7 +184,7 @@ if (require.main === module) {
       console.log('\n🎉 AdminCompetitions setup completed successfully!');
       process.exit(0);
     })
-    .catch((error: any) => {
+    .catch((error: unknown) => {
       console.error('❌ AdminCompetitions setup failed:', error);
       process.exit(1);
     });

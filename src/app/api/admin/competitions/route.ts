@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDB } from '../../../../lib/auth/firebase-admin';
+import { AdminCompetition } from '@/lib/types/AdminCompetition';
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,7 +9,7 @@ export async function GET(request: NextRequest) {
     const grouped = searchParams.get('grouped');
     const visible = searchParams.get('visible');
     
-    let query: any = adminDB.collection('adminCompetitions');
+    let query: FirebaseFirestore.Query = adminDB.collection('adminCompetitions');
     
     // Apply filters
     if (country) {
@@ -23,13 +24,12 @@ export async function GET(request: NextRequest) {
     
     // Get all documents (we'll sort in memory for now)
     const snapshot = await query.get();
-    const competitions = snapshot.docs.map((doc: any) => ({
-      id: doc.id,
-      ...doc.data()
+    const competitions: AdminCompetition[] = snapshot.docs.map((doc: FirebaseFirestore.DocumentSnapshot) => ({
+      ...doc.data() as AdminCompetition
     }));
     
     // Sort in memory to avoid needing indexes
-    competitions.sort((a: any, b: any) => {
+    competitions.sort((a: AdminCompetition, b: AdminCompetition) => {
       if (b.priority !== a.priority) {
         return b.priority - a.priority;
       }
@@ -64,10 +64,11 @@ export async function PUT(request: NextRequest) {
       if (!update.id) continue;
       
       const ref = adminDB.collection('adminCompetitions').doc(update.id);
-      const { id, ...data } = update;
+      const updateData = { ...update };
+      delete updateData.id;
       
       batch.update(ref, {
-        ...data,
+        ...updateData,
         lastUpdated: new Date(),
         updatedBy: 'admin'
       });

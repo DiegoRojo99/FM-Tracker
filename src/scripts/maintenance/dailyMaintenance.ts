@@ -1,6 +1,8 @@
 import { adminDB } from '../../lib/auth/firebase-admin';
 import { fetchFromApi } from '../../lib/apiFootball';
 import { Timestamp } from 'firebase-admin/firestore';
+import { Save } from '@/lib/types/Save';
+import { ApiCompetition } from '@/lib/types/ApiCompetition';
 
 // Daily maintenance within API limits
 export async function dailyMaintenance() {
@@ -83,7 +85,7 @@ export async function dailyMaintenance() {
 
 async function getUserActiveCompetitions() {
   const usersSnapshot = await adminDB.collection('users').get();
-  const activeSaves: any[] = [];
+  const activeSaves: Save[] = [];
   
   for (const userDoc of usersSnapshot.docs) {
     const savesSnapshot = await adminDB
@@ -95,7 +97,7 @@ async function getUserActiveCompetitions() {
     savesSnapshot.docs.forEach(saveDoc => {
       const save = saveDoc.data();
       if (save.currentLeague) {
-        activeSaves.push(save);
+        activeSaves.push(save as Save);
       }
     });
   }
@@ -143,7 +145,7 @@ async function findPriorityCompetitionsWithoutTeams() {
     .get();
   
   for (const doc of apiCompetitionsSnapshot.docs) {
-    const comp = doc.data();
+    const comp = doc.data() as ApiCompetition;
     
     // Check if missing 2024 season data
     const seasonDoc = await adminDB
@@ -165,7 +167,7 @@ async function findPriorityCompetitionsWithoutTeams() {
   return competitions;
 }
 
-function isHighPriorityLeague(comp: any): boolean {
+function isHighPriorityLeague(comp: ApiCompetition): boolean {
   // Top countries
   const topCountries = ['ES', 'EN', 'DE', 'IT', 'FR', 'BR', 'AR', 'NL', 'PT', 'BE'];
   if (!topCountries.includes(comp.countryCode)) return false;

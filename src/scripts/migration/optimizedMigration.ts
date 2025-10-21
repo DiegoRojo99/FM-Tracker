@@ -2,6 +2,16 @@ import { adminDB } from '../../lib/auth/firebase-admin';
 import { fetchFromApi } from '../../lib/apiFootball';
 import { rateLimiter } from '../../lib/utils/rateLimiter';
 import { Timestamp } from 'firebase-admin/firestore';
+import { Competition } from '@/lib/types/Country&Competition';
+import { Team } from '@/lib/types/Team';
+
+type MissingCompetition = {
+  id: number;
+  name: string;
+  countryCode: string;
+  priority: number;
+  season: number;
+};
 
 // Optimized migration based on actual data analysis
 export async function optimizedMigration(targetSeason: number = 2024) {
@@ -59,14 +69,14 @@ async function linkExistingTeamsToCompetitions(): Promise<void> {
   console.log(`Found ${teamsSnapshot.size} existing teams`);
   
   // Group teams by leagueId
-  const teamsByLeague: Record<number, any[]> = {};
+  const teamsByLeague: Record<number, Team[]> = {};
   teamsSnapshot.docs.forEach(doc => {
-    const team = doc.data();
+    const team = doc.data() as Team;
     const leagueId = team.leagueId;
     if (!teamsByLeague[leagueId]) {
       teamsByLeague[leagueId] = [];
     }
-    teamsByLeague[leagueId].push({ id: doc.id, ...team });
+    teamsByLeague[leagueId].push(team);
   });
   
   console.log(`Teams grouped into ${Object.keys(teamsByLeague).length} leagues`);
@@ -129,7 +139,7 @@ async function linkExistingTeamsToCompetitions(): Promise<void> {
 }
 
 // Find competition info from existing countries/competitions structure
-async function findCompetitionInfo(leagueId: number): Promise<any> {
+async function findCompetitionInfo(leagueId: number): Promise<Competition | null> {
   const countriesSnapshot = await adminDB.collection('countries').get();
   
   for (const countryDoc of countriesSnapshot.docs) {
@@ -141,7 +151,7 @@ async function findCompetitionInfo(leagueId: number): Promise<any> {
       .get();
     
     if (!competitionsSnapshot.empty) {
-      const compData = competitionsSnapshot.docs[0].data();
+      const compData = competitionsSnapshot.docs[0].data() as Competition;
       return {
         ...compData,
         countryCode: countryDoc.id
@@ -156,7 +166,7 @@ async function findCompetitionInfo(leagueId: number): Promise<any> {
 async function findCompetitionsNeedingTeams() {
   console.log('🔍 Finding competitions that need team data...');
   
-  const missingCompetitions = [];
+  const missingCompetitions: MissingCompetition[] = [];
   const countriesSnapshot = await adminDB.collection('countries').get();
   
   for (const countryDoc of countriesSnapshot.docs) {
@@ -168,7 +178,7 @@ async function findCompetitionsNeedingTeams() {
       .get();
     
     for (const compDoc of competitionsSnapshot.docs) {
-      const comp = compDoc.data();
+      const comp = compDoc.data() as Competition;
       
       // Check if this competition already has teams in apiCompetitions
       const apiCompDoc = await adminDB
@@ -181,7 +191,7 @@ async function findCompetitionsNeedingTeams() {
         let priority = 0;
         
         // Priority calculation
-        if (isTopTierLeague(comp.name, countryDoc.id)) priority += 500;
+        if (isTopTierLeague(comp.name)) priority += 500;
         if (['GB-ENG', 'ES', 'DE', 'IT', 'FR', 'BR', 'AR', 'NL', 'PT'].includes(countryDoc.id)) priority += 100;
         if (comp.type === 'League') priority += 50;
         
@@ -208,7 +218,7 @@ async function findCompetitionsNeedingTeams() {
   return missingCompetitions;
 }
 
-function isTopTierLeague(name: string, countryCode: string): boolean {
+function isTopTierLeague(name: string): boolean {
   const topTierPatterns = [
     'Premier League', 'Championship', 'League One', 'League Two', // England
     'La Liga', 'Segunda División', 'Primera RFEF', 'Segunda RFEF', // Spain  
@@ -243,7 +253,7 @@ function isCupCompetition(name: string): boolean {
 }
 
 // Phase 3: Strategic API calls for missing competitions
-async function fetchTeamsForMissingCompetitions(missingCompetitions: any[], targetSeason: number = 2024) {
+async function fetchTeamsForMissingCompetitions(missingCompetitions: MissingCompetition[], targetSeason: number = 2024) {
   const maxApiCalls = 80; // Reserve calls for daily operations
   let apiCallsUsed = 0;
   

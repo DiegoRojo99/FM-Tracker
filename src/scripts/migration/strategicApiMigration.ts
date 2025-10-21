@@ -4,7 +4,6 @@ import { ApiCompetition, ApiCompetitionSeason } from '../../lib/types/ApiCompeti
 import { Timestamp } from 'firebase-admin/firestore';
 
 // API call tracking to stay within 100/day limit
-let apiCallsToday = 0;
 const MAX_DAILY_CALLS = 95; // Leave buffer for other operations
 
 export class ApiRateLimiter {
@@ -123,7 +122,7 @@ async function identifyPriorityCompetitions(): Promise<Array<{id: number, priori
     }
     
     // 2. Top-tier leagues (based on name patterns)
-    if (isTopTierLeague(comp.name, comp.countryCode)) {
+    if (isTopTierLeague(comp.name)) {
       priority += 500;
     }
     
@@ -149,7 +148,7 @@ async function identifyPriorityCompetitions(): Promise<Array<{id: number, priori
   return competitions.sort((a, b) => b.priority - a.priority);
 }
 
-function isTopTierLeague(name: string, countryCode: string): boolean {
+function isTopTierLeague(name: string): boolean {
   const topTierPatterns = [
     'Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1',
     'Primera División', 'Primeira Liga', 'Eredivisie', 'Liga MX',
@@ -261,7 +260,7 @@ async function findCompetitionsWithoutTeams() {
     if (!seasonDoc.exists) {
       // Calculate priority (same logic as before)
       let priority = 0;
-      if (isTopTierLeague(comp.name, comp.countryCode)) priority += 500;
+      if (isTopTierLeague(comp.name)) priority += 500;
       if (['ES', 'EN', 'DE', 'IT', 'FR', 'BR', 'AR'].includes(comp.countryCode)) priority += 100;
       if (comp.type === 'League') priority += 50;
       
