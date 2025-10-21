@@ -62,7 +62,7 @@ export async function GET(req: NextRequest) {
           name: comp.groupName,
           logo: comp.logoUrl || '',
           type: comp.type || 'League',
-          season: '2024-25', // Default season
+          season: '2025/26', // Default season
           countryCode: comp.countryCode,
           countryName: comp.countryName,
           inFootballManager: true,
@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
         name: comp.displayName,
         logo: comp.logoUrl || '',
         type: comp.type || 'League',
-        season: '2024-25', // Default season
+        season: '2025/26', // Default season
         countryCode: comp.countryCode,
         countryName: comp.countryName,
         inFootballManager: true,
@@ -111,7 +111,7 @@ export async function GET(req: NextRequest) {
           name: comp.name,
           logo: comp.logo,
           type: comp.type,
-          season: typeof comp.season === 'string' ? parseInt(comp.season.split('-')[0]) || 2024 : comp.season,
+          season: typeof comp.season === 'string' ? parseInt(comp.season.split('/')[0]) || 2025 : comp.season,
           countryCode: comp.countryCode,
           countryName: comp.countryName,
           inFootballManager: comp.inFootballManager
