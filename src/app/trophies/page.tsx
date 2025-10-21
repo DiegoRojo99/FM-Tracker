@@ -8,13 +8,14 @@ import FootballLoader from '@/app/components/FootBallLoader';
 import CircleProgress from '@/app/components/progress/CircleProgress';
 import Image from 'next/image';
 import BlurredCard from '../components/BlurredCard';
+import { Game } from '@/lib/types/Game';
 
 export default function TrophiesPage() {
   const { user, userLoading } = useAuth();
   const [countries, setCountries] = useState<CountryWithCompetitions[]>([]);
   const [trophies, setTrophies] = useState<TrophyGroup[]>([]);
   const [groupMapping, setGroupMapping] = useState<Record<string, string[]>>({});
-  const [games, setGames] = useState<string[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
   const [selectedGame, setSelectedGame] = useState<string>('all');
   const [loading, setLoading] = useState(true);
 
@@ -71,6 +72,7 @@ export default function TrophiesPage() {
       setCountries(compsData);
       setTrophies(trophiesData);
       setGroupMapping(mappingData.groupMapping || {});
+      console.log('Fetched games data:', gamesData);
       setGames(gamesData.games || []);
       setLoading(false);
     }
@@ -109,7 +111,7 @@ export default function TrophiesPage() {
             >
               <option value="all">All Games</option>
               {games.map(game => (
-                <option key={game} value={game}>{game}</option>
+                <option key={game.id} value={game.id}>{game.name}</option>
               ))}
             </select>
           </div>
@@ -177,7 +179,7 @@ function TrophyCountry({ country, trophies, groupMapping }: {
           <ul className="pl-4 space-y-1 pt-4">
             {comps.map((comp, index) => (
               <li
-                key={`${country.code}-${comp.id}-${index}`}
+                key={`${country.code}-${String(comp.id)}-${index}`}
                 className={`flex items-center gap-2 ${
                   hasWon(comp.id) ? 'text-green-600 font-semibold' : 'text-gray-500'
                 }`}
