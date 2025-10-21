@@ -6,13 +6,7 @@ import { serverTimestamp } from 'firebase/firestore';
 import TeamGrid from './TeamGrid';
 import { Competition, Country } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/Team';
-
-type Game = {
-  id: string;
-  name: string;
-  shortName: string;
-  isActive: boolean;
-};
+import { Game } from '@/lib/types/Game';
 
 export default function NewSaveForm() {
   const { user } = useAuth();
@@ -24,7 +18,7 @@ export default function NewSaveForm() {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedLeague, setSelectedLeague] = useState('');
   const [selectedTeam, setSelectedTeam] = useState('');
-  const [selectedGame, setSelectedGame] = useState('fm24'); // Default to FM24
+  const [selectedGame, setSelectedGame] = useState('fm26'); // Default to FM26
   const [isNoTeam, setIsNoTeam] = useState(false);
 
   // Fetch countries and games on mount
@@ -92,6 +86,12 @@ export default function NewSaveForm() {
     }, 1000);
   };
 
+  function sortGamesByReleaseDate(a: Game, b: Game) {
+    if (!a.releaseDate) return 1;
+    if (!b.releaseDate) return -1;
+    return b.releaseDate.seconds - a.releaseDate.seconds;
+  }
+
   return (
     <div className="max-w-3xl mx-auto rounded-lg">
       <h1 className="text-3xl font-bold text-white mb-8 text-center">Create New Save</h1>
@@ -104,7 +104,7 @@ export default function NewSaveForm() {
             onChange={e => setSelectedGame(e.target.value)} 
             className="w-full p-3 rounded-lg bg-[var(--color-darker)] text-white border-2 border-[var(--color-primary)] focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
           >
-            {games.map((game: Game) => (
+            {games.sort(sortGamesByReleaseDate).map((game: Game) => (
               <option key={game.id} value={game.id}>
                 {game.name}
               </option>
