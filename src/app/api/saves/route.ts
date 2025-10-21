@@ -27,6 +27,13 @@ export async function GET(req: NextRequest) {
   });
 }
 
+function getSeasonFromGameId(gameId: string): string {
+  if (gameId.includes('fm24')) return '2023/24';
+  if (gameId.includes('fm25')) return '2024/25';
+  if (gameId.includes('fm26')) return '2025/26';
+  return '2023/24';
+}
+
 export async function POST(req: NextRequest) {
   return withAuth(req, async (uid) => {
     if (!uid) return new Response('Unauthorized', { status: 401 });
@@ -41,12 +48,12 @@ export async function POST(req: NextRequest) {
       // If no starting team, we can create an unemployed save
       const saveData: SaveWithoutId = {
         userId: uid,
-        gameId: gameId || 'fm24', // Default to FM24 if not provided
+        gameId: gameId || 'fm26', // Default to FM26 if not provided
         countryCode: null,
         currentClub: null,
         currentNT: null,
         currentLeague: null,
-        season: "2023/24",
+        season: getSeasonFromGameId(gameId || 'fm26'),
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
       };
