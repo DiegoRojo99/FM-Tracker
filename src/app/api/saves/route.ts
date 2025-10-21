@@ -27,6 +27,20 @@ export async function GET(req: NextRequest) {
   });
 }
 
+function getSeasonFromGameId(gameId: string): string {
+  if (gameId.includes('fm24')) return '2023/24';
+  if (gameId.includes('fm25')) return '2024/25';
+  if (gameId.includes('fm26')) return '2025/26';
+  return '2023/24';
+}
+
+function getStartDateFromGameId(gameId: string): string {
+  if (gameId.includes('fm24')) return '2023-07-01';
+  if (gameId.includes('fm25')) return '2024-07-01';
+  if (gameId.includes('fm26')) return '2025-07-01';
+  return '2023-07-01';
+}
+
 export async function POST(req: NextRequest) {
   return withAuth(req, async (uid) => {
     if (!uid) return new Response('Unauthorized', { status: 401 });
@@ -36,17 +50,18 @@ export async function POST(req: NextRequest) {
 
     let currentClub: SaveTeam | null = null;
     let currentNT: SaveTeam | null = null;
+    const gameIdToUse = gameId || 'fm26';
 
     if (!startingTeamId) {
       // If no starting team, we can create an unemployed save
       const saveData: SaveWithoutId = {
         userId: uid,
-        gameId: gameId || 'fm24', // Default to FM24 if not provided
+        gameId: gameIdToUse,
         countryCode: null,
         currentClub: null,
         currentNT: null,
         currentLeague: null,
-        season: "2023/24",
+        season: getSeasonFromGameId(gameIdToUse),
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
       };
@@ -87,12 +102,12 @@ export async function POST(req: NextRequest) {
 
     const saveData: SaveWithoutId = {
       userId: uid,
-      gameId: gameId || 'fm24', // Default to FM24 if not provided
+      gameId: gameIdToUse,
       countryCode,
       currentClub,
       currentNT,
       currentLeague,
-      season: "2023/24",
+      season: getSeasonFromGameId(gameIdToUse),
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     };
@@ -105,7 +120,7 @@ export async function POST(req: NextRequest) {
       teamId: String(startingTeamId),
       leagueId,
       countryCode,
-      startDate: '2023-07-01',
+      startDate: getStartDateFromGameId(gameIdToUse),
       endDate: null,
       createdAt: Timestamp.now(),
       isNational: !!currentNT,

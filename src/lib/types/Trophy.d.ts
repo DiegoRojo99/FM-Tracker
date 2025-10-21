@@ -19,6 +19,7 @@ type Trophy = {
   competitionType: string; // e.g., "League", "Cup", "Continental"
 
   season: string;           // "2024/25"
+  game: string;             // "FM24", "FM25", etc.
   createdAt: string;        // ISO string
   countryCode: string;     // Optional, if needed for filtering or display
 };
@@ -28,6 +29,7 @@ type TrophyInput = {
   competitionId: string;
   dateWon: string;
   countryCode: string;
+  game: string;             // "FM24", "FM25", etc.
 };
 
 export type { Trophy, TrophyInput, TrophyGroup };

@@ -6,7 +6,7 @@ import { fetchTeam } from './teams';
 import { addChallengeForTrophy } from './challenges';
 
 export async function addTrophyToSave(
-  { teamId, competitionId, countryCode, uid, season, saveId }: 
+  { teamId, competitionId, countryCode, uid, season, saveId, game }: 
   {
     teamId: string;
     competitionId: string;
@@ -14,6 +14,7 @@ export async function addTrophyToSave(
     uid: string;
     season: string;
     saveId: string;
+    game: string;
   }
 ): Promise<string | null> {
   try {
@@ -48,6 +49,7 @@ export async function addTrophyToSave(
       competitionLogo: competition.logo,
       competitionType: competition.type,
       season: season,
+      game: game,
       countryCode: countryCode,
       createdAt: new Date().toISOString(),
     };
