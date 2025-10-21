@@ -21,6 +21,14 @@ export async function POST(req: NextRequest) {
       return new Response('Missing required fields', { status: 400 });
     }
 
+    // Get save data to extract game information
+    const saveSnap = await getDoc(doc(db, 'users', uid, 'saves', saveId));
+    if (!saveSnap.exists()) {
+      return NextResponse.json({ error: 'Save not found' }, { status: 404 });
+    }
+    const saveData = saveSnap.data();
+    const game = saveData.gameId || 'FM24'; // Default fallback
+
     // Fetch team data
     const teamSnap = await getDoc(doc(db, 'teams', body.teamId));
     if (!teamSnap.exists()) throw new Error('Team not found');
@@ -80,6 +88,7 @@ export async function POST(req: NextRequest) {
         teamId: body.teamId,
         countryCode,
         season: body.season,
+        game,
       });
     }
 
@@ -93,6 +102,7 @@ export async function POST(req: NextRequest) {
           teamId: body.teamId,
           countryCode: cup.countryCode,
           season: body.season,
+          game,
         });
       }
     }

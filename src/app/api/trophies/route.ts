@@ -7,10 +7,19 @@ export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
     if (!uid) return new Response('Unauthorized', { status: 401 });
 
+    const { searchParams } = new URL(req.url);
+    const game = searchParams.get('game'); // e.g., "FM24", "FM25"
+
     const userTrophies: Trophy[] = await getAllTrophiesForUser(uid);
+    
+    // Filter by game if specified
+    const filteredTrophies = game 
+      ? userTrophies.filter(trophy => trophy.game === game)
+      : userTrophies;
+    
     const groupedTrophies: TrophyGroup[] = [];
     await Promise.all(
-      userTrophies.map(async (trophy) => {
+      filteredTrophies.map(async (trophy) => {
           const group = groupedTrophies.find((g) => g.competitionId === trophy.competitionId);
           if (group) group.trophies.push(trophy);
           else {

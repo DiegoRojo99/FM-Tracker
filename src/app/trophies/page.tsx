@@ -14,21 +14,26 @@ export default function TrophiesPage() {
   const [countries, setCountries] = useState<CountryWithCompetitions[]>([]);
   const [trophies, setTrophies] = useState<TrophyGroup[]>([]);
   const [groupMapping, setGroupMapping] = useState<Record<string, string[]>>({});
+  const [games, setGames] = useState<string[]>([]);
+  const [selectedGame, setSelectedGame] = useState<string>('all');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchAll() {
       if (!user) {
-        const [compsRes, mappingRes] = await Promise.all([
+        const [compsRes, mappingRes, gamesRes] = await Promise.all([
           fetch('/api/competitions/grouped'),
           fetch('/api/admin/competitions/mapping'),
+          fetch('/api/games?active=true'),
         ]);
         
-        if (compsRes.ok && mappingRes.ok) {
+        if (compsRes.ok && mappingRes.ok && gamesRes.ok) {
           const compsData = await compsRes.json();
           const mappingData = await mappingRes.json();
+          const gamesData = await gamesRes.json();
           setCountries(compsData);
           setGroupMapping(mappingData.groupMapping || {});
+          setGames(gamesData.games || []);
         }
         setLoading(false);
         return;
@@ -40,16 +45,18 @@ export default function TrophiesPage() {
         Authorization: `Bearer ${token}`,
       };
 
-      // Fetch competitions, trophies, and group mapping
-      const [compsRes, trophiesRes, mappingRes] = await Promise.all([
+      // Fetch competitions, trophies, group mapping, and games
+      const trophiesUrl = selectedGame !== 'all' ? `/api/trophies?game=${selectedGame}` : '/api/trophies';
+      const [compsRes, trophiesRes, mappingRes, gamesRes] = await Promise.all([
         fetch('/api/competitions/grouped', { headers }),
-        fetch('/api/trophies', { headers }),
+        fetch(trophiesUrl, { headers }),
         fetch('/api/admin/competitions/mapping'),
+        fetch('/api/games', { headers }),
       ]);
 
       // Check if all requests were successful
-      if (!compsRes.ok || !trophiesRes.ok || !mappingRes.ok) {
-        console.error('Failed to fetch competitions, trophies, or mapping');
+      if (!compsRes.ok || !trophiesRes.ok || !mappingRes.ok || !gamesRes.ok) {
+        console.error('Failed to fetch competitions, trophies, mapping, or games');
         setLoading(false);
         return;
       }
@@ -58,11 +65,13 @@ export default function TrophiesPage() {
       const compsData = await compsRes.json();
       const trophiesData = await trophiesRes.json();
       const mappingData = await mappingRes.json();
+      const gamesData = await gamesRes.json();
 
       // Set state with fetched data
       setCountries(compsData);
       setTrophies(trophiesData);
       setGroupMapping(mappingData.groupMapping || {});
+      setGames(gamesData.games || []);
       setLoading(false);
     }
     
@@ -72,7 +81,7 @@ export default function TrophiesPage() {
       fetchAll();
     }
 
-  }, [user, userLoading]);
+  }, [user, userLoading, selectedGame]);
 
   if (loading) {
     return <FootballLoader />;
@@ -84,7 +93,29 @@ export default function TrophiesPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">🏆 Trophies Checklist</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-2xl font-bold">🏆 Trophies Checklist</h1>
+        
+        {games.length > 0 && (
+          <div className="flex items-center gap-2">
+            <label htmlFor="game-select" className="text-sm font-medium text-gray-700">
+              Game:
+            </label>
+            <select
+              id="game-select"
+              value={selectedGame}
+              onChange={(e) => setSelectedGame(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-1 text-sm bg-white text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="all">All Games</option>
+              {games.map(game => (
+                <option key={game} value={game}>{game}</option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
         {countries.sort((a, b) => a.name.localeCompare(b.name)).map((country) => {
           return <TrophyCountry key={country.code} country={country} trophies={trophies} groupMapping={groupMapping} />;
