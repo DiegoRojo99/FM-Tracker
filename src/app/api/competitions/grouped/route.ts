@@ -1,6 +1,6 @@
 import { adminDB } from '@/lib/auth/firebase-admin';
 import { Competition, Country, CountryWithCompetitions } from '@/lib/types/Country&Competition';
-import { AdminCompetition } from '@/lib/types/AdminCompetition';
+import { AdminCompetition, AdminCompetitionWithId } from '@/lib/types/AdminCompetition';
 import { NextRequest } from 'next/server';
 
 type TrophyCompetition = {
@@ -33,8 +33,8 @@ export async function GET(req: NextRequest) {
   const adminCompsSnap = await adminCompsQuery.get();
   const adminCompetitions = adminCompsSnap.docs.map(doc => ({
     id: doc.id,
-    ...doc.data()
-  })) as AdminCompetition[];
+    ...doc.data() as AdminCompetition
+  })) as AdminCompetitionWithId[];
 
   // Filter by type if specified
   let filteredComps = adminCompetitions;
