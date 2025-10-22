@@ -2,7 +2,6 @@ import { Timestamp } from 'firebase/firestore';
 
 // For admin management of which API competitions to show/hide/group
 export type AdminCompetition = {
-  id: string; // Same as apiCompetitionId
   apiCompetitionId: number; // Links to ApiCompetition
   name: string; // Original competition name
   displayName: string; // Customizable display name
@@ -20,6 +19,10 @@ export type AdminCompetition = {
   priority: number; // For sorting (higher = more important)
   sortOrder: number; // Manual ordering override
   logoUrl?: string;
+  
+  // Simple promotion/relegation links
+  promotionTargetId?: string; // apiCompetitionId as string for promotion (upper league)
+  relegationTargetId?: string; // apiCompetitionId as string for relegation (lower league)
   
   // Metadata
   createdAt: Timestamp;

@@ -1,19 +1,7 @@
 'use client'
 
+import { AdminCompetition } from '@/lib/types/AdminCompetition';
 import { useState, useEffect } from 'react';
-
-type AdminCompetition = {
-  id: string;
-  name: string;
-  displayName: string;
-  countryCode: string;
-  countryName: string;
-  isVisible: boolean;
-  isGrouped: boolean;
-  groupName?: string;
-  groupOrder?: number;
-  priority: number;
-};
 
 export default function CompetitionsAdmin() {
   const [competitions, setCompetitions] = useState<AdminCompetition[]>([]);
@@ -70,9 +58,9 @@ export default function CompetitionsAdmin() {
     }
   };
 
-  const updateCompetition = (id: string, updates: Partial<AdminCompetition>) => {
+  const updateCompetition = (apiCompetitionId: number, updates: Partial<AdminCompetition>) => {
     setCompetitions(prev => prev.map(comp => 
-      comp.id === id ? { ...comp, ...updates } : comp
+      comp.apiCompetitionId === apiCompetitionId ? { ...comp, ...updates } : comp
     ));
   };
 
@@ -107,7 +95,7 @@ export default function CompetitionsAdmin() {
     }));
     
     setCompetitions(prev => prev.map(comp => {
-      const update = updates.find(u => u.id === comp.id);
+      const update = updates.find(u => u.apiCompetitionId === comp.apiCompetitionId);
       return update || comp;
     }));
   };
@@ -166,8 +154,9 @@ export default function CompetitionsAdmin() {
                     <li>3. Use <strong>Bulk Actions</strong> to change multiple competitions at once</li>
                     <li>4. Set up <strong>Groups</strong> for related competitions (e.g., regional Spanish leagues)</li>
                     <li>5. Adjust <strong>Priority</strong> numbers to control ordering (higher = appears first)</li>
-                    <li>6. Customize <strong>Display Names</strong> for user-friendly labels</li>
-                    <li>7. Click <strong>Save All Changes</strong> to apply your settings</li>
+                    <li>6. Set <strong>Promotion/Relegation</strong> targets to link league hierarchies</li>
+                    <li>7. Customize <strong>Display Names</strong> for user-friendly labels</li>
+                    <li>8. Click <strong>Save All Changes</strong> to apply your settings</li>
                   </ol>
                 </div>
                 
@@ -177,6 +166,7 @@ export default function CompetitionsAdmin() {
                     <li>• Start by hiding competitions you don&apos;t want (cups, lower divisions)</li>
                     <li>• Group similar competitions (e.g., all Spanish regional groups)</li>
                     <li>• Higher priority numbers appear first in dropdowns</li>
+                    <li>• Set promotion targets to higher-priority leagues, relegation to lower-priority leagues</li>
                     <li>• Red rows indicate hidden competitions</li>
                   </ul>
                 </div>
@@ -283,13 +273,15 @@ export default function CompetitionsAdmin() {
               <th className="border-r border-gray-600 p-4 text-center font-semibold">Grouped</th>
               <th className="border-r border-gray-600 p-4 text-left font-semibold">Group Name</th>
               <th className="border-r border-gray-600 p-4 text-center font-semibold">Priority</th>
+              <th className="border-r border-gray-600 p-4 text-left font-semibold">Promotes To</th>
+              <th className="border-r border-gray-600 p-4 text-left font-semibold">Relegates To</th>
               <th className="p-4 text-left font-semibold">Display Name</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {filteredCompetitions.map((comp, index) => (
               <tr 
-                key={comp.id} 
+                key={comp.apiCompetitionId} 
                 className={`
                   ${comp.isVisible ? 'bg-white hover:bg-blue-50' : 'bg-red-50 hover:bg-red-100'} 
                   transition-colors duration-200
@@ -298,7 +290,7 @@ export default function CompetitionsAdmin() {
               >
                 <td className="border-r border-gray-200 p-4">
                   <div className="font-medium text-gray-900">{comp.name}</div>
-                  <div className="text-xs text-gray-500 font-mono">ID: {comp.id}</div>
+                  <div className="text-xs text-gray-500 font-mono">ID: {comp.apiCompetitionId}</div>
                 </td>
                 <td className="border-r border-gray-200 p-4">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -309,7 +301,7 @@ export default function CompetitionsAdmin() {
                   <input
                     type="checkbox"
                     checked={comp.isVisible}
-                    onChange={(e) => updateCompetition(comp.id, { isVisible: e.target.checked })}
+                    onChange={(e) => updateCompetition(comp.apiCompetitionId, { isVisible: e.target.checked })}
                     className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                   />
                   <div className="text-xs mt-1">
@@ -323,7 +315,7 @@ export default function CompetitionsAdmin() {
                   <input
                     type="checkbox"
                     checked={comp.isGrouped}
-                    onChange={(e) => updateCompetition(comp.id, { isGrouped: e.target.checked })}
+                    onChange={(e) => updateCompetition(comp.apiCompetitionId, { isGrouped: e.target.checked })}
                     className="w-5 h-5 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 focus:ring-2"
                   />
                   <div className="text-xs mt-1">
@@ -337,7 +329,7 @@ export default function CompetitionsAdmin() {
                   <input
                     type="text"
                     value={comp.groupName || ''}
-                    onChange={(e) => updateCompetition(comp.id, { groupName: e.target.value })}
+                    onChange={(e) => updateCompetition(comp.apiCompetitionId, { groupName: e.target.value })}
                     placeholder="Enter group name..."
                     className={`
                       w-full px-3 py-2 border rounded-md text-sm
@@ -353,15 +345,49 @@ export default function CompetitionsAdmin() {
                   <input
                     type="number"
                     value={comp.priority}
-                    onChange={(e) => updateCompetition(comp.id, { priority: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => updateCompetition(comp.apiCompetitionId, { priority: parseInt(e.target.value) || 0 })}
                     className="w-20 px-2 py-2 border border-gray-300 rounded-md text-sm text-center text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
+                </td>
+                <td className="border-r border-gray-200 p-4">
+                  <select
+                    value={comp.promotionTargetId || ''}
+                    onChange={(e) => updateCompetition(comp.apiCompetitionId, { promotionTargetId: e.target.value || undefined })}
+                    className="w-full px-2 py-2 border border-gray-300 rounded-md text-sm text-black focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  >
+                    <option value="">No promotion</option>
+                    {competitions
+                      .filter(c => c.countryCode === comp.countryCode && c.apiCompetitionId !== comp.apiCompetitionId)
+                      .sort((a, b) => b.priority - a.priority)
+                      .map(c => (
+                        <option key={`promotion-${comp.apiCompetitionId}-${c.apiCompetitionId}`} value={c.apiCompetitionId}>
+                          {c.displayName || c.name} (Priority: {c.priority})
+                        </option>
+                      ))}
+                  </select>
+                </td>
+                <td className="border-r border-gray-200 p-4">
+                  <select
+                    value={comp.relegationTargetId || ''}
+                    onChange={(e) => updateCompetition(comp.apiCompetitionId, { relegationTargetId: e.target.value || undefined })}
+                    className="w-full px-2 py-2 border border-gray-300 rounded-md text-sm text-black focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  >
+                    <option value="">No relegation</option>
+                    {competitions
+                      .filter(c => c.countryCode === comp.countryCode && c.apiCompetitionId !== comp.apiCompetitionId)
+                      .sort((a, b) => a.priority - b.priority)
+                      .map(c => (
+                        <option key={`relegation-${comp.apiCompetitionId}-${c.apiCompetitionId}`} value={c.apiCompetitionId}>
+                          {c.displayName || c.name} (Priority: {c.priority})
+                        </option>
+                      ))}
+                  </select>
                 </td>
                 <td className="p-4">
                   <input
                     type="text"
                     value={comp.displayName}
-                    onChange={(e) => updateCompetition(comp.id, { displayName: e.target.value })}
+                    onChange={(e) => updateCompetition(comp.apiCompetitionId, { displayName: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Custom display name..."
                   />
