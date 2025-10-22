@@ -1,3 +1,4 @@
+import { AdminCompetition, AdminCompetitionWithId } from '@/lib/types/AdminCompetition';
 import { adminDB } from '../../lib/auth/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 
@@ -64,8 +65,8 @@ export async function setupExampleSpanishLinks() {
   
   const competitions = spanishComps.docs.map(doc => ({
     id: doc.id,
-    ...doc.data()
-  })) as any[];
+    ...doc.data() as AdminCompetition
+  })) as AdminCompetitionWithId[];
   
   // Find La Liga and Segunda División
   const laLiga = competitions.find(c => 

@@ -1,4 +1,5 @@
 import { adminDB } from '@/lib/auth/firebase-admin';
+import { AdminCompetition, AdminCompetitionWithId } from '@/lib/types/AdminCompetition';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -34,14 +35,14 @@ async function getCompetitionTargets(competitionId: string) {
     return NextResponse.json({ error: 'Competition not found' }, { status: 404 });
   }
   
-  const competition = { id: doc.id, ...doc.data() } as any;
+  const competition = { id: doc.id, ...doc.data() as AdminCompetition } as AdminCompetitionWithId;
   
   // Get promotion target details
   let promotionTarget = null;
   if (competition.promotionTargetId) {
     const promoDoc = await adminDB.collection('adminCompetitions').doc(competition.promotionTargetId).get();
     if (promoDoc.exists) {
-      promotionTarget = { id: promoDoc.id, ...promoDoc.data() } as any;
+      promotionTarget = { id: promoDoc.id, ...promoDoc.data() as AdminCompetition } as AdminCompetitionWithId;
     }
   }
   
@@ -50,7 +51,7 @@ async function getCompetitionTargets(competitionId: string) {
   if (competition.relegationTargetId) {
     const releDoc = await adminDB.collection('adminCompetitions').doc(competition.relegationTargetId).get();
     if (releDoc.exists) {
-      relegationTarget = { id: releDoc.id, ...releDoc.data() } as any;
+      relegationTarget = { id: releDoc.id, ...releDoc.data() as AdminCompetition } as AdminCompetitionWithId;
     }
   }
   
@@ -74,6 +75,18 @@ async function getCompetitionTargets(competitionId: string) {
   });
 }
 
+type PromotionEntry = {
+  competition: {
+    id: string;
+    name: string;
+    priority: number;
+  };
+  promotesTo: string | null;
+  promotesToName?: string;
+  relegatesTo: string | null;
+  relegatesToName?: string;
+}
+
 // Get all promotion/relegation links for a country
 async function getCountryPromotionMap(countryCode: string) {
   const competitions = await adminDB.collection('adminCompetitions')
@@ -85,10 +98,10 @@ async function getCountryPromotionMap(countryCode: string) {
   const comps = competitions.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
-  })) as any[];
+  })) as AdminCompetitionWithId[];
   
   // Build promotion map
-  const promotionMap: Record<string, any> = {};
+  const promotionMap: Record<string, PromotionEntry> = {};
   
   for (const comp of comps) {
     promotionMap[comp.id] = {
@@ -119,18 +132,26 @@ async function getCountryPromotionMap(countryCode: string) {
   
   return NextResponse.json({
     countryCode,
-    competitions: Object.values(promotionMap).sort((a: any, b: any) => b.competition.priority - a.competition.priority)
+    competitions: Object.values(promotionMap).sort((a: PromotionEntry, b: PromotionEntry) => b.competition.priority - a.competition.priority)
   });
 }
 
+interface PromotionRelegationLink {
+  id: string;
+  name: string;
+  countryCode: string;
+  priority: number;
+  promotionTargetId: string | null;
+  relegationTargetId: string | null;
+}
 // Get all promotion/relegation links (summary)
 async function getAllPromotionLinks() {
   const competitions = await adminDB.collection('adminCompetitions')
     .where('type', '==', 'League')
     .where('isVisible', '==', true)
     .get();
-  
-  const links: any[] = [];
+
+  const links: PromotionRelegationLink[] = [];
   
   for (const doc of competitions.docs) {
     const comp = doc.data();

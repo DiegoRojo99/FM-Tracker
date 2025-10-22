@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { addPromotionRelegationFields, setupExampleSpanishLinks } from '@/scripts/migration/addPromotionRelegationLinks';
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     console.log('🚀 Starting simple promotion/relegation enhancement...');
     

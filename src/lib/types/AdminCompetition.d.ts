@@ -30,6 +30,8 @@ export type AdminCompetition = {
   createdBy: string;
 }
 
+export type AdminCompetitionWithId = AdminCompetition & { id: string };
+
 export type AdminCompetitionInput = Omit<AdminCompetition, 'id' | 'createdAt' | 'lastUpdated'>;
 
 // For admin interface grouping
