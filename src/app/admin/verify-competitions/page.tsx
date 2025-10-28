@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { collectionGroup, getDocs, updateDoc, doc, getFirestore } from 'firebase/firestore';
+import { collectionGroup, getDocs, updateDoc, doc, deleteDoc, getFirestore } from 'firebase/firestore';
 
 type CountryCompetitions = {
   countryName: string;
@@ -47,6 +47,14 @@ export default function VerifyFMCompetitionsPage() {
 
     fetchData();
   }, [db]);
+  
+  async function handleDelete(countryId: string, competitionId: string) {
+    if (!window.confirm('Are you sure you want to delete this competition?')) return;
+    const newData = { ...data };
+    newData[countryId].competitions = newData[countryId].competitions.filter(c => c.id !== competitionId);
+    setData(newData);
+    await deleteDoc(doc(db, `countries/${countryId}/competitions/${competitionId}`));
+  }
 
   async function handleToggle(countryId: string, competitionId: string) {
     const newData = { ...data };
@@ -70,15 +78,23 @@ export default function VerifyFMCompetitionsPage() {
         <div key={countryId} className="bg-gray-100 rounded-lg p-4">
           <h2 className="text-xl font-semibold mb-4">{countryName}</h2>
           <ul className="space-y-2">
-            {competitions.map((comp) => (
-              <li key={comp.id} className="flex items-center space-x-4">
+            {competitions.map((comp, index) => (
+              <li key={comp.id} className={`flex items-center space-x-4 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-200'} p-2 rounded`}>
                 {/* {comp.logo && <img src={comp.logo} alt="logo" className="h-6 w-6" />} */}
-                <span className="flex-1">{comp.name}</span>
+                <span className='flex-1'>{comp.id}</span>
+                <span className="flex-6">{comp.name}</span>
                 <input
                   type="checkbox"
                   checked={comp.inFootballManager}
                   onChange={() => handleToggle(countryId, comp.id)}
                 />
+                <button
+                  className="ml-2 px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-700"
+                  onClick={() => handleDelete(countryId, comp.id)}
+                  title="Delete competition"
+                >
+                  Delete
+                </button>
               </li>
             ))}
           </ul>
