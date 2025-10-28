@@ -15,8 +15,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
     }
     
-    const body = await req.json() as SeasonInput;
     // Validate required fields
+    const body = await req.json() as SeasonInput;
     if (!body.teamId || !body.leagueId || !body.leaguePosition || !body.season) {
       return new Response('Missing required fields', { status: 400 });
     }
@@ -36,7 +36,6 @@ export async function POST(req: NextRequest) {
 
     // Fetch competition data
     const countryCode = teamData.countryCode;
-    console.log("Country code:", countryCode);
     if (!countryCode) {
       return new Response('Team does not have a country code', { status: 400 });
     }
