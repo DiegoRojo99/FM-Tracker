@@ -6,7 +6,7 @@ import { ApiLeague, ApiLeagueSeason } from '@/lib/types/FootballAPI';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
 
 // List of FM-supported countries (can expand)
-const seededCountries = [
+const fmCountries = [
   'England', 'Italy', 'Germany', 'France', 'Spain', // Top 5 leagues
   'Portugal', 'Netherlands', 'Scotland', 'Belgium', 'Turkey', // Next 5 european leagues
   'Brazil', 'Argentina', // South America
@@ -17,8 +17,8 @@ const seededCountries = [
   'Wales', 'Northern-Ireland', 'Ireland', // UK regions
   'Poland', 'Austria', 'Slovakia', // Central Europe
   'Finland', 'Iceland', // Nordic countries
-  'South-Africa', // Africa
-  'Japan', 'South-Korea', 'Hong-Kong', 'China', // Asia
+  'South-Africa', 'Egypt', // Africa
+  'Japan', 'South-Korea', 'Hong-Kong', 'China', 'United-Arab-Emirates', // Asia
   'Australia',  // Oceania
   'World',  
   'Belgium', 'Belarus', 'Chile', 'Bulgaria',
@@ -27,10 +27,10 @@ const seededCountries = [
   'Romania', 'Russia', 'Gibraltar',
 ];
 
-const fmCountries: string[] = [
+const seededCountries: string[] = [
 ];
 
-const targetSeason = 2023; // FM24 season
+const targetSeason = 2025; // FM26 season
 const competitionIndex = algoliaWriteClient.initIndex('competitions_index');
 
 async function seedLeagues() {
@@ -45,6 +45,10 @@ async function seedLeagues() {
 
   const algoliaCompetitions = [];
   for (const league of filtered) {
+    // Placeholder logic: mark as female if league name contains 'Women' or 'Femenino' (customize as needed)
+    const isFemale = /women|femenino|féminin|feminina|feminine/i.test(league.league.name);
+    // Collect all available seasons for this league
+    const seasons = league.seasons.map((s: ApiLeagueSeason) => s.year).filter((year) => typeof year === 'number');
     const data = {
       id: league.league.id,
       name: league.league.name,
@@ -52,7 +56,8 @@ async function seedLeagues() {
       logo: league.league.logo,
       countryCode: league.country.code || league.country.name.slice(0, 3).toUpperCase(),
       countryName: league.country.name,
-      season: targetSeason
+      isFemale: isFemale ? true : null,
+      seasons
     };
 
     algoliaCompetitions.push({
@@ -61,7 +66,7 @@ async function seedLeagues() {
     });
 
     await setDoc(doc(collection(db, 'countries', data.countryCode, 'competitions'), data.id.toString()), data);
-    console.log(`✅ Added: ${data.name} (${data.countryName})`);
+    console.log(`✅ Added: ${data.name} (${data.countryName})${isFemale ? ' [FEMALE]' : ''}`);
   }
 
   // Add seeded countries to Algolia

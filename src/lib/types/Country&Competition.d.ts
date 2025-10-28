@@ -14,6 +14,7 @@ export type Competition = {
   countryCode: string;       // e.g., "DE"
   countryName: string;       // e.g., "Germany"
   inFootballManager: boolean; // Indicates if the competition is in Football Manager
+  isFemale?: boolean;         // Indicates if the competition is a female league (optional)
 };
 
 export type CountryWithCompetitions = Country & {

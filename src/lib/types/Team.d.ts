@@ -15,6 +15,8 @@ export type Team = {
     lat: number | null;
     lng: number | null;
   };
+  
+  isFemale?: boolean; // Indicates if the team is a women's team (optional)
 };
 
 export type TeamWithDetails = TeamInput & {

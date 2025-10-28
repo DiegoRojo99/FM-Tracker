@@ -10,6 +10,8 @@ export type AlgoliaCompetition = {
   countryName: string; // e.g., "Japan"
   season: number; // e.g., 2023
   inFootballManager: boolean; // e.g., false
+  isFemale?: boolean; // Indicates if the competition is a female league (optional)
+  seasons: number[]; // Array of supported seasons (e.g., [2023, 2025])
 };
 
 export type AlgoliaTeam = {
@@ -27,4 +29,5 @@ export type AlgoliaTeam = {
     _operation: string; // e.g., "IncrementSet"
     value: number; // e.g., 1750009571588
   };
+  isFemale?: boolean; // Indicates if the team is a women's team (optional)
 };
