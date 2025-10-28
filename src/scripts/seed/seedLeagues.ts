@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { fetchFromApi } from '@/lib/apiFootball';
 import { db } from '@/lib/db/firebase';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 import { ApiLeague, ApiLeagueSeason } from '@/lib/types/FootballAPI';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
 import { seededLeaguesIds } from '../data/leagues';
@@ -68,8 +68,14 @@ async function seedLeagues() {
       ...data
     });
 
-    await setDoc(doc(collection(db, 'countries', data.countryCode, 'competitions'), data.id.toString()), data);
-    console.log(`✅ Added: ${data.name} (${data.countryName})${isFemale ? ' [FEMALE]' : ''}${inFootballManager ? ' [FM]' : ''}`);
+    const compRef = doc(collection(db, 'countries', data.countryCode, 'competitions'), data.id.toString());
+    const compSnap = await getDoc(compRef);
+    if (!compSnap.exists()) {
+      await setDoc(compRef, data);
+      console.log(`✅ Created: ${data.name} (${data.countryName})${isFemale ? ' [FEMALE]' : ''}${inFootballManager ? ' [FM]' : ''}`);
+    } else {
+      console.log(`⏩ Skipped (already exists): ${data.name} (${data.countryName})`);
+    }
   }
 
   // Add seeded countries to Algolia
