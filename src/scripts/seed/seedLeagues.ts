@@ -4,6 +4,7 @@ import { db } from '@/lib/db/firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { ApiLeague, ApiLeagueSeason } from '@/lib/types/FootballAPI';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
+import { seededLeaguesIds } from '../data/leagues';
 
 // List of FM-supported countries (can expand)
 const fmCountries = [
@@ -49,6 +50,7 @@ async function seedLeagues() {
     const isFemale = /women|femenino|féminin|feminina|feminine/i.test(league.league.name);
     // Collect all available seasons for this league
     const seasons = league.seasons.map((s: ApiLeagueSeason) => s.year).filter((year) => typeof year === 'number');
+    const inFootballManager = seededLeaguesIds.includes(league.league.id);
     const data = {
       id: league.league.id,
       name: league.league.name,
@@ -57,7 +59,8 @@ async function seedLeagues() {
       countryCode: league.country.code || league.country.name.slice(0, 3).toUpperCase(),
       countryName: league.country.name,
       isFemale: isFemale ? true : null,
-      seasons
+      seasons,
+      inFootballManager
     };
 
     algoliaCompetitions.push({
@@ -66,7 +69,7 @@ async function seedLeagues() {
     });
 
     await setDoc(doc(collection(db, 'countries', data.countryCode, 'competitions'), data.id.toString()), data);
-    console.log(`✅ Added: ${data.name} (${data.countryName})${isFemale ? ' [FEMALE]' : ''}`);
+    console.log(`✅ Added: ${data.name} (${data.countryName})${isFemale ? ' [FEMALE]' : ''}${inFootballManager ? ' [FM]' : ''}`);
   }
 
   // Add seeded countries to Algolia
