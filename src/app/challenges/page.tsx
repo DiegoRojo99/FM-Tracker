@@ -11,7 +11,11 @@ export default function ChallengesPage() {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [userChallenges, setUserChallenges] = useState<CareerChallenge[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedGame, setSelectedGame] = useState<string>('');
 
+  // Compute unique games from userChallenges
+  const gameOptions = Array.from(new Set(userChallenges.map(uc => uc.gameId).filter(Boolean)));
+  
   useEffect(() => {
     async function fetchAll() {
       if (!user) return;
@@ -32,7 +36,6 @@ export default function ChallengesPage() {
       setUserChallenges(userChallengesData);
       setLoading(false);
     }
-    
     // Wait for user to be loaded
     if (userLoading) return;
     else if (!user) {
@@ -45,16 +48,40 @@ export default function ChallengesPage() {
 
   }, [user, userLoading]);
 
+  // Filter userChallenges by selected game
+  const filteredUserChallenges = selectedGame
+    ? userChallenges.filter(uc => uc.gameId === selectedGame)
+    : userChallenges;
 
   if (loading) return <FootballLoader />;
 
   return (
     <div className="p-6 mx-auto space-y-6">
-      <h1 className="text-2xl font-bold m-4 text-white">Challenges</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <h1 className="text-2xl font-bold">Challenges</h1>
+        {gameOptions.length > 0 && (
+          <div className="flex items-center gap-2">
+            <label htmlFor="game-select" className="text-sm font-medium text-gray-700">
+              Game:
+            </label>
+            <select
+              id="game-select"
+              value={selectedGame}
+              onChange={e => setSelectedGame(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-1 text-sm bg-white text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">All Games</option>
+              {gameOptions.map(game => (
+                <option key={game} value={game}>{game}</option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {challenges.map(challenge => (
           <div key={challenge.id}>
-            <GlobalChallengeCard challenge={challenge} userChallenge={userChallenges.find(uc => uc.id === challenge.id)} />
+            <GlobalChallengeCard challenge={challenge} userChallenge={filteredUserChallenges.find(uc => uc.id === challenge.id)} />
           </div>
         ))}
       </div>
