@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Challenge } from '@/lib/types/Challenge';
 
 const statusStyles = {
@@ -10,21 +11,20 @@ const statusStyles = {
 type MiniChallengeCardProps = {
   challenge: Challenge;
   status?: 'completed' | 'in-progress' | 'not-started';
-  onClick: () => void;
 };
 
-const MiniChallengeCard: React.FC<MiniChallengeCardProps> = ({ challenge, status, onClick }) => {
+const MiniChallengeCard: React.FC<MiniChallengeCardProps> = ({ challenge, status }) => {
   const cardStyle = status ? statusStyles[status] : statusStyles['not-started'];
   return (
-    <button
+    <Link
+      href={`/challenges/${challenge.id}`}
       className={`aspect-square w-full border-2 ${cardStyle} rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500`}
       title={challenge.name}
-      onClick={onClick}
     >
       <span className="text-base sm:text-lg font-bold text-gray-900 dark:text-white text-center px-2">
         {challenge.name}
       </span>
-    </button>
+    </Link>
   );
 };
 

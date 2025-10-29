@@ -108,7 +108,6 @@ export default function ChallengesPage() {
             const sectionChallenges = challengeGroups[section.key].map(({ challenge }) => ({
               challenge,
               status: user ? section.key : undefined,
-              onClick: () => alert(`Show details for ${challenge.name}`), // Placeholder
             }));
             return (
               <ChallengeSection

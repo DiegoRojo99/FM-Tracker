@@ -13,13 +13,13 @@ export async function getAllChallenges() {
 }
 
 export async function getChallengeById(challengeId: string) {
+  console.log('Fetching challenge by ID:', challengeId);
   const challengesCol = collection(db, 'challenges');
   const challengeSnapshot = await getDocs(challengesCol);
-  const challengeDoc = challengeSnapshot.docs.find(doc => doc.id === challengeId);
-  
+  const challengeDocs = challengeSnapshot.docs.map(doc => doc.data()) as Challenge[];
+  const challengeDoc = challengeDocs.find(doc => doc.id === challengeId);
   if (!challengeDoc) return null;
-  
-  return { id: challengeDoc.id, ...challengeDoc.data() } as Challenge;
+  return challengeDoc as Challenge;
 }
 
 export async function getUserChallenges(userId: string) {
