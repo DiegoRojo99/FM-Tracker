@@ -3,6 +3,7 @@ import { db } from '@/lib/db/firebase';
 import { updateSaveSeason } from '@/lib/db/saves';
 import { addTrophyToSave } from '@/lib/db/trophies';
 import { SeasonInput, SeasonSummary } from '@/lib/types/Season';
+import { countryCodeMap } from '@/lib/dto/countryCode';
 import { collection, addDoc, doc, getDoc, getDocs, query, where, deleteDoc } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -35,9 +36,14 @@ export async function POST(req: NextRequest) {
     const teamData = teamSnap.data();
 
     // Fetch competition data
-    const countryCode = teamData.countryCode;
+    let countryCode = teamData.countryCode;
     if (!countryCode) {
       return new Response('Team does not have a country code', { status: 400 });
+    }
+
+    // Map for country code corrections
+    if (countryCodeMap[countryCode] !== undefined) {
+      countryCode = countryCodeMap[countryCode];
     }
 
     const leagueSnap = await getDoc(doc(db, 'countries', countryCode, 'competitions', body.leagueId));
