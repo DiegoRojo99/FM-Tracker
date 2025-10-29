@@ -25,6 +25,7 @@ export type CareerChallenge = {
   completedGoals: string[]; // Array of goal IDs completed
   startedAt: string;
   completedAt?: string;
+  gameId: string; // The game (e.g., 'fm24', 'fm26') this challenge is associated with
 };
 
 export type ChallengeGoalInputData = {

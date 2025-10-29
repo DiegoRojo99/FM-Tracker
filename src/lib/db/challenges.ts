@@ -131,13 +131,19 @@ export async function addChallengeForTeam(
   const userChallenges = await getChallengesForSave(uid, saveId);
   const matchingChallenges = await getTeamMatchingChallenges(String(teamId));
 
+  // Get the save to access its gameId
+  const savesCol = collection(db, 'users', uid, 'saves');
+  const saveSnap = await getDocs(query(savesCol, where('id', '==', saveId)));
+  const save = saveSnap.docs[0]?.data() as Save | undefined;
+  const gameId = save?.gameId || 'unknown';
+
   for (const challenge of matchingChallenges) {
     // Check if the challenge is already in the user's save
     const userHasChallenge = userChallenges.some(c => c.id === challenge.id);
     
     if (!userHasChallenge) {
       // Add the challenge to the user's save
-      const careerChallenge = getCareerChallengeFromChallengeAndTrophy(challenge, null);
+      const careerChallenge = { ...getCareerChallengeFromChallengeAndTrophy(challenge, null), gameId };
       await addChallengeForSave(uid, saveId, careerChallenge);
     }
   }
@@ -151,13 +157,19 @@ export async function addChallengeForCountry(
   const userChallenges = await getChallengesForSave(uid, saveId);
   const matchingChallenges = await getCountryMatchingChallenges(String(countryCode));
 
+  // Get the save to access its gameId
+  const savesCol = collection(db, 'users', uid, 'saves');
+  const saveSnap = await getDocs(query(savesCol, where('id', '==', saveId)));
+  const save = saveSnap.docs[0]?.data() as Save | undefined;
+  const gameId = save?.gameId || 'unknown';
+
   for (const challenge of matchingChallenges) {
     // Check if the challenge is already in the user's save
     const userHasChallenge = userChallenges.some(c => c.id === challenge.id);
     
     if (!userHasChallenge) {
       // Add the challenge to the user's save
-      const careerChallenge = getCareerChallengeFromChallengeAndTrophy(challenge, null);
+      const careerChallenge = { ...getCareerChallengeFromChallengeAndTrophy(challenge, null), gameId };
       await addChallengeForSave(uid, saveId, careerChallenge);
     }
   }
