@@ -24,3 +24,28 @@ export async function withAuth(
     return new Response('Unauthorized: Invalid token', { status: 401 });
   }
 }
+
+export async function withOptionalAuth(
+  req: NextRequest,
+  handler: (uid: string | null) => Promise<Response>
+): Promise<Response> {
+  const authHeader = req.headers.get('authorization');
+  
+  if (!authHeader) {
+    return handler(null);
+  }
+
+  const token = authHeader?.split('Bearer ')[1];
+  if (!token) {
+    return handler(null);
+  }
+
+  try {
+    const decoded = await adminAuth.verifyIdToken(token);
+    return handler(decoded.uid);
+  } 
+  catch (err) {
+    console.error('Error verifying token:', err);
+    return handler(null);
+  }
+}

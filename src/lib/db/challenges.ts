@@ -31,11 +31,16 @@ export async function getUserChallenges(userId: string) {
   for (const save of saves) {
     const challengesCol = collection(db, 'users', userId, 'saves', save.id, 'challenges');
     const challengeSnapshot = await getDocs(challengesCol);
-    const challenges = challengeSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as CareerChallenge[];
+    const challenges = challengeSnapshot.docs.map(doc => (doc.data() )) as CareerChallenge[];
     userChallenges.push(...challenges);
   }
 
   return userChallenges;
+}
+
+export async function getUserChallengeById(challengeId: string, userId: string) {
+  const userChallenges = await getUserChallenges(userId);
+  return userChallenges.find(challenge => challenge.id === challengeId) || null;
 }
 
 export async function getTeamMatchingChallenges(teamId: string) {
