@@ -1,7 +1,7 @@
 import { CareerChallenge, Challenge } from "../types/Challenge";
 import { Trophy } from "../types/Trophy";
 
-export function getCareerChallengeFromChallengeAndTrophy(challenge: Challenge, trophy: Trophy | null): CareerChallenge {
+export function getCareerChallengeFromChallengeAndTrophy(challenge: Challenge, trophy: Trophy | null): Omit<CareerChallenge, 'gameId'> {
   // Create a new CareerChallenge object based on the Challenge
   let completedGoals: string[] = [];
   if (trophy) {
@@ -30,7 +30,7 @@ export function getCareerChallengeFromChallengeAndTrophy(challenge: Challenge, t
   };
 }
 
-export function getCareerChallengeFromChallengeAndTrophies(challenge: Challenge, trophies: Trophy[]): CareerChallenge {
+export function getCareerChallengeFromChallengeAndTrophies(challenge: Challenge, trophies: Trophy[]): Omit<CareerChallenge, 'gameId'> {
   // Create a new CareerChallenge object based on the Challenge
   let completedGoals: string[] = [];
   if (trophies.length) {

@@ -118,7 +118,7 @@ export async function addChallengeForTrophy(
   if (!saveTrophies.includes(trophyData)) saveTrophies.push(trophyData);
 
   for (const challenge of matchingChallenges) {
-    const updatedCareerChallenge = getCareerChallengeFromChallengeAndTrophies(challenge, saveTrophies);
+    const updatedCareerChallenge ={...getCareerChallengeFromChallengeAndTrophies(challenge, saveTrophies), gameId: trophyData.game};
     await updateChallengeForSave(uid, saveId, updatedCareerChallenge);
   }
 }
