@@ -5,6 +5,12 @@ import { CareerChallenge, Challenge, ChallengeWithUser } from "@/lib/types/Chall
 import FootballLoader from "../components/FootBallLoader";
 import { useAuth } from "../components/AuthProvider";
 
+function getChallengeStatus(userChallenge?: CareerChallenge): 'completed' | 'in-progress' | 'not-started' {
+  if (!userChallenge) return 'not-started';
+  if (userChallenge.completedAt) return 'completed';
+  return 'in-progress';
+}
+
 export default function ChallengesPage() {
   const { user, userLoading } = useAuth();
   const [challenges, setChallenges] = useState<Challenge[]>([]);
@@ -63,11 +69,7 @@ export default function ChallengesPage() {
 
   challenges.forEach(challenge => {
     const userChallenge = filteredUserChallenges.find(uc => uc.id === challenge.id);
-    let status: 'completed' | 'in-progress' | 'not-started' = 'not-started';
-    if (userChallenge) {
-      if (userChallenge.completedAt) status = 'completed';
-      else if (userChallenge.completedGoals.length > 0) status = 'in-progress';
-    }
+    const status = getChallengeStatus(userChallenge);
     challengeGroups[status].push({ challenge, userChallenge });
   });
 

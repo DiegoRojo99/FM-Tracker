@@ -69,14 +69,12 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
   };
 
   const handleSubmit = async () => {
-    console.log('Submit 1');
     if (!user) {
       console.error('User is not authenticated');
       return;
     }
     
     setSaving(true);
-    console.log('Submit 2');
 
     try {
       const token = await user.getIdToken();
