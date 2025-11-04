@@ -16,13 +16,28 @@ type AddSeasonModalProps = {
   saveDetails: SaveWithChildren;
 };
 
+/**
+ * Pull the next season from the save details.
+ * @param saveDetails The save details containing existing seasons.
+ * @returns The next season in the format "YYYY/YY" or an empty string if not found.
+ */
+function pullNextSeasonFromSave(saveDetails: SaveWithChildren): string {
+  if (!saveDetails || !saveDetails.seasons) {
+    return "";
+  }
+
+  const lastSeason = saveDetails.seasons[saveDetails.seasons.length - 1];
+  const [year, nextYear] = lastSeason.season.split("/").map(Number);
+  return `${year + 1}/${nextYear + 1}`;
+}
+
 export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   open,
   onClose,
   onSave,
   saveDetails,
 }) => {
-  const [season, setSeason] = useState('');
+  const [season, setSeason] = useState<string>(pullNextSeasonFromSave(saveDetails));
   const [leaguePosition, setLeaguePosition] = useState<number | "">("");
   const [promoted, setPromoted] = useState(false);
   const [relegated, setRelegated] = useState(false);
