@@ -1,7 +1,7 @@
 'use client';
 import ChallengeSection from './ChallengeSection';
 import { useEffect, useState } from "react";
-import { CareerChallenge, Challenge } from "@/lib/types/Challenge";
+import { CareerChallenge, Challenge, ChallengeWithUser } from "@/lib/types/Challenge";
 import FootballLoader from "../components/FootBallLoader";
 import { useAuth } from "../components/AuthProvider";
 
@@ -56,9 +56,9 @@ export default function ChallengesPage() {
 
   // Group challenges by status
   const challengeGroups = {
-    'in-progress': [] as { challenge: Challenge; userChallenge?: CareerChallenge }[],
-    'not-started': [] as { challenge: Challenge; userChallenge?: CareerChallenge }[],
-    'completed': [] as { challenge: Challenge; userChallenge?: CareerChallenge }[],
+    'in-progress': [] as ChallengeWithUser[],
+    'not-started': [] as ChallengeWithUser[],
+    'completed': [] as ChallengeWithUser[],
   };
 
   challenges.forEach(challenge => {
@@ -105,10 +105,7 @@ export default function ChallengesPage() {
       </div>
       <div className="space-y-10">
           {sectionOrder.map(section => {
-            const sectionChallenges = challengeGroups[section.key].map(({ challenge }) => ({
-              challenge,
-              status: user ? section.key : undefined,
-            }));
+            const sectionChallenges = challengeGroups[section.key];
             return (
               <ChallengeSection
                 key={section.key}
