@@ -49,7 +49,7 @@ export default function ChallengeDetailPage() {
       <section className="mb-8">
         <h2 className="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">Goals</h2>
         <ul className="list-disc pl-6 space-y-2">
-          {challenge.goals.map((goal: any) => (
+          {challenge.goals.map((goal) => (
             <li key={goal.id} className="text-base text-gray-700 dark:text-gray-200">{goal.description}</li>
           ))}
         </ul>
