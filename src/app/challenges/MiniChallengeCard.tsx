@@ -1,6 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import { Challenge } from '@/lib/types/Challenge';
+import { CareerChallenge, ChallengeWithUser } from '@/lib/types/Challenge';
+
+type MiniChallengeCardProps = {
+  challengeWithUser: ChallengeWithUser;
+};
 
 const statusStyles = {
   completed: 'border-green-500 bg-green-50 dark:bg-green-900/40',
@@ -8,13 +12,15 @@ const statusStyles = {
   'not-started': 'border-gray-300 bg-gray-50 dark:bg-zinc-800/40',
 };
 
-type MiniChallengeCardProps = {
-  challenge: Challenge;
-  status?: 'completed' | 'in-progress' | 'not-started';
-};
+function getChallengeStatus(userChallenge?: CareerChallenge): 'completed' | 'in-progress' | 'not-started' {
+  if (!userChallenge) return 'not-started';
+  if (userChallenge.completedAt) return 'completed';
+  return 'in-progress';
+}
 
-const MiniChallengeCard: React.FC<MiniChallengeCardProps> = ({ challenge, status }) => {
-  const cardStyle = status ? statusStyles[status] : statusStyles['not-started'];
+const MiniChallengeCard: React.FC<MiniChallengeCardProps> = ({ challengeWithUser }) => {
+  const { challenge, userChallenge } = challengeWithUser;
+  const cardStyle = statusStyles[getChallengeStatus(userChallenge)];
   return (
     <Link
       href={`/challenges/${challenge.id}`}
