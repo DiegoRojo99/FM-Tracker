@@ -55,17 +55,17 @@ const TrophiesHeader: React.FC<TrophiesHeaderProps> = ({
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
-          <div className="text-sm font-medium text-blue-900 dark:text-blue-300">Trophies Won</div>
-          <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1">{totalTrophies}</div>
+        <div className="rounded-xl p-4 bg-blue-100 dark:bg-blue-900/50 border border-blue-300 dark:border-blue-700">
+          <div className="text-sm font-medium text-black">Trophies Won</div>
+          <div className="text-3xl font-bold text-black mt-1">{totalTrophies}</div>
         </div>
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl p-4 border border-purple-200 dark:border-purple-800">
-          <div className="text-sm font-medium text-purple-900 dark:text-purple-300">Total Competitions</div>
-          <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-1">{totalCompetitions}</div>
+        <div className="rounded-xl p-4 bg-purple-100 dark:bg-purple-900/50 border border-purple-300 dark:border-purple-700">
+          <div className="text-sm font-medium text-black">Total Competitions</div>
+          <div className="text-3xl font-bold text-black mt-1">{totalCompetitions}</div>
         </div>
-        <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
-          <div className="text-sm font-medium text-green-900 dark:text-green-300">Completion</div>
-          <div className="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">{completionPercentage}%</div>
+        <div className="rounded-xl p-4 bg-green-100 dark:bg-green-900/50 border border-green-300 dark:border-green-700">
+          <div className="text-sm font-medium text-black">Completion</div>
+          <div className="text-3xl font-bold text-black mt-1">{completionPercentage}%</div>
         </div>
       </div>
     </div>
