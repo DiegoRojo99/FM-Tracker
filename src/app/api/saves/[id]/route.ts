@@ -7,6 +7,8 @@ import { Trophy } from '@/lib/types/Trophy';
 import { SeasonSummary } from '@/lib/types/Season';
 import { getChallengesForSave } from '@/lib/db/challenges';
 import { Challenge } from '@/lib/types/Challenge';
+import { adminDB } from '@/lib/auth/firebase-admin';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -107,5 +109,70 @@ export async function DELETE(req: NextRequest) {
       console.error('Error deleting save:', error);
       return new Response('Failed to delete save', { status: 500 });
     }
+  });
+}
+
+export async function PUT(req: NextRequest) {
+  return withAuth(req, async (uid) => {
+    if (!uid) {
+      return new Response('Unauthorized', { status: 401 });
+    }
+
+    // Extract the save ID from the URL
+    const url = new URL(req.url);
+    const saveId = url.pathname.split('/')[3];
+
+    if (!saveId) {
+      return new Response('Save ID is required', { status: 400 });
+    }
+
+    const body = await req.json();
+    const { status, isPrimary } = body;
+
+    // Validate status if provided
+    if (status && !['current', 'paused', 'completed', 'inactive'].includes(status)) {
+      return new Response('Invalid status', { status: 400 });
+    }
+
+    const saveRef = adminDB.collection('users').doc(uid).collection('saves').doc(saveId);
+    const saveDoc = await saveRef.get();
+    
+    if (!saveDoc.exists) {
+      return new Response('Save not found', { status: 404 });
+    }
+
+    const updateData: any = {
+      updatedAt: Timestamp.now()
+    };
+
+    if (status) updateData.status = status;
+    if (isPrimary !== undefined) updateData.isPrimary = isPrimary;
+
+    // If setting this save as primary, unset all other saves as primary
+    if (isPrimary === true) {
+      const allSavesRef = adminDB.collection('users').doc(uid).collection('saves');
+      const allSavesSnapshot = await allSavesRef.where('isPrimary', '==', true).get();
+      
+      const batch = adminDB.batch();
+      allSavesSnapshot.docs.forEach(doc => {
+        if (doc.id !== saveId) {
+          batch.update(doc.ref, { isPrimary: false, updatedAt: Timestamp.now() });
+        }
+      });
+      await batch.commit();
+    }
+
+    await saveRef.update(updateData);
+    
+    // Return updated save
+    const updatedSave = await saveRef.get();
+    const saveData = updatedSave.data();
+    
+    return new Response(JSON.stringify({
+      id: updatedSave.id,
+      ...saveData,
+      status: saveData?.status || 'current',
+      isPrimary: saveData?.isPrimary || false
+    }), { status: 200 });
   });
 }
