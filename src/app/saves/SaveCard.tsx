@@ -12,9 +12,9 @@ export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (ev
 
   const getBorderColor = () => {
     switch (localStatus) {
-      case 'current': return 'border-green-400';
+      case 'current': return 'border-blue-400';
       case 'paused': return 'border-yellow-400';
-      case 'completed': return 'border-blue-400';
+      case 'completed': return 'border-green-400';
       case 'inactive': return 'border-gray-400';
       default: return 'border-green-400';
     }
