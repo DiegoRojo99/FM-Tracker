@@ -21,8 +21,16 @@ export async function GET(req: NextRequest) {
       return new Response('No saves found', { status: 404 });
     }
 
-    // Map docs to JSON
-    const saves = savesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Save[];
+    // Map docs to JSON with safe defaults
+    const saves = savesSnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        status: data.status || 'current',
+        isPrimary: data.isPrimary || false
+      } as Save;
+    });
     return new Response(JSON.stringify(saves), { status: 200 });
   });
 }
