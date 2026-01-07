@@ -6,12 +6,12 @@ import { useState } from "react";
 import SaveStatusModal from "./SaveStatusModal";
 
 export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (event: React.MouseEvent<HTMLImageElement>, saveId: string) => void }) {
-  const status = save.status || 'current';
-  const isPrimary = save.isPrimary || false;
+  const [localStatus, setLocalStatus] = useState(save.status || 'current');
+  const [localIsPrimary, setLocalIsPrimary] = useState(save.isPrimary || false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const getBorderColor = () => {
-    switch (status) {
+    switch (localStatus) {
       case 'current': return 'border-green-400';
       case 'paused': return 'border-yellow-400';
       case 'completed': return 'border-blue-400';
@@ -31,7 +31,7 @@ export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (ev
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
                   <h1 className="text-l text-gray-200">{`${save.season ?? '2023/24'}`}</h1>
-                  {isPrimary && status === 'current' && (
+                  {localIsPrimary && localStatus === 'current' && (
                     <span className="text-yellow-400 text-sm" title="Primary Save">⭐</span>
                   )}
                 </div>
@@ -94,7 +94,11 @@ export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (ev
         open={modalOpen}
         save={save}
         onClose={() => setModalOpen(false)}
-        onSubmit={() => setModalOpen(false)} // TODO: implement update logic
+        onSubmit={(status, isPrimary) => {
+          setLocalStatus(status);
+          setLocalIsPrimary(isPrimary);
+          setModalOpen(false);
+        }}
       />
     </>
   )

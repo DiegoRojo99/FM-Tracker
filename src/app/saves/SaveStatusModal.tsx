@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Save } from '@/lib/types/Save';
+import { useAuth } from '../components/AuthProvider';
 
 const STATUS_OPTIONS = [
   { value: 'current', label: '⚡ Current', color: 'green' },
@@ -18,9 +19,38 @@ interface SaveStatusModalProps {
 }
 
 export default function SaveStatusModal({ open, save, onClose, onSubmit }: SaveStatusModalProps) {
+  const { user } = useAuth();
   const [status, setStatus] = useState<SaveStatus>(save.status || 'current');
   const [isPrimary, setIsPrimary] = useState<boolean>(!!save.isPrimary);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSave() {
+    if (!user) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      const token = await user.getIdToken();
+      const res = await fetch(`/api/saves/${save.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status, isPrimary }),
+      });
+      if (!res.ok) throw new Error('Failed to update save');
+
+      const updated = await res.json();
+      onSubmit(updated.status, updated.isPrimary);
+    } 
+    catch (e) {
+      setError('Failed to update save. Please try again.');
+    } 
+    finally {
+      setSubmitting(false);
+    }
+  }
 
   if (!open) return null;
 
@@ -41,6 +71,7 @@ export default function SaveStatusModal({ open, save, onClose, onSubmit }: SaveS
                 style={status === opt.value ? { fontWeight: 700 } : {}}
                 onClick={() => setStatus(opt.value as SaveStatus)}
                 type="button"
+                disabled={submitting}
               >
                 {opt.label}
               </button>
@@ -56,6 +87,7 @@ export default function SaveStatusModal({ open, save, onClose, onSubmit }: SaveS
                   : 'bg-blue-100 border-blue-300 text-blue-800 hover:bg-blue-200'}
               `}
               aria-pressed={isPrimary}
+              disabled={submitting}
             >
               <span className="inline-block w-5 h-5 rounded-full border-2 border-blue-400 flex items-center justify-center bg-white">
                 {isPrimary ? (
@@ -65,14 +97,15 @@ export default function SaveStatusModal({ open, save, onClose, onSubmit }: SaveS
               {isPrimary ? 'Primary Save (Selected)' : 'Set as Primary Save'}
             </button>
           )}
+          {error && <div className="text-red-400 text-sm text-center mt-2">{error}</div>}
         </div>
         <div className="flex gap-4 justify-center">
           <button
             className="px-6 py-2 rounded-lg bg-[var(--primary)] text-white font-semibold hover:bg-[var(--primary-dark)] transition-colors"
-            onClick={() => { setSubmitting(true); onSubmit(status, isPrimary); }}
+            onClick={handleSave}
             disabled={submitting}
           >
-            Save
+            {submitting ? 'Saving...' : 'Save'}
           </button>
           <button
             className="px-6 py-2 rounded-lg bg-gray-600 text-white font-semibold hover:bg-gray-700 transition-colors"
