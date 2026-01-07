@@ -33,11 +33,12 @@ export default function SaveStatusModal({ open, save, onClose, onSubmit }: SaveS
             {STATUS_OPTIONS.map(opt => (
               <button
                 key={opt.value}
-                className={`px-4 py-2 rounded-lg font-medium border-2 transition-all text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${opt.color}-400 ${
-                  status === opt.value
-                    ? `bg-${opt.color}-100 border-${opt.color}-500 text-${opt.color}-900`
-                    : `bg-gray-800 border-gray-600 text-gray-200 hover:bg-${opt.color}-100 hover:text-${opt.color}-900`
-                }`}
+                className={`px-4 py-2 rounded-lg font-medium border-2 transition-all text-sm focus:outline-none focus:ring-2 focus:ring-offset-2
+                  ${status === opt.value
+                    ? `bg-${opt.color}-100 border-${opt.color}-500 text-gray-900 shadow-md`
+                    : `bg-gray-100 border-gray-300 text-gray-700 hover:bg-${opt.color}-100 hover:text-gray-900`}
+                `}
+                style={status === opt.value ? { fontWeight: 700 } : {}}
                 onClick={() => setStatus(opt.value as SaveStatus)}
                 type="button"
               >
@@ -46,15 +47,23 @@ export default function SaveStatusModal({ open, save, onClose, onSubmit }: SaveS
             ))}
           </div>
           {status === 'current' && (
-            <label className="flex items-center gap-2 justify-center cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={isPrimary}
-                onChange={e => setIsPrimary(e.target.checked)}
-                className="form-checkbox h-5 w-5 text-yellow-500"
-              />
-              <span className="text-yellow-400 font-medium">Set as Primary Save</span>
-            </label>
+            <button
+              type="button"
+              onClick={() => setIsPrimary(!isPrimary)}
+              className={`flex items-center justify-center gap-2 w-full py-3 rounded-lg border-2 transition-all text-base font-semibold mt-2
+                ${isPrimary
+                  ? 'bg-blue-600 border-blue-700 text-white shadow-lg'
+                  : 'bg-blue-100 border-blue-300 text-blue-800 hover:bg-blue-200'}
+              `}
+              aria-pressed={isPrimary}
+            >
+              <span className="inline-block w-5 h-5 rounded-full border-2 border-blue-400 flex items-center justify-center bg-white">
+                {isPrimary ? (
+                  <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" className="text-blue-600"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
+                ) : null}
+              </span>
+              {isPrimary ? 'Primary Save (Selected)' : 'Set as Primary Save'}
+            </button>
           )}
         </div>
         <div className="flex gap-4 justify-center">
