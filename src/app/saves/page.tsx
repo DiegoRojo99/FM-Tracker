@@ -9,6 +9,14 @@ import FootballLoader from '../components/FootBallLoader';
 import { SaveCard } from './SaveCard';
 import GradientButton from '../components/GradientButton';
 import { Game } from '@/lib/types/Game';
+import { ChevronDown, ChevronRight } from 'lucide-react';
+
+const STATUS_GROUPS = [
+  { key: 'current', label: 'Current', color: 'blue' },
+  { key: 'paused', label: 'Paused', color: 'yellow' },
+  { key: 'completed', label: 'Completed', color: 'green' },
+  { key: 'inactive', label: 'Inactive', color: 'gray' },
+];
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
@@ -101,6 +109,25 @@ export default function SavesPage() {
     return save.gameId === selectedGameFilter;
   });
 
+  // Group saves by status
+  const groupedSaves: { [key: string]: Save[] } = {
+    current: [],
+    paused: [],
+    completed: [],
+    inactive: [],
+  };
+  
+  filteredSaves.forEach(save => {
+    const status = save.status || 'current';
+    if (groupedSaves[status]) groupedSaves[status].push(save);
+  });
+
+  // Collapsible state for each group
+  const [collapsedGroups, setCollapsedGroups] = useState<{ [key: string]: boolean }>({});
+  const toggleGroup = (key: string) => {
+    setCollapsedGroups(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
   if (loading) {
     return <FootballLoader />;
   }
@@ -172,10 +199,37 @@ export default function SavesPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredSaves.sort(sortSavesByDate).map(save => ( 
-            <SaveCard key={save.id} save={save} handleDelete={handleDelete} /> 
-          ))}
+        <div className="flex flex-col gap-8">
+          {STATUS_GROUPS.map(group =>
+            groupedSaves[group.key].length > 0 && (
+              <div key={group.key}>
+                <button
+                  className={`flex items-center gap-2 mb-2 text-${group.color}-400 font-bold text-xl focus:outline-none`}
+                  onClick={() => toggleGroup(group.key)}
+                  aria-expanded={!collapsedGroups[group.key]}
+                  aria-controls={`section-${group.key}`}
+                  style={{ width: '100%' }}
+                >
+                  <span>{group.label}</span>
+                  <span className="ml-auto">
+                    {collapsedGroups[group.key] ? <ChevronRight size={22} /> : <ChevronDown size={22} />}
+                  </span>
+                </button>
+                <div
+                  id={`section-${group.key}`}
+                  style={{ display: collapsedGroups[group.key] ? 'none' : undefined }}
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {groupedSaves[group.key]
+                      .sort(sortSavesByDate)
+                      .map(save => (
+                        <SaveCard key={save.id} save={save} handleDelete={handleDelete} />
+                      ))}
+                  </div>
+                </div>
+              </div>
+            )
+          )}
         </div>
       )}
 

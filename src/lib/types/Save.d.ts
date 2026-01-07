@@ -34,6 +34,8 @@ export type Save = {
   currentNT: SaveTeam | null;
   currentLeague: SaveLeague | null;
   season: string; // e.g., "2026/27"
+  status?: 'current' | 'paused' | 'completed' | 'inactive'; // Optional for existing saves
+  isPrimary?: boolean; // Optional for existing saves
   createdAt: Timestamp;
   updatedAt?: Timestamp;
 }
