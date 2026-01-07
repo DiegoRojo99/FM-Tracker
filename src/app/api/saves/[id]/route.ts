@@ -9,6 +9,7 @@ import { getChallengesForSave } from '@/lib/db/challenges';
 import { Challenge } from '@/lib/types/Challenge';
 import { adminDB } from '@/lib/auth/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
+import { Save } from '@/lib/types/Save';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -141,7 +142,7 @@ export async function PUT(req: NextRequest) {
       return new Response('Save not found', { status: 404 });
     }
 
-    const updateData: any = {
+    const updateData: Partial<Save> = {
       updatedAt: Timestamp.now()
     };
 
