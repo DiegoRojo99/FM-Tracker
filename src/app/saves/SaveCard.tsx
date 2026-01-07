@@ -2,10 +2,13 @@ import { Save } from "@/lib/types/Save";
 import Image from "next/image";
 import Link from "next/link";
 import BlurredCard from "../components/BlurredCard";
+import { useState } from "react";
+import SaveStatusModal from "./SaveStatusModal";
 
 export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (event: React.MouseEvent<HTMLImageElement>, saveId: string) => void }) {
   const status = save.status || 'current';
   const isPrimary = save.isPrimary || false;
+  const [modalOpen, setModalOpen] = useState(false);
 
   const getBorderColor = () => {
     switch (status) {
@@ -17,61 +20,82 @@ export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (ev
     }
   };
 
+  const iconsClasses = 'h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform';
   return (
-    <Link key={save.id} href={`/saves/${save.id}`}>
-      <BlurredCard className={`h-full border-l-4 ${getBorderColor()}`}>
-        <div className="h-full flex flex-col justify-between p-1">
-          {/* Header */}
-          <div className="flex flex-row w-full mb-2 justify-between items-center gap-2">
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <h1 className="text-l text-gray-200">{`${save.season ?? '2023/24'}`}</h1>
-                {isPrimary && status === 'current' && (
-                  <span className="text-yellow-400 text-sm" title="Primary Save">⭐</span>
+    <>
+      <Link key={save.id} href={`/saves/${save.id}`}>
+        <BlurredCard className={`h-full border-l-4 ${getBorderColor()}`}>
+          <div className="h-full flex flex-col justify-between p-1">
+            {/* Header */}
+            <div className="flex flex-row w-full mb-2 justify-between items-center gap-2">
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-l text-gray-200">{`${save.season ?? '2023/24'}`}</h1>
+                  {isPrimary && status === 'current' && (
+                    <span className="text-yellow-400 text-sm" title="Primary Save">⭐</span>
+                  )}
+                </div>
+                {save.gameId && (
+                  <span className="text-xs text-gray-400 uppercase tracking-wider">
+                    {save.gameId.replace('fm', 'FM').replace('-touch', ' Touch')}
+                  </span>
                 )}
               </div>
-              {save.gameId && (
-                <span className="text-xs text-gray-400 uppercase tracking-wider">
-                  {save.gameId.replace('fm', 'FM').replace('-touch', ' Touch')}
-                </span>
+              {save.currentLeague && (
+                <Image
+                  src={save.currentLeague?.logo}
+                  alt={save.currentLeague?.name}
+                  width={128}
+                  height={128}
+                  className="h-12 w-auto max-w-32 object-contain"
+                />
               )}
             </div>
-            {save.currentLeague && (
+
+            {/* Team */}
+            <div className="flex flex-col items-center justify-center gap-2 pb-2 flex-1">
               <Image
-                src={save.currentLeague?.logo}
-                alt={save.currentLeague?.name}
+                src={save.currentClub?.logo ?? save.currentNT?.logo ?? '/Free-Agent.png'}
+                alt={save.currentClub?.name ?? save.currentNT?.name ?? 'No Team'}
                 width={128}
-                height={128}
-                className="h-12 w-auto max-w-32 object-contain"
+                height={160}
               />
-            )}
-          </div>
+              <h2 className="text-xl font-semibold">{save.currentClub?.name ?? save.currentNT?.name ?? 'No Team'}</h2>
+            </div>
 
-          {/* Team */}
-          <div className="flex flex-col items-center justify-center gap-2 pb-2 flex-1">
-            <Image
-              src={save.currentClub?.logo ?? save.currentNT?.logo ?? '/Free-Agent.png'}
-              alt={save.currentClub?.name ?? save.currentNT?.name ?? 'No Team'}
-              width={128}
-              height={160}
-            />
-            <h2 className="text-xl font-semibold">{save.currentClub?.name ?? save.currentNT?.name ?? 'No Team'}</h2>
+            {/* Footer */}
+            <div className="flex flex-row items-center justify-end gap-2">
+              <div></div>
+              <button
+                type="button"
+                aria-label="Edit Save Status"
+                className="h-4 w-4 flex items-center justify-center text-gray-400 hover:text-blue-400 focus:outline-none focus:text-blue-500 transition-transform mr-2"
+                onClick={e => { e.preventDefault(); setModalOpen(true); }}
+              >
+                <Image 
+                  src="/pencil.svg" 
+                  alt="Edit" width={16} height={16} 
+                  className={iconsClasses}
+                />
+              </button>
+              <Image 
+                src="/trash.svg" 
+                alt="Trash Icon" 
+                width={16} 
+                height={16} 
+                onClick={(event) => handleDelete(event as React.MouseEvent<HTMLImageElement>, save.id)}
+                className={iconsClasses}
+              />
+            </div>
           </div>
-
-          {/* Footer */}
-          <div className="flex flex-row items-center justify-between gap-2">
-            <div></div>
-            <Image 
-              src="/trash.svg" 
-              alt="Trash Icon" 
-              width={16} 
-              height={16} 
-              onClick={(event) => handleDelete(event as React.MouseEvent<HTMLImageElement>, save.id)}
-              className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform" 
-            />
-          </div>
-        </div>
-      </BlurredCard>
-    </Link>
+        </BlurredCard>
+      </Link>
+      <SaveStatusModal
+        open={modalOpen}
+        save={save}
+        onClose={() => setModalOpen(false)}
+        onSubmit={() => setModalOpen(false)} // TODO: implement update logic
+      />
+    </>
   )
 }
