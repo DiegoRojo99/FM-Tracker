@@ -47,7 +47,6 @@ export default function UserStatsOverview() {
   // Always reserve the same space for the stats section
   return (
     <div className="w-full max-w-4xl mx-auto min-h-64 space-y-6">
-      <h2 className="text-2xl font-bold text-white mb-6">📊 Your Career Statistics</h2>
       {loading && (
         <div className="text-center py-8">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent)]"></div>
