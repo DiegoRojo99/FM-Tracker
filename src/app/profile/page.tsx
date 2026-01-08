@@ -3,6 +3,7 @@
 import { useAuth } from '../components/AuthProvider';
 import PrimarySaveHighlight from './PrimarySaveHighlight';
 import ProfileHeader from './ProfileHeader';
+import UserStatsOverview from './UserStatsOverview';
 
 export default function Profile() {
   const { user } = useAuth();
@@ -13,6 +14,7 @@ export default function Profile() {
       <div className="max-w-4xl mx-auto">
         <ProfileHeader />
         <PrimarySaveHighlight />
+        <UserStatsOverview />
       </div>
     </div>
   );

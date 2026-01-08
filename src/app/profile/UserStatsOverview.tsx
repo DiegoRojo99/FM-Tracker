@@ -13,18 +13,14 @@ interface UserStats {
 
 export default function UserStatsOverview() {
   const { user } = useAuth();
-  const router = useRouter();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) router.push('/login');
-  }, [user, router]);
-
-  useEffect(() => {
+    if (!user) return;
+    
     const fetchStats = async () => {
-      if (!user) return;
       try {
         setLoading(true);
         const userToken = await user.getIdToken();
@@ -48,10 +44,9 @@ export default function UserStatsOverview() {
     fetchStats();
   }, [user]);
 
-  if (!user) return null;
-
+  // Always reserve the same space for the stats section
   return (
-    <div className="space-y-6">
+    <div className="w-full max-w-4xl mx-auto min-h-64 space-y-6">
       <h2 className="text-2xl font-bold text-white mb-6">📊 Your Career Statistics</h2>
       {loading && (
         <div className="text-center py-8">
@@ -124,19 +119,6 @@ export default function UserStatsOverview() {
               <div className="text-4xl">🎖️</div>
             </div>
           </div>
-        </div>
-      )}
-      {stats && stats.activeSaves === 0 && !loading && (
-        <div className="bg-[var(--color-accent)]/20 border border-[var(--color-accent)] rounded-lg p-6 text-center">
-          <div className="text-4xl mb-4">🚀</div>
-          <h3 className="text-xl font-bold text-white mb-2">Ready to Start Your Journey?</h3>
-          <p className="text-gray-300 mb-4">You haven&apos;t created any saves yet. Start your Football Manager career!</p>
-          <button
-            onClick={() => router.push('/add-save')}
-            className="bg-[var(--color-accent)] text-white px-6 py-3 rounded-lg hover:bg-[var(--color-highlight)] transition-all duration-200 font-medium"
-          >
-            Create Your First Save
-          </button>
         </div>
       )}
     </div>
