@@ -12,9 +12,12 @@ export default function Profile() {
   if (!user) return null;
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--color-darker)] to-[var(--color-dark)] p-6">
-      <div className="max-w-4xl mx-auto">
+      <div className="w-full max-w-4xl mx-auto">
         <ProfileHeader />
-        <ProfileSection>
+      </div>
+
+      <div className="max-w-4xl mx-auto">
+        <ProfileSection noContentPadding>
           <PrimarySaveHighlight />
         </ProfileSection>
         <ProfileSection title="Career Statistics" icon={<span>📊</span>}>
