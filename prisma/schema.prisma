@@ -1,0 +1,371 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  uid               String   @id
+  email             String   @unique
+  displayName       String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  avatarURL         String?
+  saves             Save[]
+  careerChallenges  CareerChallenge[]
+
+  @@index([email])
+  @@index([createdAt])
+}
+
+model Save {
+  id               String   @id
+  userId           String
+  gameId           Int
+  countryCode      String?
+  currentClubId    Int?
+  currentNTId      Int?
+  currentLeagueId  Int?
+  season           String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user             User             @relation(fields: [userId], references: [uid], onDelete: Cascade)
+  game             Game             @relation(fields: [gameId], references: [id])
+  currentClub      Team?            @relation("SaveCurrentClub", fields: [currentClubId], references: [id])
+  currentNT        Team?            @relation("SaveCurrentNT", fields: [currentNTId], references: [id])
+  currentLeague    CompetitionGroup? @relation(fields: [currentLeagueId], references: [id])
+  trophies         Trophy[]
+  challenges       CareerChallenge[]
+  careerStints     CareerStint[]
+  seasons          Season[]
+
+  @@index([userId])
+  @@index([gameId])
+  @@index([season])
+  @@index([createdAt])
+}
+
+model CareerStint {
+  id          Int      @id @default(autoincrement())
+  saveId      String
+  teamId      Int
+  startDate   String   // Date string format like "2025-07-01"
+  endDate     String?  // Null if still ongoing
+  isNational  Boolean
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  save        Save     @relation(fields: [saveId], references: [id], onDelete: Cascade)
+  team        Team     @relation(fields: [teamId], references: [id])
+
+  @@index([saveId])
+  @@index([teamId])
+  @@index([startDate])
+}
+
+model Season {
+  id          Int      @id @default(autoincrement())
+  saveId      String
+  season      String   // "2025/26"
+  teamId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  save        Save           @relation(fields: [saveId], references: [id], onDelete: Cascade)
+  team        Team           @relation(fields: [teamId], references: [id])
+  cupResults  CupResult[]
+  leagueResult LeagueResult?
+
+  @@index([saveId])
+  @@index([teamId])
+  @@index([season])
+}
+
+model CupResult {
+  id              Int      @id @default(autoincrement())
+  seasonId        Int
+  competitionId   Int
+  reachedRound    String   // "Semi-Final", "Round of 16", etc.
+  createdAt       DateTime @default(now())
+
+  season          Season         @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  competition     CompetitionGroup @relation("CupResults", fields: [competitionId], references: [id])
+
+  @@index([seasonId])
+  @@index([competitionId])
+}
+
+model LeagueResult {
+  id              Int      @id @default(autoincrement())
+  seasonId        Int      @unique
+  competitionId   Int
+  position        Int
+  promoted        Boolean
+  relegated       Boolean
+  createdAt       DateTime @default(now())
+
+  season          Season         @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  competition     CompetitionGroup @relation("LeagueResults", fields: [competitionId], references: [id])
+
+  @@index([competitionId])
+  @@index([position])
+}
+
+model Trophy {
+  id                  Int      @id @default(autoincrement())
+  teamId              Int
+  competitionGroupId  Int
+  season              String
+  gameId              Int
+  createdAt           DateTime @default(now())
+  saveId              String?
+
+  team                Team     @relation(fields: [teamId], references: [id])
+  competitionGroup    CompetitionGroup @relation(fields: [competitionGroupId], references: [id])
+  game                Game     @relation(fields: [gameId], references: [id])
+  save                Save?    @relation(fields: [saveId], references: [id], onDelete: Cascade)
+
+  @@index([teamId])
+  @@index([competitionGroupId])
+  @@index([gameId])
+  @@index([saveId])
+  @@index([season])
+}
+
+model Challenge {
+  id                Int      @id @default(autoincrement())
+  name              String
+  description       String
+  bonus             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  goals             ChallengeGoal[]
+  careerChallenges  CareerChallenge[]
+
+  @@index([name])
+}
+
+model ChallengeGoal {
+  id            Int      @id @default(autoincrement())
+  description   String
+  competitionId Int?
+  countryId     String?
+  challengeId   Int
+
+  challenge     Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  competition   CompetitionGroup? @relation(fields: [competitionId], references: [id])
+  country       Country? @relation(fields: [countryId], references: [code])
+  teams         ChallengeGoalTeam[]
+  careerChallengeGoals CareerChallengeGoal[]
+
+  @@index([challengeId])
+  @@index([competitionId])
+  @@index([countryId])
+}
+
+model ChallengeGoalTeam {
+  id              Int      @id @default(autoincrement())
+  challengeGoalId Int
+  teamId          Int
+
+  challengeGoal   ChallengeGoal @relation(fields: [challengeGoalId], references: [id], onDelete: Cascade)
+  team            Team          @relation(fields: [teamId], references: [id])
+
+  @@unique([challengeGoalId, teamId])
+  @@index([challengeGoalId])
+  @@index([teamId])
+}
+
+model CareerChallenge {
+  id              Int      @id @default(autoincrement())
+  userId          String
+  challengeId     Int
+  startedAt       DateTime @default(now())
+  completedAt     DateTime?
+  gameId          Int
+  saveId          String?
+
+  user            User     @relation(fields: [userId], references: [uid], onDelete: Cascade)
+  challenge       Challenge @relation(fields: [challengeId], references: [id])
+  game            Game     @relation(fields: [gameId], references: [id])
+  save            Save?    @relation(fields: [saveId], references: [id], onDelete: Cascade)
+  goalProgress    CareerChallengeGoal[]
+
+  @@index([userId])
+  @@index([challengeId])
+  @@index([gameId])
+  @@index([saveId])
+}
+
+model CareerChallengeGoal {
+  id                Int      @id @default(autoincrement())
+  careerChallengeId Int
+  challengeGoalId   Int
+  isComplete        Boolean  @default(false)
+  completedAt       DateTime?
+  createdAt         DateTime @default(now())
+
+  careerChallenge   CareerChallenge @relation(fields: [careerChallengeId], references: [id], onDelete: Cascade)
+  challengeGoal     ChallengeGoal   @relation(fields: [challengeGoalId], references: [id], onDelete: Cascade)
+
+  @@unique([careerChallengeId, challengeGoalId])
+  @@index([careerChallengeId])
+  @@index([challengeGoalId])
+  @@index([isComplete])
+}
+
+model TeamSeason {
+  id               Int      @id @default(autoincrement())
+  teamId           Int
+  apiCompetitionId Int
+  season           String   // "2024/25"
+  createdAt        DateTime @default(now())
+
+  team             Team           @relation(fields: [teamId], references: [id])
+  apiCompetition   ApiCompetition @relation(fields: [apiCompetitionId], references: [id])
+
+  @@unique([teamId, apiCompetitionId, season])
+  @@index([teamId])
+  @@index([apiCompetitionId])
+  @@index([season])
+}
+
+model Game {
+  id          Int      @id @default(autoincrement())
+  name        String
+  shortName   String
+  version     String
+  platform    String
+  logoUrl     String
+  releaseDate DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isActive    Boolean
+  sortOrder   Int
+  variant     String
+  saves       Save[]
+  trophies    Trophy[]
+  careerChallenges CareerChallenge[]
+
+  @@index([isActive])
+  @@index([sortOrder])
+  @@index([releaseDate])
+}
+
+model Team {
+  id          Int      @id
+  name        String
+  logo        String
+  national    Boolean
+  countryCode String
+  lat         Float?
+  lng         Float?
+  isFemale    Boolean?
+  country     Country  @relation(fields: [countryCode], references: [code])
+  trophies    Trophy[]
+
+  currentClubSaves  Save[]  @relation("SaveCurrentClub")
+  currentNTSaves    Save[]  @relation("SaveCurrentNT")
+
+  careerStints      CareerStint[]
+  seasons           Season[]
+  challengeGoalTeams ChallengeGoalTeam[]
+  teamSeasons       TeamSeason[]
+}
+
+model Country {
+  code               String   @id
+  name               String
+  flag               String
+  inFootballManager  Boolean
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  teams              Team[]
+  apiCompetitions    ApiCompetition[]
+  competitionGroups  CompetitionGroup[]
+  challengeGoals     ChallengeGoal[]
+
+  @@index([name])
+  @@index([inFootballManager])
+}
+
+model ApiCompetition {
+  id           Int      @id @default(autoincrement())
+  name         String
+  countryCode  String
+  type         String
+  logoUrl      String?
+  tier         Int?
+  isActive     Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  country      Country  @relation(fields: [countryCode], references: [code])
+  groups       CompetitionGroupApiCompetition[]
+  teamSeasons  TeamSeason[]
+
+  @@index([countryCode])
+  @@index([type])
+  @@index([tier])
+  @@index([isActive])
+}
+
+model CompetitionGroup {
+  id           Int      @id @default(autoincrement())
+  name         String
+  displayName  String
+  countryCode  String
+  type         String
+  tier         Int?
+  logoUrl      String?
+  isActive     Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  country      Country  @relation(fields: [countryCode], references: [code])
+  apiCompetitions CompetitionGroupApiCompetition[]
+  trophies     Trophy[]
+  saves        Save[]
+  challengeGoals ChallengeGoal[]
+  promotionsFrom PromotionRelegation[] @relation("PromotionsFrom")
+  promotionsTo   PromotionRelegation[] @relation("PromotionsTo")
+
+  leagueResults  LeagueResult[] @relation("LeagueResults")
+  cupResults     CupResult[] @relation("CupResults")
+
+  @@index([countryCode])
+  @@index([type])
+  @@index([tier])
+  @@index([isActive])
+  @@index([name])
+}
+
+model CompetitionGroupApiCompetition {
+  id                  Int      @id @default(autoincrement())
+  competitionGroupId  Int
+  apiCompetitionId    Int
+  createdAt           DateTime @default(now())
+  competitionGroup    CompetitionGroup @relation(fields: [competitionGroupId], references: [id], onDelete: Cascade)
+  apiCompetition      ApiCompetition   @relation(fields: [apiCompetitionId], references: [id], onDelete: Cascade)
+
+  @@unique([competitionGroupId, apiCompetitionId])
+  @@index([competitionGroupId])
+  @@index([apiCompetitionId])
+}
+
+model PromotionRelegation {
+  id            Int      @id @default(autoincrement())
+  fromGroupId   Int
+  toGroupId     Int
+  type          String   // 'promotion' or 'relegation'
+  slots         Int
+  playoffSlots  Int?
+  createdAt     DateTime @default(now())
+  fromGroup     CompetitionGroup @relation("PromotionsFrom", fields: [fromGroupId], references: [id], onDelete: Cascade)
+  toGroup       CompetitionGroup @relation("PromotionsTo", fields: [toGroupId], references: [id], onDelete: Cascade)
+
+  @@index([fromGroupId])
+  @@index([toGroupId])
+  @@index([type])
+}
