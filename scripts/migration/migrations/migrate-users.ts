@@ -1,14 +1,4 @@
-import { getFirestore } from 'firebase-admin/firestore';
-import pkg from 'pg';
-const { Pool } = pkg;
-
-interface FirebaseUser {
-  uid: string;
-  email: string;
-  displayName: string;
-  createdAt?: any;
-  avatarURL?: string;
-}
+import { User } from "@/lib/types/User";
 
 export async function migrateUsers(firestore: any, pool: any) {
   console.log('🔥 Fetching users from Firebase...');
@@ -22,8 +12,8 @@ export async function migrateUsers(firestore: any, pool: any) {
     let errorCount = 0;
 
     for (const doc of usersSnapshot.docs) {
-      const data = doc.data() as Omit<FirebaseUser, 'uid'>;
-      const user: FirebaseUser = {
+      const data = doc.data() as Omit<User, 'uid'>;
+      const user: User = {
         uid: doc.id,
         ...data,
       };
