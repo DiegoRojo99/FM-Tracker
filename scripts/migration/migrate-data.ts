@@ -6,6 +6,7 @@ const { Pool } = pkg;
 
 // Import migration functions
 import { migrateUsers } from './migrations/migrate-users';
+import { migrateGames } from './migrations/migrate-games';
 
 // Load environment variables
 config();
@@ -21,6 +22,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'users',
     description: 'Migrate user accounts from Firebase to PostgreSQL',
     migrate: migrateUsers,
+  },
+  {
+    name: 'games',
+    description: 'Migrate game data from Firebase to PostgreSQL',
+    migrate: migrateGames,
   },
   // Add more migrations here as we create them
   // {
