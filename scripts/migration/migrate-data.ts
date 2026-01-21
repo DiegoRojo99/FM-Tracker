@@ -11,6 +11,7 @@ import { migrateCountries } from './migrations/migrate-countries';
 import { migrateTeams } from './migrations/migrate-teams';
 import { migrateSaves } from './migrations/migrate-saves';
 import { migrateCareerStints } from './migrations/migrate-career-stints';
+import { migrateSeasons } from './migrations/migrate-seasons';
 
 // Load environment variables
 config();
@@ -51,6 +52,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'career-stints',
     description: 'Migrate career stints from Firebase to PostgreSQL (depends on saves, teams)',
     migrate: migrateCareerStints,
+  },
+  {
+    name: 'seasons',
+    description: 'Migrate season data from Firebase to PostgreSQL (depends on saves, teams)',
+    migrate: migrateSeasons,
   },
 ];
 
