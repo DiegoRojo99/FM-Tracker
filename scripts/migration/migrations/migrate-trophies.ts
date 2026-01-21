@@ -1,0 +1,245 @@
+import { Pool } from 'pg';
+import admin from 'firebase-admin';
+import type { FirestoreSaveTrophy } from '../../src/lib/types/Trophy-Migration';
+
+export async function migrateTrophies(firestore: any, pool: Pool): Promise<void> {
+  console.log('\n🏆 Starting Trophies migration...');
+  
+  try {
+    // Build necessary mappings first
+    console.log('📥 Building mapping tables...');
+    
+    // Get game mapping
+    const gameMapping = await pool.query('SELECT id, name FROM "Game"');
+    const gameMap = new Map<string, number>();
+    for (const game of gameMapping.rows) {
+      const name = game.name.toLowerCase();
+      // Map common variations
+      if (name.includes('football manager 2024')) {
+        gameMap.set('fm24', game.id);
+        gameMap.set('fm2024', game.id);
+      }
+      if (name.includes('football manager 2026')) {
+        gameMap.set('fm26', game.id);
+        gameMap.set('fm2026', game.id);
+      }
+      if (name.includes('football manager 2025')) {
+        gameMap.set('fm25', game.id);
+        gameMap.set('fm2025', game.id);
+      }
+      if (name.includes('touch')) {
+        gameMap.set('fm24touch', game.id);
+        gameMap.set('fmtouch', game.id);
+      }
+    }
+    
+    // Get competition mapping (API ID -> CompetitionGroup ID)
+    const competitionMapping = await pool.query(`
+      SELECT cgac."apiCompetitionId", cg.id as "competitionGroupId"
+      FROM "CompetitionGroupApiCompetition" cgac
+      JOIN "CompetitionGroup" cg ON cgac."competitionGroupId" = cg.id
+    `);
+    const apiToGroupMap = new Map<number, number>();
+    for (const mapping of competitionMapping.rows) {
+      apiToGroupMap.set(mapping.apiCompetitionId, mapping.competitionGroupId);
+    }
+    
+    // Get existing team IDs
+    const teamQuery = await pool.query('SELECT id FROM "Team"');
+    const existingTeams = new Set<number>(teamQuery.rows.map(row => row.id));
+    
+    // Get existing save IDs
+    const saveQuery = await pool.query('SELECT id FROM "Save"');
+    const existingSaves = new Set<string>(saveQuery.rows.map(row => row.id));
+    
+    console.log(`📊 Mapping tables built:`);
+    console.log(`   Games: ${gameMap.size}`);
+    console.log(`   Competitions: ${apiToGroupMap.size}`);
+    console.log(`   Teams: ${existingTeams.size}`);
+    console.log(`   Saves: ${existingSaves.size}`);
+    
+    // Get all users to scan their saves for trophies
+    console.log('\n📥 Scanning users for trophies...');
+    const usersSnapshot = await firestore.collection('users').get();
+    
+    let totalTrophies = 0;
+    let successfullyMigrated = 0;
+    let skippedTrophies = 0;
+    let errorCount = 0;
+    const unknownCompetitions = new Set<string>();
+    const unknownTeams = new Set<string>();
+    const unknownGames = new Set<string>();
+    
+    // Check for existing trophies to avoid duplicates
+    const existingTrophies = await pool.query(`
+      SELECT "teamId", "competitionGroupId", season, "gameId", "saveId"
+      FROM "Trophy"
+    `);
+    const existingTrophyKeys = new Set<string>();
+    for (const trophy of existingTrophies.rows) {
+      const key = `${trophy.teamId}-${trophy.competitionGroupId}-${trophy.season}-${trophy.gameId}-${trophy.saveId}`;
+      existingTrophyKeys.add(key);
+    }
+    
+    console.log(`📊 Found ${existingTrophies.rows.length} existing trophies in database`);
+    
+    for (const userDoc of usersSnapshot.docs) {
+      const userId = userDoc.id;
+      
+      try {
+        // Get all saves for this user
+        const savesSnapshot = await firestore
+          .collection('users')
+          .doc(userId)
+          .collection('saves')
+          .get();
+        
+        for (const saveDoc of savesSnapshot.docs) {
+          const saveId = saveDoc.id;
+          
+          // Skip if save doesn't exist in PostgreSQL
+          if (!existingSaves.has(saveId)) {
+            continue;
+          }
+          
+          try {
+            // Get trophies for this save
+            const trophiesSnapshot = await firestore
+              .collection('users')
+              .doc(userId)
+              .collection('saves')
+              .doc(saveId)
+              .collection('trophies')
+              .get();
+            
+            for (const trophyDoc of trophiesSnapshot.docs) {
+              totalTrophies++;
+              
+              try {
+                const trophyData: FirestoreSaveTrophy = trophyDoc.data() as FirestoreSaveTrophy;
+                
+                // Validate required fields
+                if (!trophyData.teamId || !trophyData.competitionId || !trophyData.season || !trophyData.game) {
+                  console.log(`⚠️  Skipping trophy ${trophyDoc.id}: missing required fields`);
+                  skippedTrophies++;
+                  continue;
+                }
+                
+                // Map game
+                const gameId = gameMap.get(trophyData.game);
+                if (!gameId) {
+                  unknownGames.add(trophyData.game);
+                  skippedTrophies++;
+                  continue;
+                }
+                
+                // Map team ID
+                const teamId = parseInt(trophyData.teamId);
+                if (!existingTeams.has(teamId)) {
+                  unknownTeams.add(trophyData.teamId);
+                  skippedTrophies++;
+                  continue;
+                }
+                
+                // Map competition ID
+                const competitionId = parseInt(trophyData.competitionId);
+                const competitionGroupId = apiToGroupMap.get(competitionId);
+                if (!competitionGroupId) {
+                  unknownCompetitions.add(trophyData.competitionId);
+                  skippedTrophies++;
+                  continue;
+                }
+                
+                // Check for duplicate
+                const trophyKey = `${teamId}-${competitionGroupId}-${trophyData.season}-${gameId}-${saveId}`;
+                if (existingTrophyKeys.has(trophyKey)) {
+                  skippedTrophies++;
+                  continue; // Skip duplicate
+                }
+                
+                // Parse created date
+                let createdAt = new Date();
+                if (typeof trophyData.createdAt === 'string') {
+                  createdAt = new Date(trophyData.createdAt);
+                } else if (trophyData.createdAt && typeof trophyData.createdAt === 'object' && '_seconds' in trophyData.createdAt) {
+                  createdAt = new Date(trophyData.createdAt._seconds * 1000);
+                } else if (trophyData.createdAt instanceof admin.firestore.Timestamp) {
+                  createdAt = trophyData.createdAt.toDate();
+                }
+                
+                // Insert trophy
+                await pool.query(`
+                  INSERT INTO "Trophy" (
+                    "teamId", "competitionGroupId", season, "gameId", "saveId", "createdAt"
+                  ) VALUES ($1, $2, $3, $4, $5, $6)
+                `, [
+                  teamId,
+                  competitionGroupId,
+                  trophyData.season,
+                  gameId,
+                  saveId,
+                  createdAt
+                ]);
+                
+                successfullyMigrated++;
+                existingTrophyKeys.add(trophyKey); // Track this so we don't create duplicates
+                
+                if (successfullyMigrated % 10 === 0) {
+                  console.log(`📝 Migrated ${successfullyMigrated} trophies...`);
+                }
+                
+              } catch (error) {
+                console.error(`❌ Error migrating trophy ${trophyDoc.id}:`, error);
+                errorCount++;
+              }
+            }
+            
+          } catch (error) {
+            console.error(`❌ Error processing trophies for save ${saveId}:`, error);
+          }
+        }
+        
+      } catch (error) {
+        console.error(`❌ Error processing user ${userId}:`, error);
+      }
+    }
+    
+    // Final summary
+    console.log(`\n✅ Trophies migration completed!`);
+    console.log(`   📊 Total trophies found: ${totalTrophies}`);
+    console.log(`   ✅ Successfully migrated: ${successfullyMigrated}`);
+    console.log(`   ⚠️  Skipped: ${skippedTrophies}`);
+    
+    if (errorCount > 0) {
+      console.log(`   ❌ Errors: ${errorCount}`);
+    }
+    
+    // Show skipped details
+    if (unknownCompetitions.size > 0) {
+      console.log(`\n⚠️  Unknown competitions (${unknownCompetitions.size}):`);
+      const competitionArray = Array.from(unknownCompetitions).slice(0, 10);
+      competitionArray.forEach(comp => console.log(`   - ${comp}`));
+      if (unknownCompetitions.size > 10) {
+        console.log(`   ... and ${unknownCompetitions.size - 10} more`);
+      }
+    }
+    
+    if (unknownTeams.size > 0) {
+      console.log(`\n⚠️  Unknown teams (${unknownTeams.size}):`);
+      const teamArray = Array.from(unknownTeams).slice(0, 10);
+      teamArray.forEach(team => console.log(`   - ${team}`));
+      if (unknownTeams.size > 10) {
+        console.log(`   ... and ${unknownTeams.size - 10} more`);
+      }
+    }
+    
+    if (unknownGames.size > 0) {
+      console.log(`\n⚠️  Unknown games (${unknownGames.size}):`);
+      unknownGames.forEach(game => console.log(`   - ${game}`));
+    }
+    
+  } catch (error) {
+    console.error('❌ Fatal error in Trophies migration:', error);
+    throw error;
+  }
+}

@@ -15,6 +15,7 @@ import { migrateApiCompetitions } from './migrations/migrate-api-competitions';
 import { migrateCompetitionGroups } from './migrations/migrate-competition-groups';
 import { migrateCompetitionJunctions } from './migrations/migrate-competition-junctions';
 import { migrateSeasonCompetitionData } from './migrations/migrate-season-competition-data';
+import { migrateTrophies } from './migrations/migrate-trophies';
 
 // Load environment variables
 config();
@@ -80,6 +81,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'season-competition-data',
     description: 'Migrate cup results and league results for seasons (depends on seasons, competition-junctions)',
     migrate: migrateSeasonCompetitionData,
+  },
+  {
+    name: 'trophies',
+    description: 'Migrate trophies from save collections to Trophy table (depends on teams, competition-junctions, games, saves)',
+    migrate: migrateTrophies,
   },
 ];
 
