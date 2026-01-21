@@ -17,6 +17,7 @@ import { migrateCompetitionJunctions } from './migrations/migrate-competition-ju
 import { migrateSeasonCompetitionData } from './migrations/migrate-season-competition-data';
 import { migrateTrophies } from './migrations/migrate-trophies';
 import { migrateGlobalChallenges } from './migrations/migrate-global-challenges';
+import { migrateSupplementaryCompetitions } from './migrations/migrate-supplementary-competitions';
 
 // Load environment variables
 config();
@@ -92,6 +93,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'global-challenges',
     description: 'Migrate global challenge templates from Firebase to PostgreSQL (depends on teams, competition-junctions, countries)',
     migrate: migrateGlobalChallenges,
+  },
+  {
+    name: 'supplementary-competitions',
+    description: 'Add missing competitions referenced by challenges with inFootballManager=true (depends on countries)',
+    migrate: migrateSupplementaryCompetitions,
   },
 ];
 
