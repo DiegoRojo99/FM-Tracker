@@ -18,6 +18,7 @@ import { migrateSeasonCompetitionData } from './migrations/migrate-season-compet
 import { migrateTrophies } from './migrations/migrate-trophies';
 import { migrateGlobalChallenges } from './migrations/migrate-global-challenges';
 import { migrateSupplementaryCompetitions } from './migrations/migrate-supplementary-competitions';
+import { migrateCareerChallenges } from './migrations/migrate-career-challenges';
 
 // Load environment variables
 config();
@@ -98,6 +99,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'supplementary-competitions',
     description: 'Add missing competitions referenced by challenges with inFootballManager=true (depends on countries)',
     migrate: migrateSupplementaryCompetitions,
+  },
+  {
+    name: 'career-challenges',
+    description: 'Migrate user career challenge progress from save subcollections (depends on global-challenges, saves, games)',
+    migrate: migrateCareerChallenges,
   },
 ];
 
