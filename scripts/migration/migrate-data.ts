@@ -16,6 +16,7 @@ import { migrateCompetitionGroups } from './migrations/migrate-competition-group
 import { migrateCompetitionJunctions } from './migrations/migrate-competition-junctions';
 import { migrateSeasonCompetitionData } from './migrations/migrate-season-competition-data';
 import { migrateTrophies } from './migrations/migrate-trophies';
+import { migrateGlobalChallenges } from './migrations/migrate-global-challenges';
 
 // Load environment variables
 config();
@@ -86,6 +87,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'trophies',
     description: 'Migrate trophies from save collections to Trophy table (depends on teams, competition-junctions, games, saves)',
     migrate: migrateTrophies,
+  },
+  {
+    name: 'global-challenges',
+    description: 'Migrate global challenge templates from Firebase to PostgreSQL (depends on teams, competition-junctions, countries)',
+    migrate: migrateGlobalChallenges,
   },
 ];
 
