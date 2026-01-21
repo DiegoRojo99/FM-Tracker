@@ -14,6 +14,7 @@ import { migrateSeasons } from './migrations/migrate-seasons';
 import { migrateApiCompetitions } from './migrations/migrate-api-competitions';
 import { migrateCompetitionGroups } from './migrations/migrate-competition-groups';
 import { migrateCompetitionJunctions } from './migrations/migrate-competition-junctions';
+import { migrateSeasonCompetitionData } from './migrations/migrate-season-competition-data';
 
 // Load environment variables
 config();
@@ -74,6 +75,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'competition-junctions',
     description: 'Create junction table linking competition groups with API competitions (depends on api-competitions, competition-groups)',
     migrate: migrateCompetitionJunctions,
+  },
+  {
+    name: 'season-competition-data',
+    description: 'Migrate cup results and league results for seasons (depends on seasons, competition-junctions)',
+    migrate: migrateSeasonCompetitionData,
   },
 ];
 

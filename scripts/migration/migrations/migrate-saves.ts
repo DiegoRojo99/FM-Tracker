@@ -89,14 +89,26 @@ export async function migrateSaves(firestore: any, pool: any, specificUserId?: s
             }
           }
 
-          // Handle current league ID (convert string to integer)
+          // Handle current league ID (convert string to integer and validate)
           let currentLeagueId = null;
           if (saveData.currentLeague?.id) {
-            currentLeagueId = parseInt(saveData.currentLeague.id);
-            // TODO: Skip league validation until CompetitionGroup table is migrated
-            // For now, set to null if we don't have competition groups migrated yet
-            console.log(`📝 Note: Skipping league ${currentLeagueId} validation (CompetitionGroup not migrated yet)`);
-            currentLeagueId = null; // Temporarily set to null
+            const leagueApiId = parseInt(saveData.currentLeague.id);
+            
+            // Find the CompetitionGroup that contains this API competition
+            const competitionGroupQuery = await pool.query(`
+              SELECT cg.id 
+              FROM "CompetitionGroup" cg
+              JOIN "CompetitionGroupApiCompetition" cgac ON cg.id = cgac."competitionGroupId"
+              WHERE cgac."apiCompetitionId" = $1
+              LIMIT 1
+            `, [leagueApiId]);
+
+            if (competitionGroupQuery.rows.length > 0) {
+              currentLeagueId = competitionGroupQuery.rows[0].id;
+              console.log(`🔗 Linked save to competition group ${currentLeagueId} (API competition ${leagueApiId})`);
+            } else {
+              console.log(`⚠️  Save references unknown competition ${leagueApiId} - setting currentLeagueId to null`);
+            }
           }
 
           // Handle timestamps - support both string and Firebase timestamp formats
