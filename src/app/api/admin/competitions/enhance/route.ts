@@ -1,21 +1,15 @@
 import { NextResponse } from 'next/server';
-import { addPromotionRelegationFields, setupExampleSpanishLinks } from '@/scripts/migration/addPromotionRelegationLinks';
+// import { addPromotionRelegationFields, setupExampleSpanishLinks } from '@/scripts/migration/addPromotionRelegationLinks';
 
 export async function POST() {
   try {
-    console.log('🚀 Starting simple promotion/relegation enhancement...');
-    
-    // Add the basic fields
-    await addPromotionRelegationFields();
-    
-    // Setup example Spanish links
-    await setupExampleSpanishLinks();
+    console.log('🚀 Enhancement endpoint temporarily disabled during migration');
     
     return NextResponse.json({ 
-      success: true, 
-      message: 'AdminCompetitions enhanced with simple promotion/relegation links successfully' 
+      success: false, 
+      message: 'Enhancement endpoint temporarily disabled during Firebase to PostgreSQL migration' 
     });
-    
+
   } catch (error) {
     console.error('Error running enhancement:', error);
     return NextResponse.json({ 

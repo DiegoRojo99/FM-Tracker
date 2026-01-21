@@ -1,4 +1,6 @@
-import { Timestamp } from "firebase-admin/firestore";
+import admin from "firebase-admin";
+
+type Timestamp = admin.firestore.Timestamp;
 
 export type CareerStint = {
   id?: string;

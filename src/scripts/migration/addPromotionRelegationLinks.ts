@@ -1,6 +1,8 @@
 import { AdminCompetition, AdminCompetitionWithId } from '@/lib/types/AdminCompetition';
 import { adminDB } from '../../lib/auth/firebase-admin';
-import { Timestamp } from 'firebase-admin/firestore';
+import admin from 'firebase-admin';
+
+const { Timestamp } = admin.firestore;
 
 /**
  * Simple script to add promotion/relegation target fields to adminCompetitions

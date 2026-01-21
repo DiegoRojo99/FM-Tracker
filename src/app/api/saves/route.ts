@@ -2,8 +2,10 @@ import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { Save, SaveTeam, SaveWithoutId } from '@/lib/types/Save';
 import { Team } from '@/lib/types/Team';
-import { Timestamp } from 'firebase-admin/firestore';
+import admin from 'firebase-admin';
 import { adminDB } from '@/lib/auth/firebase-admin';
+
+const { Timestamp } = admin.firestore;
 import { fetchCompetition } from '@/lib/db/competitions';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
 

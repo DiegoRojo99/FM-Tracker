@@ -1,6 +1,5 @@
 import { config } from 'dotenv';
-import { initializeApp, cert } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import admin from 'firebase-admin';
 import pkg from 'pg';
 const { Pool } = pkg;
 
@@ -64,15 +63,15 @@ async function runMigration(stepNames?: string[]) {
   console.log('🚀 Starting Firebase to PostgreSQL migration...\n');
 
   // Initialize Firebase Admin
-  const firebaseApp = initializeApp({
-    credential: cert({
+  const firebaseApp = admin.initializeApp({
+    credential: admin.credential.cert({
       projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
       privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
     }),
   });
 
-  const firestore = getFirestore(firebaseApp);
+  const firestore = admin.firestore(firebaseApp);
 
   // Initialize PostgreSQL pool
   const pool = new Pool({

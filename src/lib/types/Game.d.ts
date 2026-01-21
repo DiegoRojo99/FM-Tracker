@@ -1,4 +1,6 @@
-import { Timestamp } from 'firebase-admin/firestore';
+import admin from 'firebase-admin';
+
+type Timestamp = admin.firestore.Timestamp;
 import { Save } from './Save.d';
 
 export type Game = {
