@@ -11,6 +11,9 @@ import { migrateTeams } from './migrations/migrate-teams';
 import { migrateSaves } from './migrations/migrate-saves';
 import { migrateCareerStints } from './migrations/migrate-career-stints';
 import { migrateSeasons } from './migrations/migrate-seasons';
+import { migrateApiCompetitions } from './migrations/migrate-api-competitions';
+import { migrateCompetitionGroups } from './migrations/migrate-competition-groups';
+import { migrateCompetitionJunctions } from './migrations/migrate-competition-junctions';
 
 // Load environment variables
 config();
@@ -56,6 +59,21 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'seasons',
     description: 'Migrate season data from Firebase to PostgreSQL (depends on saves, teams)',
     migrate: migrateSeasons,
+  },
+  {
+    name: 'api-competitions',
+    description: 'Migrate API competition data from Firebase to PostgreSQL (depends on countries)',
+    migrate: migrateApiCompetitions,
+  },
+  {
+    name: 'competition-groups',
+    description: 'Migrate admin competition groups from Firebase to PostgreSQL (depends on countries)',
+    migrate: migrateCompetitionGroups,
+  },
+  {
+    name: 'competition-junctions',
+    description: 'Create junction table linking competition groups with API competitions (depends on api-competitions, competition-groups)',
+    migrate: migrateCompetitionJunctions,
   },
 ];
 
