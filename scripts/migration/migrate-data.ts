@@ -10,6 +10,7 @@ import { migrateGames } from './migrations/migrate-games';
 import { migrateCountries } from './migrations/migrate-countries';
 import { migrateTeams } from './migrations/migrate-teams';
 import { migrateSaves } from './migrations/migrate-saves';
+import { migrateCareerStints } from './migrations/migrate-career-stints';
 
 // Load environment variables
 config();
@@ -45,6 +46,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'saves',
     description: 'Migrate save data from Firebase to PostgreSQL (depends on users, games, teams)',
     migrate: migrateSaves,
+  },
+  {
+    name: 'career-stints',
+    description: 'Migrate career stints from Firebase to PostgreSQL (depends on saves, teams)',
+    migrate: migrateCareerStints,
   },
 ];
 
