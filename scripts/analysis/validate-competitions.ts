@@ -4,7 +4,7 @@ import type {
   FirestoreAdminCompetition, 
   FirestoreApiCompetition,
   CompetitionMigrationValidation 
-} from '../src/lib/types/Competition-Migration';
+} from '../../src/lib/types/Competition-Migration';
 
 config();
 

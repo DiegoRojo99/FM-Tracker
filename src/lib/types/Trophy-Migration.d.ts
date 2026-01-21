@@ -91,10 +91,12 @@ export interface TrophyMigrationAnalysis {
   };
 }
 
-export default {
+const TrophyMigrationTypes = {
   FirestoreSaveTrophy,
   FirestoreGlobalTrophy,
   PostgresTrophy,
   TrophyMigrationStrategy,
   TrophyMigrationAnalysis
 };
+
+export default TrophyMigrationTypes;

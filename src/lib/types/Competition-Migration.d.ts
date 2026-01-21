@@ -145,10 +145,12 @@ export interface CompetitionMigrationValidation {
   };
 }
 
-export default {
+const CompetitionMigrationTypes = {
   FirestoreAdminCompetition,
   FirestoreApiCompetition,
   CompetitionMigrationMapping,
   CompetitionRelationshipAnalysis,
   CompetitionMigrationValidation
 };
+
+export default CompetitionMigrationTypes;
