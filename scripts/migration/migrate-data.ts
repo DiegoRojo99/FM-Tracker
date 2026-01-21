@@ -9,6 +9,7 @@ import { migrateUsers } from './migrations/migrate-users';
 import { migrateGames } from './migrations/migrate-games';
 import { migrateCountries } from './migrations/migrate-countries';
 import { migrateTeams } from './migrations/migrate-teams';
+import { migrateSaves } from './migrations/migrate-saves';
 
 // Load environment variables
 config();
@@ -40,12 +41,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     description: 'Migrate team data from Firebase to PostgreSQL (depends on countries)',
     migrate: migrateTeams,
   },
-  // Add more migrations here as we create them
-  // {
-  //   name: 'countries',
-  //   description: 'Migrate country data',
-  //   migrate: migrateCountries,
-  // },
+  {
+    name: 'saves',
+    description: 'Migrate save data from Firebase to PostgreSQL (depends on users, games, teams)',
+    migrate: migrateSaves,
+  },
 ];
 
 async function runMigration(stepNames?: string[]) {
