@@ -1,5 +1,3 @@
-import { Game } from '../../../src/lib/types/Game.d';
-
 export async function migrateGames(firestore: any, pool: any) {
   console.log('🎮 Fetching games from Firebase...');
   
@@ -12,8 +10,8 @@ export async function migrateGames(firestore: any, pool: any) {
     let errorCount = 0;
 
     for (const doc of gamesSnapshot.docs) {
-      const data = doc.data() as Omit<Game, 'id'>;
-      const firebaseId = doc.id; // Store the original Firebase ID for reference
+      const data = doc.data();
+      const firebaseId = doc.id; // Use Firebase document ID as the game ID
       const game = {
         ...data,
       };
@@ -22,47 +20,50 @@ export async function migrateGames(firestore: any, pool: any) {
         const releaseDate = game.releaseDate?.toDate?.() || new Date();
         const logoUrl = game.logoUrl || '/default-game-logo.png'; // Provide default value
         
-        // Check if game already exists based on unique combination of name and version
+        // Check if game already exists by ID (since we're using Firebase ID)
         const existingGame = await pool.query(`
           SELECT id FROM "Game" 
-          WHERE name = $1 AND version = $2 AND platform = $3
-        `, [game.name, game.version, game.platform]);
+          WHERE id = $1
+        `, [firebaseId]);
 
         if (existingGame.rows.length > 0) {
           // Update existing game
-          const result = await pool.query(`
+          await pool.query(`
             UPDATE "Game" SET
-              "shortName" = $1,
-              "logoUrl" = $2,
-              "releaseDate" = $3,
-              "updatedAt" = $4,
-              "isActive" = $5,
-              "sortOrder" = $6,
-              variant = $7
-            WHERE name = $8 AND version = $9 AND platform = $10
-            RETURNING id;
+              name = $1,
+              "shortName" = $2,
+              version = $3,
+              platform = $4,
+              "logoUrl" = $5,
+              "releaseDate" = $6,
+              "updatedAt" = $7,
+              "isActive" = $8,
+              "sortOrder" = $9,
+              variant = $10
+            WHERE id = $11
           `, [
+            game.name,
             game.shortName,
+            game.version,
+            game.platform,
             logoUrl,
             releaseDate,
             new Date(),
             game.isActive,
             game.sortOrder,
-            game.variant || null,
-            game.name,
-            game.version,
-            game.platform
+            game.variant || 'Standard',
+            firebaseId
           ]);
 
           updatedCount++;
-          console.log(`🔄 Updated game: ${game.name} (Firebase ID: ${firebaseId})`);
+          console.log(`🔄 Updated game: ${game.name} (${firebaseId})`);
         } else {
-          // Insert new game
-          const result = await pool.query(`
-            INSERT INTO "Game" (name, "shortName", version, platform, "logoUrl", "releaseDate", "isActive", "sortOrder", variant, "createdAt", "updatedAt")
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-            RETURNING id;
+          // Insert new game with Firebase ID
+          await pool.query(`
+            INSERT INTO "Game" (id, name, "shortName", version, platform, "logoUrl", "releaseDate", "isActive", "sortOrder", variant, "createdAt", "updatedAt")
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
           `, [
+            firebaseId, // Use Firebase document ID as primary key
             game.name,
             game.shortName,
             game.version,
@@ -71,13 +72,13 @@ export async function migrateGames(firestore: any, pool: any) {
             releaseDate,
             game.isActive,
             game.sortOrder,
-            game.variant || null,
+            game.variant || 'Standard',
             new Date(),
             new Date()
           ]);
 
           migratedCount++;
-          console.log(`✅ Created game: ${game.name} (Firebase ID: ${firebaseId} -> PostgreSQL ID: ${result.rows[0].id})`);
+          console.log(`✅ Created game: ${game.name} (${firebaseId})`);
         }
 
       } catch (error: any) {

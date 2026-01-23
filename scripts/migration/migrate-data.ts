@@ -76,6 +76,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     migrate: migrateCompetitionGroups,
   },
   {
+    name: 'supplementary-competitions',
+    description: 'Add missing competitions referenced by challenges with inFootballManager=true (depends on countries)',
+    migrate: migrateSupplementaryCompetitions,
+  },
+  {
     name: 'competition-junctions',
     description: 'Create junction table linking competition groups with API competitions (depends on api-competitions, competition-groups)',
     migrate: migrateCompetitionJunctions,
@@ -94,11 +99,6 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'global-challenges',
     description: 'Migrate global challenge templates from Firebase to PostgreSQL (depends on teams, competition-junctions, countries)',
     migrate: migrateGlobalChallenges,
-  },
-  {
-    name: 'supplementary-competitions',
-    description: 'Add missing competitions referenced by challenges with inFootballManager=true (depends on countries)',
-    migrate: migrateSupplementaryCompetitions,
   },
   {
     name: 'career-challenges',

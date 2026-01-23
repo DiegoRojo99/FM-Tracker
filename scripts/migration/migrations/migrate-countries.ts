@@ -7,8 +7,14 @@ export async function migrateCountries(firestore: any, pool: any) {
     const countriesSnapshot = await firestore.collection('countries').get();
     console.log(`📦 Found ${countriesSnapshot.size} countries to migrate`);
     
+    // Get existing countries from database
+    console.log('📋 Checking existing countries in PostgreSQL...');
+    const existingCountriesResult = await pool.query('SELECT code FROM "Country"');
+    const existingCodes = new Set(existingCountriesResult.rows.map((row: any) => row.code));
+    console.log(`   Found ${existingCodes.size} existing countries in PostgreSQL`);
+    
     let migratedCount = 0;
-    let updatedCount = 0;
+    let skippedCount = 0;
     let errorCount = 0;
 
     for (const doc of countriesSnapshot.docs) {
@@ -19,16 +25,16 @@ export async function migrateCountries(firestore: any, pool: any) {
       };
 
       try {
-        // Upsert country using raw SQL
-        const result = await pool.query(`
+        // Skip if country already exists
+        if (existingCodes.has(country.code)) {
+          skippedCount++;
+          continue;
+        }
+
+        // Insert new country
+        await pool.query(`
           INSERT INTO "Country" (code, name, flag, "inFootballManager", "createdAt", "updatedAt")
           VALUES ($1, $2, $3, $4, $5, $6)
-          ON CONFLICT (code) DO UPDATE SET
-            name = EXCLUDED.name,
-            flag = EXCLUDED.flag,
-            "inFootballManager" = EXCLUDED."inFootballManager",
-            "updatedAt" = EXCLUDED."updatedAt"
-          RETURNING (xmax = 0) as is_insert;
         `, [
           country.code,
           country.name,
@@ -38,14 +44,8 @@ export async function migrateCountries(firestore: any, pool: any) {
           new Date()
         ]);
 
-        const isInsert = result.rows[0]?.is_insert;
-        if (isInsert) {
-          migratedCount++;
-          console.log(`✅ Created country: ${country.name} (${country.code})`);
-        } else {
-          updatedCount++;
-          console.log(`🔄 Updated country: ${country.name} (${country.code})`);
-        }
+        migratedCount++;
+        console.log(`✅ Created country: ${country.name} (${country.code})`);
 
       } catch (error: any) {
         errorCount++;
@@ -54,12 +54,12 @@ export async function migrateCountries(firestore: any, pool: any) {
     }
 
     console.log(`   ✅ ${migratedCount} countries created`);
-    console.log(`   🔄 ${updatedCount} countries updated`);
+    console.log(`   ⏭️  ${skippedCount} countries already exist (skipped)`);
     if (errorCount > 0) {
       console.log(`   ❌ ${errorCount} errors`);
     }
 
-    return { migratedCount, updatedCount, errorCount };
+    return { migratedCount, skippedCount, errorCount };
 
   } catch (error) {
     console.error('💥 Countries migration failed:', error);

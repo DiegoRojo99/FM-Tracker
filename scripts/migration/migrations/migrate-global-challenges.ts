@@ -171,17 +171,8 @@ export async function migrateGlobalChallenges(firestore: admin.firestore.Firesto
     console.log(`✅ Inserted ${goalsInserted} challenge goals`);
     console.log(`✅ Inserted ${teamLinksInserted} challenge-team links`);
 
-    // 6. Store mapping for career challenges migration
-    const mappingJson = JSON.stringify(Object.fromEntries(challengeIdMapping));
-    await pool.query(`
-      INSERT INTO "_migration_mappings" (entity_type, mapping_data, created_at)
-      VALUES ('challenge_ids', $1, NOW())
-      ON CONFLICT (entity_type) DO UPDATE SET 
-        mapping_data = $1, 
-        created_at = NOW()
-    `, [mappingJson]);
-
-    console.log('💾 Stored challenge ID mapping for career challenges migration');
+    // Migration completed successfully
+    console.log('💾 Challenge ID mapping created (available for this session)');
 
     return {
       success: true,
@@ -198,13 +189,36 @@ export async function migrateGlobalChallenges(firestore: admin.firestore.Firesto
 }
 
 if (require.main === module) {
-  migrateGlobalChallenges()
-    .then(result => {
+  async function runMigration() {
+    // Initialize Firebase
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId: process.env.FIREBASE_PROJECT_ID,
+          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+          privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+        })
+      });
+    }
+
+    const firestore = admin.firestore();
+
+    // Initialize PostgreSQL
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+    });
+
+    try {
+      const result = await migrateGlobalChallenges(firestore, pool);
       console.log('🎉 Global challenges migration completed!', result);
       process.exit(0);
-    })
-    .catch(error => {
+    } catch (error) {
       console.error('💥 Migration failed:', error);
       process.exit(1);
-    });
+    } finally {
+      await pool.end();
+    }
+  }
+
+  runMigration();
 }

@@ -25,7 +25,7 @@ model User {
 model Save {
   id               String   @id
   userId           String
-  gameId           Int
+  gameId           String   // Changed to String to match Game.id
   countryCode      String?
   currentClubId    Int?
   currentNTId      Int?
@@ -121,7 +121,7 @@ model Trophy {
   teamId              Int
   competitionGroupId  Int
   season              String
-  gameId              Int
+  gameId              String   // Changed to String to match Game.id
   createdAt           DateTime @default(now())
   saveId              String?
 
@@ -187,7 +187,7 @@ model CareerChallenge {
   challengeId     Int
   startedAt       DateTime @default(now())
   completedAt     DateTime?
-  gameId          Int
+  gameId          String   // Changed to String to match Game.id
   saveId          String?
 
   user            User     @relation(fields: [userId], references: [uid], onDelete: Cascade)
@@ -236,7 +236,7 @@ model TeamSeason {
 }
 
 model Game {
-  id          Int      @id @default(autoincrement())
+  id          String   @id // Changed to String for IDs like "fm24", "fm25"
   name        String
   shortName   String
   version     String
