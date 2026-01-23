@@ -1,21 +1,8 @@
-import { collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
-import { db } from './firebase';
-import { FirebaseGame, FirebaseGameInput } from '../types/firebase/Game.d';
+import { collection, doc, getDocs, getDoc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
+import { db } from '../firebase';
+import { FirebaseGame, FirebaseGameInput } from '../../types/firebase/Game';
 
 const COLLECTION_NAME = 'games';
-
-export async function createGame(gameData: FirebaseGameInput): Promise<string> {
-  try {
-    const docRef = await addDoc(collection(db, COLLECTION_NAME), {
-      ...gameData,
-      createdAt: new Date(),
-    });
-    return docRef.id;
-  } catch (error) {
-    console.error('Error creating game:', error);
-    throw error;
-  }
-}
 
 export async function getGame(gameId: string): Promise<FirebaseGame | null> {
   try {
