@@ -1,10 +1,10 @@
 import { collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
 import { db } from './firebase';
-import { Game, GameInput } from '../types/Game.d';
+import { FirebaseGame, FirebaseGameInput } from '../types/firebase/Game.d';
 
 const COLLECTION_NAME = 'games';
 
-export async function createGame(gameData: GameInput): Promise<string> {
+export async function createGame(gameData: FirebaseGameInput): Promise<string> {
   try {
     const docRef = await addDoc(collection(db, COLLECTION_NAME), {
       ...gameData,
@@ -17,7 +17,7 @@ export async function createGame(gameData: GameInput): Promise<string> {
   }
 }
 
-export async function getGame(gameId: string): Promise<Game | null> {
+export async function getGame(gameId: string): Promise<FirebaseGame | null> {
   try {
     const docRef = doc(db, COLLECTION_NAME, gameId);
     const docSnap = await getDoc(docRef);
@@ -26,7 +26,7 @@ export async function getGame(gameId: string): Promise<Game | null> {
       return {
         id: docSnap.id,
         ...docSnap.data()
-      } as Game;
+      } as FirebaseGame;
     }
     
     return null;
@@ -36,7 +36,7 @@ export async function getGame(gameId: string): Promise<Game | null> {
   }
 }
 
-export async function getAllGames(): Promise<Game[]> {
+export async function getAllGames(): Promise<FirebaseGame[]> {
   try {
     const q = query(collection(db, COLLECTION_NAME));
     const querySnapshot = await getDocs(q);
@@ -44,7 +44,7 @@ export async function getAllGames(): Promise<Game[]> {
     const games = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
-    })) as Game[];
+    })) as FirebaseGame[];
     
     // Sort in memory: first by sortOrder, then by releaseDate descending
     return games.sort((a, b) => {
@@ -59,7 +59,7 @@ export async function getAllGames(): Promise<Game[]> {
   }
 }
 
-export async function getActiveGames(): Promise<Game[]> {
+export async function getActiveGames(): Promise<FirebaseGame[]> {
   try {
     const q = query(collection(db, COLLECTION_NAME), where('isActive', '==', true));
     const querySnapshot = await getDocs(q);
@@ -67,7 +67,7 @@ export async function getActiveGames(): Promise<Game[]> {
     const games = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
-    })) as Game[];
+    })) as FirebaseGame[];
     
     // Sort in memory: first by sortOrder, then by releaseDate descending
     return games.sort((a, b) => {
@@ -82,7 +82,7 @@ export async function getActiveGames(): Promise<Game[]> {
   }
 }
 
-export async function updateGame(gameId: string, gameData: Partial<GameInput>): Promise<void> {
+export async function updateGame(gameId: string, gameData: Partial<FirebaseGameInput>): Promise<void> {
   try {
     const docRef = doc(db, COLLECTION_NAME, gameId);
     await updateDoc(docRef, {

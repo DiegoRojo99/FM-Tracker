@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllGames, getActiveGames, createGame } from '../../../lib/db/games';
-import { GameInput } from '../../../lib/types/Game.d';
+import { FirebaseGameInput } from '../../../lib/types/firebase/Game.d';
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const gameData: GameInput = await request.json();
+    const gameData: FirebaseGameInput = await request.json();
     
     // Basic validation
     if (!gameData.name || !gameData.version || !gameData.platform) {

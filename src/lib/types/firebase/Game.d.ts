@@ -1,9 +1,9 @@
 import admin from 'firebase-admin';
+import { Save } from '../Save.d';
 
 type Timestamp = admin.firestore.Timestamp;
-import { Save } from './Save.d';
 
-export type Game = {
+export type FirebaseGame = {
   id: string; // e.g., "fm24", "fm26", "fm24-touch"
   name: string; // e.g., "Football Manager 2024"
   shortName: string; // e.g., "FM24"
@@ -16,9 +16,9 @@ export type Game = {
   sortOrder: number; // For consistent ordering in dropdowns
 }
 
-export type GameInput = Omit<Game, 'id'>;
+export type FirebaseGameInput = Omit<FirebaseGame, 'id'>;
 
 // For components that need game info with saves
-export type SaveWithGame = Save & {
-  game?: Game;
+export type FirebaseSaveWithGame = Save & {
+  game?: FirebaseGame;
 }

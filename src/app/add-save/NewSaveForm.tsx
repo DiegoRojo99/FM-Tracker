@@ -6,14 +6,14 @@ import { serverTimestamp } from 'firebase/firestore';
 import TeamGrid from './TeamGrid';
 import { Competition, Country } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/Team';
-import { Game } from '@/lib/types/Game';
+import { FirebaseGame } from '@/lib/types/firebase/Game';
 
 export default function NewSaveForm() {
   const { user } = useAuth();
   const [countries, setCountries] = useState<Country[]>([]);
   const [leagues, setLeagues] = useState<Competition[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<FirebaseGame[]>([]);
 
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedLeague, setSelectedLeague] = useState('');
@@ -86,7 +86,7 @@ export default function NewSaveForm() {
     }, 1000);
   };
 
-  function sortGamesByReleaseDate(a: Game, b: Game) {
+  function sortGamesByReleaseDate(a: FirebaseGame, b: FirebaseGame) {
     if (!a.releaseDate) return 1;
     if (!b.releaseDate) return -1;
     return b.releaseDate.seconds - a.releaseDate.seconds;
@@ -104,7 +104,7 @@ export default function NewSaveForm() {
             onChange={e => setSelectedGame(e.target.value)} 
             className="w-full p-3 rounded-lg bg-[var(--color-darker)] text-white border-2 border-[var(--color-primary)] focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
           >
-            {games.sort(sortGamesByReleaseDate).map((game: Game) => (
+            {games.sort(sortGamesByReleaseDate).map((game: FirebaseGame) => (
               <option key={game.id} value={game.id}>
                 {game.name}
               </option>

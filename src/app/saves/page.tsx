@@ -8,12 +8,12 @@ import { Save } from '@/lib/types/Save';
 import FootballLoader from '../components/FootBallLoader';
 import { SaveCard } from './SaveCard';
 import GradientButton from '../components/GradientButton';
-import { Game } from '@/lib/types/Game';
+import { FirebaseGame } from '@/lib/types/firebase/Game';
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
   const [saves, setSaves] = useState<Save[]>([]);
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<FirebaseGame[]>([]);
   const [selectedGameFilter, setSelectedGameFilter] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const [deletingSave, setDeletingSave] = useState<Save | null>(null);

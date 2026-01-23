@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import { CountryWithCompetitions } from '@/lib/types/Country&Competition';
 import { TrophyGroup } from '@/lib/types/Trophy';
-import { Game } from '@/lib/types/Game';
+import { FirebaseGame } from '@/lib/types/firebase/Game';
 
 export function useTrophies(selectedGame: string) {
   const { user, userLoading } = useAuth();
   const [countries, setCountries] = useState<CountryWithCompetitions[]>([]);
   const [trophies, setTrophies] = useState<TrophyGroup[]>([]);
   const [groupMapping, setGroupMapping] = useState<Record<string, string[]>>({});
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<FirebaseGame[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

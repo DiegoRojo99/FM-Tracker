@@ -1,8 +1,8 @@
 import React from 'react';
-import { Game } from '@/lib/types/Game';
+import { FirebaseGame } from '@/lib/types/firebase/Game';
 
 interface TrophiesHeaderProps {
-  games: Game[];
+  games: FirebaseGame[];
   selectedGame: string;
   onGameChange: (game: string) => void;
   totalTrophies?: number;
