@@ -1,5 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
-import { Team } from './Team.d';
+import { Team } from './firebase/Team';
 
 // Raw competition data from API-Sports
 export type ApiCompetition = {

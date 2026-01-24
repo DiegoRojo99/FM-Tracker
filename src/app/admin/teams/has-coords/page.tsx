@@ -1,6 +1,6 @@
 'use client';
 
-import { GroupedTeamsByLeagueWithCoords, Team } from "@/lib/types/Team";
+import { GroupedTeamsByLeagueWithCoords, Team } from "@/lib/types/firebase/Team";
 import { useEffect, useState } from "react";
 
 function TeamCordsPage() {

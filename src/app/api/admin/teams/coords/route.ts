@@ -1,5 +1,5 @@
 import { getAllTeams } from "@/lib/db/teams";
-import { GroupedTeamsByLeagueWithCoords } from "@/lib/types/Team";
+import { GroupedTeamsByLeagueWithCoords } from "@/lib/types/firebase/Team";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {

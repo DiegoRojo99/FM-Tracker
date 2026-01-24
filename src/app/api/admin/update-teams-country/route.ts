@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { adminDB } from '@/lib/auth/firebase-admin';
 import { Country } from '@/lib/types/Country&Competition';
-import { Team } from '@/lib/types/Team';
+import { Team } from '@/lib/types/firebase/Team';
 
 async function updateTeamsCountryCode() {
   const countriesSnap = await adminDB.collection('countries').get();

@@ -6,7 +6,7 @@ import { Competition } from "@/lib/types/Country&Competition";
 import { SaveWithChildren } from "@/lib/types/Save";
 import BaseModal from "./BaseModal";
 import LoadingButton from "../LoadingButton";
-import { Team } from "@/lib/types/Team";
+import { Team } from "@/lib/types/firebase/Team";
 import Image from "next/image";
 
 type AddSeasonModalProps = {

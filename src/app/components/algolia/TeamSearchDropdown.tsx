@@ -3,7 +3,7 @@
 import { InstantSearch, useHits, useSearchBox } from 'react-instantsearch';
 import { algoliaClient } from '@/lib/algolia/algolia';
 import { useState } from 'react';
-import { Team } from '@/lib/types/Team';
+import { Team } from '@/lib/types/firebase/Team';
 import { AlgoliaTeam } from '@/lib/types/Algolia';
 
 interface SearchDropdownProps {

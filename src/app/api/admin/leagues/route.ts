@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/lib/db/firebase';
-import { Team } from '@/lib/types/Team';
+import { Team } from '@/lib/types/firebase/Team';
 import { Competition, Country } from '@/lib/types/Country&Competition';
 
 export async function GET() {

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db/firebase";
-import { Team } from "@/lib/types/Team";
+import { Team } from "@/lib/types/firebase/Team";
 import { doc, getDoc } from "firebase/firestore";
 
 export async function GetTeamData(teamId: string) {

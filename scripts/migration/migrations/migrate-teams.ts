@@ -1,5 +1,3 @@
-import { Team } from '../../../src/lib/types/Team.d';
-
 export async function migrateTeams(firestore: any, pool: any) {
   console.log('⚽ Fetching teams from Firebase...');
   

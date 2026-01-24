@@ -1,4 +1,4 @@
-import { TeamInput } from "./InsertDB"
+import { TeamInput } from "../InsertDB"
 import { Timestamp } from 'firebase/firestore';
 
 export type Team = {

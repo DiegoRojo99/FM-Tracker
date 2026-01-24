@@ -1,6 +1,6 @@
 'use client'
 
-import { Team } from "@/lib/types/Team";
+import { Team } from "@/lib/types/firebase/Team";
 import Image from "next/image";
 
 type Props = {

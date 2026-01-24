@@ -3,7 +3,7 @@ import { fetchFromApi } from '../../lib/apiFootball';
 import { rateLimiter } from '../../lib/utils/rateLimiter';
 import { Timestamp } from 'firebase-admin/firestore';
 import { Competition } from '@/lib/types/Country&Competition';
-import { Team } from '@/lib/types/Team';
+import { Team } from '@/lib/types/firebase/Team';
 
 type MissingCompetition = {
   id: number;

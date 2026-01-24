@@ -1,7 +1,7 @@
 'use client';
 
 import SearchDropdown from "@/app/components/algolia/TeamSearchDropdown";
-import { Team } from "@/lib/types/Team";
+import { Team } from "@/lib/types/firebase/Team";
 import { useEffect, useState } from "react";
 import TeamLocationPicker from "./TeamLocationPicker";
 import Image from "next/image";

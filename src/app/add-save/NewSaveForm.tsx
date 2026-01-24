@@ -5,7 +5,7 @@ import { useAuth } from '@/app/components/AuthProvider';
 import { serverTimestamp } from 'firebase/firestore';
 import TeamGrid from './TeamGrid';
 import { Competition, Country } from '@/lib/types/Country&Competition';
-import { Team } from '@/lib/types/Team';
+import { Team } from '@/lib/types/firebase/Team';
 import { FirebaseGame } from '@/lib/types/firebase/Game';
 
 export default function NewSaveForm() {

@@ -4,7 +4,7 @@ import { Trophy } from '@/lib/types/Trophy';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import { Competition } from '@/lib/types/Country&Competition';
-import { Team } from '@/lib/types/Team';
+import { Team } from '@/lib/types/firebase/Team';
 import { SaveWithChildren } from '@/lib/types/Save';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';

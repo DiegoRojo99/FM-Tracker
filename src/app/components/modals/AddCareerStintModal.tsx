@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
-import { Team } from '@/lib/types/Team';
+import { Team } from '@/lib/types/firebase/Team';
 import { CareerStint } from '@/lib/types/Career';
 import CompetitionDropdown from '@/app/components/dropdowns/CompetitionDropdown';
 import { Competition } from '@/lib/types/Country&Competition';

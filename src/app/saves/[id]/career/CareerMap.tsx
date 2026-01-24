@@ -11,7 +11,7 @@ import { defaults as defaultControls } from 'ol/control';
 import { defaults as defaultInteractions } from 'ol/interaction';
 import { SaveWithChildren } from '@/lib/types/Save';
 import FootballLoader from '@/app/components/FootBallLoader';
-import { Team } from '@/lib/types/Team';
+import { Team } from '@/lib/types/firebase/Team';
 import { Feature } from 'ol';
 import { LineString, Point } from 'ol/geom';
 import { Style, Icon, Stroke } from 'ol/style';
