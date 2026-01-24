@@ -1,6 +1,6 @@
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { Team } from "../types/firebase/Team";
-import { db } from "./firebase";
+import { Team } from "../../types/firebase/Team";
+import { db } from "../firebase";
 
 export async function fetchTeam(teamId: string) {
   const teamRef = doc(db, `teams/${teamId}`);

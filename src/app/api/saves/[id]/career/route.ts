@@ -15,7 +15,7 @@ import {
 } from 'firebase/firestore';
 import { NextRequest } from 'next/server';
 import { CareerStintInput } from '@/lib/types/InsertDB';
-import { fetchTeam } from '@/lib/db/teams';
+import { fetchTeam } from '@/lib/db/prisma/teams';
 import { fetchCompetition } from '@/lib/db/competitions';
 import { Save } from '@/lib/types/Save';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
@@ -42,11 +42,11 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     const startDate = new Date(body.startDate);
     const formattedStartDate = formatDate(startDate);
 
-    const teamData = await fetchTeam(String(body.teamId));
+    const teamData = await fetchTeam(Number(body.teamId));
     if (!teamData) return new Response('Team not found', { status: 404 });
 
     const isNational = teamData.national ?? false;
-    if (!isNational && !teamData.leagueId) {
+    if (!isNational && !body.leagueId) {
       return new Response('Club teams must have a leagueId', { status: 400 });
     }
 
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       });
     }
 
-    const leagueId = body.leagueId && !isNational ? String(body.leagueId) : String(teamData.leagueId);
+    const leagueId = String(body.leagueId) ?? null;
     const newStint: CareerStintInput = {
       teamId: String(teamData.id),
       teamLogo: teamData.logo,

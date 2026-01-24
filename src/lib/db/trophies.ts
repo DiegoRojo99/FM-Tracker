@@ -2,7 +2,7 @@ import { db } from '@/lib/db/firebase';
 import { collection, doc, getDocs, query, setDoc, where, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { Trophy } from '../types/Trophy';
 import { fetchCompetition } from './competitions';
-import { fetchTeam } from './teams';
+import { fetchTeam } from './firebase/teams';
 import { addChallengeForTrophy } from './challenges';
 
 export async function addTrophyToSave(
