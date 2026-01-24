@@ -9,9 +9,9 @@ import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
 import { defaults as defaultControls } from 'ol/control';
 import { defaults as defaultInteractions } from 'ol/interaction';
-import { SaveWithChildren } from '@/lib/types/Save';
+import { SaveWithChildren } from '@/lib/types/firebase/Save';
 import FootballLoader from '@/app/components/FootBallLoader';
-import { Team } from '@/lib/types/firebase/Team';
+import { Team } from '@/lib/types/prisma/Team';
 import { Feature } from 'ol';
 import { LineString, Point } from 'ol/geom';
 import { Style, Icon, Stroke } from 'ol/style';
@@ -56,7 +56,8 @@ export default function TeamLocationPicker({
 
     const careerTeamsWithCoords = career.map(stint => {
       const team = teams.find(t => String(t.id) === String(stint.teamId));
-      const hasCoords = team?.coordinates && team.coordinates.lat && team.coordinates.lng;
+      if (!team) return null;
+      const hasCoords = team.lat && team.lng;
       if (!hasCoords) return null;
       return team;
     }).filter(team => team !== null) as Team[];
@@ -70,11 +71,11 @@ export default function TeamLocationPicker({
 
     const firstTeam = careerTeamsWithCoords[0];
     const firstTeamCoords = [
-      firstTeam.coordinates.lng,
-      firstTeam.coordinates.lat
+      firstTeam.lng,
+      firstTeam.lat
     ] as [number, number];
 
-    const defaultCoords = firstTeam?.coordinates ? firstTeamCoords : [-0.1276, 51.5074]; // London coordinates
+    const defaultCoords = firstTeam ? firstTeamCoords : [-0.1276, 51.5074]; // London coordinates
     const view = new View({
       center: fromLonLat(firstTeamCoords || defaultCoords),
       zoom: careerTeamsNumber > 1 ? 4 : 8,
@@ -82,11 +83,12 @@ export default function TeamLocationPicker({
 
     // Create features for each team with coordinates
     const features = careerTeamsWithCoords.map((team: Team) => {
-      const { lng, lat } = team.coordinates;
+      const { lng, lat } = team;
       if (!lng || !lat) {
         console.warn(`Team ${team.name} does not have valid coordinates.`);
         return null;
       }
+
       return new Feature({
         geometry: new Point(fromLonLat([lng, lat])),
         name: team.name,
@@ -120,13 +122,13 @@ export default function TeamLocationPicker({
         const nextTeam = careerTeamsWithCoords[index + 1];
         if (!nextTeam) return null;
 
-        if (!team.coordinates?.lat || !team.coordinates?.lng) return null;
-        if (!nextTeam.coordinates?.lat || !nextTeam.coordinates?.lng) return null;
+        if (!team.lat || !team.lng) return null;
+        if (!nextTeam.lat || !nextTeam.lng) return null;
 
         const arrow = new Feature({
           geometry: new LineString([
-            fromLonLat([team.coordinates.lng, team.coordinates.lat]),
-            fromLonLat([nextTeam.coordinates.lng, nextTeam.coordinates.lat]),
+            fromLonLat([team.lng, team.lat]),
+            fromLonLat([nextTeam.lng, nextTeam.lat]),
           ]),
         });
 

@@ -4,7 +4,7 @@ import { CareerChallenge, Challenge } from '../types/Challenge';
 import { Trophy } from '../types/Trophy';
 import { getCareerChallengeFromChallengeAndTrophies, getCareerChallengeFromChallengeAndTrophy, getChallengeWithoutStartingAt } from '../dto/challenges';
 import { getTrophiesForSave } from './trophies';
-import { Save } from '../types/Save';
+import { Save } from '../types/firebase/Save';
 
 export async function getAllChallenges() {
   const challengesCol = collection(db, 'challenges');

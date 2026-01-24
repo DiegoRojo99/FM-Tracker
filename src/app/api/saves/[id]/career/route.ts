@@ -17,7 +17,7 @@ import { NextRequest } from 'next/server';
 import { CareerStintInput } from '@/lib/types/InsertDB';
 import { fetchTeam } from '@/lib/db/prisma/teams';
 import { fetchCompetition } from '@/lib/db/competitions';
-import { Save } from '@/lib/types/Save';
+import { Save } from '@/lib/types/firebase/Save';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
 
 function formatDate(date: Date): string {

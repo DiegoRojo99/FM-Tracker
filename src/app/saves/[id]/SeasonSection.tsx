@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AddSeasonModal from "@/app/components/modals/AddSeasonModal";
 import { SeasonInput, SeasonSummary } from "@/lib/types/Season";
 import { useAuth } from "@/app/components/AuthProvider";
-import { SaveWithChildren } from "@/lib/types/Save";
+import { SaveWithChildren } from "@/lib/types/firebase/Save";
 import { SeasonCard } from "./SeasonCard";
 import GradientButton from "@/app/components/GradientButton";
 

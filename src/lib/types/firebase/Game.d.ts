@@ -1,5 +1,5 @@
 import admin from 'firebase-admin';
-import { Save } from '../Save.d';
+import { Save } from './Save';
 
 type Timestamp = admin.firestore.Timestamp;
 

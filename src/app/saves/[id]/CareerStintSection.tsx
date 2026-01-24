@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { SaveWithChildren } from '@/lib/types/Save';
+import { SaveWithChildren } from '@/lib/types/firebase/Save';
 import { CareerStint } from '@/lib/types/Career';
 import CareerTimeline from './CareerTimeline';
 import AddCareerStintModal from '@/app/components/modals/AddCareerStintModal';

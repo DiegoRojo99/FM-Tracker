@@ -1,9 +1,9 @@
-import { Save } from "@/lib/types/Save";
+import { PreviewSave } from "@/lib/types/prisma/Save";
 import Image from "next/image";
 import Link from "next/link";
 import BlurredCard from "../components/BlurredCard";
 
-export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (event: React.MouseEvent<HTMLImageElement>, saveId: string) => void }) {
+export function SaveCard({ save, handleDelete }: { save: PreviewSave, handleDelete: (event: React.MouseEvent<HTMLImageElement>, saveId: string) => void }) {
   return (
     <Link key={save.id} href={`/saves/${save.id}`}>
       <BlurredCard className="h-full">
@@ -12,15 +12,13 @@ export function SaveCard({ save, handleDelete }: { save: Save, handleDelete: (ev
           <div className="flex flex-row w-full mb-2 justify-between items-center gap-2">
             <div className="flex flex-col">
               <h1 className="text-l text-gray-200">{`${save.season ?? '2023/24'}`}</h1>
-              {save.gameId && (
-                <span className="text-xs text-gray-400 uppercase tracking-wider">
-                  {save.gameId.replace('fm', 'FM').replace('-touch', ' Touch')}
-                </span>
-              )}
+              <span className="text-xs text-gray-400 uppercase tracking-wider">
+                {save.game.shortName ?? 'Unknown Game'}
+              </span>
             </div>
-            {save.currentLeague && (
+            {save.currentLeague?.logoUrl && (
               <Image
-                src={save.currentLeague?.logo}
+                src={save.currentLeague?.logoUrl}
                 alt={save.currentLeague?.name}
                 width={128}
                 height={128}

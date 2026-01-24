@@ -6,7 +6,7 @@ import FootballLoader from '@/app/components/FootBallLoader';
 import { useAuth } from '@/app/components/AuthProvider';
 import { Competition } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/firebase/Team';
-import { SaveWithChildren } from '@/lib/types/Save';
+import { SaveWithChildren } from '@/lib/types/firebase/Save';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
 import CompetitionWithWorldDropdown from '../dropdowns/CompetitionWithWorldDropdown';

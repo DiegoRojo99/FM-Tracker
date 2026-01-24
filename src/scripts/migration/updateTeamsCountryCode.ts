@@ -1,6 +1,6 @@
 import { adminDB } from '@/lib/auth/firebase-admin';
 import { Country } from '@/lib/types/Country&Competition';
-import { Team } from '@/lib/types/firebase/Team';
+import { Team } from '@/lib/types/prisma/Team';
 
 async function updateTeamsCountryCode() {
   const countriesSnap = await adminDB.collection('countries').get();

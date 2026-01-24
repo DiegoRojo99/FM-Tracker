@@ -1,7 +1,6 @@
 import { adminDB } from '@/lib/auth/firebase-admin';
 import { Team } from '@/lib/types/firebase/Team';
 
-
 async function normalizeCareerStints() {
   const usersSnap = await adminDB.collection('users').get();
 

@@ -1,6 +1,6 @@
 import { adminDB } from '@/lib/auth/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
-import { Save, SaveLeague } from '@/lib/types/Save';
+import { Save, SaveLeague } from '@/lib/types/firebase/Save';
 import { fetchCompetition } from '@/lib/db/competitions';
 
 async function normalizeSavesCurrentLeaguesFromCareer() {

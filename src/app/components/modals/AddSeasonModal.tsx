@@ -3,7 +3,7 @@ import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput } from "@/lib/types/S
 import CompetitionDropdown from "../dropdowns/CompetitionDropdown";
 import CompetitionWithWorldDropdown from "../dropdowns/CompetitionWithWorldDropdown";
 import { Competition } from "@/lib/types/Country&Competition";
-import { SaveWithChildren } from "@/lib/types/Save";
+import { SaveWithChildren } from "@/lib/types/firebase/Save";
 import BaseModal from "./BaseModal";
 import LoadingButton from "../LoadingButton";
 import { Team } from "@/lib/types/firebase/Team";

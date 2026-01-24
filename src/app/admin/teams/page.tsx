@@ -1,6 +1,6 @@
 'use client';
 
-import { SaveTeam } from "@/lib/types/Save";
+import { SaveTeam } from "@/lib/types/firebase/Save";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 

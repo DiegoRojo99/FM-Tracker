@@ -1,6 +1,6 @@
 import { adminDB } from '@/lib/auth/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
-import { SaveTeam } from '@/lib/types/Save';
+import { SaveTeam } from '@/lib/types/firebase/Save';
 
 async function normalizeSavesFromCareer() {
   const usersSnap = await adminDB.collection('users').get();

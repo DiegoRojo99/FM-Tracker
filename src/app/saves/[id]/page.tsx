@@ -2,7 +2,7 @@
 import { useAuth } from '@/app/components/AuthProvider';
 import { notFound, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { SaveWithChildren } from '@/lib/types/Save';
+import { SaveWithChildren } from '@/lib/types/firebase/Save';
 import FootballLoader from '@/app/components/FootBallLoader';
 import CareerStintsSection from './CareerStintSection';
 import TrophyCase from './TrophyCase';

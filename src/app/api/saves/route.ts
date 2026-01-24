@@ -1,6 +1,6 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
-import { Save, SaveTeam, SaveWithoutId } from '@/lib/types/Save';
+import { Save, SaveTeam, SaveWithoutId } from '@/lib/types/firebase/Save';
 import { Team } from '@/lib/types/firebase/Team';
 import admin from 'firebase-admin';
 import { adminDB } from '@/lib/auth/firebase-admin';
@@ -8,6 +8,7 @@ import { adminDB } from '@/lib/auth/firebase-admin';
 const { Timestamp } = admin.firestore;
 import { fetchCompetition } from '@/lib/db/competitions';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
+import { prisma } from '@/lib/db/prisma';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -15,17 +16,21 @@ export async function GET(req: NextRequest) {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    // Reference user's saves subcollection
-    const savesRef = adminDB.collection('users').doc(uid).collection('saves');
-    const savesSnapshot = await savesRef.get();
+    const userSaves = await prisma.save.findMany({
+      where: { userId: uid },
+      include: {
+        currentClub: true,
+        currentNT: true,
+        currentLeague: true,
+        game: true,
+      },
+    });
 
-    if (savesSnapshot.empty) {
+    if (!userSaves || userSaves.length === 0) {
       return new Response('No saves found', { status: 404 });
     }
 
-    // Map docs to JSON
-    const saves = savesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Save[];
-    return new Response(JSON.stringify(saves), { status: 200 });
+    return new Response(JSON.stringify(userSaves), { status: 200 });
   });
 }
 

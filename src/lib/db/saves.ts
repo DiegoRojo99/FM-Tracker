@@ -2,7 +2,7 @@ import { doc, getDoc, getDocs, updateDoc, collection, serverTimestamp } from "fi
 import { db } from '@/lib/db/firebase';
 import { fetchCompetition } from "./competitions";
 import { Competition } from "../types/Country&Competition";
-import { Save, SaveLeague } from "../types/Save";
+import { Save, SaveLeague } from "../types/firebase/Save";
 import { CareerStint } from "../types/Career";
 
 /**

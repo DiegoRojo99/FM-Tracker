@@ -4,20 +4,20 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../components/AuthProvider';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
-import { Save } from '@/lib/types/Save';
 import FootballLoader from '../components/FootBallLoader';
 import { SaveCard } from './SaveCard';
 import GradientButton from '../components/GradientButton';
 import { FirebaseGame } from '@/lib/types/firebase/Game';
+import { PreviewSave, Save } from '@/lib/types/prisma/Save';
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
-  const [saves, setSaves] = useState<Save[]>([]);
+  const [saves, setSaves] = useState<PreviewSave[]>([]);
   const [games, setGames] = useState<FirebaseGame[]>([]);
   const [selectedGameFilter, setSelectedGameFilter] = useState<string>('all');
   const [loading, setLoading] = useState(true);
-  const [deletingSave, setDeletingSave] = useState<Save | null>(null);
-
+  const [deletingSave, setDeletingSave] = useState<PreviewSave | null>(null);
+  
   useEffect(() => {
     if (!user && userLoading) return;
     if (!user) {
@@ -84,15 +84,15 @@ export default function SavesPage() {
   }
 
   function getLatestDate(save: Save) {
-    const updatedAtTime = save.updatedAt ? save.updatedAt._seconds * 1000 + Math.floor(save.updatedAt._nanoseconds / 1000000) : 0;
-    const createdAtTime = save.createdAt ? save.createdAt._seconds * 1000 + Math.floor(save.createdAt._nanoseconds / 1000000) : 0;
-    return updatedAtTime || createdAtTime;
+    const updatedAtTime = new Date(save.updatedAt);
+    const createdAtTime = new Date(save.createdAt);
+    return updatedAtTime ?? createdAtTime;
   }
 
   function sortSavesByDate(a: Save, b: Save) {
     const dateA = getLatestDate(a);
     const dateB = getLatestDate(b);
-    return dateB - dateA;
+    return dateB.getTime() - dateA.getTime();
   }
 
   // Filter saves based on selected game
