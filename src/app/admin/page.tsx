@@ -25,7 +25,6 @@ export default function AdminPage() {
         <AdminBox title="Coords Picker" link="/admin/teams/coords-picker" />
         <AdminBox title="Leagues" link="/admin/leagues" />
         <AdminBox title="Teams" link="/admin/teams" />
-        <AdminBox title="Teams with Coords" link="/admin/teams/has-coords" />
         <AdminBox title="Stats" link="/admin/stats" />
       </div>
     </div>
