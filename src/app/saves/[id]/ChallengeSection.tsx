@@ -1,10 +1,10 @@
 import BlurredCard from "@/app/components/BlurredCard";
 import ProgressBar from "@/app/components/progress/ProgressBar";
-import { CareerChallenge, ChallengeGoal } from "@/lib/types/firebase/Challenge";
+import { CareerChallengeWithDetails, ChallengeGoalWithDetails } from "@/lib/types/prisma/Challenge";
 import React from "react";
 
 type ChallengeSectionProps = {
-  challenges: CareerChallenge[];
+  challenges: CareerChallengeWithDetails[];
 };
 
 const ChallengeSection: React.FC<ChallengeSectionProps> = ({ challenges }) => {
@@ -25,7 +25,7 @@ const ChallengeSection: React.FC<ChallengeSectionProps> = ({ challenges }) => {
         {challenges.map((challenge) => (
           <div key={challenge.id} style={{ marginBottom: "1rem" }}>
             <BlurredCard>
-              <ChallengeCard challenge={challenge} />
+              <ChallengeCard careerChallenge={challenge} />
             </BlurredCard>
           </div>
         ))}
@@ -34,9 +34,10 @@ const ChallengeSection: React.FC<ChallengeSectionProps> = ({ challenges }) => {
   );
 };
 
-const ChallengeCard: React.FC<{ challenge: CareerChallenge }> = ({ challenge }) => {
-  const totalGoals = challenge.goals.length;
-  const completedGoals = challenge.completedGoals.length;
+const ChallengeCard: React.FC<{ careerChallenge: CareerChallengeWithDetails }> = ({ careerChallenge }) => {
+  const totalGoals = careerChallenge.goalProgress.length;
+  const completedGoals = careerChallenge.goalProgress.filter(gp => gp.isComplete).length;
+  const challenge = careerChallenge.challenge;
   
   return (
     <div>
@@ -45,14 +46,14 @@ const ChallengeCard: React.FC<{ challenge: CareerChallenge }> = ({ challenge }) 
       <ProgressBar completed={completedGoals} total={totalGoals} showText={false} />
       <div className="mt-2">
         {challenge.goals.map((goal) => (
-          <ChallengeGoalUI key={goal.id} goal={goal} isCompleted={challenge.completedGoals.includes(goal.id)} />
+          <ChallengeGoalUI key={goal.id} goal={goal} isCompleted={careerChallenge.goalProgress.some(gp => gp.id === goal.id && gp.isComplete)} />
         ))}
       </div>
     </div>
   );
 };
 
-const ChallengeGoalUI: React.FC<{ goal: ChallengeGoal, isCompleted: boolean }> = ({ goal, isCompleted }) => {
+const ChallengeGoalUI: React.FC<{ goal: ChallengeGoalWithDetails, isCompleted: boolean }> = ({ goal, isCompleted }) => {
   return (
     <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300 my-1">
       <span className={`flex-1 ${isCompleted ? "line-through" : ""}`}>

@@ -3,7 +3,7 @@ import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
-import { FullDetailsSave, FullSave } from '@/lib/types/prisma/Save';
+import { FullDetailsSave } from '@/lib/types/prisma/Save';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -32,7 +32,23 @@ export async function GET(req: NextRequest) {
         },
         trophies: true,
         seasons: true,
-        challenges: true,
+        challenges: {
+          include: {
+            challenge: {
+              include: {
+                goals: {
+                  include: {
+                    competition: true,
+                    country: true,
+                    teams: true,
+                  },
+                },
+              },
+            },
+            goalProgress: true,
+            game: true,
+          },
+        }
       },
     });
 
