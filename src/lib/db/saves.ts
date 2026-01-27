@@ -4,6 +4,7 @@ import { fetchCompetition } from "./competitions";
 import { Competition } from "../types/Country&Competition";
 import { Save, SaveLeague } from "../types/firebase/Save";
 import { CareerStint } from "../types/firebase/Career";
+import { prisma } from "./prisma";
 
 /**
  * Updates the 'season' attribute of a save document for a user in Firestore.
@@ -44,15 +45,14 @@ export async function updateSaveCurrentLeague(
   return true;
 }
 
-export async function getSaveById(userId: string, saveId: string) {
-  const saveRef = doc(db, `users/${userId}/saves/${saveId}`);
-  const saveSnapshot = await getDoc(saveRef);
-  if (!saveSnapshot.exists()) return null;
-  return { ...saveSnapshot.data(), id: saveSnapshot.id } as Save;
+export async function getSaveById(saveId: string) {
+  return await prisma.save.findUnique({
+    where: { id: saveId },
+  });
 }
 
 export async function getSaveWithCareer(userId: string, saveId: string) {
-  const save = await getSaveById(userId, saveId);
+  const save = await getSaveById(saveId);
   if (!save) return null;
 
   const careerRef = collection(db, `users/${userId}/saves/${saveId}/career`);

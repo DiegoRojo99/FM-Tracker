@@ -1,9 +1,10 @@
 import { db } from '@/lib/db/firebase';
 import { collection, doc, getDocs, query, setDoc, where, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
-import { Trophy } from '../types/Trophy';
 import { fetchCompetition } from './competitions';
 import { fetchTeam } from './firebase/teams';
 import { addChallengeForTrophy } from './challenges';
+import { Trophy } from '../../../prisma/generated/client';
+import { prisma } from './prisma';
 
 export async function addTrophyToSave(
   { teamId, competitionId, countryCode, uid, season, saveId, game }: 
@@ -33,7 +34,7 @@ export async function addTrophyToSave(
       return null;
     }
 
-    const competition = await fetchCompetition(countryCode, competitionId);
+    const competition = await fetchCompetition(competitionId);
     if (!competition) throw new Error('Competition not found');
 
     const team = await fetchTeam(teamId);
@@ -66,10 +67,10 @@ export async function addTrophyToSave(
   }
 }
 
-export async function getTrophiesForSave(userId: string, saveId: string): Promise<Trophy[]> {
-  const trophiesCol = collection(db, 'users', userId, 'saves', saveId, 'trophies');
-  const trophySnapshot = await getDocs(trophiesCol);
-  return trophySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Trophy[];
+export async function getTrophiesForSave(saveId: string): Promise<Trophy[]> {
+  return await prisma.trophy.findMany({
+    where: { saveId },
+  });
 }
 
 export async function getAllTrophiesForUser(userId: string): Promise<Trophy[]> {

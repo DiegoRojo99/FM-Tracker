@@ -78,8 +78,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     };
 
     // Check if the team has any matching challenges
-    await addChallengeForTeam(uid, id, body.teamId);
-    await addChallengeForCountry(uid, id, teamData.countryCode);
+    await addChallengeForTeam(id, body.teamId);
+    await addChallengeForCountry(id, teamData.countryCode);
 
     // Update the save document
     const updateResponse = await prisma.save.update({

@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
 
     // Create a starting career stint
     const careerStintData = {
-      teamId: String(startingTeamId),
+      teamId: Number(startingTeamId),
       leagueId,
       countryCode,
       startDate: getStartDateFromGameId(gameIdToUse),
@@ -139,8 +139,8 @@ export async function POST(req: NextRequest) {
     stintsRef.add(careerStintData);
     
     // Check if the team has any matching challenges
-    await addChallengeForTeam(uid, docRef.id, String(startingTeamId));
-    await addChallengeForCountry(uid, docRef.id, countryCode);
+    await addChallengeForTeam(docRef.id, Number(startingTeamId));
+    await addChallengeForCountry(docRef.id, countryCode);
 
     return new Response(JSON.stringify({ id: docRef.id, ...saveData }), { status: 201 });
   });
