@@ -3,7 +3,7 @@ import { db } from '@/lib/db/firebase';
 import { fetchCompetition } from "./competitions";
 import { Competition } from "../types/Country&Competition";
 import { Save, SaveLeague } from "../types/firebase/Save";
-import { CareerStint } from "../types/Career";
+import { CareerStint } from "../types/firebase/Career";
 
 /**
  * Updates the 'season' attribute of a save document for a user in Firestore.

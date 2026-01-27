@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '@/lib/db/firebase';
 import ChallengeGoalInput from './ChallengeGoalInput';
-import { ChallengeGoalInputData } from '@/lib/types/Challenge';
+import { ChallengeGoalInputData } from '@/lib/types/firebase/Challenge';
 
 export default function AddChallengePage() {
   const [name, setName] = useState('');

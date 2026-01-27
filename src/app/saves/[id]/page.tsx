@@ -8,13 +8,14 @@ import CareerStintsSection from './CareerStintSection';
 import TrophyCase from './TrophyCase';
 import SeasonSection from './SeasonSection';
 import ChallengeSection from './ChallengeSection';
+import { FullDetailsSave } from '@/lib/types/prisma/Save';
 // import CareerMap from './career/CareerMap';
 
 export default function SavePage() {
   const params = useParams();
   const id = params?.id;
   const { user } = useAuth();
-  const [saveDetails, setSaveDetails] = useState<SaveWithChildren | null>(null);
+  const [saveDetails, setSaveDetails] = useState<FullDetailsSave | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [refresh, setRefresh] = useState<boolean>(false);
 

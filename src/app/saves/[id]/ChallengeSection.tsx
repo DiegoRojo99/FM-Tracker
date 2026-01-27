@@ -1,6 +1,6 @@
 import BlurredCard from "@/app/components/BlurredCard";
 import ProgressBar from "@/app/components/progress/ProgressBar";
-import { CareerChallenge, ChallengeGoal } from "@/lib/types/Challenge";
+import { CareerChallenge, ChallengeGoal } from "@/lib/types/firebase/Challenge";
 import React from "react";
 
 type ChallengeSectionProps = {

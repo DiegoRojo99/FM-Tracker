@@ -1,7 +1,7 @@
 'use client';
 import ChallengeSection from './ChallengeSection';
 import { useEffect, useState } from "react";
-import { CareerChallenge, Challenge, ChallengeWithUser } from "@/lib/types/Challenge";
+import { CareerChallenge, Challenge, ChallengeWithUser } from "@/lib/types/firebase/Challenge";
 import FootballLoader from "../components/FootBallLoader";
 import { useAuth } from "../components/AuthProvider";
 

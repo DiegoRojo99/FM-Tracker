@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Challenge, CareerChallenge } from '@/lib/types/Challenge';
+import { Challenge, CareerChallenge } from '@/lib/types/firebase/Challenge';
 import FootballLoader from '../../components/FootBallLoader';
 import { useAuth } from '../../components/AuthProvider';
 import ProgressBar from '../../components/progress/ProgressBar';

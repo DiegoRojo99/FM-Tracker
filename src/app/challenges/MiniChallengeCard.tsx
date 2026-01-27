@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { CareerChallenge, ChallengeWithUser } from '@/lib/types/Challenge';
+import { CareerChallenge, ChallengeWithUser } from '@/lib/types/firebase/Challenge';
 
 type MiniChallengeCardProps = {
   challengeWithUser: ChallengeWithUser;

@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
-import { Team } from '@/lib/types/firebase/Team';
-import { CareerStint } from '@/lib/types/Career';
 import CompetitionDropdown from '@/app/components/dropdowns/CompetitionDropdown';
 import { Competition } from '@/lib/types/Country&Competition';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
+import { FullCareerStint } from '@/lib/types/prisma/Career';
+import { Team } from '@/lib/types/prisma/Team';
+import { FullDetailsSave } from '@/lib/types/prisma/Save';
 
 interface AddCareerStintModalProps {
   open: boolean;
   onClose: () => void;
-  saveId: string;
+  saveDetails: FullDetailsSave;
   onSuccess: () => void;
-  editingStint?: CareerStint | null;
+  editingStint?: FullCareerStint | null;
 }
 
 export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
   open,
   onClose,
-  saveId,
+  saveDetails,
   onSuccess,
   editingStint,
 }) => {
@@ -40,24 +41,15 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
   useEffect(() => {
     if (editingStint && open) {
       setForm({
-        teamId: editingStint.teamId,
-        leagueId: editingStint.leagueId,
+        teamId: editingStint.team?.id.toString() || '',
+        leagueId: saveDetails.currentLeague?.id.toString() || '',
         startDate: editingStint.startDate,
         endDate: editingStint.endDate || '',
       });
-      setCountryCode(editingStint.countryCode);
-      setSelectedTeam({
-        id: parseInt(editingStint.teamId),
-        name: editingStint.teamName,
-        logo: editingStint.teamLogo,
-        countryCode: editingStint.countryCode,
-        national: editingStint.isNational,
-        leagueId: parseInt(editingStint.leagueId),
-        season: 2024,
-        coordinates: { lat: null, lng: null }
-      });
+      setCountryCode(editingStint.team?.countryCode || null);
+      setSelectedTeam(editingStint.team);
     }
-  }, [editingStint, open]);
+  }, [editingStint, open, saveDetails.currentLeague]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -85,8 +77,8 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
 
       const isEditing = !!editingStint;
       const url = isEditing 
-        ? `/api/saves/${saveId}/career/${editingStint.id}` 
-        : `/api/saves/${saveId}/career`;
+        ? `/api/saves/${saveDetails.id}/career/${editingStint.id}` 
+        : `/api/saves/${saveDetails.id}/career`;
       const method = isEditing ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -97,9 +89,6 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
           startDate: form.startDate,
           endDate: form.endDate || null,
           leagueId: form.leagueId,
-          teamName: selectedTeam?.name,
-          teamLogo: selectedTeam?.logo,
-          countryCode: countryCode,
           isNational: selectedTeam?.national || false,
         }),
       });

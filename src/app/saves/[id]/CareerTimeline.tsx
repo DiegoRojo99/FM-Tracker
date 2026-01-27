@@ -1,17 +1,18 @@
 'use client';
 
-import { CareerStint } from '@/lib/types/Career';
+import { FullCareerStint } from '@/lib/types/prisma/Career';
+import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import Image from 'next/image';
 import { useState } from 'react';
 
 type Props = {
-  stints: CareerStint[];
-  onUpdateStint?: (stint: CareerStint) => void;
-  onDeleteStint?: (stintId: string) => void;
+  saveDetails: FullDetailsSave;
+  onUpdateStint?: (stint: FullCareerStint) => void;
+  onDeleteStint?: (stintId: number) => void;
 };
 
-function groupStintsByStart(stints: CareerStint[]) {
-  const grouped: Record<string, CareerStint[]> = {};
+function groupStintsByStart(stints: FullCareerStint[]) {
+  const grouped: Record<string, FullCareerStint[]> = {};
 
   stints.forEach((stint) => {
     const key = stint.startDate.toString();
@@ -34,8 +35,8 @@ function formatDate(datePassed: string): string {
   return `${capitalizedMonth} ${date.getFullYear()}`;
 }
 
-export default function CareerTimeline({ stints, onUpdateStint, onDeleteStint }: Props) {
-  const grouped = groupStintsByStart(stints);
+export default function CareerTimeline({ saveDetails, onUpdateStint, onDeleteStint }: Props) {
+  const grouped = groupStintsByStart(saveDetails.careerStints);
 
   return (
     <div className="overflow-auto py-6">
@@ -80,16 +81,16 @@ function CareerStintCard({
   onUpdate, 
   onDelete 
 }: { 
-  stint: CareerStint;
-  onUpdate?: (stint: CareerStint) => void;
-  onDelete?: (stintId: string) => void;
+  stint: FullCareerStint;
+  onUpdate?: (stint: FullCareerStint) => void;
+  onDelete?: (stintId: number) => void;
 }) {
   const [showActions, setShowActions] = useState(false);
 
   const handleDelete = () => {
     console.log('Deleting career stint:', stint);
     if (!stint.id) return;
-    const deleteConfirmed = window.confirm(`Are you sure you want to delete the career stint at ${stint.teamName}?`);
+    const deleteConfirmed = window.confirm(`Are you sure you want to delete the career stint at ${stint.team?.name}?`);
     if (deleteConfirmed) {
       onDelete?.(stint.id);
     }
@@ -142,16 +143,16 @@ function CareerStintCard({
         </div>
       )}
 
-      {stint.teamLogo && (
+      {stint.team && stint.team.logo && (
         <Image
           width={128}
           height={128}
-          src={stint.teamLogo}
-          alt={stint.teamName}
+          src={stint.team.logo}
+          alt={stint.team.name}
           className="h-20 w-20 object-contain mb-2"
         />
       )}
-      <div className="font-semibold">{stint.teamName}</div>
+      <div className="font-semibold">{stint.team?.name}</div>
       <div className="text-xs text-gray-500">
         {formatDate(stint.startDate)} —{' '}
         {stint.endDate ? formatDate(stint.endDate) : 'Present'}

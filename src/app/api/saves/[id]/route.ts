@@ -1,12 +1,9 @@
 import { db } from '@/lib/db/firebase';
-import { collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
-import { CareerStint } from '@/lib/types/Career';
-import { Trophy } from '@/lib/types/Trophy';
-import { SeasonSummary } from '@/lib/types/Season';
-import { getChallengesForSave } from '@/lib/db/challenges';
-import { Challenge } from '@/lib/types/Challenge';
+import { prisma } from '@/lib/db/prisma';
+import { FullDetailsSave, FullSave } from '@/lib/types/prisma/Save';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -18,42 +15,36 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
 
+    const save: FullDetailsSave | null = await prisma.save.findUnique({
+      where: {
+        id: saveId,
+        userId: uid,
+      },
+      include: {
+        currentLeague: true,
+        currentClub: true,
+        currentNT: true,
+        game: true,
+        careerStints: {
+          include: {
+            team: true,
+          },
+        },
+        trophies: true,
+        seasons: true,
+        challenges: true,
+      },
+    });
+
     if (!saveId) {
       return new Response('Save ID is required', { status: 400 });
     }
 
-    // Fetch the save document from Firestore
-    const saveSnapshot = await getDoc(doc(db, 'users', uid, 'saves', saveId));
-    if (!saveSnapshot.exists()) {
+    if (!save) {
       return new Response('Save not found', { status: 404 });
     }
 
-    // Fetch the career data associated with the save
-    const careersSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'career'));
-    const careerData: CareerStint[] = careersSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as CareerStint))
-      .sort((a, b) => {
-        // Sort by start date, assuming startDate is a string
-        return (a.startDate as string).localeCompare(b.startDate as string);
-      });
-
-    // Fetch the trophies data associated with the save
-    const trophiesSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'trophies'));
-    const trophiesData: Trophy[] = trophiesSnapshot.docs.map(doc => {
-      const data = doc.data() as Omit<Trophy, 'id'>;
-      return { ...data, id: doc.id };
-    });
-
-    // Fetch the seasons data associated with the save
-    const seasonsSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'seasons'));
-    const seasonsData: SeasonSummary[] = seasonsSnapshot.docs.map(doc => doc.data() as SeasonSummary);
-
-    // Fetch challenges associated with the save
-    const challenges: Challenge[] = await getChallengesForSave(uid, saveId);
-
-    return new Response(JSON.stringify({ ...saveSnapshot.data(), career: careerData, trophies: trophiesData, seasons: seasonsData, challenges, id: saveId }), { status: 200 });
+    return new Response(JSON.stringify(save), { status: 200 });
   });
 }
 

@@ -1,34 +1,34 @@
 'use client';
 
 import { useState } from 'react';
-import { SaveWithChildren } from '@/lib/types/firebase/Save';
-import { CareerStint } from '@/lib/types/Career';
+import { CareerStint, FullCareerStint } from '@/lib/types/prisma/Career';
 import CareerTimeline from './CareerTimeline';
 import AddCareerStintModal from '@/app/components/modals/AddCareerStintModal';
 import GradientButton from '@/app/components/GradientButton';
 import { useAuth } from '@/app/components/AuthProvider';
+import { FullDetailsSave } from '@/lib/types/prisma/Save';
 
 type Props = {
-  saveDetails: SaveWithChildren;
+  saveDetails: FullDetailsSave;
   setRefresh: (refresh: boolean) => void; // Optional prop for refreshing
 };
 
 export default function CareerStintsSection({ saveDetails, setRefresh }: Props) {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [editingStint, setEditingStint] = useState<CareerStint | null>(null);
+  const [editingStint, setEditingStint] = useState<FullCareerStint | null>(null);
 
   const handleSuccess = () => {
     setRefresh(true);
     setEditingStint(null);
   };
 
-  const onUpdateStint = (stint: CareerStint) => {
+  const onUpdateStint = (stint: FullCareerStint) => {
     setEditingStint(stint);
     setIsOpen(true);
   };
 
-  const onDeleteStint = async (stintId: string) => {
+  const onDeleteStint = async (stintId: number) => {
     try {
       if (!user) {
         console.error('User is not authenticated');
@@ -64,9 +64,9 @@ export default function CareerStintsSection({ saveDetails, setRefresh }: Props) 
         </GradientButton>
       </div>
 
-      {saveDetails.career?.length ? (
+      {saveDetails.careerStints?.length ? (
         <CareerTimeline
-          stints={saveDetails.career}
+          saveDetails={saveDetails}
           onUpdateStint={onUpdateStint}
           onDeleteStint={onDeleteStint}
         />
@@ -80,7 +80,7 @@ export default function CareerStintsSection({ saveDetails, setRefresh }: Props) 
           setIsOpen(false);
           setEditingStint(null);
         }}
-        saveId={saveDetails.id}
+        saveDetails={saveDetails}
         onSuccess={handleSuccess}
         editingStint={editingStint}
       />

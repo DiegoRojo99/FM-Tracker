@@ -1,4 +1,4 @@
-import { CareerChallenge, Challenge } from "../types/Challenge";
+import { CareerChallenge, Challenge } from "../types/firebase/Challenge";
 import { Trophy } from "../types/Trophy";
 
 export function getCareerChallengeFromChallengeAndTrophy(challenge: Challenge, trophy: Trophy | null): Omit<CareerChallenge, 'gameId'> {

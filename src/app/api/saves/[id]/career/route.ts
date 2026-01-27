@@ -1,24 +1,11 @@
-import { db } from '@/lib/db/firebase';
 import { withAuth } from '@/lib/auth/withAuth';
-import {
-  collection,
-  addDoc,
-  Timestamp,
-  doc,
-  updateDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  getDocs,
-  PartialWithFieldValue
-} from 'firebase/firestore';
 import { NextRequest } from 'next/server';
-import { CareerStintInput } from '@/lib/types/InsertDB';
 import { fetchTeam } from '@/lib/db/prisma/teams';
 import { fetchCompetition } from '@/lib/db/competitions';
-import { Save } from '@/lib/types/firebase/Save';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
+import { prisma } from '@/lib/db/prisma';
+import { CareerStintInput } from '@/lib/types/prisma/Career';
+import { Save } from '@/lib/types/prisma/Save';
 
 function formatDate(date: Date): string {
   const year = date.getFullYear();
@@ -34,7 +21,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     const { id } = await context.params;
     if (!id) return new Response('Save ID is required', { status: 400 });
 
-    const body = await req.json();
+    const body = await req.json() as CareerStintInput;
     if (!body.teamId || !body.startDate) {
       return new Response('Missing required fields', { status: 400 });
     }
@@ -46,80 +33,61 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     if (!teamData) return new Response('Team not found', { status: 404 });
 
     const isNational = teamData.national ?? false;
-    if (!isNational && !body.leagueId) {
-      return new Response('Club teams must have a leagueId', { status: 400 });
-    }
 
     // Find latest stint of the same type (club/national) with no endDate
-    const stintsRef = collection(db, 'users', uid, 'saves', id, 'career');
-    const stintQuery = query(
-      stintsRef,
-      where('isNational', '==', isNational),
-      where('endDate', '==', null),
-      orderBy('startDate', 'desc'),
-      limit(1)
-    );
+    const lastStint = await prisma.careerStint.findFirst({
+      where: {
+        saveId: id,
+        isNational: isNational,
+        endDate: null,
+      },
+      orderBy: {
+        startDate: 'desc',
+      },
+    });
 
-    const stintSnap = await getDocs(stintQuery);
-    if (!stintSnap.empty) {
-      const lastStint = stintSnap.docs[0];
-      await updateDoc(lastStint.ref, {
-        endDate: formattedStartDate,
+    // If found, update its endDate to the new stint's startDate
+    if (lastStint) {
+      await prisma.careerStint.update({
+        where: { id: lastStint.id },
+        data: { endDate: formattedStartDate },
       });
     }
 
-    const leagueId = String(body.leagueId) ?? null;
     const newStint: CareerStintInput = {
-      teamId: String(teamData.id),
-      teamLogo: teamData.logo,
-      teamName: teamData.name,
-      leagueId,
+      teamId: teamData.id,
+      saveId: id,
       startDate: formattedStartDate,
       endDate: body.endDate ? formatDate(new Date(body.endDate)) : null,
       isNational,
-      countryCode: teamData.countryCode ?? 'Unknown',
-      createdAt: Timestamp.now(),
     };
 
-    const docRef = await addDoc(stintsRef, newStint);
-
-    const competitionData = !isNational ? await fetchCompetition(teamData.countryCode, leagueId) : null;
-    if (!competitionData) {
-      console.warn(`⚠️ Skipping team ${teamData.name} — no competition found for country "${teamData.countryCode}" and league "${leagueId}"`);
-    }
+    // Create new stint
+    const docRef = await prisma.careerStint.create({ data: newStint });
 
     // Update save doc with current team
-    const saveRef = doc(db, 'users', uid, 'saves', id);
     const saveUpdateField = isNational ? 'currentNT' : 'currentClub';
+    const competitionId = !isNational ? Number(body.leagueId) : null;
     
-    const updateData: PartialWithFieldValue<Save> = {
+    const updateData = {
       [saveUpdateField]: {
         id: teamData.id,
-        name: teamData.name,
-        logo: teamData.logo,
       },
-      ...(competitionData && !isNational ? { 
-        countryCode: teamData.countryCode,
-      } : {}),
-      updatedAt: Timestamp.now()
+      currentLeagueId: competitionId,
+      updatedAt: new Date()
     };
 
-    // Only add `currentLeague` if `competitionData` exists and not national team
-    if (competitionData && !isNational) {
-      updateData.currentLeague = {
-        id: competitionData.id,
-        name: competitionData.name,
-        logo: competitionData.logo || '',
-      };
-    }
-
     // Check if the team has any matching challenges
-    await addChallengeForTeam(uid, id, String(body.teamId));
+    await addChallengeForTeam(uid, id, body.teamId);
     await addChallengeForCountry(uid, id, teamData.countryCode);
 
-    await updateDoc(saveRef, updateData);
-    return new Response(JSON.stringify({ id: docRef.id, ...newStint }), {
-      status: 201,
+    // Update the save document
+    const updateResponse = await prisma.save.update({
+      where: { id },
+      data: updateData,
     });
+
+    if (!updateResponse) return new Response('Failed to update save with current team', { status: 500 });
+    return new Response(JSON.stringify(docRef), { status: 200 });
   });
 }

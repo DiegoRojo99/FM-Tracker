@@ -1,6 +1,6 @@
 import React from 'react';
 import MiniChallengeCard from './MiniChallengeCard';
-import { ChallengeWithUser } from '@/lib/types/Challenge';
+import { ChallengeWithUser } from '@/lib/types/firebase/Challenge';
 
 
 interface ChallengeSectionProps {
