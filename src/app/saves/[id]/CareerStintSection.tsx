@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CareerStint, FullCareerStint } from '@/lib/types/prisma/Career';
+import { FullCareerStint } from '@/lib/types/prisma/Career';
 import CareerTimeline from './CareerTimeline';
 import AddCareerStintModal from '@/app/components/modals/AddCareerStintModal';
 import GradientButton from '@/app/components/GradientButton';

@@ -1,11 +1,9 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { NextRequest } from 'next/server';
 import { fetchTeam } from '@/lib/db/prisma/teams';
-import { fetchCompetition } from '@/lib/db/competitions';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
 import { prisma } from '@/lib/db/prisma';
 import { CareerStintInput } from '@/lib/types/prisma/Career';
-import { Save } from '@/lib/types/prisma/Save';
 
 function formatDate(date: Date): string {
   const year = date.getFullYear();

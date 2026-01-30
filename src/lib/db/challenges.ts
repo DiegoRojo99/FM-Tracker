@@ -1,12 +1,11 @@
 import { addDoc, collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { db } from './firebase';
-import { CareerChallenge, CareerChallengeGoalInput, CareerChallengeWithDetails, Challenge, ChallengeGoalWithDetails, ChallengeWithGoals } from '../types/prisma/Challenge';
-import { challengeGoalToCareerChallengeGoal, getCareerChallengeFromChallengeAndTrophies, getCareerChallengeFromChallengeAndTrophy, getChallengeWithoutStartingAt } from '../dto/challenges';
+import { CareerChallenge, CareerChallengeGoalInput, CareerChallengeWithDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '../types/prisma/Challenge';
+import { challengeGoalToCareerChallengeGoal, getChallengeWithoutStartingAt } from '../dto/challenges';
 import { getTrophiesForSave } from './trophies';
-import { Save } from '../types/firebase/Save';
 import { prisma } from './prisma';
 import { getSaveById } from './saves';
-import { CareerChallengeGoal, Trophy } from '../../../prisma/generated/client';
+import { Trophy } from '../../../prisma/generated/client';
 
 const ChallengeGoalWithDetailsInclude = {
   competition: true,
