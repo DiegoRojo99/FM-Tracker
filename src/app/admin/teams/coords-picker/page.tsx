@@ -1,7 +1,7 @@
 'use client';
 
 import SearchDropdown from "@/app/components/algolia/TeamSearchDropdown";
-import { Team } from "@/lib/types/firebase/Team";
+import { Team } from "@/lib/types/prisma/Team";
 import { useEffect, useState } from "react";
 import TeamLocationPicker from "./TeamLocationPicker";
 import Image from "next/image";
@@ -67,7 +67,7 @@ function TeamCordsMapSection({ team, loading, setLoading }: { team: Team; loadin
   if (loading) {
     return <p className="text-lg">Loading...</p>;
   }
-  else if (!team.coordinates.lat || !team.coordinates.lng) {
+  else if (!team.lat || !team.lng) {
     return <TeamLocationPicker onSelect={(coords) => { if (team) addCoordinates(coords); }} />;
   }
   else {
@@ -83,7 +83,7 @@ function TeamCordsMapSection({ team, loading, setLoading }: { team: Team; loadin
         />
         <p className="text-lg">{team.name}</p>
         <p className="text-lg">
-          Latitude: {team.coordinates.lat}, Longitude: {team.coordinates.lng}
+          Latitude: {team.lat}, Longitude: {team.lng}
         </p>
       </div>
       </BlurredCard>

@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
 
     // Add trophy to save
     const season = getSeasonFromDate(body.dateWon);
-    const newTrophyId = await addTrophyToSave({teamId: body.teamId, competitionId: body.competitionId, countryCode: body.countryCode, uid, season, saveId, game: body.game});
+    const newTrophyId = await addTrophyToSave({teamId: Number(body.teamId), competitionId: Number(body.competitionId), uid, season, saveId, game: body.game});
 
     if (!newTrophyId) {
       return NextResponse.json({ error: 'Failed to add trophy' }, { status: 500 });

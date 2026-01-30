@@ -30,8 +30,19 @@ export async function GET(req: NextRequest) {
             team: true,
           },
         },
-        trophies: true,
-        seasons: true,
+        trophies: {
+          include: {
+            team: true,
+            competitionGroup: true,
+          },
+        },
+        seasons: {
+          include: {
+            team: true,
+            leagueResult: {include: {competition: true}},
+            cupResults: {include: {competition: true}},
+          },
+        },
         challenges: {
           include: {
             challenge: {

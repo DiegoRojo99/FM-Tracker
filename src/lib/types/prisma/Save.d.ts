@@ -1,7 +1,9 @@
-import { CareerStint, CompetitionGroup, Game, Save as PrismaSave, Season, Trophy } from '../../../../prisma/generated/client';
+import { CareerStint, CompetitionGroup, Game, Save as PrismaSave } from '../../../../prisma/generated/client';
 import { CareerStint } from './Career';
 import { CareerChallengeWithDetails } from './Challenge';
+import { SeasonSummary } from './Season';
 import { Team } from './Team';
+import { FullTrophy } from './Trophy';
 
 export type Save = PrismaSave;
 
@@ -25,10 +27,10 @@ export type FullSave = Save & {
   currentNT: Team | null;
   currentLeague: CompetitionGroup | null;
   game: Game;
-  trophies: Trophy[];
+  trophies: FullTrophy[];
   challenges: CareerChallenge[];
   careerStints: CareerStint[];
-  seasons: Season[];
+  seasons: SeasonSummary[];
 }
 
 export type FullDetailsSave = Save & {
@@ -36,8 +38,8 @@ export type FullDetailsSave = Save & {
   currentNT: Team | null;
   currentLeague: CompetitionGroup | null;
   game: Game;
-  trophies: Trophy[];
+  trophies: FullTrophy[];
   challenges: CareerChallengeWithDetails[];
   careerStints: FullCareerStint[];
-  seasons: Season[];
+  seasons: SeasonSummary[];
 }

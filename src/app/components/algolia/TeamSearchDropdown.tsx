@@ -3,7 +3,7 @@
 import { InstantSearch, useHits, useSearchBox } from 'react-instantsearch';
 import { algoliaClient } from '@/lib/algolia/algolia';
 import { useState } from 'react';
-import { Team } from '@/lib/types/firebase/Team';
+import { Team } from '@/lib/types/prisma/Team';
 import { AlgoliaTeam } from '@/lib/types/Algolia';
 
 interface SearchDropdownProps {
@@ -68,18 +68,16 @@ function CustomHits({ onTeamSelect }: { onTeamSelect: (team: Team) => void }) {
   if (!hits.length) return null;
 
   function parseTeam(hit: AlgoliaTeam): Team {
+    const { lat, lng } = !!hit.coordinates ? hit.coordinates : { lat: null, lng: null };
     return {
       id: hit.id,
       name: hit.name,
       logo: hit.logo,
       countryCode: hit.countryCode,
-      leagueId: hit.leagueId,
-      season: hit.season,
       national: hit.national,
-      coordinates: {
-        lat: (hit.coordinates && typeof hit.coordinates.lat === 'number' ? hit.coordinates.lat : null),
-        lng: (hit.coordinates && typeof hit.coordinates.lng === 'number' ? hit.coordinates.lng : null),
-      },
+      isFemale: null,
+      lat: (typeof lat === 'number' ? lat : null),
+      lng: (typeof lng === 'number' ? lng : null),
     };
   }
 

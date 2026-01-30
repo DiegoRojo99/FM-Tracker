@@ -2,7 +2,7 @@ import { withAuth } from '@/lib/auth/withAuth';
 import { db } from '@/lib/db/firebase';
 import { updateSaveSeason } from '@/lib/db/saves';
 import { addTrophyToSave } from '@/lib/db/trophies';
-import { SeasonInput, SeasonSummary } from '@/lib/types/Season';
+import { SeasonInput, SeasonSummary } from '@/lib/types/firebase/Season';
 import { countryCodeMap } from '@/lib/dto/countryCode';
 import { collection, addDoc, doc, getDoc, getDocs, query, where, deleteDoc } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
@@ -89,9 +89,8 @@ export async function POST(req: NextRequest) {
       await addTrophyToSave({
         uid,
         saveId,
-        competitionId: body.leagueId,
-        teamId: body.teamId,
-        countryCode,
+        competitionId: Number(body.leagueId),
+        teamId: Number(body.teamId),
         season: body.season,
         game,
       });
@@ -103,9 +102,8 @@ export async function POST(req: NextRequest) {
         await addTrophyToSave({
           uid,
           saveId,
-          competitionId: cup.competitionId,
-          teamId: body.teamId,
-          countryCode: cup.countryCode,
+          competitionId: Number(cup.competitionId),
+          teamId: Number(body.teamId),
           season: body.season,
           game,
         });
@@ -114,7 +112,6 @@ export async function POST(req: NextRequest) {
 
     // Update the season in the save
     await updateSaveSeason(uid, saveId, body.season);
-
     return NextResponse.json({ id: docRef.id, ...newSeason }, { status: 201 });
   });
 }

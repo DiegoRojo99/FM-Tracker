@@ -1,11 +1,11 @@
 'use client';
 
-import { Trophy } from '@/lib/types/firebase/Trophy';
+import { Trophy } from '@/lib/types/prisma/Trophy';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import { Competition } from '@/lib/types/Country&Competition';
-import { Team } from '@/lib/types/firebase/Team';
-import { SaveWithChildren } from '@/lib/types/firebase/Save';
+import { Team } from '@/lib/types/prisma/Team';
+import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
 import CompetitionWithWorldDropdown from '../dropdowns/CompetitionWithWorldDropdown';
@@ -14,7 +14,7 @@ type Props = {
   open: boolean;
   onClose: () => void;
   saveId: string;
-  saveDetails: SaveWithChildren;
+  saveDetails: FullDetailsSave;
   trophy: Trophy;
   onSuccess: () => void;
 };
@@ -37,38 +37,47 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
       : `${year - 1}/${year.toString().slice(-2)}`;
   }
 
+  async function fetchTeamData(teamId: number) {
+    return fetch(`/api/teams/${teamId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch team data');
+        }
+        return response.json();
+      }) as Promise<Team>;
+  }
+
+  async function fetchCompetition(competitionId: number) {
+    return fetch(`/api/competitions/${competitionId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch competition data');
+        }
+        return response.json();
+      }) as Promise<Competition>;
+  }
+
   // Populate form when trophy data changes
   useEffect(() => {
-    if (trophy && open) {
+    const loadTrophyData = async () => {
+      if (!trophy || !open) return;
+      
       // Set selected team
-      setSelectedTeam({
-        id: parseInt(trophy.teamId),
-        name: trophy.teamName,
-        logo: trophy.teamLogo,
-        countryCode: trophy.countryCode,
-        national: false, // Assume false for now, could be enhanced
-        leagueId: 0, // Not used in this context
-        season: 2024, // Not used in this context
-        coordinates: { lat: null, lng: null }
-      });
+      const teamData = await fetchTeamData(trophy.teamId);
+      setSelectedTeam(teamData);
 
       // Set competition
-      setCompetition({
-        id: parseInt(trophy.competitionId),
-        name: trophy.competitionName,
-        logo: trophy.competitionLogo,
-        type: trophy.competitionType,
-        season: 2024, // Default season
-        countryCode: trophy.countryCode,
-        countryName: '', // Will be populated when dropdown loads
-        inFootballManager: true
-      });
+      const competitionData = await fetchCompetition(trophy.competitionGroupId);
+      setCompetition(competitionData);
 
       // Set date - convert from season back to date
       // For now, use a default date in the season
+      // Default to August 1st of the season
       const seasonYear = parseInt(trophy.season.split('/')[0]);
-      setDateWon(`${seasonYear}-08-01`); // Default to August 1st of the season
-    }
+      setDateWon(`${seasonYear}-08-01`);
+    };
+
+    loadTrophyData();
   }, [trophy, open]);
 
   const handleSubmit = async () => {
@@ -108,6 +117,21 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
     }
   };
 
+  async function selectTeam(teamId: string) {
+    if (!teamId) {
+      setSelectedTeam(null);
+      setCompetition(null);
+      return;
+    }
+
+    // Set selected team
+    const teamData = await fetchTeamData(parseInt(teamId));
+    setSelectedTeam(teamData);
+    
+    // Reset competition when team changes    
+    setCompetition(null);
+  }
+
   if (!open) return null;
 
   return (
@@ -116,38 +140,18 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
         {/* Team Selection */}
         <div>
           <label className="block text-sm mb-3 font-medium text-gray-200">Team</label>
-          {saveDetails.career && saveDetails.career.length > 0 ? (
+          {saveDetails.careerStints && saveDetails.careerStints.length > 0 ? (
             <select
               value={selectedTeam ? selectedTeam.id : ''}
-              onChange={(e) => {
+              onChange={async (e) => {
                 const teamId = e.target.value;
-                if (teamId) {
-                  const careerStint = saveDetails.career?.find(stint => stint.teamId === teamId);
-                  if (careerStint) {
-                    // Create a Team object from career stint data
-                    const team: Team = {
-                      id: parseInt(careerStint.teamId),
-                      name: careerStint.teamName || '',
-                      logo: careerStint.teamLogo || '',
-                      countryCode: careerStint.countryCode,
-                      national: careerStint.isNational || false,
-                      leagueId: parseInt(careerStint.leagueId),
-                      season: 2024, // Default season as number
-                      coordinates: { lat: null, lng: null }
-                    };
-                    setSelectedTeam(team);
-                    setCompetition(null); // Reset competition when team changes
-                  }
-                } else {
-                  setSelectedTeam(null);
-                  setCompetition(null);
-                }
+                await selectTeam(teamId);
               }}
               className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
               disabled={saving}
             >
               <option value="">Select a team...</option>
-              {saveDetails.career
+              {saveDetails.careerStints
                 ?.filter((stint, index, self) => 
                   index === self.findIndex(s => s.teamId === stint.teamId)
                 )

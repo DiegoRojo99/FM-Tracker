@@ -5,15 +5,15 @@ import { useEffect, useState } from 'react';
 import AddTrophyModal from '@/app/components/modals/AddTrophyModal';
 import EditTrophyModal from '@/app/components/modals/EditTrophyModal';
 import ConfirmationModal from '@/app/components/modals/ConfirmationModal';
-import { TrophyGroup, Trophy } from '@/lib/types/firebase/Trophy';
-import { SaveWithChildren } from '@/lib/types/firebase/Save';
 import Image from 'next/image';
 import BlurredCard from '@/app/components/BlurredCard';
 import { groupTrophies } from '@/lib/dto/trophies';
+import { TrophyGroup, Trophy } from '@/lib/types/prisma/Trophy';
+import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import GradientButton from '@/app/components/GradientButton';
 
 type Props = {
-  save: SaveWithChildren;
+  save: FullDetailsSave;
   setRefresh: (refresh: boolean) => void; // Prop for refreshing
 };
 
@@ -125,7 +125,7 @@ export default function TrophyCase({ save, setRefresh }: Props) {
         onClose={() => setDeletingTrophy(null)}
         onConfirm={handleDeleteTrophy}
         title="Delete Trophy"
-        message={`Are you sure you want to delete the trophy "${deletingTrophy?.competitionName}" won in season ${deletingTrophy?.season}? This action cannot be undone.`}
+        message={`Are you sure you want to delete the trophy won in season ${deletingTrophy?.season}? This action cannot be undone.`}
         confirmText="Delete"
       />
     </section>
@@ -156,16 +156,16 @@ function TrophyGroupCard({
   return (
     <BlurredCard blurSize='2xs'>
       <div className="flex flex-col items-center">
-        {trophies.competitionLogo && (
+        {trophies.competitionGroup.logoUrl && (
           <Image
-            src={trophies.competitionLogo}
-            alt={trophies.competitionName}
+            src={trophies.competitionGroup.logoUrl}
+            alt={trophies.competitionGroup.name}
             width={96}
             height={96}
             className="w-24 h-24 object-contain mb-2"
           />
         )}
-        <div className="text-lg font-bold text-center mb-2">{trophies.competitionName}</div>
+        <div className="text-lg font-bold text-center mb-2">{trophies.competitionGroup.name}</div>
         
         {trophies.trophies.length > 1 && (
           <button
@@ -180,10 +180,10 @@ function TrophyGroupCard({
           showIndividualTrophies || trophies.trophies.length === 1 ? (
             <div className="space-y-2 w-full">
               {trophies.trophies.map((trophyItem, j) => (
-                <div key={`trophy-${trophies.competitionName}-${j}`} className="flex items-center justify-between p-2 bg-black/20 rounded border border-gray-600">
+                <div key={`trophy-${trophies.competitionGroup.name}-${j}`} className="flex items-center justify-between p-2 bg-black/20 rounded border border-gray-600">
                   <Image
-                    src={trophyItem.teamLogo || '/default-team-logo.png'}
-                    alt={trophyItem.teamName}
+                    src={trophyItem.team.logo || '/default-team-logo.png'}
+                    alt={trophyItem.team.name}
                     width={32}
                     height={32}
                     className="h-8 w-8 object-contain mr-2"
@@ -229,9 +229,9 @@ function TrophyGroupCard({
           ) : (
             <ul className="list-none text-sm text-gray-700 dark:text-gray-300">
               {trophies.trophies.map((trophyItem, j) => (
-                <li key={`trophy-${trophies.competitionName}-${j}`} className="mb-1">
+                <li key={`trophy-${trophies.competitionGroup.name}-${j}`} className="mb-1">
                   <span className="font-semibold">{trophyItem.season}</span>:
-                  <span className="ml-1">{trophyItem.teamName}</span>
+                  <span className="ml-1">{trophyItem.team.name}</span>
                 </li>
               ))}
             </ul>

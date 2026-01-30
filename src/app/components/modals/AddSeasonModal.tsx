@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput } from "@/lib/types/Season";
+import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput } from "@/lib/types/firebase/Season";
 import CompetitionDropdown from "../dropdowns/CompetitionDropdown";
 import CompetitionWithWorldDropdown from "../dropdowns/CompetitionWithWorldDropdown";
 import { Competition } from "@/lib/types/Country&Competition";
-import { SaveWithChildren } from "@/lib/types/firebase/Save";
+import { FullDetailsSave } from "@/lib/types/prisma/Save";
 import BaseModal from "./BaseModal";
 import LoadingButton from "../LoadingButton";
 import { Team } from "@/lib/types/firebase/Team";
@@ -13,7 +13,7 @@ type AddSeasonModalProps = {
   open: boolean;
   onClose: () => void;
   onSave: (season: SeasonInput) => void;
-  saveDetails: SaveWithChildren;
+  saveDetails: FullDetailsSave;
 };
 
 /**
@@ -21,7 +21,7 @@ type AddSeasonModalProps = {
  * @param saveDetails The save details containing existing seasons.
  * @returns The next season in the format "YYYY/YY" or an empty string if not found.
  */
-function pullNextSeasonFromSave(saveDetails: SaveWithChildren): string {
+function pullNextSeasonFromSave(saveDetails: FullDetailsSave): string {
   if (!saveDetails || !saveDetails.seasons) {
     return "";
   }
@@ -130,13 +130,13 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
         {/* Team Selection - from save's career stints */}
         <div>
           <label className="block text-sm mb-2 font-medium text-gray-200">Team</label>
-          {saveDetails.career && saveDetails.career.length > 0 ? (
+          {saveDetails.careerStints && saveDetails.careerStints.length > 0 ? (
             <select
               value={selectedTeam ? selectedTeam.id : ''}
               onChange={(e) => {
                 const teamId = e.target.value;
                 if (teamId) {
-                  const careerStint = saveDetails.career?.find(stint => stint.teamId === teamId);
+                  const careerStint = saveDetails.careerStints?.find(stint => stint.teamId === teamId);
                   if (careerStint) {
                     // Create a Team object from career stint data
                     const team: Team = {
@@ -161,7 +161,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
             >
               <option value="">-- Select a team --</option>
               {/* Get unique teams from career stints */}
-              {Array.from(new Map(saveDetails.career.map(stint => [stint.teamId, stint])).values()).map((stint) => (
+              {Array.from(new Map(saveDetails.careerStints.map(stint => [stint.teamId, stint])).values()).map((stint) => (
                 <option key={stint.teamId} value={stint.teamId}>
                   {stint.teamName}
                 </option>

@@ -1,18 +1,16 @@
-import { Trophy, TrophyGroup } from "../types/firebase/Trophy";
+import { FullTrophy, TrophyGroup } from "../types/prisma/Trophy";
 
-export function groupTrophies(trophies: Trophy[]): TrophyGroup[] {
+export function groupTrophies(trophies: FullTrophy[]): TrophyGroup[] {
   const groupedTrophies: TrophyGroup[] = [];
 
   trophies.forEach((trophy) => {
-    const group = groupedTrophies.find((g) => g.competitionId === trophy.competitionId);
+    const group = groupedTrophies.find((g) => g.competitionGroup.id === trophy.competitionGroup.id);
     if (group) {
       group.trophies.push(trophy);
-    } else {
+    } 
+    else {
       groupedTrophies.push({
-        competitionId: trophy.competitionId,
-        competitionName: trophy.competitionName,
-        competitionLogo: trophy.competitionLogo,
-        competitionType: trophy.competitionType,
+        competitionGroup: trophy.competitionGroup,
         trophies: [trophy],
       });
     }

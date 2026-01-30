@@ -6,7 +6,7 @@ import FootballLoader from '@/app/components/FootBallLoader';
 import { useAuth } from '@/app/components/AuthProvider';
 import { Competition } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/firebase/Team';
-import { SaveWithChildren } from '@/lib/types/firebase/Save';
+import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
 import CompetitionWithWorldDropdown from '../dropdowns/CompetitionWithWorldDropdown';
@@ -16,7 +16,7 @@ type Props = {
   open: boolean;
   onClose: () => void;
   saveId: string;
-  saveDetails: SaveWithChildren;
+  saveDetails: FullDetailsSave;
   onSuccess: (trophy: Trophy) => void;
 };
 
@@ -102,13 +102,13 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
         {/* Team Selection - from save's career stints */}
         <div>
           <label className="block text-sm mb-3 font-medium text-gray-200">Team</label>
-          {saveDetails.career && saveDetails.career.length > 0 ? (
+          {saveDetails.careerStints && saveDetails.careerStints.length > 0 ? (
             <select
               value={selectedTeam ? selectedTeam.id : ''}
               onChange={(e) => {
                 const teamId = e.target.value;
                 if (teamId) {
-                  const careerStint = saveDetails.career?.find(stint => stint.teamId === teamId);
+                  const careerStint = saveDetails.careerStints?.find(stint => stint.teamId === teamId);
                   if (careerStint) {
                     // Create a Team object from career stint data
                     const team: Team = {
@@ -133,7 +133,7 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
             >
               <option value="" className="bg-[var(--color-darker)] text-white">-- Select a team --</option>
               {/* Get unique teams from career stints */}
-              {Array.from(new Map(saveDetails.career.map(stint => [stint.teamId, stint])).values()).map((stint) => (
+              {Array.from(new Map(saveDetails.careerStints.map(stint => [stint.teamId, stint])).values()).map((stint) => (
                 <option key={stint.teamId} value={stint.teamId} className="bg-[var(--color-darker)] text-white">
                   {stint.teamName}
                 </option>

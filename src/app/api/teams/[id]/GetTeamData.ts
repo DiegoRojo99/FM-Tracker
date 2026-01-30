@@ -1,10 +1,8 @@
-import { db } from "@/lib/db/firebase";
-import { Team } from "@/lib/types/firebase/Team";
-import { doc, getDoc } from "firebase/firestore";
+import { prisma } from "@/lib/db/prisma";
+import { Team } from "@/lib/types/prisma/Team";
 
-export async function GetTeamData(teamId: string) {
-  const teamRef = doc(db, 'teams', teamId);
-  const teamSnap = await getDoc(teamRef);
-  const team = teamSnap.exists() ? { ...teamSnap.data() as Team } : null;
-  return team;
+export async function getTeamData(teamId: number): Promise<Team | null> {
+  return await prisma.team.findUnique({
+    where: { id: teamId }
+  })
 }

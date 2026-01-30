@@ -3,6 +3,7 @@ import { fetchTeam } from './firebase/teams';
 import { addChallengeForTrophy } from './challenges';
 import { Trophy } from '../../../prisma/generated/client';
 import { prisma } from './prisma';
+import { FullTrophy } from '../types/prisma/Trophy';
 
 export async function addTrophyToSave(
   { teamId, competitionId, uid, season, saveId, game }: 
@@ -71,9 +72,13 @@ export async function getTrophiesForSave(saveId: string): Promise<Trophy[]> {
   });
 }
 
-export async function getAllTrophiesForUser(userId: string): Promise<Trophy[]> {
+export async function getAllTrophiesForUser(userId: string): Promise<FullTrophy[]> {
   return await prisma.trophy.findMany({
     where: { save: { userId } },
+    include: {
+      team: true,
+      competitionGroup: true,
+    },
   });
 }
 

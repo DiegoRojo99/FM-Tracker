@@ -20,7 +20,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'At least one field must be provided for update' }, { status: 400 });
     }
 
-    const success = await updateTrophy(uid, saveId, trophyId, body);
+    const success = await updateTrophy(Number(trophyId), body);
 
     if (!success) {
       return NextResponse.json({ error: 'Failed to update trophy' }, { status: 500 });
@@ -41,7 +41,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized or missing IDs' }, { status: 401 });
     }
 
-    const success = await deleteTrophy(uid, saveId, trophyId);
+    const success = await deleteTrophy(Number(trophyId));
 
     if (!success) {
       return NextResponse.json({ error: 'Failed to delete trophy' }, { status: 500 });

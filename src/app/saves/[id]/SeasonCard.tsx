@@ -1,8 +1,8 @@
 import BlurredCard from "@/app/components/BlurredCard";
 import ConfirmationModal from "@/app/components/modals/ConfirmationModal";
-import { SeasonSummary } from "@/lib/types/Season";
 import { useState } from "react";
 import Image from "next/image";
+import { SeasonSummary } from "@/lib/types/prisma/Season";
 
 type SeasonCardProps = {
   season: SeasonSummary;
@@ -50,14 +50,14 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
       {/* Team information */}
       <div className="flex flex-col items-center mb-2">
         <Image
-          src={season.teamLogo}
-          alt={season.teamName}
+          src={season.team.logo}
+          alt={season.team.name}
           className="h-16 w-auto object-contain"
           width={128}
           height={128}
           unoptimized
         />
-        <span className="font-medium">{season.teamName}</span>
+        <span className="font-medium">{season.team.name}</span>
       </div>
 
       {/* League result */}
@@ -65,17 +65,17 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
         <div className="border-t pt-3">
           <h3 className="font-semibold mb-2">League</h3>
           <div className="flex items-center gap-3">
-            {leagueResult.competitionLogo && (
+            {leagueResult.competition.logoUrl && (
               <Image
-                src={leagueResult.competitionLogo}
-                alt={leagueResult.competitionName ?? 'League Logo'}
+                src={leagueResult.competition.logoUrl}
+                alt={leagueResult.competition.name ?? 'League Logo'}
                 className="h-10 w-auto"
                 width={150}
                 height={150}
                 unoptimized
               />
             )}
-            <p className="text-sm font-medium ml-1">{leagueResult.competitionName}</p>
+            <p className="text-sm font-medium ml-1">{leagueResult.competition.name}</p>
             <span className="ml-auto text-sm">
               {leagueResult.position ? `${getOrdinal(leagueResult.position)}` : 'N/A'}
               {leagueResult.position === 1 && ' 🏆'}
@@ -94,15 +94,15 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
             {cupResults.map(cup => (
               <div key={cup.competitionId} className="flex items-center gap-2 text-sm">
                 <Image
-                  src={cup.competitionLogo}
-                  alt={cup.competitionName}
+                  src={cup.competition.logoUrl || '/default-competition-logo.png'}
+                  alt={cup.competition.name}
                   className="h-10 w-auto"
                   width={150}
                   height={150}
                   unoptimized
                 />
                 <div className="flex flex-col ml-2">
-                  <span className="font-medium">{cup.competitionName}</span>
+                  <span className="font-medium">{cup.competition.name}</span>
                   <span className="text-zinc-500">{cup.reachedRound}{cup.reachedRound === 'Winners' && ' 🏆'}</span>
                 </div>
               </div>
@@ -126,7 +126,7 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
         onClose={() => setShowDeleteConfirmation(false)}
         onConfirm={confirmDelete}
         title="Delete Season"
-        message={`Are you sure you want to delete the ${season.season} season for ${season.teamName}? This action cannot be undone.`}
+        message={`Are you sure you want to delete the ${season.season} season for ${season.team.name}? This action cannot be undone.`}
         confirmText="Delete"
         destructive={true}
       />

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import AddSeasonModal from "@/app/components/modals/AddSeasonModal";
-import { SeasonInput, SeasonSummary } from "@/lib/types/Season";
 import { useAuth } from "@/app/components/AuthProvider";
-import { SaveWithChildren } from "@/lib/types/firebase/Save";
+import { FullDetailsSave } from "@/lib/types/prisma/Save";
+import { SeasonInput, SeasonSummary } from "@/lib/types/prisma/Season";
 import { SeasonCard } from "./SeasonCard";
 import GradientButton from "@/app/components/GradientButton";
 
 interface SeasonSectionProps {
-  saveDetails: SaveWithChildren;
+  saveDetails: FullDetailsSave;
   setRefresh: (refresh: boolean) => void; // Prop for refreshing
 }
 

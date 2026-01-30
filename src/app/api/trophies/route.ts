@@ -1,7 +1,8 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { NextRequest } from 'next/server';
 import { getAllTrophiesForUser } from '@/lib/db/trophies';
-import { Trophy, TrophyGroup } from '@/lib/types/prisma/Trophy';
+import { FullTrophy, TrophyGroup } from '@/lib/types/prisma/Trophy';
+import { fetchCompetition } from '@/lib/db/competitions';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -10,23 +11,35 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const game = searchParams.get('game'); // e.g., "FM24", "FM25"
 
-    const userTrophies: Trophy[] = await getAllTrophiesForUser(uid);
+    const userTrophies: FullTrophy[] = await getAllTrophiesForUser(uid);
     
     // Filter by game if specified
-    const filteredTrophies: Trophy[] = game 
+    const filteredTrophies: FullTrophy[] = game 
       ? userTrophies.filter(trophy => trophy.gameId === game)
       : userTrophies;
     
     const groupedTrophies: TrophyGroup[] = [];
+    const competitions = await Promise.all(
+      filteredTrophies.map(trophy => trophy.competitionGroupId)
+        .filter((value, index, self) => self.indexOf(value) === index)
+        .map(async (competitionGroupId) => {
+          const competitionGroup = await fetchCompetition(competitionGroupId);
+          return competitionGroup;
+        })
+    );
+
     await Promise.all(
       filteredTrophies.map(async (trophy) => {
-          const group = groupedTrophies.find((g) => g.competitionId === trophy.competitionGroupId);
+          const group = groupedTrophies.find((g) => g.competitionGroup.id === trophy.competitionGroupId);
           if (group) group.trophies.push(trophy);
           else {
-            groupedTrophies.push({
-              competitionId: trophy.competitionGroupId,
-              trophies: [trophy],
-            });
+            const competitionGroup = competitions.find(comp => comp && comp.id === trophy.competitionGroupId);
+            if (competitionGroup){
+              groupedTrophies.push({
+                competitionGroup: competitionGroup,
+                trophies: [trophy],
+              });
+            }
           }
       })
     );
