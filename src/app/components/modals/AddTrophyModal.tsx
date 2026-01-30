@@ -1,6 +1,6 @@
 'use client';
 
-import { Trophy } from '@/lib/types/Trophy';
+import { Trophy } from '@/lib/types/firebase/Trophy';
 import { useState } from 'react';
 import FootballLoader from '@/app/components/FootBallLoader';
 import { useAuth } from '@/app/components/AuthProvider';

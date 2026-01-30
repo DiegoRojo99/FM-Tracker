@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import AddTrophyModal from '@/app/components/modals/AddTrophyModal';
 import EditTrophyModal from '@/app/components/modals/EditTrophyModal';
 import ConfirmationModal from '@/app/components/modals/ConfirmationModal';
-import { TrophyGroup, Trophy } from '@/lib/types/Trophy';
+import { TrophyGroup, Trophy } from '@/lib/types/firebase/Trophy';
 import { SaveWithChildren } from '@/lib/types/firebase/Save';
 import Image from 'next/image';
 import BlurredCard from '@/app/components/BlurredCard';

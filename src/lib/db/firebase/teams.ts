@@ -1,33 +1,18 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { Team } from "../../types/firebase/Team";
-import { db } from "../firebase";
+import { Team } from "../../types/prisma/Team";
+import { prisma } from "../prisma";
 
-export async function fetchTeam(teamId: string) {
-  const teamRef = doc(db, `teams/${teamId}`);
-  const teamSnap = await getDoc(teamRef);
-
-  if (!teamSnap.exists()) {
-    return null;
-  }
-
-  const teamData = teamSnap.data() as Team;
-  return teamData;
+export async function fetchTeam(teamId: number): Promise<Team | null> {
+  return await prisma.team.findFirst({
+    where: { id: teamId }
+  })
 }
 
-export async function getTeamsByIds(ids: string[]) {
-  const teams = await Promise.all(ids.map(id => fetchTeam(id)));
-  return teams.filter(Boolean) as Team[];
+export async function getTeamsByIds(ids: number[]): Promise<Team[]> {
+  return await prisma.team.findMany({
+    where: { id: { in: ids } }
+  })
 }
 
-export async function getAllTeams() {
-  const teamsRef = collection(db, "teams");
-  const snapshot = await getDocs(teamsRef);
-  const teams: Team[] = [];
-
-  snapshot.forEach(doc => {
-    const teamData = doc.data() as Team;
-    teams.push(teamData);
-  });
-
-  return teams;
+export async function getAllTeams(): Promise<Team[]> {
+  return await prisma.team.findMany();
 }

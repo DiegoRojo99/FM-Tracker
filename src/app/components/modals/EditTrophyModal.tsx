@@ -1,6 +1,6 @@
 'use client';
 
-import { Trophy } from '@/lib/types/Trophy';
+import { Trophy } from '@/lib/types/firebase/Trophy';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import { Competition } from '@/lib/types/Country&Competition';

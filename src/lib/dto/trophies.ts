@@ -1,4 +1,4 @@
-import { Trophy, TrophyGroup } from "../types/Trophy";
+import { Trophy, TrophyGroup } from "../types/firebase/Trophy";
 
 export function groupTrophies(trophies: Trophy[]): TrophyGroup[] {
   const groupedTrophies: TrophyGroup[] = [];

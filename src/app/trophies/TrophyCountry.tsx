@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { CountryWithCompetitions } from '@/lib/types/Country&Competition';
-import { TrophyGroup } from '@/lib/types/Trophy';
+import { TrophyGroup } from '@/lib/types/firebase/Trophy';
 
 interface TrophyCountryProps {
   country: CountryWithCompetitions;

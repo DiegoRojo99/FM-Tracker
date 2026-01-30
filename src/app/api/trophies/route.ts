@@ -1,7 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { NextRequest } from 'next/server';
-import { Trophy, TrophyGroup } from '@/lib/types/Trophy';
 import { getAllTrophiesForUser } from '@/lib/db/trophies';
+import { Trophy, TrophyGroup } from '@/lib/types/prisma/Trophy';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -13,21 +13,18 @@ export async function GET(req: NextRequest) {
     const userTrophies: Trophy[] = await getAllTrophiesForUser(uid);
     
     // Filter by game if specified
-    const filteredTrophies = game 
-      ? userTrophies.filter(trophy => trophy.game === game)
+    const filteredTrophies: Trophy[] = game 
+      ? userTrophies.filter(trophy => trophy.gameId === game)
       : userTrophies;
     
     const groupedTrophies: TrophyGroup[] = [];
     await Promise.all(
       filteredTrophies.map(async (trophy) => {
-          const group = groupedTrophies.find((g) => g.competitionId === trophy.competitionId);
+          const group = groupedTrophies.find((g) => g.competitionId === trophy.competitionGroupId);
           if (group) group.trophies.push(trophy);
           else {
             groupedTrophies.push({
-              competitionId: trophy.competitionId,
-              competitionName: trophy.competitionName,
-              competitionLogo: trophy.competitionLogo,
-              competitionType: trophy.competitionType,
+              competitionId: trophy.competitionGroupId,
               trophies: [trophy],
             });
           }

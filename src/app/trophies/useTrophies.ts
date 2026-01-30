@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import { CountryWithCompetitions } from '@/lib/types/Country&Competition';
-import { TrophyGroup } from '@/lib/types/Trophy';
+import { TrophyGroup } from '@/lib/types/firebase/Trophy';
 import { FirebaseGame } from '@/lib/types/firebase/Game';
 
 export function useTrophies(selectedGame: string) {

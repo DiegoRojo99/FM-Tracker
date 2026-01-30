@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
     if (teamData.national) currentNT = saveTeam;
     else currentClub = saveTeam;
 
-    const currentLeagueData = await fetchCompetition(countryCode, String(leagueId));
+    const currentLeagueData = await fetchCompetition(leagueId);
     if (!currentLeagueData) {
       return new Response('Invalid league ID or country code', { status: 404 });
     }
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
     const currentLeague: SaveTeam = {
       id: currentLeagueData.id,
       name: currentLeagueData.name,
-      logo: currentLeagueData.logo || '',
+      logo: currentLeagueData.logoUrl || '',
     };
 
     const saveData: SaveWithoutId = {

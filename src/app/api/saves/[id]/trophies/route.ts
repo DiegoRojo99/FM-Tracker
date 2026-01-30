@@ -1,7 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { db } from '@/lib/db/firebase';
 import { addTrophyToSave } from '@/lib/db/trophies';
-import { Trophy, TrophyGroup } from '@/lib/types/Trophy';
+import { Trophy, TrophyGroup } from '@/lib/types/firebase/Trophy';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 
