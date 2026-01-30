@@ -4,7 +4,8 @@ import { withOptionalAuth } from '@/lib/auth/withAuth';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withOptionalAuth(req, async (uid) => {
-    const { id: challengeId } = await params;
+    const { id } = await params;
+    const challengeId = Number(id);
 
     try {
       // Fetch the challenge data
