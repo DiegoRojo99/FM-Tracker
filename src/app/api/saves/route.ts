@@ -8,7 +8,7 @@ import { adminDB } from '@/lib/auth/firebase-admin';
 const { Timestamp } = admin.firestore;
 import { fetchCompetition } from '@/lib/db/competitions';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
-import { prisma } from '@/lib/db/prisma';
+import { getUserPreviewSaves } from '@/lib/db/saves';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -16,16 +16,7 @@ export async function GET(req: NextRequest) {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    const userSaves = await prisma.save.findMany({
-      where: { userId: uid },
-      include: {
-        currentClub: true,
-        currentNT: true,
-        currentLeague: true,
-        game: true,
-      },
-    });
-
+    const userSaves = await getUserPreviewSaves(uid);
     if (!userSaves || userSaves.length === 0) {
       return new Response('No saves found', { status: 404 });
     }

@@ -1,10 +1,7 @@
-import { doc, getDocs, updateDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from '@/lib/db/firebase';
 import { fetchCompetition } from "./competitions";
-import { Competition } from "../types/Country&Competition";
-import { Save, SaveLeague } from "../types/firebase/Save";
-import { CareerStint } from "../types/firebase/Career";
+import { FullDetailsSave, PreviewSave } from "../types/prisma/Save";
 import { prisma } from "./prisma";
+import { CompetitionGroup, Team } from "@prisma/client";
 
 /**
  * Updates the 'season' attribute of a save document for a user in Firestore.
@@ -13,36 +10,37 @@ import { prisma } from "./prisma";
  * @param season - The new season value.
  */
 export async function updateSaveSeason(userId: string, saveId: string, season: string) {
-  const saveRef = doc(db, `users/${userId}/saves/${saveId}`);
-  await updateDoc(saveRef, { season, updatedAt: serverTimestamp() });
+  const save = await getSaveById(saveId);
+  if (!save || save.userId !== userId) return false;
+  const updatedSave = await prisma.save.update({
+    where: { id: saveId },
+    data: {
+      season: season,
+    },
+  });
+  return !!updatedSave;
 }
 
 /**
  * Updates the 'season' attribute of a save document for a user in Firestore.
- * @param userId - The user's ID.
  * @param saveId - The save's ID.
  * @param currentLeagueId - The ID of the current league.
- * @param countryCode - The country code of the current league.
  */
-export async function updateSaveCurrentLeague(
-  userId: string, saveId: string, currentLeagueId: string, countryCode: string
-): Promise<boolean> {
-  const saveRef = doc(db, `users/${userId}/saves/${saveId}`);
-
-  const currentLeague: Competition | null = await fetchCompetition(countryCode, currentLeagueId);
+export async function updateSaveCurrentLeague( saveId: string, currentLeagueId: number): Promise<boolean> {
+  const currentLeague: CompetitionGroup | null = await fetchCompetition(currentLeagueId);
   if (!currentLeague) return false;
 
-  const currentLeagueData: SaveLeague = {
-    id: currentLeague.id,
-    name: currentLeague.name,
-    logo: currentLeague.logo,
-  };
+  const save = await getSaveById(saveId);
+  if (!save) return false;
 
-  await updateDoc(saveRef, { 
-    currentLeague: currentLeagueData,
-    updatedAt: serverTimestamp()
+  const updatedSave = await prisma.save.update({
+    where: { id: saveId },
+    data: {
+      currentLeagueId: currentLeague.id,
+    },
   });
-  return true;
+
+  return !!updatedSave;
 }
 
 export async function getSaveById(saveId: string) {
@@ -51,25 +49,197 @@ export async function getSaveById(saveId: string) {
   });
 }
 
-export async function getSaveWithCareer(userId: string, saveId: string) {
-  const save = await getSaveById(saveId);
-  if (!save) return null;
-
-  const careerRef = collection(db, `users/${userId}/saves/${saveId}/career`);
-  const careerSnapshot = await getDocs(careerRef);
-  const career = careerSnapshot.docs.map(doc => ({ ...doc.data() as CareerStint })) as CareerStint[];
-
-  return { ...save, career };
+export async function getPreviewSaveById(saveId: string): Promise<PreviewSave | null> {
+  return await prisma.save.findUnique({
+    where: {
+      id: saveId,
+    },
+    include: {
+      currentClub: true,
+      currentNT: true,
+      currentLeague: true,
+      game: true,
+    },
+  });
 }
 
-export async function getUserSaves(userId: string) {
-  const savesRef = collection(db, `users/${userId}/saves`);
-  const savesSnapshot = await getDocs(savesRef);
-  return savesSnapshot.docs.map(doc => ({ ...doc.data() as Save, id: doc.id })) as Save[];
+export async function getFullSave(saveId: string): Promise<FullDetailsSave | null> {
+  return await prisma.save.findUnique({
+    where: {
+      id: saveId,
+    },
+    include: {
+      currentLeague: true,
+      currentClub: true,
+      currentNT: true,
+      game: true,
+      careerStints: {
+        include: {
+          team: true,
+        },
+      },
+      trophies: {
+        include: {
+          team: true,
+          competitionGroup: true,
+        },
+      },
+      seasons: {
+        include: {
+          team: true,
+          leagueResult: {include: {competition: true}},
+          cupResults: {include: {competition: true}},
+        },
+      },
+      challenges: {
+        include: {
+          challenge: {
+            include: {
+              goals: {
+                include: {
+                  competition: true,
+                  country: true,
+                  teams: true,
+                },
+              },
+            },
+          },
+          goalProgress: true,
+          game: true,
+        },
+      }
+    },
+  });
 }
 
-export async function getUserSavesWithCareer(userId: string) {
-  const saves = await getUserSaves(userId);
-  const savesWithCareer = await Promise.all(saves.map(async save => await getSaveWithCareer(userId, save.id)));
-  return savesWithCareer.filter(save => save !== null);
+export async function getUserPreviewSaves(userId: string): Promise<PreviewSave[]> {
+  return await prisma.save.findMany({
+    where: { userId: userId },
+    include: {
+      currentClub: true,
+      currentNT: true,
+      currentLeague: true,
+      game: true,
+    },
+  });
+}
+
+export async function getFullUserSaves(userId: string): Promise<FullDetailsSave[]> {
+  return await prisma.save.findMany({
+    where: {
+      userId: userId,
+    },
+    include: {
+      currentLeague: true,
+      currentClub: true,
+      currentNT: true,
+      game: true,
+      careerStints: {
+        include: {
+          team: true,
+        },
+      },
+      trophies: {
+        include: {
+          team: true,
+          competitionGroup: true,
+        },
+      },
+      seasons: {
+        include: {
+          team: true,
+          leagueResult: {include: {competition: true}},
+          cupResults: {include: {competition: true}},
+        },
+      },
+      challenges: {
+        include: {
+          challenge: {
+            include: {
+              goals: {
+                include: {
+                  competition: true,
+                  country: true,
+                  teams: true,
+                },
+              },
+            },
+          },
+          goalProgress: true,
+          game: true,
+        },
+      }
+    },
+  });
+}
+
+export async function getAllFullSaves(): Promise<FullDetailsSave[] | null> {
+  return await prisma.save.findMany({
+    include: {
+      currentLeague: true,
+      currentClub: true,
+      currentNT: true,
+      game: true,
+      careerStints: {
+        include: {
+          team: true,
+        },
+      },
+      trophies: {
+        include: {
+          team: true,
+          competitionGroup: true,
+        },
+      },
+      seasons: {
+        include: {
+          team: true,
+          leagueResult: {include: {competition: true}},
+          cupResults: {include: {competition: true}},
+        },
+      },
+      challenges: {
+        include: {
+          challenge: {
+            include: {
+              goals: {
+                include: {
+                  competition: true,
+                  country: true,
+                  teams: true,
+                },
+              },
+            },
+          },
+          goalProgress: true,
+          game: true,
+        },
+      }
+    },
+  });
+}
+
+export async function getAllTeamsInSaves(): Promise<Team[]> {
+  const saves = await prisma.save.findMany({
+    include: {
+      careerStints: {
+        include: {
+          team: true,
+        },
+      },
+    },
+  });
+
+  const teams: Team[] = saves.flatMap(save => 
+    save.careerStints.map(stint => stint.team)
+  );
+
+  const uniqueTeams = new Map<number, Team>();
+  teams.forEach(team => {
+    if (!uniqueTeams.has(team.id)) {
+      uniqueTeams.set(team.id, team);
+    }
+  });
+  
+  return Array.from(uniqueTeams.values());
 }

@@ -2,8 +2,8 @@ import { db } from '@/lib/db/firebase';
 import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
-import { prisma } from '@/lib/db/prisma';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
+import { getFullSave } from '@/lib/db/saves';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -14,62 +14,10 @@ export async function GET(req: NextRequest) {
     // Extract the save ID from the URL
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
+    if (!saveId) return new Response('Save ID is required', { status: 400 });
 
-    const save: FullDetailsSave | null = await prisma.save.findUnique({
-      where: {
-        id: saveId,
-        userId: uid,
-      },
-      include: {
-        currentLeague: true,
-        currentClub: true,
-        currentNT: true,
-        game: true,
-        careerStints: {
-          include: {
-            team: true,
-          },
-        },
-        trophies: {
-          include: {
-            team: true,
-            competitionGroup: true,
-          },
-        },
-        seasons: {
-          include: {
-            team: true,
-            leagueResult: {include: {competition: true}},
-            cupResults: {include: {competition: true}},
-          },
-        },
-        challenges: {
-          include: {
-            challenge: {
-              include: {
-                goals: {
-                  include: {
-                    competition: true,
-                    country: true,
-                    teams: true,
-                  },
-                },
-              },
-            },
-            goalProgress: true,
-            game: true,
-          },
-        }
-      },
-    });
-
-    if (!saveId) {
-      return new Response('Save ID is required', { status: 400 });
-    }
-
-    if (!save) {
-      return new Response('Save not found', { status: 404 });
-    }
+    const save: FullDetailsSave | null = await getFullSave(saveId);
+    if (!save) return new Response('Save not found', { status: 404 });
 
     return new Response(JSON.stringify(save), { status: 200 });
   });
@@ -84,10 +32,7 @@ export async function DELETE(req: NextRequest) {
     // Extract the save ID from the URL
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
-
-    if (!saveId) {
-      return new Response('Save ID is required', { status: 400 });
-    }
+    if (!saveId) return new Response('Save ID is required', { status: 400 });
 
     try {
       // Delete all subcollections first
