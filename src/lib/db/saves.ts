@@ -1,7 +1,7 @@
 import { fetchCompetition } from "./competitions";
 import { FullDetailsSave, PreviewSave } from "../types/prisma/Save";
 import { prisma } from "./prisma";
-import { CompetitionGroup, Team } from "@prisma/client";
+import { Team, CompetitionGroup } from "../../../prisma/generated/client";
 
 /**
  * Updates the 'season' attribute of a save document for a user in Firestore.

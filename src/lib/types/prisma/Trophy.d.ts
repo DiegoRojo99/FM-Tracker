@@ -1,4 +1,4 @@
-import { CompetitionGroup } from '@prisma/client';
+import { CompetitionGroup } from '../../../../prisma/generated/client';
 import { Trophy as PrismaTrophy } from '../../../../prisma/generated/client';
 import { Team } from './Team';
 

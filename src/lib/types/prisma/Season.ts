@@ -1,4 +1,4 @@
-import { CompetitionGroup, CupResult, LeagueResult, Season as PrismaSeason } from "@prisma/client";
+import { CompetitionGroup, CupResult, LeagueResult, Season as PrismaSeason } from "../../../../prisma/generated/client";
 import { Team } from "./Team";
 
 export type Season = PrismaSeason;
