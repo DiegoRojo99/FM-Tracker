@@ -6,7 +6,7 @@ import { Competition } from "@/lib/types/Country&Competition";
 import { FullDetailsSave } from "@/lib/types/prisma/Save";
 import BaseModal from "./BaseModal";
 import LoadingButton from "../LoadingButton";
-import { Team } from "@/lib/types/firebase/Team";
+import { Team } from "@/lib/types/prisma/Team";
 import Image from "next/image";
 
 type AddSeasonModalProps = {
@@ -145,9 +145,9 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                       logo: careerStint.teamLogo || '',
                       countryCode: careerStint.countryCode,
                       national: careerStint.isNational || false,
-                      leagueId: parseInt(careerStint.leagueId),
-                      season: 2024, // Default season as number
-                      coordinates: { lat: null, lng: null }
+                      lat: null, 
+                      lng: null ,
+                      isFemale: null,
                     };
                     setSelectedTeam(team);
                     setSelectedLeague(null); // Reset league when team changes

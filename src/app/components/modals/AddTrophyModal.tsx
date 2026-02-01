@@ -5,7 +5,7 @@ import { useState } from 'react';
 import FootballLoader from '@/app/components/FootBallLoader';
 import { useAuth } from '@/app/components/AuthProvider';
 import { Competition } from '@/lib/types/Country&Competition';
-import { Team } from '@/lib/types/firebase/Team';
+import { Team } from '@/lib/types/prisma/Team';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
@@ -117,9 +117,9 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
                       logo: careerStint.teamLogo || '',
                       countryCode: careerStint.countryCode,
                       national: careerStint.isNational || false,
-                      leagueId: parseInt(careerStint.leagueId),
-                      season: 2024, // Default season as number
-                      coordinates: { lat: null, lng: null }
+                      lat: null, 
+                      lng: null ,
+                      isFemale: null,
                     };
                     setSelectedTeam(team);
                     setCompetition(null); // Reset competition when team changes

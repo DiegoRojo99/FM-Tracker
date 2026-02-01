@@ -1,7 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { SaveTeam, SaveWithoutId } from '@/lib/types/firebase/Save';
-import { Team } from '@/lib/types/firebase/Team';
+import { Team } from '@/lib/types/prisma/Team';
 import admin from 'firebase-admin';
 import { adminDB } from '@/lib/auth/firebase-admin';
 

@@ -1,5 +1,5 @@
 import { fetchCompetition } from './competitions';
-import { fetchTeam } from './firebase/teams';
+import { fetchTeam } from './prisma/teams';
 import { addChallengeForTrophy } from './challenges';
 import { Trophy } from '../../../prisma/generated/client';
 import { prisma } from './prisma';
