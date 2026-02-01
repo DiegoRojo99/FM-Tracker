@@ -1,9 +1,8 @@
-import { db } from '@/lib/db/firebase';
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import { getFullSave } from '@/lib/db/saves';
+import { prisma } from '@/lib/db/prisma';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -35,36 +34,9 @@ export async function DELETE(req: NextRequest) {
     if (!saveId) return new Response('Save ID is required', { status: 400 });
 
     try {
-      // Delete all subcollections first
-      const saveRef = doc(db, 'users', uid, 'saves', saveId);
-      
-      // Delete career subcollection
-      const careerSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'career'));
-      const careerDeletePromises = careerSnapshot.docs.map(doc => deleteDoc(doc.ref));
-      
-      // Delete trophies subcollection
-      const trophiesSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'trophies'));
-      const trophiesDeletePromises = trophiesSnapshot.docs.map(doc => deleteDoc(doc.ref));
-      
-      // Delete seasons subcollection
-      const seasonsSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'seasons'));
-      const seasonsDeletePromises = seasonsSnapshot.docs.map(doc => deleteDoc(doc.ref));
-      
-      // Delete challenges subcollection
-      const challengesSnapshot = await getDocs(collection(db, 'users', uid, 'saves', saveId, 'challenges'));
-      const challengesDeletePromises = challengesSnapshot.docs.map(doc => deleteDoc(doc.ref));
-      
-      // Wait for all subcollection deletions to complete
-      await Promise.all([
-        ...careerDeletePromises,
-        ...trophiesDeletePromises,
-        ...seasonsDeletePromises,
-        ...challengesDeletePromises
-      ]);
-      
-      // Finally, delete the save document itself
-      await deleteDoc(saveRef);
-
+      await prisma.save.delete({
+        where: { id: saveId },
+      });
       return new Response('Save and all associated data deleted successfully', { status: 200 });
     } catch (error) {
       console.error('Error deleting save:', error);
