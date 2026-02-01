@@ -1,11 +1,11 @@
 'use client';
 
-import { SaveTeam } from "@/lib/types/firebase/Save";
+import { Team } from "@/lib/types/prisma/Team";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function TeamsPage() {
-  const [teams, setTeams] = useState<SaveTeam[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
 
   useEffect(() => {
     const fetchTeams = async () => {

@@ -21,9 +21,7 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <AdminBox title="Challenges" link="/admin/add-challenge" />
         <AdminBox title="Competitions" link="/admin/competitions" />
-        <AdminBox title="Verify Competitions" link="/admin/verify-competitions" />
         <AdminBox title="Coords Picker" link="/admin/teams/coords-picker" />
-        <AdminBox title="Leagues" link="/admin/leagues" />
         <AdminBox title="Teams" link="/admin/teams" />
         <AdminBox title="Stats" link="/admin/stats" />
       </div>
