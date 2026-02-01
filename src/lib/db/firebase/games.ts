@@ -1,80 +1,52 @@
-import { collection, doc, getDocs, getDoc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
-import { db } from '../firebase';
-import { FirebaseGame, FirebaseGameInput } from '../../types/firebase/Game';
+import { Game } from "@/lib/types/prisma/Game";
+import { prisma } from "../prisma";
 
-const COLLECTION_NAME = 'games';
-
-export async function getGame(gameId: string): Promise<FirebaseGame | null> {
+export async function getGame(gameId: string): Promise<Game | null> {
   try {
-    const docRef = doc(db, COLLECTION_NAME, gameId);
-    const docSnap = await getDoc(docRef);
+    const game = await prisma.game.findUnique({
+      where: { id: gameId },
+    });
     
-    if (docSnap.exists()) {
-      return {
-        id: docSnap.id,
-        ...docSnap.data()
-      } as FirebaseGame;
-    }
-    
-    return null;
-  } catch (error) {
+    return game;
+  } 
+  catch (error) {
     console.error('Error getting game:', error);
     throw error;
   }
 }
 
-export async function getAllGames(): Promise<FirebaseGame[]> {
+export async function getAllGames(): Promise<Game[]> {
   try {
-    const q = query(collection(db, COLLECTION_NAME));
-    const querySnapshot = await getDocs(q);
-    
-    const games = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as FirebaseGame[];
-    
-    // Sort in memory: first by sortOrder, then by releaseDate descending
-    return games.sort((a, b) => {
-      if (a.sortOrder !== b.sortOrder) {
-        return a.sortOrder - b.sortOrder;
-      }
-      return b.releaseDate.toMillis() - a.releaseDate.toMillis();
-    });
+    const games = await prisma.game.findMany(
+      { orderBy: [ { sortOrder: 'asc' }, { releaseDate: 'desc' } ] }
+    );
+
+    return games;
   } catch (error) {
     console.error('Error getting all games:', error);
     throw error;
   }
 }
 
-export async function getActiveGames(): Promise<FirebaseGame[]> {
+export async function getActiveGames(): Promise<Game[]> {
   try {
-    const q = query(collection(db, COLLECTION_NAME), where('isActive', '==', true));
-    const querySnapshot = await getDocs(q);
-    
-    const games = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as FirebaseGame[];
-    
-    // Sort in memory: first by sortOrder, then by releaseDate descending
-    return games.sort((a, b) => {
-      if (a.sortOrder !== b.sortOrder) {
-        return a.sortOrder - b.sortOrder;
-      }
-      return b.releaseDate.toMillis() - a.releaseDate.toMillis();
+    const games = await prisma.game.findMany({
+      where: { isActive: true },
+      orderBy: [ { sortOrder: 'asc' }, { releaseDate: 'desc' } ]
     });
+
+    return games;
   } catch (error) {
     console.error('Error getting active games:', error);
     throw error;
   }
 }
 
-export async function updateGame(gameId: string, gameData: Partial<FirebaseGameInput>): Promise<void> {
+export async function updateGame(gameId: string, gameData: Partial<Game>): Promise<void> {
   try {
-    const docRef = doc(db, COLLECTION_NAME, gameId);
-    await updateDoc(docRef, {
-      ...gameData,
-      updatedAt: new Date(),
+    await prisma.game.update({
+      where: { id: gameId },
+      data: gameData,
     });
   } catch (error) {
     console.error('Error updating game:', error);
@@ -84,8 +56,9 @@ export async function updateGame(gameId: string, gameData: Partial<FirebaseGameI
 
 export async function deleteGame(gameId: string): Promise<void> {
   try {
-    const docRef = doc(db, COLLECTION_NAME, gameId);
-    await deleteDoc(docRef);
+    await prisma.game.delete({
+      where: { id: gameId },
+    });
   } catch (error) {
     console.error('Error deleting game:', error);
     throw error;

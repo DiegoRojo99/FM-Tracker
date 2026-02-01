@@ -1,7 +1,5 @@
-import { addDoc, collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { db } from './firebase';
 import { CareerChallenge, CareerChallengeGoalInput, CareerChallengeWithDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '../types/prisma/Challenge';
-import { challengeGoalToCareerChallengeGoal, getChallengeWithoutStartingAt } from '../dto/challenges';
+import { challengeGoalToCareerChallengeGoal } from '../dto/challenges';
 import { getTrophiesForSave } from './trophies';
 import { prisma } from './prisma';
 import { getSaveById } from './saves';
@@ -94,28 +92,6 @@ export async function getChallengesForSave(saveId: string): Promise<CareerChalle
   return await prisma.careerChallenge.findMany({
     where: { saveId },
   });
-}
-
-export async function updateChallengeForSave(userId: string, saveId: string, challenge: CareerChallenge) {
-  const challengesRef = collection(db, 'users', userId, 'saves', saveId, 'challenges');
-  
-  // Look for existing document with the same challenge.id
-  const existingQuery = query(challengesRef, where('id', '==', challenge.id));
-  const existingSnap = await getDocs(existingQuery);
-
-  if (!existingSnap.empty) {
-    // Update the first match
-    const docRef = existingSnap.docs[0].ref;
-
-    // Remove the startedAt field to avoid overwriting it
-    const updatedChallenge = getChallengeWithoutStartingAt(challenge);
-    await updateDoc(docRef, updatedChallenge);
-  } 
-  else {
-    // Add new document with auto-generated ID
-    await addDoc(challengesRef, challenge);
-  }
-  return challenge.id;
 }
 
 export async function checkForMatchingChallenges(trophyData: Trophy) {
