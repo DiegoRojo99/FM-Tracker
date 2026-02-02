@@ -1,10 +1,7 @@
-import { db } from '@/lib/db/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { prisma } from '@/lib/db/prisma';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const q = query(collection(db, 'countries'), where('inFootballManager', '==', true));
-  const snapshot = await getDocs(q);
-  const data = snapshot.docs.map(doc => doc.data());
-  return NextResponse.json(data);
+  const countries = await prisma.country.findMany({});
+  return NextResponse.json(countries, { status: 200 });
 }

@@ -18,13 +18,16 @@ const CountryDropdown: React.FC<CountryDropdownProps> = ({ value, onChange }) =>
         if (!res.ok) throw new Error('Failed to fetch countries');
         const data = await res.json();
         setCountries(data);
-      } catch (error) {
+      } 
+      catch (error) {
         console.error('Error fetching countries:', error);
         setCountries([]);
-      } finally {
+      } 
+      finally {
         setLoading(false);
       }
     };
+    
     fetchCountries();
   }, []);
 
