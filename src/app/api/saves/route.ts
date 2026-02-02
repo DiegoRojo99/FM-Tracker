@@ -1,14 +1,12 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
-import { SaveTeam, SaveWithoutId } from '@/lib/types/firebase/Save';
-import { Team } from '@/lib/types/prisma/Team';
-import admin from 'firebase-admin';
-import { adminDB } from '@/lib/auth/firebase-admin';
-
-const { Timestamp } = admin.firestore;
 import { fetchCompetition } from '@/lib/db/competitions';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
 import { getUserPreviewSaves } from '@/lib/db/saves';
+import { Save } from '@/lib/types/prisma/Save';
+import { fetchTeam } from '@/lib/db/prisma/teams';
+import { prisma } from '@/lib/db/prisma';
+import { CareerStint } from '@/lib/types/prisma/Career';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -43,96 +41,63 @@ export async function POST(req: NextRequest) {
   return withAuth(req, async (uid) => {
     if (!uid) return new Response('Unauthorized', { status: 401 });
 
+    // Parse request body
     const body = await req.json();
     const { countryCode, leagueId, startingTeamId, gameId } = body;
 
-    let currentClub: SaveTeam | null = null;
-    let currentNT: SaveTeam | null = null;
+    // Validate team id
+    const startingTeam = !startingTeamId ? null : await fetchTeam(Number(startingTeamId));
+    if (!startingTeam) return new Response('Invalid starting team ID', { status: 400 });
+
+    // Validate league id
+    const currentLeagueData = await fetchCompetition(Number(leagueId));
+    if (!currentLeagueData) return new Response('Invalid league ID', { status: 400 });
+
+    // Validate required fields
     const gameIdToUse = gameId || 'fm26';
-
-    if (!startingTeamId) {
-      // If no starting team, we can create an unemployed save
-      const saveData: SaveWithoutId = {
-        userId: uid,
-        gameId: gameIdToUse,
-        countryCode: null,
-        currentClub: null,
-        currentNT: null,
-        currentLeague: null,
-        season: getSeasonFromGameId(gameIdToUse),
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
-      };
-
-      const savesRef = adminDB.collection('users').doc(uid).collection('saves');
-      const docRef = await savesRef.add(saveData);
-      return new Response(JSON.stringify({ id: docRef.id, ...saveData }), { status: 201 });
-    }
+    const currentClubId = startingTeam && !startingTeam.national ? startingTeam.id : null;
+    const currentNTId = startingTeam && startingTeam.national ? startingTeam.id : null;
+    const saveId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     
-    // Validate startingTeamId
-    const teamDoc = adminDB.collection('teams').doc(String(startingTeamId));
-    if (!teamDoc) return new Response('Invalid team ID', { status: 400 });
-
-    // Fetch the team document
-    const teamSnapshot = await teamDoc.get();
-    if (!teamSnapshot.exists) return new Response('Starting team not found', { status: 404 });
-
-    const teamData = teamSnapshot.data() as Team;
-    const saveTeam: SaveTeam = {
-      id: teamData.id,
-      name: teamData.name,
-      logo: teamData.logo,
-    };
-
-    if (teamData.national) currentNT = saveTeam;
-    else currentClub = saveTeam;
-
-    const currentLeagueData = await fetchCompetition(leagueId);
-    if (!currentLeagueData) {
-      return new Response('Invalid league ID or country code', { status: 404 });
-    }
-
-    const currentLeague: SaveTeam = {
-      id: currentLeagueData.id,
-      name: currentLeagueData.name,
-      logo: currentLeagueData.logoUrl || '',
-    };
-
-    const saveData: SaveWithoutId = {
+    // Prepare save data
+    const saveInputData: Save = {
+      id: saveId,
       userId: uid,
       gameId: gameIdToUse,
-      countryCode,
-      currentClub,
-      currentNT,
-      currentLeague,
+      countryCode: countryCode || null,
+      currentClubId: currentClubId,
+      currentNTId: currentNTId,
+      currentLeagueId: Number(leagueId) || null,
       season: getSeasonFromGameId(gameIdToUse),
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
-    const savesRef = adminDB.collection('users').doc(uid).collection('saves');
-    const docRef = await savesRef.add(saveData);
+    // Create save in database with connected team and league data
+    const docRef = await prisma.save.create({
+      data: saveInputData,
+    });
 
     // Create a starting career stint
-    const careerStintData = {
+    const careerStintInputData: Omit<CareerStint, 'id'> = {
+      saveId: docRef.id,
       teamId: Number(startingTeamId),
-      leagueId,
-      countryCode,
       startDate: getStartDateFromGameId(gameIdToUse),
       endDate: null,
-      createdAt: Timestamp.now(),
-      isNational: !!currentNT,
-      teamName: currentClub?.name || currentNT?.name,
-      teamLogo: currentClub?.logo || currentNT?.logo,
+      isNational: startingTeam ? startingTeam.national : false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
-    const stintsRef = adminDB.collection('users').doc(uid).collection('saves').doc(docRef.id).collection('career');
-    stintsRef.add(careerStintData);
+    // Create career stint in database
+    await prisma.careerStint.create({
+      data: careerStintInputData,
+    });
     
     // Check if the team has any matching challenges
     await addChallengeForTeam(docRef.id, Number(startingTeamId));
     await addChallengeForCountry(docRef.id, countryCode);
 
-    return new Response(JSON.stringify({ id: docRef.id, ...saveData }), { status: 201 });
+    return new Response(JSON.stringify(saveInputData), { status: 201 });
   });
 }
