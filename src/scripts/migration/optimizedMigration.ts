@@ -2,7 +2,7 @@ import { adminDB } from '../../lib/auth/firebase-admin';
 import { fetchFromApi } from '../../lib/apiFootball';
 import { rateLimiter } from '../../lib/utils/rateLimiter';
 import { Timestamp } from 'firebase-admin/firestore';
-import { Competition } from '@/lib/types/Country&Competition';
+import { FirebaseCompetition } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/firebase/Team';
 
 type MissingCompetition = {
@@ -139,7 +139,7 @@ async function linkExistingTeamsToCompetitions(): Promise<void> {
 }
 
 // Find competition info from existing countries/competitions structure
-async function findCompetitionInfo(leagueId: number): Promise<Competition | null> {
+async function findCompetitionInfo(leagueId: number): Promise<FirebaseCompetition | null> {
   const countriesSnapshot = await adminDB.collection('countries').get();
   
   for (const countryDoc of countriesSnapshot.docs) {
@@ -151,7 +151,7 @@ async function findCompetitionInfo(leagueId: number): Promise<Competition | null
       .get();
     
     if (!competitionsSnapshot.empty) {
-      const compData = competitionsSnapshot.docs[0].data() as Competition;
+      const compData = competitionsSnapshot.docs[0].data() as FirebaseCompetition;
       return {
         ...compData,
         countryCode: countryDoc.id
@@ -178,7 +178,7 @@ async function findCompetitionsNeedingTeams() {
       .get();
     
     for (const compDoc of competitionsSnapshot.docs) {
-      const comp = compDoc.data() as Competition;
+      const comp = compDoc.data() as FirebaseCompetition;
       
       // Check if this competition already has teams in apiCompetitions
       const apiCompDoc = await adminDB

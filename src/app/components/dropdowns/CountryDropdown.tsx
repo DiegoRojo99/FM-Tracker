@@ -1,4 +1,4 @@
-import { Country } from '@/lib/types/Country&Competition';
+import { FirebaseCountry } from '@/lib/types/Country&Competition';
 import React, { useEffect, useState } from 'react';
 
 interface CountryDropdownProps {
@@ -7,7 +7,7 @@ interface CountryDropdownProps {
 }
 
 const CountryDropdown: React.FC<CountryDropdownProps> = ({ value, onChange }) => {
-  const [countries, setCountries] = useState<Country[]>([]);
+  const [countries, setCountries] = useState<FirebaseCountry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

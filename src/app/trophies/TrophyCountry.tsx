@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { CountryWithCompetitions } from '@/lib/types/Country&Competition';
 import { TrophyGroup } from '@/lib/types/firebase/Trophy';
+import { CountryWithCompetitions } from '@/lib/types/prisma/Competitions';
 
 interface TrophyCountryProps {
   country: CountryWithCompetitions;
@@ -101,9 +101,9 @@ const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies, groupM
                       : 'hover:bg-zinc-800/50'
                   }`}
                 >
-                  {comp.logo ? (
+                  {comp.logoUrl ? (
                     <Image 
-                      src={comp.logo} 
+                      src={comp.logoUrl} 
                       alt={comp.name} 
                       width={20}
                       height={20}

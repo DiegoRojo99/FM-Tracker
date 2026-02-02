@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
 import CompetitionDropdown from '@/app/components/dropdowns/CompetitionDropdown';
-import { Competition } from '@/lib/types/Country&Competition';
+import { FirebaseCompetition } from '@/lib/types/Country&Competition';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
 import { FullCareerStint } from '@/lib/types/prisma/Career';
@@ -160,7 +160,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
           <div>
             <label className="block text-sm mb-2 font-medium text-gray-200">League</label>
             <CompetitionDropdown
-              onChange={(competition: Competition) => setForm((prev) => ({ ...prev, leagueId: String(competition.id) }))}
+              onChange={(competition: FirebaseCompetition) => setForm((prev) => ({ ...prev, leagueId: String(competition.id) }))}
               type='League'
               country={countryCode}
               value={form.leagueId}

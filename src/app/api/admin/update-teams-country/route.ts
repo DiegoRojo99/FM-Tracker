@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { adminDB } from '@/lib/auth/firebase-admin';
-import { Country } from '@/lib/types/Country&Competition';
+import { FirebaseCountry } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/firebase/Team';
 
 async function updateTeamsCountryCode() {
@@ -9,7 +9,7 @@ async function updateTeamsCountryCode() {
   // Create a map of country names to codes
   const countryMap: Record<string, string> = {};
   countriesSnap.forEach((doc) => {
-    const data = doc.data() as Country;
+    const data = doc.data() as FirebaseCountry;
     if (data.name && data.code) {
       countryMap[data.name] = data.code;
     }

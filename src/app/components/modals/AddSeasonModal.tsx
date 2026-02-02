@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput } from "@/lib/types/firebase/Season";
 import CompetitionDropdown from "../dropdowns/CompetitionDropdown";
 import CompetitionWithWorldDropdown from "../dropdowns/CompetitionWithWorldDropdown";
-import { Competition } from "@/lib/types/Country&Competition";
+import { FirebaseCompetition } from "@/lib/types/Country&Competition";
 import { FullDetailsSave } from "@/lib/types/prisma/Save";
 import BaseModal from "./BaseModal";
 import LoadingButton from "../LoadingButton";
@@ -46,7 +46,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   
   // New state for team and league selection
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
-  const [selectedLeague, setSelectedLeague] = useState<Competition | null>(null);
+  const [selectedLeague, setSelectedLeague] = useState<FirebaseCompetition | null>(null);
 
   const handleAddCup = () => {
     setCupResults([
@@ -58,14 +58,14 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   const handleCupChange = (
     idx: number,
     field: "reachedRound" | "competition",
-    value: Competition | CupRound | string
+    value: FirebaseCompetition | CupRound | string
   ) => {
     const updated = [...cupResults];
     if (field === "reachedRound") {
       updated[idx][field] = value as CupRound;
     } 
     else if (field === "competition") {
-      const competition = value as Competition;
+      const competition = value as FirebaseCompetition;
       updated[idx]["competitionId"] = String(competition.id);
       updated[idx]["countryCode"] = competition.countryCode;
     }
@@ -195,7 +195,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
               type="League"
               country={selectedTeam.countryCode}
               value={selectedLeague?.id ? String(selectedLeague.id) : ""}
-              onChange={(competition: Competition) => setSelectedLeague(competition)}
+              onChange={(competition: FirebaseCompetition) => setSelectedLeague(competition)}
             />
             {selectedLeague && (
               <div className="mt-2 p-3 bg-[var(--color-darker)] rounded-lg border border-[var(--color-primary)]">

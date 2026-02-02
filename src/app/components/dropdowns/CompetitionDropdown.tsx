@@ -1,11 +1,11 @@
-import { Competition } from '@/lib/types/Country&Competition';
+import { FirebaseCompetition } from '@/lib/types/Country&Competition';
 import React, { useEffect, useState } from 'react';
 
 interface CompetitionDropdownProps {
   country?: string;
   type?: string;
   value?: string;
-  onChange?: (competition: Competition) => void;
+  onChange?: (competition: FirebaseCompetition) => void;
   placeholder?: string;
 }
 
@@ -16,7 +16,7 @@ const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({
   onChange,
   placeholder = 'Select competition',
 }) => {
-  const [competitions, setCompetitions] = useState<Competition[]>([]);
+  const [competitions, setCompetitions] = useState<FirebaseCompetition[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

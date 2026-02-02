@@ -1,11 +1,11 @@
-export type Country = {
+export type FirebaseCountry = {
   code: string;              // e.g., "DE"
   name: string;              // e.g., "Germany"
   flag: string;              // URL to flag image
   inFootballManager: boolean;
 };
 
-export type Competition = {
+export type FirebaseCompetition = {
   id: number;                // API-sports ID
   name: string;              // e.g., "Super Cup"
   logo: string;              // URL to competition logo
@@ -17,6 +17,6 @@ export type Competition = {
   isFemale?: boolean;         // Indicates if the competition is a female league (optional)
 };
 
-export type CountryWithCompetitions = Country & {
-  competitions?: Competition[];
+export type FirebaseCountryWithCompetitions = FirebaseCountry & {
+  competitions?: FirebaseCompetition[];
 };

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
-import { CountryWithCompetitions } from '@/lib/types/Country&Competition';
 import { TrophyGroup } from '@/lib/types/firebase/Trophy';
 import { FirebaseGame } from '@/lib/types/firebase/Game';
+import { CountryWithCompetitions } from '@/lib/types/prisma/Competitions';
 
 export function useTrophies(selectedGame: string) {
   const { user, userLoading } = useAuth();
