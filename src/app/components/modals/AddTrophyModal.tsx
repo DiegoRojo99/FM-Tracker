@@ -1,12 +1,12 @@
 'use client';
 
-import { Trophy } from '@/lib/types/firebase/Trophy';
 import { useState } from 'react';
 import FootballLoader from '@/app/components/FootBallLoader';
 import { useAuth } from '@/app/components/AuthProvider';
 import { CompetitionGroup } from '@/lib/types/prisma/Competitions';
 import { Team } from '@/lib/types/prisma/Team';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
+import { Trophy } from '@/lib/types/prisma/Trophy';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
 import CompetitionWithWorldDropdown from '../dropdowns/CompetitionWithWorldDropdown';

@@ -1,4 +1,4 @@
-import { CUP_ROUNDS } from '@/lib/types/firebase/Season';
+import { CUP_ROUNDS } from '@/lib/types/prisma/Season';
 import React from 'react';
 
 interface CupRoundDropdownProps {
