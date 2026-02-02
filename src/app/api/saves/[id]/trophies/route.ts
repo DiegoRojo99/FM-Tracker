@@ -1,8 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
-import { db } from '@/lib/db/firebase';
+import { prisma } from '@/lib/db/prisma';
 import { addTrophyToSave } from '@/lib/db/trophies';
-import { Trophy, TrophyGroup } from '@/lib/types/firebase/Trophy';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { FullTrophy, TrophyGroup } from '@/lib/types/prisma/Trophy';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Auto-season inference if missing
@@ -25,19 +24,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
     }
     
-    const body = await req.json();
     // Validate required fields
+    const body = await req.json();
     if (!body.teamId || !body.competitionId || !body.dateWon || !body.countryCode || !body.game) {
       return new Response('Missing required fields', { status: 400 });
     }
 
     // Fetch team data
-    const teamSnap = await getDoc(doc(db, 'teams', body.teamId));
-    if (!teamSnap.exists()) throw new Error('Team not found');
+    const team = await prisma.team.findUnique({ where: { id: Number(body.teamId) } });
+    if (!team) throw new Error('Team not found');
 
     // Fetch competition data
-    const compSnap = await getDoc(doc(db, 'countries', body.countryCode, 'competitions', body.competitionId));
-    if (!compSnap.exists()) throw new Error('Competition not found');
+    const competition = await prisma.competitionGroup.findUnique({ where: { id: Number(body.competitionId) } });
+    if (!competition) throw new Error('Competition not found');
 
     // Add trophy to save
     const season = getSeasonFromDate(body.dateWon);
@@ -60,30 +59,30 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
     }
 
-    const trophiesRef = collection(db, 'users', uid, 'saves', saveId, 'trophies');
-    const snapshot = await getDocs(trophiesRef);
-
-    const trophiesData: Trophy[] = snapshot.docs.map(doc => {
-      const data = doc.data() as Omit<Trophy, 'id'>;
-      return { ...data, id: doc.id };
+    const trophiesData: FullTrophy[] = await prisma.trophy.findMany({
+      where: { saveId: saveId },
+      orderBy: { season: 'desc' },
+      include: {
+        team: true,
+        competitionGroup: true,
+      },
     });
 
+    const competitionGroups = await prisma.competitionGroup.findMany();
     const groupedTrophies: TrophyGroup[] = [];
     trophiesData.forEach((trophy) => {
-      const group = groupedTrophies.find((g) => g.competitionId === trophy.competitionId);
-      if (group) {
-        group.trophies.push(trophy);
-      } 
+      const group = groupedTrophies.find((g) => g.competitionGroup.id === trophy.competitionGroupId);
+      if (group) group.trophies.push(trophy);
       else {
+        const competition = competitionGroups.find(cg => cg.id === trophy.competitionGroupId);
+        if (!competition) return;
         groupedTrophies.push({
-          competitionId: trophy.competitionId,
-          competitionName: trophy.competitionName,
-          competitionLogo: trophy.competitionLogo,
-          competitionType: trophy.competitionType,
+          competitionGroup: competition,
           trophies: [trophy],
         });
       }
     });
+
     return NextResponse.json(groupedTrophies);
   });
 }
