@@ -1,9 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import { CareerChallenge, ChallengeWithUser } from '@/lib/types/firebase/Challenge';
+import { CareerChallengeWithDetails } from '@/lib/types/prisma/Challenge';
 
 type MiniChallengeCardProps = {
-  challengeWithUser: ChallengeWithUser;
+  userChallenge: CareerChallengeWithDetails;
 };
 
 const statusStyles = {
@@ -12,39 +12,39 @@ const statusStyles = {
   'not-started': 'border-gray-300 bg-gray-50 dark:bg-zinc-800/40',
 };
 
-function getChallengeStatus(userChallenge?: CareerChallenge): 'completed' | 'in-progress' | 'not-started' {
+function getChallengeStatus(userChallenge?: CareerChallengeWithDetails): 'completed' | 'in-progress' | 'not-started' {
   if (!userChallenge) return 'not-started';
   if (userChallenge.completedAt) return 'completed';
   return 'in-progress';
 }
 
-function getChallengeCompletionPercentage(userChallenge: CareerChallenge | undefined, totalGoals: number): number {
-  if (!userChallenge || totalGoals === 0) return 0;
-  return Math.floor((userChallenge.completedGoals.length / totalGoals) * 100);
+function getChallengeCompletionPercentage(userChallenge: CareerChallengeWithDetails | undefined): number {
+  if (!userChallenge || userChallenge.challenge.goals.length === 0) return 0;
+  const totalGoals = userChallenge.challenge.goals.length;
+  const completedGoals = userChallenge.goalProgress.filter(gp => gp.isComplete).length;
+  return Math.floor((completedGoals / totalGoals) * 100);
 }
 
-const MiniChallengeCard: React.FC<MiniChallengeCardProps> = ({ challengeWithUser }) => {
-  const { challenge, userChallenge } = challengeWithUser;
+const MiniChallengeCard: React.FC<MiniChallengeCardProps> = ({ userChallenge }) => {
   const status = getChallengeStatus(userChallenge);
   const cardStyle = statusStyles[status];
   
   return (
     <Link
-      href={`/challenges/${challenge.id}`}
+      href={`/challenges/${userChallenge?.challenge.id}`}
       className={`relative aspect-square w-full border-2 ${cardStyle} rounded-xl flex flex-col items-center justify-center transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 p-2`}
-      title={challenge.name}
+      title={userChallenge?.challenge.name}
     >
       <span className="text-base sm:text-lg font-bold text-gray-900 dark:text-white text-center px-2 flex-grow flex items-center">
-        {challenge.name}
+        {userChallenge?.challenge.name}
       </span>
-      <ChallengeProgressBar challengeWithUser={challengeWithUser} />
+      <ChallengeProgressBar userChallenge={userChallenge} />
     </Link>
   );
 };
 
-function ChallengeProgressBar({ challengeWithUser }: { challengeWithUser: ChallengeWithUser }) {
-  const { challenge, userChallenge } = challengeWithUser;
-  const pctCompleted = getChallengeCompletionPercentage(userChallenge, challenge.goals.length);
+function ChallengeProgressBar({ userChallenge }: { userChallenge?: CareerChallengeWithDetails }) {
+  const pctCompleted = getChallengeCompletionPercentage(userChallenge);
   if (pctCompleted === 0) return null;
   
   return (

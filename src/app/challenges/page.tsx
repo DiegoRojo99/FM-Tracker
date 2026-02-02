@@ -1,11 +1,11 @@
 'use client';
 import ChallengeSection from './ChallengeSection';
 import { useEffect, useState } from "react";
-import { CareerChallenge, Challenge, ChallengeWithUser } from "@/lib/types/firebase/Challenge";
+import { CareerChallengeWithDetails, Challenge } from "@/lib/types/prisma/Challenge";
 import FootballLoader from "../components/FootBallLoader";
 import { useAuth } from "../components/AuthProvider";
 
-function getChallengeStatus(userChallenge?: CareerChallenge): 'completed' | 'in-progress' | 'not-started' {
+function getChallengeStatus(userChallenge?: CareerChallengeWithDetails): 'completed' | 'in-progress' | 'not-started' {
   if (!userChallenge) return 'not-started';
   if (userChallenge.completedAt) return 'completed';
   return 'in-progress';
@@ -14,7 +14,7 @@ function getChallengeStatus(userChallenge?: CareerChallenge): 'completed' | 'in-
 export default function ChallengesPage() {
   const { user, userLoading } = useAuth();
   const [challenges, setChallenges] = useState<Challenge[]>([]);
-  const [userChallenges, setUserChallenges] = useState<CareerChallenge[]>([]);
+  const [userChallenges, setUserChallenges] = useState<CareerChallengeWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedGame, setSelectedGame] = useState<string>('');
 
@@ -61,16 +61,16 @@ export default function ChallengesPage() {
   if (loading) return <FootballLoader />;
 
   // Group challenges by status
-  const challengeGroups = {
-    'in-progress': [] as ChallengeWithUser[],
-    'not-started': [] as ChallengeWithUser[],
-    'completed': [] as ChallengeWithUser[],
+  const challengeGroups: { [key: string]: CareerChallengeWithDetails[] } = {
+    'in-progress': [],
+    'not-started': [],
+    'completed': [],
   };
 
   challenges.forEach(challenge => {
     const userChallenge = filteredUserChallenges.find(uc => uc.id === challenge.id);
     const status = getChallengeStatus(userChallenge);
-    challengeGroups[status].push({ challenge, userChallenge });
+    if (userChallenge) challengeGroups[status].push(userChallenge);
   });
 
   // Section order: in-progress, not-started, completed

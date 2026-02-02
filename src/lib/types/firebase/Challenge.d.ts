@@ -36,15 +36,9 @@ export type ChallengeGoalInputData = {
   teamGroup?: string[];
 };
 
-export type ChallengeWithUser = { 
-  challenge: Challenge;
-  userChallenge?: CareerChallenge;
-};
-
 export type {
   ChallengeGoal,
   Challenge,
   CareerChallenge,
-  ChallengeGoalInputData,
-  ChallengeWithUser
+  ChallengeGoalInputData
 }
