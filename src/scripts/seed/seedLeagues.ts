@@ -1,10 +1,9 @@
 import 'dotenv/config';
 import { fetchFromApi } from '@/lib/apiFootball';
-import { db } from '@/lib/db/firebase';
-import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 import { ApiLeague, ApiLeagueSeason } from '@/lib/types/FootballAPI';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
 import { seededLeaguesIds } from '../data/leagues';
+import { prisma } from '@/lib/db/prisma';
 
 // List of FM-supported countries (can expand)
 const fmCountries = [
@@ -68,12 +67,22 @@ async function seedLeagues() {
       ...data
     });
 
-    const compRef = doc(collection(db, 'countries', data.countryCode, 'competitions'), data.id.toString());
-    const compSnap = await getDoc(compRef);
-    if (!compSnap.exists()) {
-      await setDoc(compRef, data);
+    const competition = await prisma.apiCompetition.findUnique({
+      where: { id: data.id },
+    });
+
+    if (!competition) {
+      await prisma.apiCompetition.create({
+        data: {
+          ...data,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          isActive: true,
+        },
+      });
       console.log(`✅ Created: ${data.name} (${data.countryName})${isFemale ? ' [FEMALE]' : ''}${inFootballManager ? ' [FM]' : ''}`);
-    } else {
+    } 
+    else {
       console.log(`⏩ Skipped (already exists): ${data.name} (${data.countryName})`);
     }
   }

@@ -1,5 +1,4 @@
-import { adminDB } from '../../lib/auth/firebase-admin';
-import { Timestamp } from 'firebase-admin/firestore';
+import { prisma } from "@/lib/db/prisma";
 
 // Using a simpler type for seeding since we're bypassing the client-side types
 type SeedGame = {
@@ -8,7 +7,7 @@ type SeedGame = {
   shortName: string;
   version: string;
   platform: 'PC' | 'Mobile' | 'Console';
-  variant?: 'Standard' | 'Touch';
+  variant: 'Standard' | 'Touch';
   releaseDate: Date; // Using Date, will be converted by admin SDK
   isActive: boolean;
   sortOrder: number;
@@ -55,17 +54,24 @@ const initialGames: SeedGame[] = [
 export async function seedGames() {
   console.log('Starting games seeding...');
   
-  try {
-    const gamesCollection = adminDB.collection('games');
-    
+  try {    
     for (const game of initialGames) {
       const { id, ...gameData } = game;
-      console.log(`Seeding game: ${game.name}`);
       
-      // Use admin SDK to set document with custom ID
-      await gamesCollection.doc(id).set({
-        ...gameData,
-        createdAt: Timestamp.now(),
+      await prisma.game.upsert({
+        where: { id: id },
+        create: {
+          id,
+          ...gameData,
+          logoUrl: game.logoUrl || '',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        update: {
+          ...gameData,
+          logoUrl: game.logoUrl || '',
+          updatedAt: new Date(),
+        },
       });
       console.log(`✓ Seeded: ${game.name}`);
     }

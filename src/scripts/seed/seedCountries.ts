@@ -1,21 +1,26 @@
 import 'dotenv/config';
 import { fetchFromApi } from '@/lib/apiFootball';
-import { db } from '@/lib/db/firebase';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { prisma } from '@/lib/db/prisma';
+import { Country } from '../../../prisma/generated/client';
 
 async function seedCountries() {
   const countries = await fetchFromApi('/countries');
 
   for (const country of countries) {
-    const docId = country.code || country.name.replace(/\s+/g, '-').toLowerCase();
-
-    const countryData = {
+    const countryData: Omit<Country, 'id'> = {
       name: country.name,
       code: country.code || '',
       flag: country.flag || '',
+      inFootballManager: country.inFootballManager || false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
-    await setDoc(doc(collection(db, 'countries'), docId), countryData);
+    await prisma.country.upsert({
+      where: { code: countryData.code },
+      create: countryData,
+      update: countryData,
+    });
     console.log(`✅ Added: ${country.name}`);
   }
 

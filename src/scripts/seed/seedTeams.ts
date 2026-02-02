@@ -1,16 +1,16 @@
 import 'dotenv/config';
 import { fetchFromApi } from '@/lib/apiFootball';
-import { db } from '@/lib/db/firebase';
-import { collection, doc, setDoc } from 'firebase/firestore';
 import { ApiTeam } from '@/lib/types/FootballAPI';
 import { leaguesToSeed, seededLeagues } from '../data/leagues';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
+import { prisma } from '@/lib/db/prisma';
 
 const teamsIndex = algoliaWriteClient.initIndex('teams_index');
 async function seedTeams() {
   const unseededLeagues = leaguesToSeed.filter(
     league => !seededLeagues.some(l => l.id === league.id)
   );
+
   for (const league of unseededLeagues) {
     console.log(`📥 Fetching teams for league ${league.id} (${league.season})`);
 
@@ -35,7 +35,11 @@ async function seedTeams() {
       };
       algoliaTeams.push({objectID: data.id, ...data});
 
-      await setDoc(doc(collection(db, 'teams'), data.id.toString()), data);
+      await prisma.team.upsert({
+        where: { id: data.id },
+        create: data,
+        update: data,
+      });
       console.log(`✅ Added: ${data.name}`);
     }
 
