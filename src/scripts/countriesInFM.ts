@@ -1,4 +1,4 @@
-import { adminDB } from "@/lib/auth/firebase-admin";
+import { prisma } from '../lib/db/prisma';
 
 const countriesInFM = [
   'Argentina', 'Australia', 'Austria', 'Belarus', 'Belgium', 'Brazil', 'Bulgaria',
@@ -12,16 +12,16 @@ const countriesInFM = [
 ];
 
 async function updateCountries() {
-  const snapshot = await adminDB.collection('countries').get();
-  const batch = adminDB.batch();
+  const countries = await prisma.country.findMany();
+  
+  for (const country of countries) {
+    const isInFM = countriesInFM.includes(country.name);
+    await prisma.country.update({
+      where: { code: country.code },
+      data: { inFootballManager: isInFM }
+    });
+  }
 
-  snapshot.docs.forEach((doc) => {
-    const data = doc.data();
-    const isInFM = countriesInFM.includes(data.name);
-    batch.update(doc.ref, { inFootballManager: isInFM });
-  });
-
-  await batch.commit();
   console.log('✅ Countries updated with inFootballManager flag.');
 }
 
