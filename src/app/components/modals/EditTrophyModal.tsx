@@ -3,9 +3,9 @@
 import { Trophy } from '@/lib/types/prisma/Trophy';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
-import { FirebaseCompetition } from '@/lib/types/firebase/Country&Competition';
 import { Team } from '@/lib/types/prisma/Team';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
+import { CompetitionGroup } from '@/lib/types/prisma/Competitions';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
 import CompetitionWithWorldDropdown from '../dropdowns/CompetitionWithWorldDropdown';
@@ -23,7 +23,7 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
   const { user } = useAuth();
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [dateWon, setDateWon] = useState('');
-  const [competition, setCompetition] = useState<FirebaseCompetition | null>(null);
+  const [competition, setCompetition] = useState<CompetitionGroup | null>(null);
   const [saving, setSaving] = useState(false);
 
   // Auto-season inference if missing
@@ -54,7 +54,7 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
           throw new Error('Failed to fetch competition data');
         }
         return response.json();
-      }) as Promise<FirebaseCompetition>;
+      }) as Promise<CompetitionGroup>;
   }
 
   // Populate form when trophy data changes
@@ -177,7 +177,7 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
               <CompetitionWithWorldDropdown
                 country={selectedTeam.countryCode}
                 value={competition?.id ? String(competition.id) : ""}
-                onChange={(comp: FirebaseCompetition) => setCompetition(comp)}
+                onChange={(comp: CompetitionGroup) => setCompetition(comp)}
                 placeholder="Select competition"
               />
             </div>

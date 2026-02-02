@@ -4,7 +4,7 @@ import { Trophy } from '@/lib/types/firebase/Trophy';
 import { useState } from 'react';
 import FootballLoader from '@/app/components/FootBallLoader';
 import { useAuth } from '@/app/components/AuthProvider';
-import { FirebaseCompetition } from '@/lib/types/firebase/Country&Competition';
+import { CompetitionGroup } from '@/lib/types/prisma/Competitions';
 import { Team } from '@/lib/types/prisma/Team';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import BaseModal from './BaseModal';
@@ -24,7 +24,7 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
   const { user } = useAuth();
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [dateWon, setDateWon] = useState('');
-  const [competition, setCompetition] = useState<FirebaseCompetition | null>(null);
+  const [competition, setCompetition] = useState<CompetitionGroup | null>(null);
   const [saving, setSaving] = useState(false);
 
   const handleSubmit = async () => {
@@ -79,7 +79,7 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
               <CompetitionWithWorldDropdown
                 country={selectedTeam.countryCode}
                 value={competition?.id ? String(competition.id) : ""}
-                onChange={(comp: FirebaseCompetition) => setCompetition(comp)}
+                onChange={(comp: CompetitionGroup) => setCompetition(comp)}
                 placeholder="Select competition"
               />
             </div>

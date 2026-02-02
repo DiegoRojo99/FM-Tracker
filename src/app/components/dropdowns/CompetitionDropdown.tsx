@@ -1,11 +1,11 @@
-import { FirebaseCompetition } from '@/lib/types/firebase/Country&Competition';
 import React, { useEffect, useState } from 'react';
+import { CompetitionGroup } from '@/lib/types/prisma/Competitions';
 
 interface CompetitionDropdownProps {
   country?: string;
   type?: string;
   value?: string;
-  onChange?: (competition: FirebaseCompetition) => void;
+  onChange?: (competition: CompetitionGroup) => void;
   placeholder?: string;
 }
 
@@ -16,7 +16,7 @@ const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({
   onChange,
   placeholder = 'Select competition',
 }) => {
-  const [competitions, setCompetitions] = useState<FirebaseCompetition[]>([]);
+  const [competitions, setCompetitions] = useState<CompetitionGroup[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
