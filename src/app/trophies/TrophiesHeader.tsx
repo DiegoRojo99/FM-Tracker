@@ -1,8 +1,8 @@
 import React from 'react';
-import { FirebaseGame } from '@/lib/types/firebase/Game';
+import { Game } from '@/lib/types/prisma/Game';
 
 interface TrophiesHeaderProps {
-  games: FirebaseGame[];
+  games: Game[];
   selectedGame: string;
   onGameChange: (game: string) => void;
   totalTrophies?: number;

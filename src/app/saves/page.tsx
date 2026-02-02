@@ -7,13 +7,13 @@ import ConfirmationModal from '../components/modals/ConfirmationModal';
 import FootballLoader from '../components/FootBallLoader';
 import { SaveCard } from './SaveCard';
 import GradientButton from '../components/GradientButton';
-import { FirebaseGame } from '@/lib/types/firebase/Game';
+import { Game } from '@/lib/types/prisma/Game';
 import { PreviewSave, Save } from '@/lib/types/prisma/Save';
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
   const [saves, setSaves] = useState<PreviewSave[]>([]);
-  const [games, setGames] = useState<FirebaseGame[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
   const [selectedGameFilter, setSelectedGameFilter] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const [deletingSave, setDeletingSave] = useState<PreviewSave | null>(null);

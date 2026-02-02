@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
-import { TrophyGroup } from '@/lib/types/firebase/Trophy';
-import { FirebaseGame } from '@/lib/types/firebase/Game';
+import { TrophyGroup } from '@/lib/types/prisma/Trophy';
+import { Game } from '@/lib/types/prisma/Game';
 import { CountryWithCompetitions } from '@/lib/types/prisma/Competitions';
 
 export function useTrophies(selectedGame: string) {
@@ -9,7 +9,7 @@ export function useTrophies(selectedGame: string) {
   const [countries, setCountries] = useState<CountryWithCompetitions[]>([]);
   const [trophies, setTrophies] = useState<TrophyGroup[]>([]);
   const [groupMapping, setGroupMapping] = useState<Record<string, string[]>>({});
-  const [games, setGames] = useState<FirebaseGame[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

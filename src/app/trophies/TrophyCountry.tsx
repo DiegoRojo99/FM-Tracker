@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { TrophyGroup } from '@/lib/types/firebase/Trophy';
+import { TrophyGroup } from '@/lib/types/prisma/Trophy';
 import { CountryWithCompetitions } from '@/lib/types/prisma/Competitions';
 
 interface TrophyCountryProps {
@@ -12,22 +12,20 @@ interface TrophyCountryProps {
 const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies, groupMapping }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const hasWon = (competitionId: string | number) => {
-    const compIdStr = String(competitionId);
-    
+  const hasWon = (competitionId: number) => {    
     // Check if user has won this specific competition
-    const directWin = trophies.some((t) => String(t.competitionId) === compIdStr);
+    const directWin = trophies.some((t) => t.competitionGroup.id === competitionId);
     if (directWin) return true;
     
     // Check if this is a grouped competition and user won any member of the group
     const groupName = Object.keys(groupMapping).find(groupName => 
-      groupMapping[groupName].includes(compIdStr)
+      groupMapping[groupName].includes(String(competitionId))
     );
     
     if (groupName) {
       // Check if user won any competition in this group
       const groupMembers = groupMapping[groupName];
-      return trophies.some((t) => groupMembers.includes(String(t.competitionId)));
+      return trophies.some((t) => groupMembers.includes(String(t.competitionGroup.id)));
     }
     
     return false;
