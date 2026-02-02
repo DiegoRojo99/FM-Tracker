@@ -19,7 +19,6 @@ export default function AdminPage() {
     <div className="flex flex-col items-center min-h-screen mx-8 p-6">
       <h1 className="text-2xl font-bold mb-8">Admin Page</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <AdminBox title="Challenges" link="/admin/add-challenge" />
         <AdminBox title="Competitions" link="/admin/competitions" />
         <AdminBox title="Coords Picker" link="/admin/teams/coords-picker" />
         <AdminBox title="Teams" link="/admin/teams" />
