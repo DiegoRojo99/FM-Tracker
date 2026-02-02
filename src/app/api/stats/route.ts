@@ -1,43 +1,28 @@
+import { prisma } from '@/lib/db/prisma';
+import { GlobalStats } from '@/lib/types/prisma/Stats';
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db/firebase';
-import { collection, getDocs, collectionGroup } from 'firebase/firestore';
 
 export async function GET() {
   try {
     // Get total number of users
-    const usersSnapshot = await getDocs(collection(db, 'users'));
-    const totalUsers = usersSnapshot.size;
+    const totalUsers = await prisma.user.count();
 
     // Get total number of saves across all users
-    const savesSnapshot = await getDocs(collectionGroup(db, 'saves'));
-    const totalSaves = savesSnapshot.size;
+    const totalSaves = await prisma.save.count();
 
     // Get total number of seasons across all saves
-    const seasonsSnapshot = await getDocs(collectionGroup(db, 'seasons'));
-    const totalSeasons = seasonsSnapshot.size;
+    const totalSeasons = await prisma.season.count();
 
     // Get total number of career stints across all saves
-    const careerSnapshot = await getDocs(collectionGroup(db, 'career'));
-    const totalCareerStints = careerSnapshot.size;
+    const totalCareerStints = await prisma.careerStint.count();
 
-    // Get total number of trophies from saves subcollections only
-    let totalTrophies = 0;
-    let totalChallenges = 0;
+    // Get total number of trophies
+    const totalTrophies = await prisma.trophy.count();
 
-    // Iterate through each save to count trophies and challenges
-    for (const saveDoc of savesSnapshot.docs) {
-      const savePath = saveDoc.ref.path; // e.g., "users/uid/saves/saveId"
-      
-      // Count trophies in this save
-      const trophiesSnapshot = await getDocs(collection(db, `${savePath}/trophies`));
-      totalTrophies += trophiesSnapshot.size;
-      
-      // Count challenges in this save
-      const challengesSnapshot = await getDocs(collection(db, `${savePath}/challenges`));
-      totalChallenges += challengesSnapshot.size;
-    }
+    // Get total number of challenges
+    const totalChallenges = await prisma.challenge.count();
 
-    const stats = {
+    const stats: GlobalStats = {
       totalUsers,
       totalSaves,
       totalTrophies,
@@ -48,7 +33,8 @@ export async function GET() {
     };
 
     return NextResponse.json(stats, { status: 200 });
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error fetching stats:', error);
     return NextResponse.json(
       { error: 'Failed to fetch database statistics' },

@@ -1,20 +1,11 @@
 'use client';
 
 import FootballLoader from '@/app/components/FootBallLoader';
+import { GlobalStats } from '@/lib/types/prisma/Stats';
 import { useEffect, useState } from 'react';
 
-interface Stats {
-  totalUsers: number;
-  totalSaves: number;
-  totalTrophies: number;
-  totalSeasons: number;
-  totalCareerStints: number;
-  totalChallenges: number;
-  timestamp: string;
-}
-
 export default function AdminStatsPage() {
-  const [stats, setStats] = useState<Stats | null>(null);
+  const [stats, setStats] = useState<GlobalStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
