@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Challenge, CareerChallenge } from '@/lib/types/firebase/Challenge';
+import { CareerChallengeWithDetails, ChallengeWithGoals } from '@/lib/types/prisma/Challenge';
 import FootballLoader from '../../components/FootBallLoader';
 import { useAuth } from '../../components/AuthProvider';
 import ProgressBar from '../../components/progress/ProgressBar';
@@ -10,8 +10,8 @@ import ProgressBar from '../../components/progress/ProgressBar';
 export default function ChallengeDetailPage() {
   const params = useParams();
   const { user } = useAuth();
-  const [challenge, setChallenge] = useState<Challenge | null>(null);
-  const [userChallenge, setUserChallenge] = useState<CareerChallenge | null>(null);
+  const [challenge, setChallenge] = useState<ChallengeWithGoals | null>(null);
+  const [userChallenge, setUserChallenge] = useState<CareerChallengeWithDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,6 +31,7 @@ export default function ChallengeDetailPage() {
         setLoading(false);
         return;
       }
+
       const data = await res.json();
       setChallenge(data.challenge);
       setUserChallenge(data.userChallenge || null);
@@ -70,8 +71,8 @@ export default function ChallengeDetailPage() {
               )}
             </div>
             <ProgressBar 
-              completed={userChallenge.completedGoals.length} 
-              total={challenge.goals.length} 
+              completed={userChallenge.goalProgress.filter(gp => gp.isComplete).length} 
+              total={userChallenge.goalProgress.length} 
               showText={true}
             />
           </div>
@@ -82,7 +83,7 @@ export default function ChallengeDetailPage() {
         <h2 className="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">Goals</h2>
         <ul className="space-y-3">
           {challenge.goals.map((goal) => {
-            const isCompleted = userChallenge?.completedGoals.includes(goal.id);
+            const isCompleted = userChallenge?.goalProgress.find(gp => gp.id === goal.id)?.isComplete;
             return (
               <li 
                 key={goal.id} 
