@@ -7,11 +7,10 @@ import { FullTrophy } from './Trophy';
 export type Save = PrismaSave;
 
 export type SaveInput = {
-  userId: string;
+  countryCode: string | null;
+  leagueId: number | null;
+  startingTeamId: number | null;
   gameId: string;
-  countryCode: string;
-  leagueId: number;
-  startingTeamId: number;
 }
 
 export type PreviewSave = Save & {

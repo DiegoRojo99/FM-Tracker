@@ -2,18 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
-import { serverTimestamp } from 'firebase/firestore';
 import TeamGrid from './TeamGrid';
-import { Competition, Country } from '@/lib/types/Country&Competition';
 import { Team } from '@/lib/types/prisma/Team';
-import { FirebaseGame } from '@/lib/types/firebase/Game';
+import { CompetitionGroup, Country } from '../../../prisma/generated/client';
+import { Game } from '@/lib/types/prisma/Game';
+import { SaveInput } from '@/lib/types/prisma/Save';
 
 export default function NewSaveForm() {
   const { user } = useAuth();
   const [countries, setCountries] = useState<Country[]>([]);
-  const [leagues, setLeagues] = useState<Competition[]>([]);
+  const [leagues, setLeagues] = useState<CompetitionGroup[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
-  const [games, setGames] = useState<FirebaseGame[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
 
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedLeague, setSelectedLeague] = useState('');
@@ -57,12 +57,11 @@ export default function NewSaveForm() {
     e.preventDefault();
     if (!user || (!selectedTeam && !isNoTeam)) return;
 
-    const newSave = {
+    const newSave: SaveInput = {
       gameId: selectedGame,
       countryCode: isNoTeam ? null : selectedCountry,
       leagueId: isNoTeam ? null : Number(selectedLeague),
-      startingTeamId: isNoTeam ? null : Number(selectedTeam),
-      createdAt: serverTimestamp()
+      startingTeamId: isNoTeam ? null : Number(selectedTeam)
     };
 
     const userToken = await user.getIdToken();
@@ -86,10 +85,10 @@ export default function NewSaveForm() {
     }, 1000);
   };
 
-  function sortGamesByReleaseDate(a: FirebaseGame, b: FirebaseGame) {
+  function sortGamesByReleaseDate(a: Game, b: Game) {
     if (!a.releaseDate) return 1;
     if (!b.releaseDate) return -1;
-    return b.releaseDate.seconds - a.releaseDate.seconds;
+    return new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime();
   }
 
   return (
@@ -104,7 +103,7 @@ export default function NewSaveForm() {
             onChange={e => setSelectedGame(e.target.value)} 
             className="w-full p-3 rounded-lg bg-[var(--color-darker)] text-white border-2 border-[var(--color-primary)] focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
           >
-            {games.sort(sortGamesByReleaseDate).map((game: FirebaseGame) => (
+            {games.sort(sortGamesByReleaseDate).map((game) => (
               <option key={game.id} value={game.id}>
                 {game.name}
               </option>
@@ -136,7 +135,7 @@ export default function NewSaveForm() {
             className="w-full p-3 rounded-lg bg-[var(--color-darker)] text-white border-2 border-[var(--color-primary)] focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <option value="">-- Select a league --</option>
-            {leagues.map((l: Competition) => (
+            {leagues.map((l) => (
               <option key={l.id} value={l.id}>{l.name}</option>
             ))}
           </select>
