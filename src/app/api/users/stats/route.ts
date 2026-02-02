@@ -1,100 +1,40 @@
 import { NextRequest } from 'next/server';
 import { withAuth } from '@/lib/auth/withAuth';
-import { adminDB } from '@/lib/auth/firebase-admin';
-
-interface UserStats {
-  activeSaves: number;
-  totalTrophies: number;
-  totalMatches: number;
-  currentSeasons: number;
-  favoriteTeam?: string;
-  longestSave?: string;
-}
+import { UserStats } from '@/lib/types/prisma/Stats';
+import { getFullUserSaves } from '@/lib/db/prisma/saves';
+import { countAllTrophiesForUser } from '@/lib/db/prisma/trophies';
+import { countUserSeasons } from '@/lib/db/prisma/seasons';
+import { FullDetailsSave } from '@/lib/types/prisma/Save';
+import { getUserMostUsedTeam } from '@/lib/db/prisma/career';
+import { Team } from '@/lib/types/prisma/Team';
 
 export async function GET(request: NextRequest) {
   return withAuth(request, async (uid) => {
     try {
-      // Get user's saves from the user's saves subcollection
-      const savesRef = adminDB.collection('users').doc(uid).collection('saves');
-      const savesSnapshot = await savesRef.get();
+      // Get user saves
+      const userSaves = await getFullUserSaves(uid);
+      const userTrophies = await countAllTrophiesForUser(uid);
+      const userSeasons = await countUserSeasons(uid);
+      const favoriteTeamEntry: Team | null = await getUserMostUsedTeam(uid);
 
-      const saves = savesSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+      const longestSave = userSaves.reduce((longest: FullDetailsSave | undefined, current) => {
+        return (current.seasons.length > (longest?.seasons.length || 0)) ? current : longest;
+      }, undefined);
 
-      // Calculate statistics
-      const activeSaves = saves.length;
-      
-      // Get total trophies from all saves
-      let totalTrophies = 0;
-      let currentSeasons = 0;
-      let longestSaveId = '';
-      let maxSeasons = 0;
-      
-      for (const save of saves) {
-        // Count trophies for this save
-        const trophiesRef = adminDB.collection('users').doc(uid).collection('saves').doc(save.id).collection('trophies');
-        const trophiesSnapshot = await trophiesRef.get();
-        
-        totalTrophies += trophiesSnapshot.size;
-        
-        // Count current seasons for this save
-        const seasonsRef = adminDB.collection('users').doc(uid).collection('saves').doc(save.id).collection('seasons');
-        const seasonsSnapshot = await seasonsRef.get();
-        
-        const seasonCount = seasonsSnapshot.size;
-        currentSeasons += seasonCount;
-        
-        // Track longest save
-        if (seasonCount > maxSeasons) {
-          maxSeasons = seasonCount;
-          longestSaveId = save.id;
-        }
-      }
-
-      // Get favorite team (most used team across saves)
-      const teamUsage: { [key: string]: number } = {};
-      
-      for (const save of saves) {
-        const saveData = save as Record<string, unknown>;
-        // Check both currentClub and currentNT for team information
-        const currentTeam = (saveData.currentClub as { name?: string } | null) || (saveData.currentNT as { name?: string } | null);
-        if (currentTeam && currentTeam.name) {
-          teamUsage[currentTeam.name] = (teamUsage[currentTeam.name] || 0) + 1;
-        }
-      }
-
-      const favoriteTeam = Object.keys(teamUsage).length > 0 
-        ? Object.entries(teamUsage).reduce((a, b) => teamUsage[a[0]] > teamUsage[b[0]] ? a : b)[0]
-        : undefined;
-
-      // Get longest save name
-      let longestSaveName: string | undefined;
-      if (longestSaveId) {
-        const longestSave = saves.find((save: Record<string, unknown>) => save.id === longestSaveId) as Record<string, unknown>;
-        if (longestSave) {
-          const currentTeam = (longestSave.currentClub as { name?: string } | null) || (longestSave.currentNT as { name?: string } | null);
-          if (currentTeam && currentTeam.name) {
-            longestSaveName = currentTeam.name;
-          } else {
-            longestSaveName = 'Unemployed Career';
-          }
-        }
-      }
-
+      // Create empty stats
       const userStats: UserStats = {
-        activeSaves,
-        totalTrophies,
-        totalMatches: 0, // Set to 0 as requested
-        currentSeasons,
-        favoriteTeam,
-        longestSave: longestSaveName
+        activeSaves: userSaves.length,
+        totalTrophies: userTrophies,
+        totalMatches: 0,
+        currentSeasons: userSeasons,
+        favoriteTeam: favoriteTeamEntry ?? undefined,
+        longestSave: longestSave
       };
-
+      
       return new Response(JSON.stringify(userStats), { status: 200 });
 
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error fetching user stats:', error);
       return new Response(
         JSON.stringify({ error: 'Internal server error' }), 

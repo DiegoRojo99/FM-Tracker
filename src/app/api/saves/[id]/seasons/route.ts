@@ -1,7 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { db } from '@/lib/db/firebase';
-import { updateSaveSeason } from '@/lib/db/saves';
-import { addTrophyToSave } from '@/lib/db/trophies';
+import { updateSaveSeason } from '@/lib/db/prisma/saves';
+import { addTrophyToSave } from '@/lib/db/prisma/trophies';
 import { SeasonInput, SeasonSummary } from '@/lib/types/firebase/Season';
 import { countryCodeMap } from '@/lib/dto/countryCode';
 import { collection, addDoc, doc, getDoc, getDocs, query, where, deleteDoc } from 'firebase/firestore';

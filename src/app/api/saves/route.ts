@@ -2,7 +2,7 @@ import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { fetchCompetition } from '@/lib/db/competitions';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
-import { getUserPreviewSaves } from '@/lib/db/saves';
+import { getUserPreviewSaves } from '@/lib/db/prisma/saves';
 import { Save } from '@/lib/types/prisma/Save';
 import { fetchTeam } from '@/lib/db/prisma/teams';
 import { prisma } from '@/lib/db/prisma';

@@ -5,15 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { signOut } from 'firebase/auth'
 import { auth } from '@/lib/db/firebase'
-
-interface UserStats {
-  activeSaves: number;
-  totalTrophies: number;
-  totalMatches: number;
-  currentSeasons: number;
-  favoriteTeam?: string;
-  longestSave?: string;
-}
+import { UserStats } from '@/lib/types/prisma/Stats'
 
 export default function Profile() {
   const { user } = useAuth()
@@ -45,10 +37,12 @@ export default function Profile() {
 
         const statsData = await response.json()
         setStats(statsData)
-      } catch (err) {
+      } 
+      catch (err) {
         setError('Failed to load profile statistics')
         console.error('Error fetching stats:', err)
-      } finally {
+      } 
+      finally {
         setLoading(false)
       }
     }
@@ -142,7 +136,7 @@ export default function Profile() {
                     <div>
                       <h3 className="text-lg font-semibold text-gray-300">Favorite Team</h3>
                       <p className="text-xl font-bold text-[var(--color-highlight)]">
-                        {stats.favoriteTeam || 'None yet'}
+                        {stats.favoriteTeam?.name || 'None yet'}
                       </p>
                     </div>
                     <div className="text-4xl">❤️</div>
@@ -154,7 +148,7 @@ export default function Profile() {
                     <div>
                       <h3 className="text-lg font-semibold text-gray-300">Longest Save</h3>
                       <p className="text-xl font-bold text-[var(--color-success)]">
-                        {stats.longestSave || 'None yet'}
+                        {stats.longestSave?.currentClub?.name || 'N/A'} ({stats.longestSave?.seasons.length || 0} seasons)
                       </p>
                     </div>
                     <div className="text-4xl">🎖️</div>

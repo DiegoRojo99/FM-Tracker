@@ -1,4 +1,4 @@
-import { getAllTeamsInSaves } from "@/lib/db/saves";
+import { getAllTeamsInSaves } from "@/lib/db/prisma/saves";
 
 export async function GET() {
   const uniqueTeams = await getAllTeamsInSaves();

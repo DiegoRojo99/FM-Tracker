@@ -1,7 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
-import { getFullSave } from '@/lib/db/saves';
+import { getFullSave } from '@/lib/db/prisma/saves';
 import { prisma } from '@/lib/db/prisma';
 
 export async function GET(req: NextRequest) {

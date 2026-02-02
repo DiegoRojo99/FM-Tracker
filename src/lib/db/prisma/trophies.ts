@@ -1,9 +1,9 @@
-import { fetchCompetition } from './competitions';
-import { fetchTeam } from './prisma/teams';
-import { addChallengeForTrophy } from './challenges';
-import { Trophy } from '../../../prisma/generated/client';
-import { prisma } from './prisma';
-import { FullTrophy } from '../types/prisma/Trophy';
+import { fetchCompetition } from '../competitions';
+import { fetchTeam } from './teams';
+import { addChallengeForTrophy } from '../challenges';
+import { Trophy } from '../../../../prisma/generated/client';
+import { prisma } from '../prisma';
+import { FullTrophy } from '../../types/prisma/Trophy';
 
 export async function addTrophyToSave(
   { teamId, competitionId, uid, season, saveId, game }: 
@@ -82,7 +82,13 @@ export async function getAllTrophiesForUser(userId: string): Promise<FullTrophy[
   });
 }
 
-  export async function updateTrophy(
+export async function countAllTrophiesForUser(userId: string): Promise<number> {
+  return await prisma.trophy.count({
+    where: { save: { userId } }
+  });
+}
+
+export async function updateTrophy(
   trophyId: number,
   updates: { teamId?: number; season?: string; competitionId?: number }
 ): Promise<boolean> {

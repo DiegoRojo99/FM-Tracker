@@ -1,7 +1,9 @@
-import { fetchCompetition } from "./competitions";
-import { FullDetailsSave, PreviewSave } from "../types/prisma/Save";
-import { prisma } from "./prisma";
-import { Team, CompetitionGroup } from "../../../prisma/generated/client";
+import { fetchCompetition } from "../competitions";
+import { FullDetailsSave, PreviewSave } from "../../types/prisma/Save";
+import { prisma } from "../prisma";
+import { Team } from "@/lib/types/prisma/Team";
+import { CompetitionGroup } from "../../../../prisma/generated/client";
+
 
 /**
  * Updates the 'season' attribute of a save document for a user in Firestore.
@@ -169,6 +171,13 @@ export async function getFullUserSaves(userId: string): Promise<FullDetailsSave[
           game: true,
         },
       }
+    },
+  });
+}
+export async function countUserSaves(userId: string): Promise<number> {
+  return await prisma.save.count({
+    where: {
+      userId: userId,
     },
   });
 }
