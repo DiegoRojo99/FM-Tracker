@@ -8,7 +8,6 @@ import TrophyCase from './TrophyCase';
 import SeasonSection from './SeasonSection';
 import ChallengeSection from './ChallengeSection';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
-// import CareerMap from './career/CareerMap';
 
 export default function SavePage() {
   const params = useParams();
@@ -60,7 +59,6 @@ export default function SavePage() {
       <SeasonSection saveDetails={saveDetails} setRefresh={setRefresh} />
       <TrophyCase save={saveDetails} setRefresh={setRefresh} />
       <ChallengeSection challenges={saveDetails.challenges ?? []} />
-      {/* <CareerMap saveDetails={saveDetails} /> */}
     </div>
   );
 }
