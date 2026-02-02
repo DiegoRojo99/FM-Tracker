@@ -6,28 +6,15 @@ import { CountryWithCompetitions } from '@/lib/types/prisma/Competitions';
 interface TrophyCountryProps {
   country: CountryWithCompetitions;
   trophies: TrophyGroup[];
-  groupMapping: Record<string, string[]>;
 }
 
-const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies, groupMapping }) => {
+const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hasWon = (competitionId: number) => {    
     // Check if user has won this specific competition
     const directWin = trophies.some((t) => t.competitionGroup.id === competitionId);
-    if (directWin) return true;
-    
-    // Check if this is a grouped competition and user won any member of the group
-    const groupName = Object.keys(groupMapping).find(groupName => 
-      groupMapping[groupName].includes(String(competitionId))
-    );
-    
-    if (groupName) {
-      // Check if user won any competition in this group
-      const groupMembers = groupMapping[groupName];
-      return trophies.some((t) => groupMembers.includes(String(t.competitionGroup.id)));
-    }
-    
+    if (directWin) return true;    
     return false;
   };
   

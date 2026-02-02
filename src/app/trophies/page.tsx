@@ -8,7 +8,7 @@ import { useTrophies } from './useTrophies';
 
 export default function TrophiesPage() {
   const [selectedGame, setSelectedGame] = useState<string>('all');
-  const { countries, trophies, groupMapping, games, loading } = useTrophies(selectedGame);
+  const { countries, trophies, games, loading } = useTrophies(selectedGame);
 
   if (loading) {
     return <FootballLoader />;
@@ -43,7 +43,7 @@ export default function TrophiesPage() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {countries.sort((a, b) => a.name.localeCompare(b.name)).map((country) => {
-            return <TrophyCountry key={country.code} country={country} trophies={trophies} groupMapping={groupMapping} />;
+            return <TrophyCountry key={country.code} country={country} trophies={trophies} />;
           })}
         </div>
       </div>
