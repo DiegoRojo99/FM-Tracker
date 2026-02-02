@@ -3,9 +3,31 @@
 import { createContext, useEffect, useState, useContext } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/db/firebase';
-import { createUserIfNotExists } from '@/lib/db/firestore';
 
 const AuthContext = createContext<{ user: User | null, userLoading: boolean }>({ user: null, userLoading: true })
+
+const createUserIfNotExists = async (firebaseUser: User) => {
+  try {
+    const response = await fetch('/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName || 'Anonymous',
+        photoURL: firebaseUser.photoURL || '',
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Failed to create user:', await response.text());
+    }
+  } catch (error) {
+    console.error('Error creating user:', error);
+  }
+};
 
 export const useAuth = () => useContext(AuthContext)
 export function AuthProvider({ children }: { children: React.ReactNode }) {

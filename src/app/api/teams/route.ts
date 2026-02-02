@@ -1,4 +1,6 @@
 import { db } from '@/lib/db/firebase';
+import { prisma } from '@/lib/db/prisma';
+import { Team } from '@/lib/types/prisma/Team';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -24,9 +26,13 @@ async function searchTeamsByLeague(leagueId: string) {
     return data;
 }
 
-async function searchTeamsByName(name: string) {
-    const q = query(collection(db, 'teams'), where('name', 'array-contains', name));
-    const snapshot = await getDocs(q);
-    const data = snapshot.docs.map(doc => doc.data());
-    return data;
+async function searchTeamsByName(name: string): Promise<Team[]> {
+  return await prisma.team.findMany({
+    where: {
+      name: {
+        contains: name,
+        mode: 'insensitive',
+      },
+    },
+  });
 }

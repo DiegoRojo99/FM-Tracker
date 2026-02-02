@@ -1,4 +1,4 @@
-import { getAllUsers } from "@/lib/db/users";
+import { getAllUsers } from "@/lib/db/prisma/users";
 
 export async function GET() {
   const users = await getAllUsers();
