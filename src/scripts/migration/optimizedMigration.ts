@@ -2,7 +2,7 @@ import { adminDB } from '../../lib/auth/firebase-admin';
 import { fetchFromApi } from '../../lib/apiFootball';
 import { rateLimiter } from '../../lib/utils/rateLimiter';
 import { Timestamp } from 'firebase-admin/firestore';
-import { FirebaseCompetition } from '@/lib/types/Country&Competition';
+import { FirebaseCompetition } from '@/lib/types/firebase/Country&Competition';
 import { Team } from '@/lib/types/firebase/Team';
 
 type MissingCompetition = {

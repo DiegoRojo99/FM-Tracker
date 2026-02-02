@@ -1,33 +1,24 @@
 import { NextResponse } from 'next/server';
-import { adminDB } from '@/lib/auth/firebase-admin';
-import { FirebaseCountry } from '@/lib/types/Country&Competition';
-import { Team } from '@/lib/types/firebase/Team';
+import { prisma } from '@/lib/db/prisma';
 
 async function updateTeamsCountryCode() {
-  const countriesSnap = await adminDB.collection('countries').get();
+  const countries = await prisma.country.findMany({});
 
   // Create a map of country names to codes
-  const countryMap: Record<string, string> = {};
-  countriesSnap.forEach((doc) => {
-    const data = doc.data() as FirebaseCountry;
-    if (data.name && data.code) {
-      countryMap[data.name] = data.code;
-    }
-  });
+  const countryMap: Record<string, string> = countries.reduce((map: Record<string, string>, country) => {
+    map[country.name] = country.code;
+    return map;
+  }, {});
 
   console.log(`Found ${Object.keys(countryMap).length} countries.`);
-
-  const teamsSnap = await adminDB.collection('teams').get();
-  console.log(`Found ${teamsSnap.size} teams.`);
+  const teams = await prisma.team.findMany({});
+  console.log(`Found ${teams.length} teams.`);
 
   let updatedCount = 0;
   let skippedCount = 0;
 
-  for (const doc of teamsSnap.docs) {
-    console.log(`Processing team: ${doc.id}`);
-    const team = doc.data() as Team;
-    const teamRef = doc.ref;
-
+  for (const team of teams) {
+    console.log(`Processing team: ${team.id}`);
     const countryName = team.countryCode;
     console.log(`Team ${team.name} has countryName: "${countryName}"`);
     const countryCode = countryMap[countryName];
@@ -38,7 +29,10 @@ async function updateTeamsCountryCode() {
       continue;
     }
 
-    await teamRef.update({ countryCode });
+    await prisma.team.update({
+      where: { id: team.id },
+      data: { countryCode }
+    });
     updatedCount++;
   }
 

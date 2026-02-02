@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import TeamSearchDropdown from '@/app/components/algolia/TeamSearchDropdown';
 import CompetitionDropdown from '@/app/components/dropdowns/CompetitionDropdown';
-import { FirebaseCompetition } from '@/lib/types/Country&Competition';
+import { FirebaseCompetition } from '@/lib/types/firebase/Country&Competition';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
 import { FullCareerStint } from '@/lib/types/prisma/Career';

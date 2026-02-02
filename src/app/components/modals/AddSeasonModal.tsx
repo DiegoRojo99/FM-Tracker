@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput } from "@/lib/types/firebase/Season";
 import CompetitionDropdown from "../dropdowns/CompetitionDropdown";
 import CompetitionWithWorldDropdown from "../dropdowns/CompetitionWithWorldDropdown";
-import { FirebaseCompetition } from "@/lib/types/Country&Competition";
+import { FirebaseCompetition } from "@/lib/types/firebase/Country&Competition";
 import { FullDetailsSave } from "@/lib/types/prisma/Save";
 import BaseModal from "./BaseModal";
 import LoadingButton from "../LoadingButton";

@@ -1,4 +1,4 @@
-import { Country } from '../../../src/lib/types/Country&Competition.d';
+import { FirebaseCountry } from '@/lib/types/firebase/Country';
 
 export async function migrateCountries(firestore: any, pool: any) {
   console.log('🌍 Fetching countries from Firebase...');
@@ -18,8 +18,8 @@ export async function migrateCountries(firestore: any, pool: any) {
     let errorCount = 0;
 
     for (const doc of countriesSnapshot.docs) {
-      const data = doc.data() as Omit<Country, 'code'>;
-      const country: Country = {
+      const data = doc.data() as Omit<FirebaseCountry, 'code'>;
+      const country: FirebaseCountry = {
         code: doc.id, // Use Firebase document ID as country code
         ...data,
       };

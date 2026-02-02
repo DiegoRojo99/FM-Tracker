@@ -3,7 +3,7 @@
 import { Trophy } from '@/lib/types/prisma/Trophy';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
-import { FirebaseCompetition } from '@/lib/types/Country&Competition';
+import { FirebaseCompetition } from '@/lib/types/firebase/Country&Competition';
 import { Team } from '@/lib/types/prisma/Team';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import BaseModal from './BaseModal';

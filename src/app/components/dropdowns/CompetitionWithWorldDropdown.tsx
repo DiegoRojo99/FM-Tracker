@@ -1,4 +1,4 @@
-import { FirebaseCompetition } from '@/lib/types/Country&Competition';
+import { FirebaseCompetition } from '@/lib/types/firebase/Country&Competition';
 import React, { useEffect, useState } from 'react';
 
 interface CompetitionWithWorldDropdownProps {
