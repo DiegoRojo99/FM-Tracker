@@ -1,9 +1,9 @@
-import { fetchCompetition } from '../competitions';
+import { fetchCompetition } from './competitions';
 import { fetchTeam } from './teams';
-import { addChallengeForTrophy } from '../challenges';
-import { Trophy } from '../../../../prisma/generated/client';
-import { prisma } from '../prisma';
-import { FullTrophy } from '../../types/prisma/Trophy';
+import { addChallengeForTrophy } from './challenges';
+import { Trophy } from '../../../prisma/generated/client';
+import { prisma } from './prisma';
+import { FullTrophy } from '../types/prisma/Trophy';
 
 export async function addTrophyToSave(
   { teamId, competitionId, uid, season, saveId, game }: 

@@ -1,5 +1,5 @@
-import { Team } from "../../types/prisma/Team";
-import { prisma } from "../prisma";
+import { Team } from "../types/prisma/Team";
+import { prisma } from "./prisma";
 
 export async function fetchTeam(teamId: number): Promise<Team | null> {
   return await prisma.team.findUnique({

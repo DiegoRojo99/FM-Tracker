@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server';
 import { withAuth } from '@/lib/auth/withAuth';
 import { UserStats } from '@/lib/types/prisma/Stats';
-import { getFullUserSaves } from '@/lib/db/prisma/saves';
-import { countAllTrophiesForUser } from '@/lib/db/prisma/trophies';
-import { countUserSeasons } from '@/lib/db/prisma/seasons';
+import { getFullUserSaves } from '@/lib/db/saves';
+import { countAllTrophiesForUser } from '@/lib/db/trophies';
+import { countUserSeasons } from '@/lib/db/seasons';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
-import { getUserMostUsedTeam } from '@/lib/db/prisma/career';
+import { getUserMostUsedTeam } from '@/lib/db/career';
 import { Team } from '@/lib/types/prisma/Team';
 
 export async function GET(request: NextRequest) {

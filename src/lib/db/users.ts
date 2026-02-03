@@ -1,5 +1,5 @@
-import { User, UserInput } from "../../types/prisma/User";
-import { prisma } from "../prisma";
+import { User, UserInput } from "../types/prisma/User";
+import { prisma } from "./prisma";
 import { User as FirebaseUser} from 'firebase/auth';
 
 export async function createUserIfNotExists(user: FirebaseUser) {

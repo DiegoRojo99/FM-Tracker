@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createUserIfNotExists } from '@/lib/db/prisma/users';
+import { createUserIfNotExists } from '@/lib/db/users';
 
 export async function POST(request: NextRequest) {
   try {

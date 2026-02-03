@@ -1,6 +1,6 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { NextRequest } from 'next/server';
-import { getAllTrophiesForUser } from '@/lib/db/prisma/trophies';
+import { getAllTrophiesForUser } from '@/lib/db/trophies';
 import { FullTrophy, TrophyGroup } from '@/lib/types/prisma/Trophy';
 import { fetchCompetition } from '@/lib/db/competitions';
 

@@ -1,5 +1,5 @@
 import { SeasonSummary } from "@/lib/types/prisma/Season";
-import { prisma } from "../prisma";
+import { prisma } from "./prisma";
 
 const seasonSummaryInclude = {
   team: true,

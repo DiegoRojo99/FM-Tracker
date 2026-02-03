@@ -1,8 +1,8 @@
-import { fetchCompetition } from "../competitions";
-import { FullDetailsSave, PreviewSave } from "../../types/prisma/Save";
-import { prisma } from "../prisma";
+import { fetchCompetition } from "./competitions";
+import { FullDetailsSave, PreviewSave } from "../types/prisma/Save";
+import { prisma } from "./prisma";
 import { Team } from "@/lib/types/prisma/Team";
-import { CompetitionGroup } from "../../../../prisma/generated/client";
+import { CompetitionGroup } from "../../../prisma/generated/client";
 
 
 /**

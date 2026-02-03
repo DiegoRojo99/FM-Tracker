@@ -1,10 +1,10 @@
 import { withAuth } from '@/lib/auth/withAuth';
-import { updateSaveSeason } from '@/lib/db/prisma/saves';
-import { addTrophyToSave } from '@/lib/db/prisma/trophies';
+import { updateSaveSeason } from '@/lib/db/saves';
+import { addTrophyToSave } from '@/lib/db/trophies';
 import { SeasonInput } from '@/lib/types/prisma/Season';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
-import { getSaveSeasons } from '@/lib/db/prisma/seasons';
+import { getSaveSeasons } from '@/lib/db/seasons';
 
 export async function POST(req: NextRequest) {
   return withAuth(req, async (uid) => {

@@ -1,4 +1,4 @@
-import { fetchTeamsByIds } from '@/lib/db/prisma/teams';
+import { fetchTeamsByIds } from '@/lib/db/teams';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {

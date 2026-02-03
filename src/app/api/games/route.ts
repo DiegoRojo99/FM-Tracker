@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllGames, getActiveGames } from '../../../lib/db/prisma/games';
+import { getAllGames, getActiveGames } from '../../../lib/db/games';
 
 export async function GET(request: NextRequest) {
   try {

@@ -1,6 +1,6 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
-import { addTrophyToSave } from '@/lib/db/prisma/trophies';
+import { addTrophyToSave } from '@/lib/db/trophies';
 import { FullTrophy, TrophyGroup } from '@/lib/types/prisma/Trophy';
 import { NextRequest, NextResponse } from 'next/server';
 

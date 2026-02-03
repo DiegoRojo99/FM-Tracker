@@ -1,8 +1,8 @@
 import { CareerChallenge, CareerChallengeGoalInput, CareerChallengeWithDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '../types/prisma/Challenge';
 import { challengeGoalToCareerChallengeGoal } from '../dto/challenges';
-import { getTrophiesForSave } from './prisma/trophies';
+import { getTrophiesForSave } from './trophies';
 import { prisma } from './prisma';
-import { getSaveById } from './prisma/saves';
+import { getSaveById } from './saves';
 import { Trophy } from '../../../prisma/generated/client';
 
 const ChallengeGoalWithDetailsInclude = {

@@ -1,6 +1,6 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { NextRequest } from 'next/server';
-import { fetchTeam } from '@/lib/db/prisma/teams';
+import { fetchTeam } from '@/lib/db/teams';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
 import { prisma } from '@/lib/db/prisma';
 import { CareerStintInput } from '@/lib/types/prisma/Career';

@@ -1,6 +1,6 @@
 import { FullCareerStint } from "@/lib/types/prisma/Career";
-import { prisma } from "../prisma";
-import { Team } from "../../../../prisma/generated/client";
+import { prisma } from "./prisma";
+import { Team } from "../../../prisma/generated/client";
 
 export async function getSaveCareer(saveId: string): Promise<FullCareerStint[]> {
   return await prisma.careerStint.findMany({

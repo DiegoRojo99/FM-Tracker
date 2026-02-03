@@ -1,5 +1,5 @@
-import { prisma } from '../prisma';
-import { Game, GameInput } from '../../types/prisma/Game';
+import { prisma } from './prisma';
+import { Game, GameInput } from '../types/prisma/Game';
 
 export async function getGame(gameId: string): Promise<Game | null> {
   try {

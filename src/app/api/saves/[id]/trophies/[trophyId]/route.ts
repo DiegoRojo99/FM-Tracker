@@ -1,5 +1,5 @@
 import { withAuth } from '@/lib/auth/withAuth';
-import { updateTrophy, deleteTrophy } from '@/lib/db/prisma/trophies';
+import { updateTrophy, deleteTrophy } from '@/lib/db/trophies';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function PUT(req: NextRequest) {
