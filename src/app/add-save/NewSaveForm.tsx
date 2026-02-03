@@ -30,7 +30,7 @@ export default function NewSaveForm() {
   // Fetch leagues when country changes
   useEffect(() => {
     if (selectedCountry) {
-      fetch(`/api/competitions?country=${selectedCountry}&type=League`)
+      fetch(`/api/competitions?country=${selectedCountry}&type=League&gameId=${selectedGame}`)
         .then(res => res.json())
         .then(setLeagues);
     } 
@@ -38,12 +38,12 @@ export default function NewSaveForm() {
       setLeagues([]);
       setSelectedLeague('');
     }
-  }, [selectedCountry]);
+  }, [selectedCountry, selectedGame]);
 
   // Fetch teams when league changes
   useEffect(() => {
     if (selectedLeague) {
-      fetch(`/api/teams?leagueId=${selectedLeague}`)
+      fetch(`/api/teams?leagueId=${selectedLeague}&gameId=${selectedGame}`)
         .then(res => res.json())
         .then(setTeams);
     } 
@@ -51,7 +51,7 @@ export default function NewSaveForm() {
       setTeams([]);
       setSelectedTeam('');
     }
-  }, [selectedLeague]);
+  }, [selectedLeague, selectedGame]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
