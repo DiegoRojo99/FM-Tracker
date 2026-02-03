@@ -1,6 +1,15 @@
 import { TeamInput } from "../InsertDB"
 import { Timestamp } from 'firebase/firestore';
 
+export type TeamInput = {
+  name: string
+  logoUrl: string
+  countryCode: string
+  location: { lat: number; lng: number }
+  competitionId: string
+  national: boolean
+}
+
 export type Team = {
   id: number;
   name: string;

@@ -1,5 +1,5 @@
+import { CareerStint } from "./Career";
 import { CareerChallenge } from "./Challenge";
-import { CareerStint } from "../InsertDB";
 import { SeasonSummary } from "./Season";
 import { Trophy } from "./Trophy";
 
