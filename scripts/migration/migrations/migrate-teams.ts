@@ -1,50 +1,87 @@
+// Country name to code mapping for teams with full country names
+export const countryNameMapping: { [key: string]: string } = {
+  'Argentina': 'AR',
+  'Austria': 'AT',
+  'Belarus': 'BY',
+  'Belgium': 'BE',
+  'Bolivia': 'BO',
+  'Brazil': 'BR',
+  'Bulgaria': 'BG',
+  'Cape-Verde-Islands': 'CV',
+  'Central-African-Republic': 'CF',
+  'Chad': 'TD',
+  'Chile': 'CL',
+  'China': 'CN',
+  'Comoros': 'KM',
+  'Colombia': 'CO',
+  'Croatia': 'HR',
+  'Czech-Republic': 'CZ',
+  'Denmark': 'DK',
+  'Djibouti': 'DJ',
+  'Ecuador': 'EC',
+  'Egypt': 'EG',
+  'Equatorial-Guinea': 'GQ',
+  'England': 'GB-ENG',
+  'Eritrea': 'ER',
+  'Finland': 'FI',
+  'France': 'FR',
+  'Germany': 'DE',
+  'Gibraltar': 'GI',
+  'Greece': 'GR',
+  'Guinea-Bissau': 'GW',
+  'Hong-Kong': 'HK',
+  'Hong Kong, China': 'HK',
+  'Hungary': 'HU',
+  'Iceland': 'IS',
+  'Israel': 'IL',
+  'Ireland': 'IE',
+  'Italy': 'IT',
+  'Indonesia': 'ID',
+  'Japan': 'JP',
+  'Kazakhstan': 'KZ',
+  'Korea': 'KR',
+  'Latvia': 'LV',
+  'Liechtenstein': 'LI',
+  'Madagascar': 'MG',
+  'Martinique': 'MQ',
+  'Mexico': 'MX',
+  'Mozambique': 'MZ',
+  'Netherlands': 'NL',
+  'New-Zealand': 'NZ',
+  'Niger': 'NE',
+  'Northern-Ireland': 'GB-NIR',
+  'Norway': 'NO',
+  'Paraguay': 'PY',
+  'Peru': 'PE',
+  'Poland': 'PL',
+  'Portugal': 'PT',
+  'Romania': 'RO',
+  'Rommania': 'RO',
+  'Russia': 'RU',
+  'Malaysia': 'MY',
+  'Saint-Kitts-and-Nevis': 'KN',
+  'Seychelles': 'SC',
+  'Serbia': 'RS',
+  'Sierra-Leone': 'SL',
+  'Slovenia': 'SI',
+  'Slovakia': 'SK',
+  'South-Africa': 'ZA',
+  'South-Korea': 'KR',
+  'Spain': 'ES',
+  'Sweden': 'SE',
+  'Switzerland': 'CH',
+  'São-Tomé-e-Príncipe': 'ST',
+  'Turkey': 'TR',
+  'UAE': 'AE',
+  'Uruguay': 'UY',
+  'USA': 'US',
+  'United-Arab-Emirates': 'AE',
+  'Venezuela': 'VE',
+  'Wales': 'GB-WLS'
+};
+
 export async function migrateTeams(firestore: any, pool: any) {
   console.log('⚽ Fetching teams from Firebase...');
-  
-  // Country name to code mapping for teams with full country names
-  const countryNameMapping: { [key: string]: string } = {
-    'Argentina': 'AR',
-    'Belarus': 'BY',
-    'Bulgaria': 'BG',
-    'Cape-Verde-Islands': 'CV',
-    'Central-African-Republic': 'CF',
-    'Chad': 'TD',
-    'China': 'CN',
-    'Comoros': 'KM',
-    'Croatia': 'HR',
-    'Czech-Republic': 'CZ',
-    'Djibouti': 'DJ',
-    'Egypt': 'EG',
-    'Equatorial-Guinea': 'GQ',
-    'Eritrea': 'ER',
-    'Guinea-Bissau': 'GW',
-    'Ireland': 'IE',
-    'Korea': 'KR',
-    'Latvia': 'LV',
-    'Liechtenstein': 'LI',
-    'Madagascar': 'MG',
-    'Martinique': 'MQ',
-    'Mexico': 'MX',
-    'Mozambique': 'MZ',
-    'Netherlands': 'NL',
-    'Niger': 'NE',
-    'Northern-Ireland': 'GB-NIR',
-    'Norway': 'NO',
-    'Poland': 'PL',
-    'Portugal': 'PT',
-    'Saint-Kitts-and-Nevis': 'KN',
-    'Seychelles': 'SC',
-    'Sierra-Leone': 'SL',
-    'Slovenia': 'SI',
-    'South-Africa': 'ZA',
-    'South-Korea': 'KR',
-    'Spain': 'ES',
-    'Switzerland': 'CH',
-    'São-Tomé-e-Príncipe': 'ST',
-    'UAE': 'AE',
-    'United-Arab-Emirates': 'AE',
-    'Wales': 'GB-WLS'
-  };
   
   try {
     // First, get existing team IDs from PostgreSQL
@@ -95,8 +132,13 @@ export async function migrateTeams(firestore: any, pool: any) {
         // Handle null countryCode - skip teams without country
         if (!team.countryCode) {
           skippedCount++;
+          console.warn(`   ⚠️  Team has no country code, skipping: ${team.name}`);
+          console.warn(`       Team data:`, team);
           nullCountryTeams.push(team.name);
           continue;
+        }
+        else{
+          console.log(`   ℹ️  Team country code: ${team.countryCode} for team: ${team.name}`);
         }
 
         // Check if country exists

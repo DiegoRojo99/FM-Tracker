@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 import admin from 'firebase-admin';
-import type { FirestoreApiCompetition } from '../../src/lib/types/Competition-Migration';
+import type { FirestoreApiCompetition } from '../../../src/lib/types/Competition-Migration';
 
 export async function migrateApiCompetitions(firestore: any, pool: Pool): Promise<void> {
   console.log('\n🏆 Starting ApiCompetition migration...');
@@ -66,7 +66,8 @@ export async function migrateApiCompetitions(firestore: any, pool: Pool): Promis
         if (competition.createdAt) {
           if (competition.createdAt instanceof admin.firestore.Timestamp) {
             createdAt = competition.createdAt.toDate();
-          } else if (typeof competition.createdAt === 'object' && '_seconds' in competition.createdAt) {
+          } 
+          else if (typeof competition.createdAt === 'object' && '_seconds' in competition.createdAt) {
             createdAt = new Date(competition.createdAt._seconds * 1000);
           }
         }

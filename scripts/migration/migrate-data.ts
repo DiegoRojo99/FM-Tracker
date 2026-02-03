@@ -12,6 +12,7 @@ import { migrateSaves } from './migrations/migrate-saves';
 import { migrateCareerStints } from './migrations/migrate-career-stints';
 import { migrateSeasons } from './migrations/migrate-seasons';
 import { migrateApiCompetitions } from './migrations/migrate-api-competitions';
+import { migrateApiCompetitionsTeams } from './migrations/migrate-api-competitions-teams';
 import { migrateCompetitionGroups } from './migrations/migrate-competition-groups';
 import { migrateCompetitionJunctions } from './migrations/migrate-competition-junctions';
 import { migrateSeasonCompetitionData } from './migrations/migrate-season-competition-data';
@@ -69,6 +70,11 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'api-competitions',
     description: 'Migrate API competition data from Firebase to PostgreSQL (depends on countries)',
     migrate: migrateApiCompetitions,
+  },
+  {
+    name: 'api-competitions-teams',
+    description: 'Migrate API competition teams from Firebase to PostgreSQL (depends on api-competitions, teams)',
+    migrate: migrateApiCompetitionsTeams,
   },
   {
     name: 'competition-groups',
