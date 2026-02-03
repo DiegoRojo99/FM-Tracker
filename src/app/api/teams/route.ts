@@ -39,13 +39,15 @@ async function getApiCompetitionIdsFromLeagueId(leagueId: number): Promise<numbe
 
 async function searchTeamsByLeague(leagueId: string, gameId: string | null): Promise<Team[]> {
     const season = gameId ? getSeasonFromGameId(gameId) : null;
+    console.log('Searching teams for leagueId:', leagueId, 'season:', season);
     const apiCompetitionIds = await getApiCompetitionIdsFromLeagueId(Number(leagueId));
+    console.log('Found API Competition IDs:', apiCompetitionIds);
 
     if (apiCompetitionIds.length === 0) {
       return [];
     }
 
-    return await prisma.team.findMany({
+    const teams = await prisma.team.findMany({
       where: {
         teamSeasons: {
           some: {
@@ -55,7 +57,8 @@ async function searchTeamsByLeague(leagueId: string, gameId: string | null): Pro
         },
       },
     });
-          
+    console.log('Found teams:', teams.length);
+    return teams;
 }
 
 async function searchTeamsByName(name: string): Promise<Team[]> {

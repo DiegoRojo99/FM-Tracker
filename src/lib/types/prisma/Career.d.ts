@@ -3,7 +3,7 @@ import { Team } from './Team';
 
 export type CareerStint = PrismaStint;
 export type FullCareerStint = CareerStint & {
-  team: Team | null;
+  team: Team;
 };
 
 export type CareerStintInput = Omit<CareerStint, 'id' | 'teamName' | 'teamLogo' | 'createdAt' | 'updatedAt'> & {

@@ -1,6 +1,5 @@
 import { Pool } from 'pg';
-import admin from 'firebase-admin';
-import type { FirestoreAdminCompetition } from '../../src/lib/types/Competition-Migration';
+import type { FirestoreAdminCompetition } from '../../../src/lib/types/Competition-Migration';
 
 interface CompetitionMapping {
   adminCompetitionId: string;

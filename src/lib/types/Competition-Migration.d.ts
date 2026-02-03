@@ -46,6 +46,12 @@ export interface FirestoreApiCompetition {
 }
 
 /**
+ * Firestore apiCompetitions collection schema
+ * This represents raw API data for competitions
+ */
+export type FirestoreCompetition = Omit<FirestoreApiCompetition, 'createdAt' | 'lastUpdated' | 'apiSource'>;
+
+/**
  * Migration mapping between Firestore and PostgreSQL
  * This shows how the data will be mapped during migration
  */

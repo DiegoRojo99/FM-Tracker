@@ -8,6 +8,7 @@ import LoadingButton from "../LoadingButton";
 import { Team } from "@/lib/types/prisma/Team";
 import { CompetitionGroup } from '@/lib/types/prisma/Competitions';
 import Image from "next/image";
+import { FullCareerStint } from "@/lib/types/prisma/Career";
 
 type AddSeasonModalProps = {
   open: boolean;
@@ -22,7 +23,7 @@ type AddSeasonModalProps = {
  * @returns The next season in the format "YYYY/YY" or an empty string if not found.
  */
 function pullNextSeasonFromSave(saveDetails: FullDetailsSave): string {
-  if (!saveDetails || !saveDetails.seasons) {
+  if (!saveDetails || !saveDetails.seasons?.length) {
     return "";
   }
 
@@ -43,6 +44,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   const [relegated, setRelegated] = useState(false);
   const [cupResults, setCupResults] = useState<CupResultInput[]>([]);
   const [saving, setSaving] = useState(false);
+  const uniqueTeams = getUniqueTeams();
   
   // New state for team and league selection
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
@@ -108,6 +110,18 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
     }
   };
 
+  {/* Get unique teams from career stints */}
+  function getUniqueTeams(): Team[] {
+    if (!saveDetails.careerStints) return [];
+    const uniqueMap = new Map<string, Team>();
+    saveDetails.careerStints.forEach((stint) => {
+      if (!uniqueMap.has(stint.teamId)) {
+        uniqueMap.set(stint.teamId, stint.team);
+      }
+    });
+    return Array.from(uniqueMap.values());
+  }
+
   if (!open) return null;
   
   return (
@@ -135,24 +149,18 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
               value={selectedTeam ? selectedTeam.id : ''}
               onChange={(e) => {
                 const teamId = e.target.value;
+                console.log("Selected team ID:", teamId);
                 if (teamId) {
-                  const careerStint = saveDetails.careerStints?.find(stint => stint.teamId === teamId);
+                  const careerStint: FullCareerStint | undefined = saveDetails.careerStints.find((stint: FullCareerStint) => stint.teamId === Number(teamId));
+                  console.log("Found career stint for selected team:", careerStint);
                   if (careerStint) {
-                    // Create a Team object from career stint data
-                    const team: Team = {
-                      id: parseInt(careerStint.teamId),
-                      name: careerStint.teamName || '',
-                      logo: careerStint.teamLogo || '',
-                      countryCode: careerStint.countryCode,
-                      national: careerStint.isNational || false,
-                      lat: null, 
-                      lng: null ,
-                      isFemale: null,
-                    };
+                    const team: Team = careerStint.team;
+                    console.log("Setting selected team to:", team);
                     setSelectedTeam(team);
                     setSelectedLeague(null); // Reset league when team changes
                   }
-                } else {
+                } 
+                else {
                   setSelectedTeam(null);
                   setSelectedLeague(null);
                 }
@@ -160,10 +168,9 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
               className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
             >
               <option value="">-- Select a team --</option>
-              {/* Get unique teams from career stints */}
-              {Array.from(new Map(saveDetails.careerStints.map(stint => [stint.teamId, stint])).values()).map((stint) => (
-                <option key={stint.teamId} value={stint.teamId}>
-                  {stint.teamName}
+              {uniqueTeams.map((team) => (
+                <option key={team.id} value={team.id}>
+                  {team.name}
                 </option>
               ))}
             </select>

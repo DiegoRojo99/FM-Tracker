@@ -20,6 +20,8 @@ import { migrateTrophies } from './migrations/migrate-trophies';
 import { migrateGlobalChallenges } from './migrations/migrate-global-challenges';
 import { migrateSupplementaryCompetitions } from './migrations/migrate-supplementary-competitions';
 import { migrateCareerChallenges } from './migrations/migrate-career-challenges';
+import { migrateCompetitions } from './migrations/migrate-competitions';
+import { migrateGroupCompetitions } from './migrations/migrate-group-competitions';
 
 // Load environment variables
 config();
@@ -70,6 +72,16 @@ const MIGRATION_STEPS: MigrationStep[] = [
     name: 'api-competitions',
     description: 'Migrate API competition data from Firebase to PostgreSQL (depends on countries)',
     migrate: migrateApiCompetitions,
+  },
+  {
+    name: 'competitions',
+    description: 'Migrate API competition data from Firebase to PostgreSQL (depends on countries)',
+    migrate: migrateCompetitions,
+  },
+  {
+    name: 'group-competitions',
+    description: 'Migrate API competition data from Firebase to PostgreSQL (depends on countries)',
+    migrate: migrateGroupCompetitions,
   },
   {
     name: 'api-competitions-teams',
