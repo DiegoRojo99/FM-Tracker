@@ -4,9 +4,7 @@ import { Game, GameInput } from '../../types/prisma/Game';
 export async function getGame(gameId: string): Promise<Game | null> {
   try {
     const game = await prisma.game.findUnique({
-      where: {
-        id: gameId,
-      },
+      where: { id: gameId },
     });
 
     return game;
@@ -53,9 +51,7 @@ export async function getActiveGames(): Promise<Game[]> {
 export async function updateGame(gameId: string, gameData: Partial<GameInput>): Promise<void> {
   try {
     await prisma.game.update({
-      where: {
-        id: gameId,
-      },
+      where: { id: gameId },
       data: gameData,
     });
   } catch (error) {
@@ -67,9 +63,7 @@ export async function updateGame(gameId: string, gameData: Partial<GameInput>): 
 export async function deleteGame(gameId: string): Promise<void> {
   try {
     await prisma.game.delete({
-      where: {
-        id: gameId,
-      },
+      where: { id: gameId },
     });
   } catch (error) {
     console.error('Error deleting game:', error);
