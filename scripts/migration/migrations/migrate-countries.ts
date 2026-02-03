@@ -1,4 +1,9 @@
-import { FirebaseCountry } from '@/lib/types/firebase/Country';
+export type FirebaseCountry = {
+  code: string;              // e.g., "DE"
+  name: string;              // e.g., "Germany"
+  flag: string;              // URL to flag image
+  inFootballManager: boolean;
+};
 
 export async function migrateCountries(firestore: any, pool: any) {
   console.log('🌍 Fetching countries from Firebase...');

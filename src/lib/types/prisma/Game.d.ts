@@ -1,5 +1,5 @@
 import { Game as PrismaGame } from '../../../../prisma/generated/client';
-import { Save } from '../firebase/Save';
+import { Save } from './Save';
 
 export type Game = PrismaGame;
 export type GameInput = Omit<PrismaGame, 'id' | 'createdAt' | 'updatedAt'>;
