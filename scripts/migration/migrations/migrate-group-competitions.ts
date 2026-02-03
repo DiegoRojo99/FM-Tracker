@@ -48,11 +48,25 @@ export async function migrateGroupCompetitions(firestore: any, pool: Pool): Prom
     let successful = 0;
     let failed = 0;
 
+    // Check how many already have a competition group in PostgreSQL
+    const groupExistingCheck = await pool.query(
+      'SELECT "name", "countryCode" FROM "CompetitionGroup"'
+    );
+    const existingGroups = new Set(groupExistingCheck.rows.map((row: any) => `${row.name}||${row.countryCode}`));
+
     for (const competition of newCompetitions) {
       try {
         // Validate required fields
         if (!competition.name || !competition.countryCode || !competition.type) {
           console.log(`⚠️  Skipping API competition ${competition.id}: missing required fields`);
+          failed++;
+          continue;
+        }
+
+        // Check if CompetitionGroup already exists to avoid duplicates
+        const groupKey = `${competition.name}||${competition.countryCode}`;
+        if (existingGroups.has(groupKey)) {
+          console.log(`⚠️  Skipping API competition ${competition.id} (${competition.name}): CompetitionGroup already exists`);
           failed++;
           continue;
         }
