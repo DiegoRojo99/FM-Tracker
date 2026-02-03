@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 import admin from 'firebase-admin';
-import type { FirestoreSaveTrophy } from '../../src/lib/types/Trophy-Migration';
+import { FirebaseTrophy } from '../../../src/lib/types/firebase/Trophy.d.ts';
 
 export async function migrateTrophies(firestore: any, pool: Pool): Promise<void> {
   console.log('\n🏆 Starting Trophies migration...');
@@ -116,7 +116,7 @@ export async function migrateTrophies(firestore: any, pool: Pool): Promise<void>
               totalTrophies++;
               
               try {
-                const trophyData: FirestoreSaveTrophy = trophyDoc.data() as FirestoreSaveTrophy;
+                const trophyData: FirebaseTrophy = trophyDoc.data() as FirebaseTrophy;
                 
                 // Validate required fields
                 if (!trophyData.teamId || !trophyData.competitionId || !trophyData.season || !trophyData.game) {
