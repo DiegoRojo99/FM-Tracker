@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
 
   const competitions: CompetitionGroup[] = await prisma.competitionGroup.findMany({
     where: {
+      isActive: true,
       countryCode: { in: countriesToQuery },
       ...(compType ? { type: compType.charAt(0).toUpperCase() + compType.slice(1).toLowerCase() } : {})
     }
