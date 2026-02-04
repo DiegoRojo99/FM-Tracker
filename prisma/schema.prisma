@@ -188,6 +188,7 @@ model CareerChallenge {
   user         User                  @relation(fields: [userId], references: [uid], onDelete: Cascade)
   goalProgress CareerChallengeGoal[]
 
+  @@unique([userId, challengeId, saveId])
   @@index([userId])
   @@index([challengeId])
   @@index([gameId])
