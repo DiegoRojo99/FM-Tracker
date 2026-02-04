@@ -78,6 +78,7 @@ model Season {
   save         Save          @relation(fields: [saveId], references: [id], onDelete: Cascade)
   team         Team          @relation(fields: [teamId], references: [id])
 
+  @@unique([saveId, teamId, season])
   @@index([saveId])
   @@index([teamId])
   @@index([season])
@@ -92,6 +93,7 @@ model CupResult {
   competition   CompetitionGroup @relation("CupResults", fields: [competitionId], references: [id])
   season        Season           @relation(fields: [seasonId], references: [id], onDelete: Cascade)
 
+  @@unique([seasonId, competitionId])
   @@index([seasonId])
   @@index([competitionId])
 }
@@ -124,6 +126,7 @@ model Trophy {
   save               Save?            @relation(fields: [saveId], references: [id], onDelete: Cascade)
   team               Team             @relation(fields: [teamId], references: [id])
 
+  @@unique([competitionGroupId, season, saveId])
   @@index([teamId])
   @@index([competitionGroupId])
   @@index([gameId])
@@ -228,7 +231,7 @@ model TeamSeason {
 
 model Game {
   id               String            @id
-  name             String
+  name             String            
   shortName        String
   version          String
   platform         String
@@ -243,6 +246,7 @@ model Game {
   saves            Save[]
   trophies         Trophy[]
 
+  @@unique([name, version, platform])
   @@index([isActive])
   @@index([sortOrder])
   @@index([releaseDate])
@@ -265,11 +269,13 @@ model Team {
   country            Country             @relation(fields: [countryCode], references: [code])
   teamSeasons        TeamSeason[]
   trophies           Trophy[]
+
+  @@unique([name, countryCode])
 }
 
 model Country {
-  code              String             @id
-  name              String
+  code              String             @id @unique
+  name              String             @unique
   flag              String
   inFootballManager Boolean
   createdAt         DateTime           @default(now())
@@ -297,6 +303,7 @@ model ApiCompetition {
   groups      CompetitionGroupApiCompetition[]
   teamSeasons TeamSeason[]
 
+  @@unique([name, countryCode])
   @@index([countryCode])
   @@index([type])
   @@index([tier])
@@ -356,6 +363,7 @@ model PromotionRelegation {
   fromGroup    CompetitionGroup @relation("PromotionsFrom", fields: [fromGroupId], references: [id], onDelete: Cascade)
   toGroup      CompetitionGroup @relation("PromotionsTo", fields: [toGroupId], references: [id], onDelete: Cascade)
 
+  @@unique([fromGroupId, toGroupId, type])
   @@index([fromGroupId])
   @@index([toGroupId])
   @@index([type])
