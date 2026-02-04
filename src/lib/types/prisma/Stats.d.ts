@@ -16,6 +16,6 @@ export interface UserStats {
   totalTrophies: number;
   totalMatches: number;
   currentSeasons: number;
-  favoriteTeam?: Team;
+  favoriteTeams: Team[];
   longestSave?: FullDetailsSave;
 }

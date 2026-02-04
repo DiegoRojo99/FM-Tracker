@@ -35,7 +35,7 @@ export async function countUserCareerStintsByTeam(uid: string, teamId: number): 
   });
 }
 
-export async function getUserMostUsedTeam(uid: string): Promise<Team | null> {
+export async function getUserMostUsedTeams(uid: string): Promise<Team[]> {
    const result = await prisma.careerStint.groupBy({
     by: ['teamId'],
     where: { save: { userId: uid }},
@@ -47,13 +47,28 @@ export async function getUserMostUsedTeam(uid: string): Promise<Team | null> {
         teamId: 'desc',
       },
     },
-    take: 1,
   });
 
-  if (result.length === 0) return null;
-  const teamId = result[0].teamId;
-  if (teamId === null) return null;
+  if (result.length === 0) return [];
+  
+  // Find the maximum count
+  const maxCount = result[0]._count.teamId;
+  
+  // Get all teams with the maximum count
+  const topTeamIds = result
+    .filter(item => item._count.teamId === maxCount)
+    .map(item => item.teamId)
+    .filter((teamId): teamId is number => teamId !== null);
 
-  const team: Team | null = await prisma.team.findUnique({ where: { id: teamId } });
-  return team;
+  if (topTeamIds.length === 0) return [];
+
+  const teams: Team[] = await prisma.team.findMany({ 
+    where: { 
+      id: { 
+        in: topTeamIds 
+      } 
+    } 
+  });
+  
+  return teams;
 }

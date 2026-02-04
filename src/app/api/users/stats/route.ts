@@ -5,7 +5,7 @@ import { getFullUserSaves } from '@/lib/db/saves';
 import { countAllTrophiesForUser } from '@/lib/db/trophies';
 import { countUserSeasons } from '@/lib/db/seasons';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
-import { getUserMostUsedTeam } from '@/lib/db/career';
+import { getUserMostUsedTeams } from '@/lib/db/career';
 import { Team } from '@/lib/types/prisma/Team';
 
 export async function GET(request: NextRequest) {
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       const userSaves = await getFullUserSaves(uid);
       const userTrophies = await countAllTrophiesForUser(uid);
       const userSeasons = await countUserSeasons(uid);
-      const favoriteTeamEntry: Team | null = await getUserMostUsedTeam(uid);
+      const favoriteTeamEntries: Team[] = await getUserMostUsedTeams(uid);
 
       const longestSave = userSaves.reduce((longest: FullDetailsSave | undefined, current) => {
         return (current.seasons.length > (longest?.seasons.length || 0)) ? current : longest;
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
         totalTrophies: userTrophies,
         totalMatches: 0,
         currentSeasons: userSeasons,
-        favoriteTeam: favoriteTeamEntry ?? undefined,
+        favoriteTeams: favoriteTeamEntries,
         longestSave: longestSave
       };
       

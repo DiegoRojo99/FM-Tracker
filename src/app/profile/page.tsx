@@ -55,6 +55,14 @@ export default function Profile() {
     router.push('/login')
   }
 
+  function showFavTeams() {
+    const numberOfTeams = stats?.favoriteTeams.length || 0;
+    if (!stats || numberOfTeams === 0) return 'N/A';
+    if (numberOfTeams === 1) return stats?.favoriteTeams[0].name;
+    if (numberOfTeams > 3) return `${numberOfTeams} teams`;
+    return stats.favoriteTeams.map(team => team.name).join(', ');
+  }
+
   if (!user) return null
 
   return (
@@ -136,7 +144,7 @@ export default function Profile() {
                     <div>
                       <h3 className="text-lg font-semibold text-gray-300">Favorite Team</h3>
                       <p className="text-xl font-bold text-[var(--color-highlight)]">
-                        {stats.favoriteTeam?.name || 'None yet'}
+                        {showFavTeams()}
                       </p>
                     </div>
                     <div className="text-4xl">❤️</div>
