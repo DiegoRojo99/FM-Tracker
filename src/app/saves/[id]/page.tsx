@@ -52,7 +52,7 @@ export default function SavePage() {
 
   if (loading || refresh) return <FootballLoader />;
   if (!saveDetails) notFound();
-
+  console.log('Rendering SavePage with details:', saveDetails);
   return (
     <div className="p-4 sm:p-6">
       <CareerStintsSection saveDetails={saveDetails} setRefresh={setRefresh} />

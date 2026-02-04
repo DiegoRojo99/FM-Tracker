@@ -34,7 +34,7 @@ export async function migrateGlobalChallenges(firestore: admin.firestore.Firesto
 
     if (firestoreChallenges.length === 0) {
       console.log('ℹ️  No challenges to migrate');
-      return { success: true, challengesCount: 0, goalsCount: 0, teamLinksCount: 0 };
+      return { success: true, challengesCount: 0, challengesSkipped: 0, goalsCount: 0, teamLinksCount: 0 };
     }
 
     // 2. Get reference data for FK validation
@@ -81,12 +81,35 @@ export async function migrateGlobalChallenges(firestore: admin.firestore.Firesto
     // 3. Create challenge ID mapping table
     const challengeIdMapping = new Map<string, number>();
     let challengesInserted = 0;
+    let challengesSkipped = 0;
     let goalsInserted = 0;
     let teamLinksInserted = 0;
 
-    // 4. Insert challenges first to get auto-increment IDs
-    console.log('📝 Inserting global challenges...');
+    // 4. Get existing challenges to avoid duplicates
+    console.log('🔍 Checking for existing challenges...');
+    const existingChallengesResult = await pool.query(`
+      SELECT id, name FROM "Challenge"
+    `);
+    const existingChallenges = new Map<string, number>();
+    existingChallengesResult.rows.forEach(row => {
+      existingChallenges.set(row.name, row.id);
+    });
+
+    console.log(`📊 Found ${existingChallenges.size} existing challenges`);
+
+    // 5. Insert challenges first to get auto-increment IDs
+    console.log('📝 Processing global challenges...');
     for (const challenge of firestoreChallenges) {
+      // Check if challenge already exists
+      if (existingChallenges.has(challenge.name)) {
+        const existingId = existingChallenges.get(challenge.name)!;
+        challengeIdMapping.set(challenge.id, existingId);
+        challengesSkipped++;
+        console.log(`⏭️  Skipping existing challenge: ${challenge.name} (using existing ID ${existingId})`);
+        continue;
+      }
+
+      // Insert new challenge
       const insertChallengeResult = await pool.query(`
         INSERT INTO "Challenge" (name, description, bonus, "createdAt", "updatedAt")
         VALUES ($1, $2, $3, NOW(), NOW())
@@ -104,7 +127,7 @@ export async function migrateGlobalChallenges(firestore: admin.firestore.Firesto
       console.log(`  ✅ Challenge "${challenge.name}" → ID ${challengeId}`);
     }
 
-    console.log(`✅ Inserted ${challengesInserted} challenges`);
+    console.log(`✅ Processed challenges: ${challengesInserted} inserted, ${challengesSkipped} skipped (already exist)`);
 
     // 5. Insert challenge goals with FK validation
     console.log('🎯 Inserting challenge goals...');
@@ -177,6 +200,7 @@ export async function migrateGlobalChallenges(firestore: admin.firestore.Firesto
     return {
       success: true,
       challengesCount: challengesInserted,
+      challengesSkipped: challengesSkipped,
       goalsCount: goalsInserted,
       teamLinksCount: teamLinksInserted,
       challengeIdMapping: Object.fromEntries(challengeIdMapping)

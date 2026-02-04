@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
     // Get save data to extract game information
     const save = await prisma.save.findUnique({ where: { id: saveId } });
     if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
-    const game = save.gameId || 'FM26'; // Default fallback
 
     // Fetch team data
     const team = await prisma.team.findUnique({ where: { id: Number(body.teamId) } });

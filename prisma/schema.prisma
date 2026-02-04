@@ -133,7 +133,7 @@ model Trophy {
 
 model Challenge {
   id               Int               @id @default(autoincrement())
-  name             String
+  name             String            @unique
   description      String
   bonus            String?
   createdAt        DateTime          @default(now())
