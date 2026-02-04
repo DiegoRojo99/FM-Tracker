@@ -51,7 +51,7 @@ export async function addTrophyToSave(
     });
 
     // Check if the trophy matches any existing challenges
-    await addChallengeForTrophy(uid, saveId, trophy);
+    await addChallengeForTrophy(uid, saveId, trophy, competition.countryCode);
 
     // Return the ID of the newly created trophy
     return trophy.id;

@@ -99,20 +99,21 @@ export async function checkForMatchingChallenges(trophyData: Trophy) {
     where: { id: trophyData.competitionGroupId },
   }).then(comp => comp?.countryCode);
 
-  const [teamChallenges, countryChallenges, competitionChallenges] = await Promise.all([
-    getTeamMatchingChallenges(trophyData.teamId),
-    getCountryMatchingChallenges(countryCode),
-    getCompetitionMatchingChallenges(trophyData.competitionGroupId),
-  ]);
+  // Get all challenges and filter them based on whether AT LEAST ONE goal can be fully satisfied
+  const allChallenges = await getAllChallenges();
+  const matchingChallenges = allChallenges.filter(challenge => {
+    return challenge.goals.some(goal => filterGoalByTrophy(goal, trophyData, countryCode));
+  });
 
-  return [...teamChallenges, ...countryChallenges, ...competitionChallenges]
+  return matchingChallenges;
 }
 
 /* Checks for matching challenges and adds them to the user's save */
 export async function addChallengeForTrophy(
   uid: string,
   saveId: string,
-  trophyData: Trophy
+  trophyData: Trophy,
+  countryCode?: string
 ): Promise<void> {
   const matchingChallenges = await checkForMatchingChallenges(trophyData);
   const saveTrophies = await getTrophiesForSave(saveId);
@@ -121,7 +122,8 @@ export async function addChallengeForTrophy(
   for (const challenge of matchingChallenges) {
     const processedGoals: CareerChallengeGoalInput[] = filterCompletedChallengeGoalsBasedOnTrophies(
       challenge,
-      [...saveTrophies, trophyData]
+      [...saveTrophies, trophyData],
+      countryCode
     );
 
     await upsertCareerChallenge(uid, saveId, trophyData.gameId, challenge.id, processedGoals);
@@ -243,12 +245,13 @@ export async function upsertCareerChallenge(
 /* FILTERS */
 export function filterCompletedChallengeGoalsBasedOnTrophies(
   challenge: ChallengeWithGoals,
-  trophies: Trophy[]
+  trophies: Trophy[],
+  countryCode?: string
 ): CareerChallengeGoalInput[] {
   const goals: CareerChallengeGoalInput[] = [];
   
   for (const goal of challenge.goals) {
-    const isCompleted = trophies.some(trophy => filterGoalByTrophy(goal, trophy));
+    const isCompleted = trophies.some(trophy => filterGoalByTrophy(goal, trophy, countryCode));
     const careerGoal = challengeGoalToCareerChallengeGoal({ goal, isCompleted });
     goals.push(careerGoal);
   }
@@ -258,13 +261,17 @@ export function filterCompletedChallengeGoalsBasedOnTrophies(
 
 function filterGoalByTrophy(
   goal: ChallengeGoalWithDetails,
-  trophy: Trophy
+  trophy: Trophy,
+  countryCode?: string
 ): boolean {
-  if (goal.competitionId && goal.competitionId === trophy.competitionGroupId) {
-    return true;  
+  if (goal.competitionId && goal.competitionId !== trophy.competitionGroupId) {
+    return false;  
   }
-  if (goal.teams?.length && goal.teams.some(team => team.teamId === trophy.teamId)) {
-    return true;
+  if (goal.teams?.length && goal.teams.every(team => team.teamId !== trophy.teamId)) {
+    return false;
   }
-  return false;
+  if (goal.countryId && goal.countryId !== countryCode) {
+    return false;
+  }
+  return true;
 }
