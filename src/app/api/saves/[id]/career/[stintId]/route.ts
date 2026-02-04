@@ -17,7 +17,7 @@ export async function PUT(req: NextRequest) {
       const body = await req.json();
       
       // Validate required fields
-      const { teamId, startDate, endDate, isNational } = body;
+      const { teamId, startDate, endDate, isNational, leagueId } = body;
       if (!teamId || !startDate) {
         return NextResponse.json(
           { error: 'Missing required fields: teamId, startDate' }, 
@@ -25,26 +25,64 @@ export async function PUT(req: NextRequest) {
         );
       }
 
-      // Check if career stint exists
-      const careerStint = await prisma.careerStint.findUnique({
-        where: { id: Number(careerStintId) }
+      // Validate teamId is a number
+      const teamIdNumber = parseInt(teamId);
+      if (isNaN(teamIdNumber)) {
+        return NextResponse.json(
+          { error: 'teamId must be a valid number' }, 
+          { status: 400 }
+        );
+      }
+
+      // Check if career stint exists and belongs to the user's save
+      const careerStint = await prisma.careerStint.findFirst({
+        where: { 
+          id: Number(careerStintId),
+          save: {
+            id: saveId,
+            userId: uid
+          }
+        }
       });
       
-      if (!careerStint) return NextResponse.json({ error: 'Career stint not found' }, { status: 404 });
+      if (!careerStint) {
+        return NextResponse.json({ error: 'Career stint not found or unauthorized' }, { status: 404 });
+      }
 
       // Update the career stint
       const updatedCareerStint = await prisma.careerStint.update({
         where: { id: Number(careerStintId) },
         data: {
-          saveId: saveId,
-          teamId: teamId,
+          teamId: teamIdNumber,
           startDate,
           endDate: endDate || null,
           isNational: Boolean(isNational),
-          createdAt: new Date(),
           updatedAt: new Date(),
         },
       });
+
+      // Update save doc with current team if this is the most recent stint
+      if (leagueId !== undefined) {
+        const saveUpdateField = Boolean(isNational) ? 'currentNTId' : 'currentClubId';
+        const competitionId = !Boolean(isNational) ? Number(leagueId) : null;
+        
+        const updateData: {
+          currentNTId?: number;
+          currentClubId?: number;
+          currentLeagueId?: number;
+          updatedAt: Date;
+        } = {
+          [saveUpdateField]: teamIdNumber,
+          updatedAt: new Date()
+        };
+
+        if (competitionId) updateData.currentLeagueId = competitionId;
+
+        await prisma.save.update({
+          where: { id: saveId },
+          data: updateData,
+        });
+      }
 
       return NextResponse.json(updatedCareerStint, { status: 200 });
     } 
@@ -67,12 +105,20 @@ export async function DELETE(req: NextRequest) {
     }
 
     try {
-      // Check if career stint exists
-      const careerStint = await prisma.careerStint.findUnique({
-        where: { id: Number(careerStintId) }
+      // Check if career stint exists and belongs to the user's save
+      const careerStint = await prisma.careerStint.findFirst({
+        where: { 
+          id: Number(careerStintId),
+          save: {
+            id: saveId,
+            userId: uid
+          }
+        }
       });
       
-      if (!careerStint) return NextResponse.json({ error: 'Career stint not found' }, { status: 404 });
+      if (!careerStint) {
+        return NextResponse.json({ error: 'Career stint not found or unauthorized' }, { status: 404 });
+      }
 
       // Delete the career stint
       await prisma.careerStint.delete({

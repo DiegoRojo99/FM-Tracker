@@ -63,6 +63,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
   const handleSubmit = async () => {
     if (!user) {
       console.error('User is not authenticated');
+      alert('You must be logged in to perform this action.');
       return;
     }
     
@@ -72,6 +73,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
       const token = await user.getIdToken();
       if (!token) {
         console.error('User is not authenticated');
+        alert('You must be logged in to perform this action.');
         return;
       }
 
@@ -95,6 +97,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
 
       if (!response.ok) {
         console.error(`Failed to ${isEditing ? 'update' : 'save'} career stint`);
+        alert(`Failed to ${isEditing ? 'update' : 'save'} career stint`);
         return;
       }
 
@@ -110,9 +113,12 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
       
       onSuccess();
       onClose();
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error saving career stint:', error);
-    } finally {
+      alert('An error occurred while saving the career stint. Please try again.');
+    } 
+    finally {
       setSaving(false);
     }
   };
