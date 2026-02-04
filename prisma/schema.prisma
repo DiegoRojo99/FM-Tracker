@@ -156,6 +156,7 @@ model ChallengeGoal {
   country              Country?              @relation(fields: [countryId], references: [code])
   teams                ChallengeGoalTeam[]
 
+  @@unique([description, challengeId])
   @@index([challengeId])
   @@index([competitionId])
   @@index([countryId])
