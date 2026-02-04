@@ -6,7 +6,8 @@ import {
   Country,
   ChallengeGoalTeam,
   CareerChallengeGoal,
-  Game
+  Game,
+  Team
 } from "../../../../prisma/generated/client";
 
 export type ChallengeWithGoals = Challenge & {
@@ -16,7 +17,7 @@ export type ChallengeWithGoals = Challenge & {
 export type ChallengeGoalWithDetails = ChallengeGoal & {
   competition: CompetitionGroup | null;
   country: Country | null;
-  teams: ChallengeGoalTeam[];
+  teams: (ChallengeGoalTeam & { team: Team })[];
 };
 
 export type CareerChallengeWithDetails = CareerChallenge & {

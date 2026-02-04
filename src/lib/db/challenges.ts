@@ -8,7 +8,11 @@ import { Trophy } from '../../../prisma/generated/client';
 const ChallengeGoalWithDetailsInclude = {
   competition: true,
   country: true,
-  teams: true,
+  teams: {
+    include: {
+      team: true
+    }
+  },
 };
 
 const CareerChallengeWithDetailsInclude = {
