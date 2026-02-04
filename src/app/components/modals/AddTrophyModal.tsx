@@ -11,6 +11,7 @@ import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
 import CompetitionWithWorldDropdown from '../dropdowns/CompetitionWithWorldDropdown';
 import Image from 'next/image';
+import { FullCareerStint } from '@/lib/types/prisma/Career';
 
 type Props = {
   open: boolean;
@@ -54,10 +55,11 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
       return res.json();
     })
     .then((data) => {
-      onSuccess?.(data);
+      onSuccess(data);
     })
     .catch((error) => {
       console.error('Error adding trophy:', error);
+      alert('Failed to add trophy. Please try again.');
     })
     .finally(() => {
       setSaving(false);
@@ -108,19 +110,10 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
               onChange={(e) => {
                 const teamId = e.target.value;
                 if (teamId) {
-                  const careerStint = saveDetails.careerStints?.find(stint => stint.teamId === teamId);
+                  const careerStint = saveDetails.careerStints?.find((stint: FullCareerStint) => stint.teamId === Number(teamId));
                   if (careerStint) {
                     // Create a Team object from career stint data
-                    const team: Team = {
-                      id: parseInt(careerStint.teamId),
-                      name: careerStint.teamName || '',
-                      logo: careerStint.teamLogo || '',
-                      countryCode: careerStint.countryCode,
-                      national: careerStint.isNational || false,
-                      lat: null, 
-                      lng: null ,
-                      isFemale: null,
-                    };
+                    const team: Team = careerStint.team;
                     setSelectedTeam(team);
                     setCompetition(null); // Reset competition when team changes
                   }
@@ -135,7 +128,7 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
               {/* Get unique teams from career stints */}
               {Array.from(new Map(saveDetails.careerStints.map(stint => [stint.teamId, stint])).values()).map((stint) => (
                 <option key={stint.teamId} value={stint.teamId} className="bg-[var(--color-darker)] text-white">
-                  {stint.teamName}
+                  {stint.team.name}
                 </option>
               ))}
             </select>

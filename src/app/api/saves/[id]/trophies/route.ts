@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     
     // Validate required fields
     const body = await req.json();
-    if (!body.teamId || !body.competitionId || !body.dateWon || !body.countryCode || !body.game) {
+    if (!body.teamId || !body.competitionId || !body.dateWon || !body.countryCode) {
       return new Response('Missing required fields', { status: 400 });
     }
 
@@ -40,12 +40,15 @@ export async function POST(req: NextRequest) {
 
     // Add trophy to save
     const season = getSeasonFromDate(body.dateWon);
-    const newTrophyId = await addTrophyToSave({teamId: Number(body.teamId), competitionId: Number(body.competitionId), uid, season, saveId, game: body.game});
+    const newTrophyId = await addTrophyToSave({
+      teamId: Number(body.teamId), 
+      competitionId: Number(body.competitionId), 
+      uid, 
+      season, 
+      saveId
+    });
 
-    if (!newTrophyId) {
-      return NextResponse.json({ error: 'Failed to add trophy' }, { status: 500 });
-    }
-
+    if (!newTrophyId) return NextResponse.json({ error: 'Failed to add trophy' }, { status: 500 });
     return NextResponse.json({ id: newTrophyId }, { status: 201 });
   });
 }

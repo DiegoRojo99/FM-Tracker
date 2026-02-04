@@ -68,8 +68,7 @@ export async function POST(req: NextRequest) {
         saveId,
         competitionId: Number(body.leagueId),
         teamId: Number(body.teamId),
-        season: body.season,
-        game,
+        season: body.season
       });
     }
 
@@ -81,8 +80,7 @@ export async function POST(req: NextRequest) {
           saveId,
           competitionId: Number(cup.competitionId),
           teamId: Number(body.teamId),
-          season: body.season,
-          game,
+          season: body.season
         });
       }
     }

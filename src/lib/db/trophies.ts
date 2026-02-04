@@ -6,14 +6,13 @@ import { prisma } from './prisma';
 import { FullTrophy } from '../types/prisma/Trophy';
 
 export async function addTrophyToSave(
-  { teamId, competitionId, uid, season, saveId, game }: 
+  { teamId, competitionId, uid, season, saveId }: 
   {
     teamId: number;
     competitionId: number;
     uid: string;
     season: string;
     saveId: string;
-    game: string;
   }
 ): Promise<number | null> {
   try {
@@ -36,11 +35,14 @@ export async function addTrophyToSave(
 
     const team = await fetchTeam(teamId);
     if (!team) throw new Error('Team not found');
+
+    const save = await prisma.save.findUnique({ where: { id: saveId } });
+    if (!save) throw new Error('Save not found');
     
     // Add new trophy
     const trophy: Trophy = await prisma.trophy.create({
       data: {
-        gameId: game,
+        gameId: save.gameId,
         saveId: saveId,
         season: season,
         teamId: Number(teamId),
