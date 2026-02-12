@@ -1,12 +1,12 @@
 'use client';
 
 import { FullCareerStint } from '@/lib/types/prisma/Career';
-import { FullDetailsSave } from '@/lib/types/prisma/Save';
+import { FullDetailsSaveWithOwnership } from '@/lib/types/prisma/Save';
 import Image from 'next/image';
 import { useState } from 'react';
 
 type Props = {
-  saveDetails: FullDetailsSave;
+  saveDetails: FullDetailsSaveWithOwnership;
   onUpdateStint?: (stint: FullCareerStint) => void;
   onDeleteStint?: (stintId: number) => void;
 };
@@ -65,6 +65,7 @@ export default function CareerTimeline({ saveDetails, onUpdateStint, onDeleteSti
                   stint={stint} 
                   onUpdate={onUpdateStint}
                   onDelete={onDeleteStint}
+                  isOwner={saveDetails.isOwner}
                 />
               ))}
             </div>
@@ -79,11 +80,13 @@ export default function CareerTimeline({ saveDetails, onUpdateStint, onDeleteSti
 function CareerStintCard({ 
   stint, 
   onUpdate, 
-  onDelete 
+  onDelete,
+  isOwner = false
 }: { 
   stint: FullCareerStint;
   onUpdate?: (stint: FullCareerStint) => void;
   onDelete?: (stintId: number) => void;
+  isOwner?: boolean;
 }) {
   const [showActions, setShowActions] = useState(false);
 
@@ -108,7 +111,7 @@ function CareerStintCard({
       onMouseLeave={() => setShowActions(false)}
     >
       {/* Action buttons */}
-      {(onUpdate || onDelete) && (
+      {isOwner && (onUpdate || onDelete) && (
         <div className={`absolute top-2 right-2 flex gap-1 transition-opacity duration-200 ${showActions ? 'opacity-100' : 'opacity-0'}`}>
           {onUpdate && (
             <button

@@ -14,23 +14,20 @@ function formatDate(date: Date): string {
 
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   return withAuth(req, async (uid) => {
-    if (!uid) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!uid) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
 
     const { id } = await context.params;
     if (!id) return NextResponse.json({ error: 'Save ID is required' }, { status: 400 });
 
     try {
-      // Verify save belongs to user
-      const save = await prisma.save.findFirst({
-        where: {
-          id,
-          userId: uid,
-        },
+      // Check if save exists first
+      const save = await prisma.save.findUnique({
+        where: { id },
+        select: { userId: true }
       });
 
-      if (!save) {
-        return NextResponse.json({ error: 'Save not found or unauthorized' }, { status: 404 });
-      }
+      if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
+      if (save.userId !== uid) return NextResponse.json({ error: 'Forbidden: You can only modify your own saves' }, { status: 403 });
 
       const body = await req.json() as CareerStintInput & { leagueId?: string };
       if (!body.teamId || !body.startDate) {
@@ -111,7 +108,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       });
 
       return NextResponse.json(docRef, { status: 201 });
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error creating career stint:', error);
       return NextResponse.json({ error: 'Failed to create career stint' }, { status: 500 });
     }

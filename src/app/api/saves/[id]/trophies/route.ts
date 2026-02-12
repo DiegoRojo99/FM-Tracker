@@ -20,23 +20,35 @@ export async function POST(req: NextRequest) {
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
 
-    if (!uid || !saveId) {
-      return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
+    if (!uid) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    if (!saveId) return NextResponse.json({ error: 'Save ID is required' }, { status: 400 });
+    
+    // Check if save exists first
+    const save = await prisma.save.findUnique({
+      where: { id: saveId },
+      select: { userId: true }
+    });
+
+    if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
+    
+    // Check if user owns the save
+    if (save.userId !== uid) {
+      return NextResponse.json({ error: 'Forbidden: You can only modify your own saves' }, { status: 403 });
     }
     
     // Validate required fields
     const body = await req.json();
     if (!body.teamId || !body.competitionId || !body.dateWon || !body.countryCode) {
-      return new Response('Missing required fields', { status: 400 });
+      return NextResponse.json({ error: 'Missing required fields: teamId, competitionId, dateWon, countryCode' }, { status: 400 });
     }
 
     // Fetch team data
     const team = await prisma.team.findUnique({ where: { id: Number(body.teamId) } });
-    if (!team) throw new Error('Team not found');
+    if (!team) return NextResponse.json({ error: 'Team not found' }, { status: 404 });
 
     // Fetch competition data
     const competition = await prisma.competitionGroup.findUnique({ where: { id: Number(body.competitionId) } });
-    if (!competition) throw new Error('Competition not found');
+    if (!competition) return NextResponse.json({ error: 'Competition not found' }, { status: 404 });
 
     // Add trophy to save
     const season = getSeasonFromDate(body.dateWon);
@@ -58,9 +70,16 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
 
-    if (!uid || !saveId) {
-      return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
-    }
+    if (!uid) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });    
+    if (!saveId) return NextResponse.json({ error: 'Save ID is required' }, { status: 400 });
+
+    // Check if save exists
+    const save = await prisma.save.findUnique({
+      where: { id: saveId },
+      select: { userId: true }
+    });
+
+    if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
 
     const trophiesData: FullTrophy[] = await prisma.trophy.findMany({
       where: { saveId: saveId },

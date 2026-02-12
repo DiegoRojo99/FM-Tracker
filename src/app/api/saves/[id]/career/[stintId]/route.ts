@@ -9,14 +9,21 @@ export async function PUT(req: NextRequest) {
     const saveId = pathParts[3];
     const careerStintId = pathParts[5];
 
-    if (!uid || !saveId || !careerStintId) {
-      return NextResponse.json({ error: 'Unauthorized or missing IDs' }, { status: 401 });
-    }
+    if (!uid) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });    
+    if (!saveId || !careerStintId) return NextResponse.json({ error: 'Save ID and Career Stint ID are required' }, { status: 400 });
 
     try {
-      const body = await req.json();
-      
+      // Check if save exists and user owns it
+      const save = await prisma.save.findUnique({
+        where: { id: saveId },
+        select: { userId: true }
+      });
+
+      if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
+      if (save.userId !== uid) return NextResponse.json({ error: 'Forbidden: You can only modify your own saves' }, { status: 403 });
+
       // Validate required fields
+      const body = await req.json();
       const { teamId, startDate, endDate, isNational, leagueId } = body;
       if (!teamId || !startDate) {
         return NextResponse.json(
@@ -34,20 +41,15 @@ export async function PUT(req: NextRequest) {
         );
       }
 
-      // Check if career stint exists and belongs to the user's save
+      // Check if career stint exists and belongs to this save
       const careerStint = await prisma.careerStint.findFirst({
         where: { 
           id: Number(careerStintId),
-          save: {
-            id: saveId,
-            userId: uid
-          }
+          saveId: saveId
         }
       });
       
-      if (!careerStint) {
-        return NextResponse.json({ error: 'Career stint not found or unauthorized' }, { status: 404 });
-      }
+      if (!careerStint) return NextResponse.json({ error: 'Career stint not found' }, { status: 404 });
 
       // Update the career stint
       const updatedCareerStint = await prisma.careerStint.update({
@@ -100,25 +102,28 @@ export async function DELETE(req: NextRequest) {
     const saveId = pathParts[3];
     const careerStintId = pathParts[5];
 
-    if (!uid || !saveId || !careerStintId) {
-      return NextResponse.json({ error: 'Unauthorized or missing IDs' }, { status: 401 });
-    }
+    if (!uid) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });    
+    if (!saveId || !careerStintId) return NextResponse.json({ error: 'Save ID and Career Stint ID are required' }, { status: 400 });
 
     try {
-      // Check if career stint exists and belongs to the user's save
+      // Check if save exists and user owns it
+      const save = await prisma.save.findUnique({
+        where: { id: saveId },
+        select: { userId: true }
+      });
+
+      if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });      
+      if (save.userId !== uid) return NextResponse.json({ error: 'Forbidden: You can only modify your own saves' }, { status: 403 });
+
+      // Check if career stint exists and belongs to this save
       const careerStint = await prisma.careerStint.findFirst({
         where: { 
           id: Number(careerStintId),
-          save: {
-            id: saveId,
-            userId: uid
-          }
+          saveId: saveId
         }
       });
       
-      if (!careerStint) {
-        return NextResponse.json({ error: 'Career stint not found or unauthorized' }, { status: 404 });
-      }
+      if (!careerStint) return NextResponse.json({ error: 'Career stint not found' }, { status: 404 });
 
       // Delete the career stint
       await prisma.careerStint.delete({

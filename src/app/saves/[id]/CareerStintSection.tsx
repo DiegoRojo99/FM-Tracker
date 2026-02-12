@@ -6,10 +6,10 @@ import CareerTimeline from './CareerTimeline';
 import AddCareerStintModal from '@/app/components/modals/AddCareerStintModal';
 import GradientButton from '@/app/components/GradientButton';
 import { useAuth } from '@/app/components/AuthProvider';
-import { FullDetailsSave } from '@/lib/types/prisma/Save';
+import { FullDetailsSaveWithOwnership } from '@/lib/types/prisma/Save';
 
 type Props = {
-  saveDetails: FullDetailsSave;
+  saveDetails: FullDetailsSaveWithOwnership;
   setRefresh: (refresh: boolean) => void; // Optional prop for refreshing
 };
 
@@ -59,9 +59,11 @@ export default function CareerStintsSection({ saveDetails, setRefresh }: Props) 
     <section className="w-full">
       <div className="mb-2 sm:mb-6 flex flex-row items-center justify-between">
         <h3 className="text-xl font-semibold">Career Stints</h3>
-        <GradientButton onClick={() => setIsOpen(true)}>
-          + Add Stint
-        </GradientButton>
+        {saveDetails.isOwner && (
+          <GradientButton onClick={() => setIsOpen(true)}>
+            + Add Stint
+          </GradientButton>
+        )}
       </div>
 
       {saveDetails.careerStints?.length ? (

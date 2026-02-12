@@ -9,11 +9,11 @@ import Image from 'next/image';
 import BlurredCard from '@/app/components/BlurredCard';
 import { groupTrophies } from '@/lib/dto/trophies';
 import { TrophyGroup, Trophy } from '@/lib/types/prisma/Trophy';
-import { FullDetailsSave } from '@/lib/types/prisma/Save';
+import { FullDetailsSaveWithOwnership } from '@/lib/types/prisma/Save';
 import GradientButton from '@/app/components/GradientButton';
 
 type Props = {
-  save: FullDetailsSave;
+  save: FullDetailsSaveWithOwnership;
   setRefresh: (refresh: boolean) => void; // Prop for refreshing
 };
 
@@ -49,8 +49,6 @@ export default function TrophyCase({ save, setRefresh }: Props) {
   }, [save, user]);
 
   const handleDeleteTrophy = async () => {
-    console.log('Deleting trophy:', deletingTrophy);
-    console.log('User:', user);
     if (!deletingTrophy || !user) return;
 
     const userToken = await user.getIdToken();
@@ -74,11 +72,13 @@ export default function TrophyCase({ save, setRefresh }: Props) {
     <section className="mt-8">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Trophy Case</h2>
-        <GradientButton
-          onClick={() => setShowModal(true)}
-        >
-          + Add Trophy
-        </GradientButton>
+        {save.isOwner && (
+          <GradientButton
+            onClick={() => setShowModal(true)}
+          >
+            + Add Trophy
+          </GradientButton>
+        )}
       </div>
 
       {trophies.length === 0 ? (
@@ -91,6 +91,7 @@ export default function TrophyCase({ save, setRefresh }: Props) {
               trophies={trophy}
               onEditTrophy={setEditingTrophy}
               onDeleteTrophy={setDeletingTrophy}
+              isOwner={save.isOwner}
             />
           ))}
         </div>
@@ -135,11 +136,13 @@ export default function TrophyCase({ save, setRefresh }: Props) {
 function TrophyGroupCard({ 
   trophies, 
   onEditTrophy, 
-  onDeleteTrophy 
+  onDeleteTrophy,
+  isOwner = false
 }: { 
   trophies: TrophyGroup;
-  onEditTrophy: (trophy: Trophy) => void;
-  onDeleteTrophy: (trophy: Trophy) => void;
+  onEditTrophy?: (trophy: Trophy) => void;
+  onDeleteTrophy?: (trophy: Trophy) => void;
+  isOwner?: boolean;
 }) {
   if (!trophies?.trophies?.length) {
     return (
@@ -177,40 +180,42 @@ function TrophyGroupCard({
                     className="h-8 w-8 object-contain mr-2"
                   />
                   <div className="font-semibold">{trophyItem.season}</div>
-                  <div className="flex space-x-1">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onEditTrophy(trophyItem);
-                      }}
-                      className="text-blue-400 hover:text-blue-300 p-1 text-xs"
-                      title="Edit Trophy"
-                    >
-                      <Image
-                        src="/pencil.svg"
-                        alt="Edit Icon"
-                        width={16}
-                        height={16}
-                        className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform"
-                      />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDeleteTrophy(trophyItem);
-                      }}
-                      className="text-red-400 hover:text-red-300 p-1 text-xs"
-                      title="Delete Trophy"
-                    >
-                      <Image 
-                        src="/trash.svg" 
-                        alt="Trash Icon" 
-                        width={16} 
-                        height={16} 
-                        className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform" 
-                      />
-                    </button>
-                  </div>
+                  {isOwner && (
+                    <div className="flex space-x-1">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEditTrophy?.(trophyItem);
+                        }}
+                        className="text-blue-400 hover:text-blue-300 p-1 text-xs"
+                        title="Edit Trophy"
+                      >
+                        <Image
+                          src="/pencil.svg"
+                          alt="Edit Icon"
+                          width={16}
+                          height={16}
+                          className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform"
+                        />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteTrophy?.(trophyItem);
+                        }}
+                        className="text-red-400 hover:text-red-300 p-1 text-xs"
+                        title="Delete Trophy"
+                      >
+                        <Image 
+                          src="/trash.svg" 
+                          alt="Trash Icon" 
+                          width={16} 
+                          height={16} 
+                          className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform" 
+                        />
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

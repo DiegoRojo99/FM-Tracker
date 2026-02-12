@@ -30,3 +30,7 @@ export type FullDetailsSave = Save & {
   careerStints: FullCareerStint[];
   seasons: SeasonSummary[];
 }
+
+export type FullDetailsSaveWithOwnership = FullDetailsSave & {
+  isOwner: boolean;
+}

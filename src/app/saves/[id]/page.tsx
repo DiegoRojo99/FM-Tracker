@@ -7,35 +7,43 @@ import CareerStintsSection from './CareerStintSection';
 import TrophyCase from './TrophyCase';
 import SeasonSection from './SeasonSection';
 import ChallengeSection from './ChallengeSection';
-import { FullDetailsSave } from '@/lib/types/prisma/Save';
+import { FullDetailsSaveWithOwnership } from '@/lib/types/prisma/Save';
 
 export default function SavePage() {
   const params = useParams();
   const id = params?.id;
   const { user } = useAuth();
-  const [saveDetails, setSaveDetails] = useState<FullDetailsSave | null>(null);
+  const [saveDetails, setSaveDetails] = useState<FullDetailsSaveWithOwnership | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      // Ensure we have an ID and user before proceeding
+      // Ensure we have an ID before proceeding
       if (!id) {
         console.error('No ID provided in URL parameters');
         notFound();
       }
 
-      // Check if user is authenticated
-      if (!user) return;
+      // Build headers with auth if available
+      const headers: HeadersInit = {
+        'cache': 'no-store'
+      };
       
-      const token = await user.getIdToken();
+      if (user) {
+        const token = await user.getIdToken();
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       const res = await fetch(`/api/saves/${id}`, { 
         cache: 'no-store',
-        headers: {
-          Authorization: `Bearer ${token || ''}`,
-        },
+        headers,
       });
-      if (!res.ok) return null;
+      
+      if (!res.ok) {
+        if (res.status === 404) notFound();
+        return null;
+      }
 
       // Check if the response is valid
       const data = await res.json();

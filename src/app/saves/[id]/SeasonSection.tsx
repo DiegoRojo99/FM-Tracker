@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import AddSeasonModal from "@/app/components/modals/AddSeasonModal";
 import { useAuth } from "@/app/components/AuthProvider";
-import { FullDetailsSave } from "@/lib/types/prisma/Save";
+import { FullDetailsSaveWithOwnership } from "@/lib/types/prisma/Save";
 import { SeasonInput, SeasonSummary } from "@/lib/types/prisma/Season";
 import { SeasonCard } from "./SeasonCard";
 import GradientButton from "@/app/components/GradientButton";
 
 interface SeasonSectionProps {
-  saveDetails: FullDetailsSave;
+  saveDetails: FullDetailsSaveWithOwnership;
   setRefresh: (refresh: boolean) => void; // Prop for refreshing
 }
 
@@ -83,11 +83,13 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", marginTop: "16px" }}>
         <h2 className="text-xl font-semibold" style={{ margin: 0 }}>Seasons</h2>
-        <GradientButton
-          onClick={() => setModalOpen(true)}
-        >
-          + Add season
-        </GradientButton>
+        {saveDetails.isOwner && (
+          <GradientButton
+            onClick={() => setModalOpen(true)}
+          >
+            + Add season
+          </GradientButton>
+        )}
       </div>
       <div className="flex flex-row gap-4 overflow-x-auto">
         {!saveDetails.seasons?.length ? (
@@ -97,7 +99,7 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
             <SeasonCard
               key={`${String(season.teamId)}-${String(season.season)}`}
               season={season}
-              onDelete={handleDeleteSeason}
+              onDelete={saveDetails.isOwner ? handleDeleteSeason : undefined}
             />
           ))
         )}

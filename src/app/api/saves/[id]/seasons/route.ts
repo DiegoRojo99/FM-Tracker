@@ -11,19 +11,23 @@ export async function POST(req: NextRequest) {
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
 
-    if (!uid || !saveId) {
-      return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
-    }
+    if (!uid) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });    
+    if (!saveId) return NextResponse.json({ error: 'Save ID is required' }, { status: 400 });
+    
+    // Check if save exists first
+    const save = await prisma.save.findUnique({
+      where: { id: saveId },
+      select: { userId: true }
+    });
+
+    if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
+    if (save.userId !== uid) return NextResponse.json({ error: 'Forbidden: You can only modify your own saves' }, { status: 403 });
     
     // Validate required fields
     const body = await req.json() as SeasonInput;
     if (!body.teamId || !body.leagueId || !body.leaguePosition || !body.season) {
-      return new Response('Missing required fields', { status: 400 });
+      return NextResponse.json({ error: 'Missing required fields: teamId, leagueId, leaguePosition, season' }, { status: 400 });
     }
-
-    // Get save data to extract game information
-    const save = await prisma.save.findUnique({ where: { id: saveId } });
-    if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
 
     // Fetch team data
     const team = await prisma.team.findUnique({ where: { id: Number(body.teamId) } });
@@ -95,9 +99,15 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
 
-    if (!uid || !saveId) {
-      return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
-    }
+    if (!uid) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    if (!saveId) return NextResponse.json({ error: 'Save ID is required' }, { status: 400 });
+
+    // Check if save exists
+    const save = await prisma.save.findUnique({
+      where: { id: saveId }
+    });
+
+    if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
 
     const seasons = await getSaveSeasons(saveId);
     return NextResponse.json(seasons);
@@ -109,15 +119,22 @@ export async function DELETE(req: NextRequest) {
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
 
-    if (!uid || !saveId) {
-      return NextResponse.json({ error: 'Unauthorized or missing save ID' }, { status: 401 });
-    }
-    
-    const body = await req.json() as { season: string; teamId: string };
+    if (!uid) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });    
+    if (!saveId) return NextResponse.json({ error: 'Save ID is required' }, { status: 400 });
+
+    // Check if save exists and user owns it
+    const save = await prisma.save.findUnique({
+      where: { id: saveId },
+      select: { userId: true }
+    });
+
+    if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
+    if (save.userId !== uid) return NextResponse.json({ error: 'Forbidden: You can only modify your own saves' }, { status: 403 });
     
     // Validate required fields
+    const body = await req.json() as { season: string; teamId: string };
     if (!body.season || !body.teamId) {
-      return new Response('Missing season or teamId', { status: 400 });
+      return NextResponse.json({ error: 'Missing required fields: season, teamId' }, { status: 400 });
     }
 
     try {
