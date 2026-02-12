@@ -141,8 +141,6 @@ function TrophyGroupCard({
   onEditTrophy: (trophy: Trophy) => void;
   onDeleteTrophy: (trophy: Trophy) => void;
 }) {
-  const [showIndividualTrophies, setShowIndividualTrophies] = useState(false);
-
   if (!trophies?.trophies?.length) {
     return (
       <BlurredCard blurSize='2xs'>
@@ -166,18 +164,8 @@ function TrophyGroupCard({
           />
         )}
         <div className="text-lg font-bold text-center mb-2">{trophies.competitionGroup.name}</div>
-        
-        {trophies.trophies.length > 1 && (
-          <button
-            onClick={() => setShowIndividualTrophies(!showIndividualTrophies)}
-            className="text-xs text-blue-400 hover:text-blue-300 mb-2 underline"
-          >
-            {showIndividualTrophies ? 'Hide Details' : `Show ${trophies.trophies.length} Trophies`}
-          </button>
-        )}
 
         {trophies.trophies.length ? (
-          showIndividualTrophies || trophies.trophies.length === 1 ? (
             <div className="space-y-2 w-full">
               {trophies.trophies.map((trophyItem, j) => (
                 <div key={`trophy-${trophies.competitionGroup.name}-${j}`} className="flex items-center justify-between p-2 bg-black/20 rounded border border-gray-600">
@@ -227,16 +215,6 @@ function TrophyGroupCard({
               ))}
             </div>
           ) : (
-            <ul className="list-none text-sm text-gray-700 dark:text-gray-300">
-              {trophies.trophies.map((trophyItem, j) => (
-                <li key={`trophy-${trophies.competitionGroup.name}-${j}`} className="mb-1">
-                  <span className="font-semibold">{trophyItem.season}</span>:
-                  <span className="ml-1">{trophyItem.team.name}</span>
-                </li>
-              ))}
-            </ul>
-          )
-        ) : (
           <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
             No trophies won
           </div>

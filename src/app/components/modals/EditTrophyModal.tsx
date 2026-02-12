@@ -9,6 +9,7 @@ import { CompetitionGroup } from '@/lib/types/prisma/Competitions';
 import BaseModal from './BaseModal';
 import LoadingButton from '../LoadingButton';
 import CompetitionWithWorldDropdown from '../dropdowns/CompetitionWithWorldDropdown';
+import { FullCareerStint } from '@/lib/types/prisma/Career';
 
 type Props = {
   open: boolean;
@@ -152,12 +153,12 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
             >
               <option value="">Select a team...</option>
               {saveDetails.careerStints
-                ?.filter((stint, index, self) => 
-                  index === self.findIndex(s => s.teamId === stint.teamId)
+                ?.filter((stint: FullCareerStint, index, self) => 
+                  index === self.findIndex((s: FullCareerStint) => s.teamId === stint.teamId)
                 )
-                .map((stint) => (
+                .map((stint: FullCareerStint) => (
                   <option key={stint.teamId} value={stint.teamId}>
-                    {stint.teamName}
+                    {stint.team.name}
                   </option>
                 ))}
             </select>

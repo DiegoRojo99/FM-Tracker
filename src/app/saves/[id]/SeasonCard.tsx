@@ -93,14 +93,14 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
             {cupResults.map(cup => (
               <div key={cup.competitionId} className="flex items-center gap-2 text-sm">
-                <Image
-                  src={cup.competition.logoUrl || '/default-competition-logo.png'}
+                {cup.competition.logoUrl && <Image
+                  src={cup.competition.logoUrl}
                   alt={cup.competition.name}
                   className="h-10 w-auto"
                   width={150}
                   height={150}
                   unoptimized
-                />
+                />}
                 <div className="flex flex-col ml-2">
                   <span className="font-medium">{cup.competition.name}</span>
                   <span className="text-zinc-500">{cup.reachedRound}{cup.reachedRound === 'Winners' && ' 🏆'}</span>
