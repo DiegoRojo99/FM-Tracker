@@ -4,7 +4,6 @@ import { prisma } from "./prisma";
 import { Team } from "@/lib/types/prisma/Team";
 import { CompetitionGroup } from "../../../prisma/generated/client";
 
-
 /**
  * Updates the 'season' attribute of a save document for a user in Firestore.
  * @param userId - The user's ID.
@@ -14,12 +13,14 @@ import { CompetitionGroup } from "../../../prisma/generated/client";
 export async function updateSaveSeason(userId: string, saveId: string, season: string) {
   const save = await getSaveById(saveId);
   if (!save || save.userId !== userId) return false;
+
   const updatedSave = await prisma.save.update({
     where: { id: saveId },
     data: {
       season: season,
     },
   });
+  
   return !!updatedSave;
 }
 
