@@ -1,6 +1,6 @@
 import BlurredCard from "@/app/components/BlurredCard";
 import ProgressBar from "@/app/components/progress/ProgressBar";
-import { CareerChallengeWithDetails, ChallengeGoalWithDetails } from "@/lib/types/prisma/Challenge";
+import { CareerChallengeGoal, CareerChallengeWithDetails, ChallengeGoalWithDetails } from "@/lib/types/prisma/Challenge";
 import React from "react";
 
 type ChallengeSectionProps = {
@@ -45,15 +45,17 @@ const ChallengeCard: React.FC<{ careerChallenge: CareerChallengeWithDetails }> =
       <p className="text-sm text-gray-400 my-2">{challenge.description}</p>
       <ProgressBar completed={completedGoals} total={totalGoals} showText={false} />
       <div className="mt-2">
-        {challenge.goals.map((goal) => (
-          <ChallengeGoalUI key={goal.id} goal={goal} isCompleted={careerChallenge.goalProgress.some(gp => gp.id === goal.id && gp.isComplete)} />
-        ))}
+        {challenge.goals.map((goal) => {
+          const careerGoalProgress: CareerChallengeGoal | undefined = careerChallenge.goalProgress.find(gp => gp.challengeGoalId === goal.id);
+          return <ChallengeGoalUI key={goal.id} goal={goal} careerGoal={careerGoalProgress} />;
+        })}
       </div>
     </div>
   );
 };
 
-const ChallengeGoalUI: React.FC<{ goal: ChallengeGoalWithDetails, isCompleted: boolean }> = ({ goal, isCompleted }) => {
+const ChallengeGoalUI: React.FC<{ goal: ChallengeGoalWithDetails, careerGoal?: CareerChallengeGoal }> = ({ goal, careerGoal }) => {
+  const isCompleted = careerGoal?.isComplete ?? false;
   return (
     <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300 my-1">
       <span className={`flex-1 ${isCompleted ? "line-through" : ""}`}>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { CareerChallengeWithDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '@/lib/types/prisma/Challenge';
+import { CareerChallengeWithSaveDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '@/lib/types/prisma/Challenge';
 import FootballLoader from '../../components/FootBallLoader';
 import ProgressBar from '../../components/progress/ProgressBar';
 import { useAuth } from '../../components/AuthProvider';
@@ -12,7 +12,8 @@ export default function ChallengeDetailPage() {
   const params = useParams();
   const { user } = useAuth();
   const [challenge, setChallenge] = useState<ChallengeWithGoals | null>(null);
-  const [userChallenge, setUserChallenge] = useState<CareerChallengeWithDetails | null>(null);
+  const [userChallenges, setUserChallenges] = useState<CareerChallengeWithSaveDetails[]>([]);
+  const [selectedSaveIndex, setSelectedSaveIndex] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,14 +29,15 @@ export default function ChallengeDetailPage() {
       const res = await fetch(`/api/challenges/${id}`, { headers });
       if (!res.ok) {
         setChallenge(null);
-        setUserChallenge(null);
+        setUserChallenges([]);
         setLoading(false);
         return;
       }
 
       const data = await res.json();
       setChallenge(data.challenge);
-      setUserChallenge(data.userChallenge || null);
+      setUserChallenges(data.userChallenges || []);
+      setSelectedSaveIndex(0); // Reset to first save when data changes
       setLoading(false);
     }
 
@@ -58,27 +60,71 @@ export default function ChallengeDetailPage() {
         )}
         
         {/* Display user progress if logged in */}
-        {userChallenge && (
-          <div className="mt-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Your Progress</span>
-              {userChallenge.completedAt && (
-                <span className="text-sm font-semibold text-green-600 dark:text-green-400">✓ Completed</span>
+        {userChallenges.length > 0 && (() => {
+          const selectedChallenge = userChallenges[selectedSaveIndex];
+          return (
+            <div className="mt-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Your Progress</h3>
+                {userChallenges.length > 1 && (
+                  <select 
+                    value={selectedSaveIndex} 
+                    onChange={(e) => setSelectedSaveIndex(Number(e.target.value))}
+                    className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  >
+                    {userChallenges.map((challenge, index) => (
+                      <option key={challenge.id} value={index}>
+                        {challenge.save ? `${challenge.save.season} Season` : 'Legacy Save'}
+                        {challenge.completedAt ? ' (Completed)' : ' (In Progress)'}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+              
+              {selectedChallenge && (
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {selectedChallenge.save ? (
+                          `Save: ${selectedChallenge.save.season} Season`
+                        ) : (
+                          'Legacy Save'
+                        )}
+                      </span>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Started: {new Date(selectedChallenge.startedAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                    {selectedChallenge.completedAt && (
+                      <span className="text-sm font-semibold text-green-600 dark:text-green-400">
+                        ✓ Completed {new Date(selectedChallenge.completedAt).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                  <ProgressBar 
+                    completed={selectedChallenge.goalProgress.filter(gp => gp.isComplete).length} 
+                    total={selectedChallenge.goalProgress.length} 
+                    showText={true}
+                  />
+                </div>
               )}
             </div>
-            <ProgressBar 
-              completed={userChallenge.goalProgress.filter(gp => gp.isComplete).length} 
-              total={userChallenge.goalProgress.length} 
-              showText={true}
-            />
-          </div>
-        )}
+          );
+        })()}
       </header>
       
       <section className="mb-8">
         <h2 className="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">Goals</h2>
         <div className="space-y-3">
-          {challenge.goals.map((goal: ChallengeGoalWithDetails) => <ChallengeGoalCard key={goal.id} goal={goal} userChallenge={userChallenge} />)}
+          {challenge.goals.map((goal: ChallengeGoalWithDetails) => 
+            <ChallengeGoalCard 
+              key={goal.id} 
+              goal={goal} 
+              selectedUserChallenge={userChallenges.length > 0 ? userChallenges[selectedSaveIndex] : null} 
+            />
+          )}
         </div>
       </section>
     </main>

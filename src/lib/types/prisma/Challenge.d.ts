@@ -7,7 +7,8 @@ import {
   ChallengeGoalTeam,
   CareerChallengeGoal,
   Game,
-  Team
+  Team,
+  Save
 } from "../../../../prisma/generated/client";
 
 export type ChallengeWithGoals = Challenge & {
@@ -23,7 +24,14 @@ export type ChallengeGoalWithDetails = ChallengeGoal & {
 export type CareerChallengeWithDetails = CareerChallenge & {
   challenge: ChallengeWithGoals;
   goalProgress: CareerChallengeGoal[];
-  game: Game
+  game: Game;
+};
+
+export type CareerChallengeWithSaveDetails = CareerChallenge & {
+  challenge: ChallengeWithGoals;
+  goalProgress: CareerChallengeGoal[];
+  game: Game;
+  save: Save | null;
 };
 
 export type CareerChallengeGoalInput = Omit<CareerChallengeGoal, 'id' | 'careerChallengeId'>;
@@ -33,5 +41,6 @@ export type {
   ChallengeGoal,
   CareerChallenge,
   CareerChallengeGoal,
-  CareerChallengeGoalInput
+  CareerChallengeGoalInput,
+  CareerChallengeWithSaveDetails
 }

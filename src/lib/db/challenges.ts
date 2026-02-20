@@ -1,4 +1,4 @@
-import { CareerChallenge, CareerChallengeGoalInput, CareerChallengeWithDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '../types/prisma/Challenge';
+import { CareerChallenge, CareerChallengeGoalInput, CareerChallengeWithDetails, CareerChallengeWithSaveDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '../types/prisma/Challenge';
 import { challengeGoalToCareerChallengeGoal } from '../dto/challenges';
 import { getTrophiesForSave } from './trophies';
 import { prisma } from './prisma';
@@ -24,7 +24,8 @@ const CareerChallengeWithDetailsInclude = {
     }
   },
   goalProgress: true,
-  game: true
+  game: true,
+  save: true
 };
 
 export async function getAllChallenges(): Promise<ChallengeWithGoals[]> {
@@ -55,10 +56,20 @@ export async function getUserChallenges(userId: string): Promise<CareerChallenge
   });
 }
 
+export async function getUserChallengesByChallenge(challengeId: number, userId: string): Promise<CareerChallengeWithSaveDetails[]> {
+  return await prisma.careerChallenge.findMany({
+    where: { challengeId, userId },
+    include: CareerChallengeWithDetailsInclude,
+    orderBy: { startedAt: 'desc' } // Most recent first
+  });
+}
+
+// Keep the old function name for backward compatibility, but fix the query
 export async function getUserChallengeById(challengeId: number, userId: string): Promise<CareerChallengeWithDetails | null> {
   return await prisma.careerChallenge.findFirst({
-    where: { id: challengeId, userId },
-    include: CareerChallengeWithDetailsInclude
+    where: { challengeId, userId },
+    include: CareerChallengeWithDetailsInclude,
+    orderBy: { startedAt: 'desc' } // Get the most recent one
   });
 }
 

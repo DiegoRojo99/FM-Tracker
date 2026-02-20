@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
-import { getChallengeById, getUserChallengeById } from '@/lib/db/challenges';
+import { getChallengeById, getUserChallengesByChallenge } from '@/lib/db/challenges';
 import { withOptionalAuth } from '@/lib/auth/withAuth';
+import { CareerChallengeWithSaveDetails } from '@/lib/types/prisma/Challenge';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withOptionalAuth(req, async (uid) => {
@@ -10,18 +11,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     try {
       // Fetch the challenge data
       const challenge = await getChallengeById(challengeId);
-      if (!challenge) {
-        return new Response(JSON.stringify({ error: 'Challenge not found' }), { status: 404 });
-      }
+      if (!challenge) return new Response(JSON.stringify({ error: 'Challenge not found' }), { status: 404 });
 
-      // Try to get user challenge if authenticated
-      let userChallenge = null;
-      if (uid) {
-        userChallenge = await getUserChallengeById(challengeId, uid);
-      }
+      // Try to get user challenges if authenticated
+      let userChallenges: CareerChallengeWithSaveDetails[] = [];
+      if (uid) userChallenges = await getUserChallengesByChallenge(challengeId, uid);
 
-      // Return challenge with optional user challenge data
-      return new Response(JSON.stringify({ challenge, userChallenge }), { 
+      // Return challenge with optional user challenges data
+      return new Response(JSON.stringify({ challenge, userChallenges }), { 
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       });
