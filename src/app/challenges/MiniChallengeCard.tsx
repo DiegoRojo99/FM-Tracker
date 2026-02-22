@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { use } from 'react';
 import Link from 'next/link';
-import { CareerChallengeWithDetails } from '@/lib/types/prisma/Challenge';
+import { CareerChallengeWithDetails, Challenge } from '@/lib/types/prisma/Challenge';
 
 type MiniChallengeCardProps = {
-  userChallenge: CareerChallengeWithDetails;
+  userChallenge: CareerChallengeWithDetails | Challenge;
 };
 
 const statusStyles = {
@@ -12,9 +12,9 @@ const statusStyles = {
   'not-started': 'border-gray-300 bg-gray-50 dark:bg-zinc-800/40',
 };
 
-function getChallengeStatus(userChallenge?: CareerChallengeWithDetails): 'completed' | 'in-progress' | 'not-started' {
-  if (!userChallenge) return 'not-started';
-  if (userChallenge.completedAt) return 'completed';
+function getChallengeStatus(userChallenge?: CareerChallengeWithDetails | Challenge): 'completed' | 'in-progress' | 'not-started' {
+  if (!userChallenge || !('challenge' in userChallenge)) return 'not-started';
+  if ('completedAt' in userChallenge && userChallenge.completedAt) return 'completed';
   return 'in-progress';
 }
 
@@ -28,17 +28,20 @@ function getChallengeCompletionPercentage(userChallenge: CareerChallengeWithDeta
 const MiniChallengeCard: React.FC<MiniChallengeCardProps> = ({ userChallenge }) => {
   const status = getChallengeStatus(userChallenge);
   const cardStyle = statusStyles[status];
+  const hasChallengeData = 'challenge' in userChallenge;
+  const challengeId = hasChallengeData ? userChallenge.challenge.id : userChallenge.id;
+  const challengeName = hasChallengeData ? userChallenge.challenge.name : userChallenge.name;
   
   return (
     <Link
-      href={`/challenges/${userChallenge?.challenge.id}`}
+      href={`/challenges/${challengeId}`}
       className={`relative aspect-square w-full border-2 ${cardStyle} rounded-xl flex flex-col items-center justify-center transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 p-2`}
-      title={userChallenge?.challenge.name}
+      title={challengeName}
     >
       <span className="text-base sm:text-lg font-bold text-gray-900 dark:text-white text-center px-2 flex-grow flex items-center">
-        {userChallenge?.challenge.name}
+        {challengeName}
       </span>
-      <ChallengeProgressBar userChallenge={userChallenge} />
+      <ChallengeProgressBar userChallenge={hasChallengeData ? userChallenge : undefined} />
     </Link>
   );
 };

@@ -85,7 +85,7 @@ export default function ChallengesPage() {
   if (loading) return <FootballLoader />;
 
   // Group challenges by status
-  const challengeGroups: { [key: string]: CareerChallengeWithDetails[] } = {
+  const challengeGroups: { [key: string]: (CareerChallengeWithDetails | Challenge)[] } = {
     'in-progress': [],
     'not-started': [],
     'completed': [],
@@ -95,6 +95,7 @@ export default function ChallengesPage() {
     const userChallenge = getBestUserChallengeForChallenge(challenge, filteredUserChallenges);
     const status = getChallengeStatus(userChallenge);
     if (userChallenge) challengeGroups[status].push(userChallenge);
+    else challengeGroups['not-started'].push(challenge);
   });
 
   // Section order: in-progress, not-started, completed

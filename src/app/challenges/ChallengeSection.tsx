@@ -1,11 +1,11 @@
 import React from 'react';
 import MiniChallengeCard from './MiniChallengeCard';
-import { CareerChallengeWithDetails } from '@/lib/types/prisma/Challenge';
+import { CareerChallengeWithDetails, Challenge } from '@/lib/types/prisma/Challenge';
 
 interface ChallengeSectionProps {
   name: string;
   icon: string;
-  challenges: CareerChallengeWithDetails[];
+  challenges: (CareerChallengeWithDetails | Challenge)[];
 }
 
 const ChallengeSection: React.FC<ChallengeSectionProps> = ({ name, icon, challenges }) => {
@@ -16,9 +16,9 @@ const ChallengeSection: React.FC<ChallengeSectionProps> = ({ name, icon, challen
         <span role="img" aria-label={name}>{icon}</span> {name}
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {challenges.map((userChallenge) => (
+        {challenges.map((userChallenge, index) => (
           <MiniChallengeCard
-            key={userChallenge.challenge.id}
+            key={`challenge-${index}`}
             userChallenge={userChallenge}
           />
         ))}
