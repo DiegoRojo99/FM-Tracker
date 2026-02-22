@@ -46,34 +46,51 @@ export default function ChallengesPage() {
   const gameOptions = Array.from(new Set(userChallenges.map(uc => uc.gameId).filter(Boolean)));
   
   useEffect(() => {
-    async function fetchAll() {
+    async function fetchUserChallenges(): Promise<CareerChallengeWithDetails[] | undefined> {
       if (!user) return;
       const token = await user.getIdToken();
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
+      const response = await fetch('/api/challenges/user', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-      const [allChallengesRes, userChallengesRes] = await Promise.all([
-        fetch('/api/challenges', { headers }),
-        fetch('/api/challenges/user', { headers }),
-      ]);
+      if (!response.ok) {
+        console.error('Failed to fetch user challenges:', response.statusText);
+        return;
+      }
 
-      const allChallengesData = await allChallengesRes.json();
-      const userChallengesData = await userChallengesRes.json();
+      const data = await response.json();
+      return data;
+    }
 
-      setChallenges(allChallengesData);
-      setUserChallenges(userChallengesData);
+    async function fetchChallenges(): Promise<Challenge[] | undefined> {
+      const response = await fetch('/api/challenges');
+      if (!response.ok) {
+        console.error('Failed to fetch challenges:', response.statusText);
+        return;
+      }
+
+      const data = await response.json();
+      return data;
+    }
+
+    async function fetchAll() {
+      // Always fetch challenges, regardless of login status
+      const allChallengesData = await fetchChallenges();
+      setChallenges(allChallengesData || []);
+
+      // Only fetch user challenges if user is logged in
+      if (!user) setUserChallenges([]);
+      else {
+        const userChallengesData = await fetchUserChallenges();
+        setUserChallenges(userChallengesData || []);
+      }
+
       setLoading(false);
     }
-    // Wait for user to be loaded
+
+    // Wait for user to be loaded, then fetch data
     if (userLoading) return;
-    else if (!user) {
-      setLoading(false);
-      return;
-    }
-    else {
-      fetchAll();
-    }
+    fetchAll();
 
   }, [user, userLoading]);
 
