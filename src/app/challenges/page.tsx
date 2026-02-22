@@ -11,6 +11,30 @@ function getChallengeStatus(userChallenge?: CareerChallengeWithDetails): 'comple
   return 'in-progress';
 }
 
+function getChallengeCompletionPercentage(userChallenge: CareerChallengeWithDetails | undefined): number {
+  if (!userChallenge || userChallenge.challenge.goals.length === 0) return 0;
+  const totalGoals = userChallenge.challenge.goals.length;
+  const completedGoals = userChallenge.goalProgress.filter(gp => gp.isComplete).length;
+  return Math.floor((completedGoals / totalGoals) * 100);
+}
+
+function getBestUserChallengeForChallenge(challenge: Challenge, userChallenges: CareerChallengeWithDetails[]): CareerChallengeWithDetails | undefined {
+  const matchingChallenges = userChallenges.filter(uc => uc.challengeId === challenge.id);
+  if (matchingChallenges.length === 0) return undefined;
+
+  let bestChallenge: CareerChallengeWithDetails | undefined = undefined;
+  for (const uc of matchingChallenges) {
+    if (!bestChallenge) bestChallenge = uc;
+    else {
+      const completionPct = getChallengeCompletionPercentage(uc);
+      const bestCompletionPct = getChallengeCompletionPercentage(bestChallenge);
+      if (completionPct > bestCompletionPct) bestChallenge = uc;
+    }
+  }
+  return bestChallenge;
+}
+
+
 export default function ChallengesPage() {
   const { user, userLoading } = useAuth();
   const [challenges, setChallenges] = useState<Challenge[]>([]);
@@ -68,7 +92,7 @@ export default function ChallengesPage() {
   };
 
   challenges.forEach(challenge => {
-    const userChallenge = filteredUserChallenges.find(uc => uc.id === challenge.id);
+    const userChallenge = getBestUserChallengeForChallenge(challenge, filteredUserChallenges);
     const status = getChallengeStatus(userChallenge);
     if (userChallenge) challengeGroups[status].push(userChallenge);
   });
