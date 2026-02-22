@@ -1,4 +1,4 @@
-import React, { use } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { CareerChallengeWithDetails, Challenge } from '@/lib/types/prisma/Challenge';
 
