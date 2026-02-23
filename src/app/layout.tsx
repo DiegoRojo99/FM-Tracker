@@ -33,6 +33,26 @@ export const metadata: Metadata = {
   authors: [{ name: "Diego Rojo" }],
   creator: "Diego Rojo",
   description: "Track your Football Manager legacy with FM Tracker. Log saves, earn achievements, complete challenges, and build your career history.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "FM Tracker",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "FM Tracker",
+    title: "FM Tracker",
+    description: "Track your Football Manager legacy with FM Tracker. Log saves, earn achievements, complete challenges, and build your career history.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FM Tracker",
+    description: "Track your Football Manager legacy with FM Tracker. Log saves, earn achievements, complete challenges, and build your career history.",
+  },
 };
 
 export default function RootLayout({
@@ -42,6 +62,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="theme-color" content="#270f3f" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="FM Tracker" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
+        <meta name="msapplication-TileColor" content="#270f3f" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >        
