@@ -4,6 +4,7 @@ import { User } from 'firebase/auth'
 import { UserWithRelationshipStatus } from '@/lib/types/prisma/Friends'
 import { useState } from 'react'
 import { GradientButton } from '@/app/components/GradientButton'
+import { useRouter } from 'next/navigation'
 
 interface SearchFriendsProps {
   onUpdate: () => void
@@ -17,6 +18,7 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
   const [sendingRequest, setSendingRequest] = useState<string | null>(null)
   const [message, setMessage] = useState('')
   const [showMessage, setShowMessage] = useState(false)
+  const router = useRouter()
 
   const handleSearch = async () => {
     if (!searchQuery.trim() || searchQuery.length < 2) {
@@ -208,32 +210,44 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
                         {statusDisplay.text}
                       </span>
 
-                      {/* Action Button */}
-                      {searchUser.canSendRequest && (
+                      {/* Action Buttons */}
+                      <div className="flex items-center space-x-2">
+                        {/* View Profile Button */}
                         <GradientButton
                           size="sm"
-                          onClick={() => handleSendRequest(searchUser.email, searchUser.uid)}
-                          disabled={sendingRequest === searchUser.uid}
+                          onClick={() => router.push(`/profile/${searchUser.uid}`)}
+                          className="px-3"
                         >
-                          {sendingRequest === searchUser.uid ? (
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          ) : (
-                            '+ Add Friend'
-                          )}
+                          👁️
                         </GradientButton>
-                      )}
-                      
-                      {searchUser.relationshipStatus === 'request_received_pending' && (
-                        <GradientButton
-                          size="sm"
-                          onClick={() => {
-                            // Navigate to requests tab to respond
-                            alert('Please go to the Requests tab to respond to this friend request.')
-                          }}
-                        >
-                          Respond
-                        </GradientButton>
-                      )}
+
+                        {/* Friend Action Buttons */}
+                        {searchUser.canSendRequest && (
+                          <GradientButton
+                            size="sm"
+                            onClick={() => handleSendRequest(searchUser.email, searchUser.uid)}
+                            disabled={sendingRequest === searchUser.uid}
+                          >
+                            {sendingRequest === searchUser.uid ? (
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                              '+ Add Friend'
+                            )}
+                          </GradientButton>
+                        )}
+                        
+                        {searchUser.relationshipStatus === 'request_received_pending' && (
+                          <GradientButton
+                            size="sm"
+                            onClick={() => {
+                              // Navigate to requests tab to respond
+                              alert('Please go to the Requests tab to respond to this friend request.')
+                            }}
+                          >
+                            Respond
+                          </GradientButton>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
