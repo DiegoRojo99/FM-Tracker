@@ -15,7 +15,7 @@ const sizes = [
 
 async function generateIcons() {
   const inputPath = path.join(__dirname, '../public/FM-Tracker-Logo.png');
-  const outputDir = path.join(__dirname, '../public/icons');
+  const outputDir = path.join(__dirname, '../public/logos');
 
   // Create icons directory if it doesn't exist
   if (!fs.existsSync(outputDir)) {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
+import { UserWithStatus } from '@/lib/types/prisma/User';
 
 // GET /api/friends/search?q=query - Search for users to add as friends
 export async function GET(request: NextRequest) {
@@ -47,7 +48,7 @@ export async function GET(request: NextRequest) {
       });
 
       // For each user, check their relationship status with the current user
-      const usersWithStatus = await Promise.all(
+      const usersWithStatus: UserWithStatus[] = await Promise.all(
         users.map(async (user) => {
           // Check if already friends
           const friendship = await prisma.friendship.findFirst({
@@ -81,17 +82,18 @@ export async function GET(request: NextRequest) {
           });
 
           if (existingRequest) {
+            const existingStatus = existingRequest.status.toLowerCase() as 'pending' | 'accepted' | 'blocked';
             if (existingRequest.requesterId === uid) {
               return {
                 ...user,
-                relationshipStatus: `request_sent_${existingRequest.status.toLowerCase()}`,
+                relationshipStatus: `request_sent_${existingStatus}`,
                 canSendRequest: false
               };
             } 
             else {
               return {
                 ...user,
-                relationshipStatus: `request_received_${existingRequest.status.toLowerCase()}`,
+                relationshipStatus: `request_received_${existingStatus}`,
                 canSendRequest: false,
                 pendingRequestId: existingRequest.id
               };

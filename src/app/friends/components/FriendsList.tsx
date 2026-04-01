@@ -4,6 +4,7 @@ import { User } from 'firebase/auth'
 import { User as PrismaUser } from '@/lib/types/prisma/User'
 import { useState } from 'react'
 import { GradientButton } from '@/app/components/GradientButton'
+import { useRouter } from 'next/navigation'
 
 interface FriendsListProps {
   friends: (PrismaUser & { friendshipDate: Date })[]
@@ -13,6 +14,7 @@ interface FriendsListProps {
 
 export default function FriendsList({ friends, onUpdate, user }: FriendsListProps) {
   const [removing, setRemoving] = useState<string | null>(null)
+  const router = useRouter()
 
   const handleRemoveFriend = async (friendId: string, friendName: string) => {
     if (!confirm(`Are you sure you want to remove ${friendName} from your friends?`)) {
@@ -103,10 +105,7 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
               <GradientButton
                 size="sm"
                 width="full"
-                onClick={() => {
-                  // Future: Navigate to friend's profile or send message
-                  alert('Profile view coming soon!')
-                }}
+                onClick={() => router.push(`/profile/${friend.uid}`)}
                 className="flex-1"
               >
                 View Profile
