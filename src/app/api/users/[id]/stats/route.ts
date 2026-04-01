@@ -9,11 +9,10 @@ import { getUserMostUsedTeams } from '@/lib/db/career';
 import { getUserById } from '@/lib/db/users';
 import { Team } from '@/lib/types/prisma/Team';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return withOptionalAuth(request, async () => {
     try {
-      const targetUserId = params.id;
-
+      const { id: targetUserId } = await params;
       // Get the user first to ensure they exist
       const user = await getUserById(targetUserId);
       if (!user) {
@@ -45,7 +44,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       };
       
       return new Response(JSON.stringify(userStats), { status: 200 });
-
     } 
     catch (error) {
       console.error('Error fetching user profile:', error);
