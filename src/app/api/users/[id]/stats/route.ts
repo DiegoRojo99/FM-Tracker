@@ -10,7 +10,7 @@ import { getUserById } from '@/lib/db/users';
 import { Team } from '@/lib/types/prisma/Team';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-  return withOptionalAuth(request, async (currentUserId) => {
+  return withOptionalAuth(request, async () => {
     try {
       const targetUserId = params.id;
 

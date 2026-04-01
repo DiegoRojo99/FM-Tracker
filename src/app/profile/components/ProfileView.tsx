@@ -3,7 +3,7 @@
 import { useAuth } from '@/app/components/AuthProvider'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { User } from '@/lib/types/prisma/User'
+import { User, UserWithStatus } from '@/lib/types/prisma/User'
 import { UserStats } from '@/lib/types/prisma/Stats'
 import { GradientButton } from '@/app/components/GradientButton'
 
@@ -15,7 +15,7 @@ interface UserProfile {
   user: User
   stats: UserStats
   isOwnProfile: boolean
-  friendshipStatus?: 'friend' | 'request_sent' | 'request_received' | 'none' | 'blocked'
+  friendshipStatus?: UserWithStatus['relationshipStatus']
 }
 
 export default function ProfileView({ userId }: ProfileViewProps) {
@@ -82,10 +82,8 @@ export default function ProfileView({ userId }: ProfileViewProps) {
 
           if (searchResponse.ok) {
             const searchData = await searchResponse.json()
-            const userResult = searchData.users?.find((u: any) => u.uid === targetUserId)
-            if (userResult) {
-              friendshipStatus = userResult.relationshipStatus
-            }
+            const userResult: UserWithStatus | undefined = searchData.users?.find((u: UserWithStatus) => u.uid === targetUserId)
+            if (userResult) friendshipStatus = userResult.relationshipStatus
           }
         } catch (err) {
           console.warn('Could not fetch friendship status:', err)
@@ -171,13 +169,13 @@ export default function ProfileView({ userId }: ProfileViewProps) {
             <span>Friends</span>
           </GradientButton>
         )
-      case 'request_sent':
+      case 'request_sent_pending':
         return (
           <GradientButton disabled className="opacity-60">
             Request Sent
           </GradientButton>
         )
-      case 'request_received':
+      case 'request_received_pending':
         return (
           <GradientButton
             onClick={() => router.push('/friends?tab=requests')}
@@ -187,7 +185,10 @@ export default function ProfileView({ userId }: ProfileViewProps) {
             <span>Respond to Request</span>
           </GradientButton>
         )
-      case 'blocked':
+      case 'request_sent_accepted':
+      case 'request_sent_blocked':
+      case 'request_received_accepted':
+      case 'request_received_blocked':
         return null
       default:
         return (
