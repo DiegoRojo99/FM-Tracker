@@ -247,17 +247,17 @@ export default function ProfileView({ userId }: ProfileViewProps) {
     <div className="min-h-screen bg-gradient-to-br from-[var(--color-darker)] to-[var(--color-dark)] p-6">
       <div className="max-w-6xl mx-auto">
         {/* Profile Header */}
-        <div className="bg-[var(--color-dark)] rounded-xl shadow-2xl p-8 mb-8">
+        <div className="bg-[var(--color-dark)] rounded-xl shadow-2xl p-4 mb-4 md:p-8 md:mb-8">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
             <div className="flex items-center space-x-6 mb-6 md:mb-0">
               {/* Avatar */}
-              <div className="w-24 h-24 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white text-3xl font-bold">
+              <div className="w-24 h-24 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white text-lg md:text-3xl font-bold">
                 {profile.user.displayName.charAt(0).toUpperCase()}
               </div>
               
               {/* User Info */}
               <div>
-                <h1 className="text-3xl font-bold text-white mb-2">
+                <h1 className="text-lg md:text-3xl font-bold text-white mb-2">
                   {profile.user.displayName}
                 </h1>
                 <p className="text-gray-300 mb-1">{profile.user.email}</p>
