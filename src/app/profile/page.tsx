@@ -8,15 +8,15 @@ import { auth } from '@/lib/db/firebase'
 import { UserStats } from '@/lib/types/prisma/Stats'
 
 export default function Profile() {
-  const { user } = useAuth()
+  const { user, userLoading } = useAuth()
   const router = useRouter()
   const [stats, setStats] = useState<UserStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!user) router.push('/login')
-  }, [user, router])
+    if (!user && !userLoading) router.push('/login')
+  }, [user, userLoading, router])
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -31,20 +31,15 @@ export default function Profile() {
           }
         })
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch stats')
-        }
-
-        const statsData = await response.json()
-        setStats(statsData)
+        if (!response.ok) throw new Error('Failed to fetch stats');
+        const statsData = await response.json();
+        setStats(statsData);
       } 
       catch (err) {
-        setError('Failed to load profile statistics')
-        console.error('Error fetching stats:', err)
+        setError('Failed to load profile statistics');
+        console.error('Error fetching stats:', err);
       } 
-      finally {
-        setLoading(false)
-      }
+      finally { setLoading(false); }
     }
 
     fetchStats()
@@ -63,8 +58,14 @@ export default function Profile() {
     return stats.favoriteTeams.map(team => team.name).join(', ');
   }
 
-  if (!user) return null
-
+  if (userLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--color-darker)] to-[var(--color-dark)]">
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-accent)]"></div>
+      </div>
+    )
+  }
+  if (!user) return null;
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--color-darker)] to-[var(--color-dark)] p-6">
       <div className="max-w-4xl mx-auto">
