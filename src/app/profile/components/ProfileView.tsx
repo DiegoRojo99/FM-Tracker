@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/app/components/AuthProvider'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { User, UserWithStatus } from '@/lib/types/prisma/User'
 import { UserStats } from '@/lib/types/prisma/Stats'
 import { GradientButton } from '@/app/components/GradientButton'
@@ -29,18 +29,7 @@ export default function ProfileView({ userId }: ProfileViewProps) {
   // Determine target user ID
   const targetUserId = userId || currentUser?.uid
 
-  useEffect(() => {
-    if (!currentUser && !userLoading) {
-      router.push('/login')
-      return
-    }
-
-    if (!targetUserId) return
-
-    fetchProfile()
-  }, [currentUser, userLoading, targetUserId, router])
-
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     if (!targetUserId) return
 
     try {
@@ -96,13 +85,27 @@ export default function ProfileView({ userId }: ProfileViewProps) {
         isOwnProfile,
         friendshipStatus
       })
-    } catch (err: any) {
+    } 
+    catch (err: unknown) {
+      if (!(err instanceof Error)) return;
       setError(err.message || 'Failed to load profile')
       console.error('Error fetching profile:', err)
-    } finally {
+    } 
+    finally {
       setLoading(false)
     }
-  }
+  }, [targetUserId, currentUser])
+
+  useEffect(() => {
+    if (!currentUser && !userLoading) {
+      router.push('/login')
+      return
+    }
+
+    if (!targetUserId) return
+
+    fetchProfile()
+  }, [currentUser, userLoading, targetUserId, router, fetchProfile])
 
   const handleSendFriendRequest = async () => {
     if (!profile || !currentUser || profile.isOwnProfile) return
@@ -129,10 +132,13 @@ export default function ProfileView({ userId }: ProfileViewProps) {
 
       // Refresh profile to update friendship status
       fetchProfile()
-    } catch (error: any) {
-      console.error('Error sending friend request:', error)
-      alert(error.message || 'Failed to send friend request')
-    } finally {
+    } 
+    catch (error: unknown) {
+      if (!(error instanceof Error)) return;
+      console.error('Error sending friend request:', error);
+      alert(error.message || 'Failed to send friend request');
+    } 
+    finally {
       setSendingRequest(false)
     }
   }
