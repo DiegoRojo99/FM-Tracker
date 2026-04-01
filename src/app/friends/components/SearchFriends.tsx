@@ -75,10 +75,12 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
       setMessage('')
       setShowMessage(false)
       onUpdate() // Refresh main data
-    } catch (error: any) {
+    } 
+    catch (error: unknown) {
       console.error('Error sending friend request:', error)
-      alert(error.message || 'Failed to send friend request. Please try again.')
-    } finally {
+      alert((error as Error).message || 'Failed to send friend request. Please try again.')
+    } 
+    finally {
       setSendingRequest(null)
     }
   }

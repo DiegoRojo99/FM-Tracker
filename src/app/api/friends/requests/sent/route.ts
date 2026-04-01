@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       const status = url.searchParams.get('status');
 
       // Build the where clause based on the presence of status filter
-      const where: Record<string, any> = { requesterId: uid };
+      const where: Record<string, string> = { requesterId: uid };
       if (status && ['PENDING', 'REJECTED', 'BLOCKED'].includes(status)) where.status = status;
       console.log('Querying with where clause:', where);
 

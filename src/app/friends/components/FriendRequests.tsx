@@ -136,7 +136,7 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
                           </p>
                           {request.message && (
                             <p className="text-gray-300 text-sm mt-2 italic">
-                              "{request.message}"
+                              &ldquo;{request.message}&rdquo;
                             </p>
                           )}
                         </div>

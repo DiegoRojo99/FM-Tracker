@@ -2,9 +2,9 @@
 
 import { useAuth } from '@/app/components/AuthProvider';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react'
 import { User } from '@/lib/types/prisma/User';
-import { FriendRequestWithReceiver, FriendRequestWithRequester, Friendship } from '@/lib/types/prisma/Friends';
+import { FriendRequestWithReceiver, FriendRequestWithRequester } from '@/lib/types/prisma/Friends';
 import FriendsList from './components/FriendsList';
 import FriendRequests from './components/FriendRequests';
 import SearchFriends from './components/SearchFriends';
@@ -37,7 +37,7 @@ export default function FriendsPage() {
     }
   }, [user, router])
 
-  const fetchFriendsData = async () => {
+  const fetchFriendsData = useCallback(async () => {
     if (!user) return
 
     try {
@@ -83,11 +83,11 @@ export default function FriendsPage() {
     finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
   useEffect(() => {
     fetchFriendsData()
-  }, [user])
+  }, [user, fetchFriendsData])
 
   const handleDataUpdate = () => {
     fetchFriendsData() // Refresh data after actions

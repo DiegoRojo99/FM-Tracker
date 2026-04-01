@@ -9,10 +9,7 @@ export async function GET(request: NextRequest) {
     try {
       const url = new URL(request.url);
       const status = url.searchParams.get('status'); // Optional filter by status
-
-      const where: any = {
-        receiverId: uid
-      };
+      const where: Record<string, string> = { receiverId: uid };
 
       // Add status filter if provided
       if (status && ['PENDING', 'REJECTED', 'BLOCKED'].includes(status)) {
