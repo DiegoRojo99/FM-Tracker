@@ -8,6 +8,12 @@ datasource db {
   provider = "postgresql"
 }
 
+enum FriendRequestStatus {
+  PENDING
+  REJECTED
+  BLOCKED
+}
+
 model User {
   uid              String            @id
   email            String            @unique
@@ -17,8 +23,52 @@ model User {
   avatarURL        String?
   careerChallenges CareerChallenge[]
   saves            Save[]
+  
+  // Friend request relations
+  sentFriendRequests     FriendRequest[] @relation("SentFriendRequests")
+  receivedFriendRequests FriendRequest[] @relation("ReceivedFriendRequests")
+  
+  // Friendship relations  
+  primaryFriendships   Friendship[] @relation("User1Friendships")
+  secondaryFriendships Friendship[] @relation("User2Friendships")
 
   @@index([email])
+  @@index([createdAt])
+}
+
+model FriendRequest {
+  id          String              @id @default(cuid())
+  requesterId String              // User who sent the friend request  
+  receiverId  String              // User who received the friend request
+  status      FriendRequestStatus @default(PENDING)
+  requestedAt DateTime            @default(now())
+  respondedAt DateTime?           // When status changed from pending
+  message     String?             // Optional message with friend request
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  
+  requester User @relation("SentFriendRequests", fields: [requesterId], references: [uid], onDelete: Cascade)
+  receiver  User @relation("ReceivedFriendRequests", fields: [receiverId], references: [uid], onDelete: Cascade)
+  
+  @@unique([requesterId, receiverId]) // Prevent duplicate friend requests
+  @@index([requesterId])
+  @@index([receiverId])
+  @@index([status])
+  @@index([requestedAt])
+}
+
+model Friendship {
+  id        String   @id @default(cuid())
+  user1Id   String   // Lexically smaller user ID (ensures consistent ordering)
+  user2Id   String   // Lexically larger user ID
+  createdAt DateTime @default(now())
+  
+  user1 User @relation("User1Friendships", fields: [user1Id], references: [uid], onDelete: Cascade)
+  user2 User @relation("User2Friendships", fields: [user2Id], references: [uid], onDelete: Cascade)
+  
+  @@unique([user1Id, user2Id]) // Prevent duplicate friendships
+  @@index([user1Id])
+  @@index([user2Id])
   @@index([createdAt])
 }
 
