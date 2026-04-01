@@ -5,7 +5,7 @@ import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { useAuth } from './AuthProvider';
 import { NavBarProfile } from './NavBarProfile';
-import { FriendsNavLink } from './FriendsNavLink';
+
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -36,7 +36,6 @@ export default function Navbar() {
           <Link href="/challenges" className="flex hover:text-[var(--color-highlight)]">
             <p className='h-fit my-auto'>Challenges</p>
           </Link>
-          <FriendsNavLink className="flex hover:text-[var(--color-highlight)]" />
           {/* <Link href="#" className="hover:text-[var(--color-highlight)]">Achievements</Link> */}
           {user && user.uid === adminUID && (
             <Link href="/admin" className="flex hover:text-[var(--color-highlight)]">
@@ -62,7 +61,6 @@ export default function Navbar() {
           <Link href="/trophies" className="block hover:text-[var(--color-highlight)]" onClick={() => setOpen(false)}>Trophies</Link>
           {/* <Link href="#" className="block hover:text-[var(--color-highlight)]">Achievements</Link> */}
           <Link href="/challenges" className="block hover:text-[var(--color-highlight)]" onClick={() => setOpen(false)}>Challenges</Link>
-          <FriendsNavLink className="block hover:text-[var(--color-highlight)]" onClick={() => setOpen(false)} />
           {user && user.uid === adminUID && (
             <Link href="/admin" className="block hover:text-[var(--color-highlight)]" onClick={() => setOpen(false)}>
               Admin

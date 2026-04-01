@@ -7,11 +7,16 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/db/firebase';
 import { useRouter } from 'next/navigation';
 
+interface FriendRequestsCount {
+  pendingCount: number
+}
+
 export function NavBarProfile() {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const [pendingCount, setPendingCount] = useState(0);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -26,6 +31,38 @@ export function NavBarProfile() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Fetch pending friend requests
+  useEffect(() => {
+    const fetchPendingRequests = async () => {
+      if (!user) return
+
+      try {
+        const userToken = await user.getIdToken()
+        const response = await fetch('/api/friends/requests/received?status=PENDING', {
+          headers: {
+            'Authorization': `Bearer ${userToken}`
+          }
+        })
+
+        if (response.ok) {
+          const data: FriendRequestsCount = await response.json()
+          setPendingCount(data.pendingCount || 0)
+        }
+      } 
+      catch (error) {
+        console.error('Error fetching pending friend requests:', error)
+      }
+    }
+
+    // Fetch initially
+    fetchPendingRequests()
+
+    // Fetch periodically (every 30 seconds)
+    const interval = setInterval(fetchPendingRequests, 30000)
+
+    return () => clearInterval(interval)
+  }, [user]);
 
   const handleLogout = async () => {
     try {
@@ -107,7 +144,14 @@ export function NavBarProfile() {
               <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              Friends
+              <div className="relative">
+                <span>Friends</span>
+                {pendingCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    {pendingCount > 9 ? '9+' : pendingCount}
+                  </span>
+                )}
+              </div>
             </Link>
           </div>
 
