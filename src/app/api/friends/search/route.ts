@@ -43,7 +43,6 @@ export async function GET(request: NextRequest) {
             }
           ]
         },
-
         take: 20 // Limit results
       });
 
@@ -88,7 +87,8 @@ export async function GET(request: NextRequest) {
                 relationshipStatus: `request_sent_${existingRequest.status.toLowerCase()}`,
                 canSendRequest: false
               };
-            } else {
+            } 
+            else {
               return {
                 ...user,
                 relationshipStatus: `request_received_${existingRequest.status.toLowerCase()}`,
@@ -113,7 +113,8 @@ export async function GET(request: NextRequest) {
         count: usersWithStatus.length
       });
 
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error searching users:', error);
       return NextResponse.json(
         { error: 'Failed to search users' },

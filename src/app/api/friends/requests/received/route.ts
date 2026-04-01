@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
+import { FriendRequestWithRequester, FriendsRequestReceivedResponse } from '@/lib/types/prisma/Friends';
 
 // GET /api/friends/requests/received - Get all friend requests received by the user
 export async function GET(request: NextRequest) {
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
         where.status = status;
       }
 
-      const receivedRequests = await prisma.friendRequest.findMany({
+      const receivedRequests: FriendRequestWithRequester[] = await prisma.friendRequest.findMany({
         where,
         include: {
           requester: true
@@ -38,18 +39,21 @@ export async function GET(request: NextRequest) {
         if (!acc[status]) acc[status] = [];
         acc[status].push(request);
         return acc;
-      }, {} as Record<string, typeof receivedRequests>);
+      }, {} as Record<string, FriendRequestWithRequester[]>);
 
-      return NextResponse.json({
+      const responseData: FriendsRequestReceivedResponse = {
         requests: receivedRequests,
         pendingRequests,
         processedRequests,
         grouped,
         count: receivedRequests.length,
         pendingCount: pendingRequests.length
-      });
+      };
 
-    } catch (error) {
+      return NextResponse.json(responseData);
+
+    } 
+    catch (error) {
       console.error('Error fetching received friend requests:', error);
       return NextResponse.json(
         { error: 'Failed to fetch received friend requests' },

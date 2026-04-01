@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
-import { FriendRequestStatus } from '@/lib/types/prisma/Friends';
+import { FriendRequestStatus, FriendRequestWithRequester } from '@/lib/types/prisma/Friends';
 
 // POST /api/friends/respond - Accept or reject a friend request
 export async function POST(request: NextRequest) {
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Find the friend request
-      const friendRequest = await prisma.friendRequest.findFirst({
+      const friendRequest: FriendRequestWithRequester | null = await prisma.friendRequest.findFirst({
         where: {
           id: requestId,
           receiverId: uid, // Only the receiver can respond
@@ -88,8 +88,8 @@ export async function POST(request: NextRequest) {
           friendship: result.friendship,
           friend
         });
-
-      } else {
+      } 
+      else {
         // Reject or block
         const status: FriendRequestStatus = action === 'block' ? 'BLOCKED' : 'REJECTED';
         
@@ -110,8 +110,8 @@ export async function POST(request: NextRequest) {
           request: updatedRequest
         });
       }
-
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error responding to friend request:', error);
       return NextResponse.json(
         { error: 'Failed to respond to friend request' },

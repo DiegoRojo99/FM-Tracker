@@ -10,6 +10,14 @@ export type FriendRequestWithUser = FriendRequest & {
   receiver?: Pick<User, 'uid' | 'displayName' | 'email' | 'avatarURL'>;
 };
 
+export type FriendRequestWithRequester = FriendRequest & {
+  requester: User;
+};
+
+export type FriendRequestWithReceiver = FriendRequest & {
+  receiver: User;
+};
+
 export type FriendshipWithUsers = Friendship & {
   user1: Pick<User, 'uid' | 'displayName' | 'email' | 'avatarURL' | 'createdAt'>;
   user2: Pick<User, 'uid' | 'displayName' | 'email' | 'avatarURL' | 'createdAt'>;
@@ -39,3 +47,18 @@ export type RespondToFriendRequestInput = {
 export type RemoveFriendInput = {
   friendId: string;
 };
+
+export type FriendsRequestReceivedResponse = {
+  requests: FriendRequestWithRequester[];
+  pendingRequests: FriendRequestWithRequester[];
+  processedRequests: FriendRequestWithRequester[];
+  grouped: Record<string, FriendRequestWithRequester[]>;
+  count: number;
+  pendingCount: number;
+}
+
+export type FriendsRequestSentResponse = {
+  requests: FriendRequestWithReceiver[];
+  grouped: Record<string, FriendRequestWithReceiver[]>;
+  count: number;
+}

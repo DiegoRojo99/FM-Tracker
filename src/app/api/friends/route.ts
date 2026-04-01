@@ -37,7 +37,8 @@ export async function GET(request: NextRequest) {
         count: friends.length
       });
 
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error fetching friends:', error);
       return NextResponse.json(
         { error: 'Failed to fetch friends' },
