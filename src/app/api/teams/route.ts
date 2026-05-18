@@ -20,10 +20,10 @@ export async function GET(req: NextRequest) {
 }
 
 function getSeasonFromGameId(gameId: string): string {
-  if (gameId.includes('fm24')) return '2023/24';
-  if (gameId.includes('fm25')) return '2024/25';
-  if (gameId.includes('fm26')) return '2025/26';
-  return '2023/24';
+  if (gameId.includes('fm24')) return '2023/2024';
+  if (gameId.includes('fm25')) return '2024/2025';
+  if (gameId.includes('fm26')) return '2025/2026';
+  return '2023/2024';
 }
 
 async function getApiCompetitionIdsFromLeagueId(leagueId: number): Promise<number[]> {
@@ -47,6 +47,7 @@ async function searchTeamsByLeague(leagueId: string, gameId: string | null): Pro
       return [];
     }
 
+    console.log('Querying teams with API Competition IDs:', apiCompetitionIds, 'and season:', season);
     const teams = await prisma.team.findMany({
       where: {
         teamSeasons: {

@@ -12,6 +12,7 @@ export default function NewSaveForm() {
   const { user } = useAuth();
   const [countries, setCountries] = useState<Country[]>([]);
   const [leagues, setLeagues] = useState<CompetitionGroup[]>([]);
+  const [loadingTeams, setLoadingTeams] = useState(false);
   const [teams, setTeams] = useState<Team[]>([]);
   const [games, setGames] = useState<Game[]>([]);
 
@@ -20,6 +21,8 @@ export default function NewSaveForm() {
   const [selectedTeam, setSelectedTeam] = useState('');
   const [selectedGame, setSelectedGame] = useState('fm26'); // Default to FM26
   const [isNoTeam, setIsNoTeam] = useState(false);
+  
+  const [savingGame, setSavingGame] = useState(false);
 
   // Fetch countries and games on mount
   useEffect(() => {
@@ -43,19 +46,26 @@ export default function NewSaveForm() {
   // Fetch teams when league changes
   useEffect(() => {
     if (selectedLeague) {
+      setLoadingTeams(true);
       fetch(`/api/teams?leagueId=${selectedLeague}&gameId=${selectedGame}`)
         .then(res => res.json())
-        .then(setTeams);
+        .then(data => {
+          setTeams(data);
+          setLoadingTeams(false);
+        });
     } 
     else {
       setTeams([]);
       setSelectedTeam('');
+      setLoadingTeams(false);
     }
   }, [selectedLeague, selectedGame]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user || (!selectedTeam && !isNoTeam)) return;
+
+    setSavingGame(true);
 
     const newSave: SaveInput = {
       gameId: selectedGame,
@@ -76,9 +86,11 @@ export default function NewSaveForm() {
     if (!saveResponse.ok) {
       const errorData = await saveResponse.json();
       alert(`Error creating save: ${errorData.message}`);
+      setSavingGame(false);
       return;
     }
 
+    setSavingGame(false);
     alert('✅ Save created!');
     setTimeout(() => {
       window.location.href = '/saves';
@@ -183,12 +195,14 @@ export default function NewSaveForm() {
             </div>
           ) : (
             <div className={`transition-opacity duration-200 ${!selectedLeague ? 'opacity-50 pointer-events-none' : ''}`}>
-              <TeamGrid
-                teams={teams}
-                selectedTeamId={selectedTeam}
-                onSelect={setSelectedTeam}
-              />
-              {selectedLeague && teams.length === 0 && (
+              { !loadingTeams && (
+                <TeamGrid
+                  teams={teams}
+                  selectedTeamId={selectedTeam}
+                  onSelect={setSelectedTeam}
+                />
+              )}
+              {loadingTeams && (
                 <div className="text-center py-8 text-gray-400">
                   <div className="text-4xl mb-2">⚽</div>
                   <p>Loading teams...</p>
@@ -200,7 +214,7 @@ export default function NewSaveForm() {
 
         <button
           type="submit"
-          disabled={!selectedGame || (!selectedTeam && !isNoTeam)}
+          disabled={ !selectedGame || (!selectedTeam && !isNoTeam) || savingGame }
           className="w-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] 
           text-white font-bold py-4 px-6 rounded-lg cursor-pointer
           hover:from-[var(--color-highlight)] hover:to-[var(--color-accent)] 
