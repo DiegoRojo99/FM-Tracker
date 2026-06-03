@@ -8,8 +8,10 @@ import { FriendRequestWithReceiver, FriendRequestWithRequester } from '@/lib/typ
 import FriendsList from './components/FriendsList';
 import FriendRequests from './components/FriendRequests';
 import SearchFriends from './components/SearchFriends';
+import FootballLoader from '../components/FootBallLoader';
+import FriendsLeaderboard from './components/FriendsLeaderboard';
 
-type TabType = 'friends' | 'requests' | 'search'
+type TabType = 'friends' | 'requests' | 'search' | 'leaderboard'
 
 interface FriendsData {
   friends: (User & { friendshipDate: Date })[]
@@ -33,7 +35,7 @@ export default function FriendsPage() {
   useEffect(() => {
     if (!user) {
       // router.push('/login')
-      return
+      return;
     }
   }, [user, router])
 
@@ -141,15 +143,24 @@ export default function FriendsPage() {
             >
               Add Friends
             </button>
+            <button
+              onClick={() => setActiveTab('leaderboard')}
+              className={`flex-1 py-3 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
+                activeTab === 'leaderboard'
+                  ? 'bg-[var(--color-accent)] text-white shadow-lg'
+                  : 'text-gray-300 hover:text-white hover:bg-[var(--color-dark)]'
+              }`}
+            >
+              Leaderboard
+            </button>
           </div>
         </div>
 
         {/* Content */}
         <div className="bg-[var(--color-dark)] rounded-xl shadow-2xl p-8">
           {loading && (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent)]"></div>
-              <p className="text-gray-300 mt-4">Loading...</p>
+            <div className="py-12">
+              <FootballLoader />
             </div>
           )}
 
@@ -187,6 +198,9 @@ export default function FriendsPage() {
                   onUpdate={handleDataUpdate}
                   user={user}
                 />
+              )}
+              {activeTab === 'leaderboard' && (
+                <FriendsLeaderboard user={user} />
               )}
             </>
           )}
