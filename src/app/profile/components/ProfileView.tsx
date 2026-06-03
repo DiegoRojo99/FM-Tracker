@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { User, UserWithStatus } from '@/lib/types/prisma/User'
 import { UserStats } from '@/lib/types/prisma/Stats'
 import { GradientButton } from '@/app/components/GradientButton'
+import FootballLoader from '@/app/components/FootBallLoader'
 
 interface ProfileViewProps {
   userId?: string // If provided, show that user's profile; otherwise show current user
@@ -218,10 +219,7 @@ export default function ProfileView({ userId }: ProfileViewProps) {
   if (userLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--color-darker)] to-[var(--color-dark)]">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-accent)]"></div>
-          <p className="text-gray-300 mt-4">Loading profile...</p>
-        </div>
+        <FootballLoader />
       </div>
     )
   }

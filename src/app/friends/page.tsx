@@ -8,6 +8,7 @@ import { FriendRequestWithReceiver, FriendRequestWithRequester } from '@/lib/typ
 import FriendsList from './components/FriendsList';
 import FriendRequests from './components/FriendRequests';
 import SearchFriends from './components/SearchFriends';
+import FootballLoader from '../components/FootBallLoader';
 
 type TabType = 'friends' | 'requests' | 'search'
 
@@ -147,9 +148,8 @@ export default function FriendsPage() {
         {/* Content */}
         <div className="bg-[var(--color-dark)] rounded-xl shadow-2xl p-8">
           {loading && (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent)]"></div>
-              <p className="text-gray-300 mt-4">Loading...</p>
+            <div className="py-12">
+              <FootballLoader />
             </div>
           )}
 

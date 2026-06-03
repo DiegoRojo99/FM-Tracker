@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import TeamLocationPicker from "./TeamLocationPicker";
 import Image from "next/image";
 import BlurredCard from "@/app/components/BlurredCard";
+import FootballLoader from "@/app/components/FootBallLoader";
 
 function TeamCordsPage() {
   const [team, setTeam] = useState<Team | null>(null);
@@ -13,12 +14,13 @@ function TeamCordsPage() {
 
   useEffect(() => {
     async function fetchTeamCoordinates() {
-      if (team && loading) {
-        const response = await fetch(`/api/teams/${team.id}`);
-        const data = await response.json();
-        setTeam(data);
-        setLoading(false);
-      }
+      if (!team) return;
+      if (!loading) return;
+      
+      const response = await fetch(`/api/teams/${team.id}`);
+      const data = await response.json();
+      setTeam(data);
+      setLoading(false);
     }
 
     fetchTeamCoordinates();
@@ -65,7 +67,7 @@ function TeamCordsMapSection({ team, loading, setLoading }: { team: Team; loadin
   }
 
   if (loading) {
-    return <p className="text-lg">Loading...</p>;
+    return <FootballLoader />;
   }
   else if (!team.lat || !team.lng) {
     return <TeamLocationPicker onSelect={(coords) => { if (team) addCoordinates(coords); }} />;

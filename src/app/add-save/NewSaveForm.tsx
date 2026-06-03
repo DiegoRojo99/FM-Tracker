@@ -7,6 +7,7 @@ import { Team } from '@/lib/types/prisma/Team';
 import { CompetitionGroup, Country } from '../../../prisma/generated/client';
 import { Game } from '@/lib/types/prisma/Game';
 import { SaveInput } from '@/lib/types/prisma/Save';
+import FootballLoader from '@/app/components/FootBallLoader';
 
 export default function NewSaveForm() {
   const { user } = useAuth();
@@ -203,9 +204,8 @@ export default function NewSaveForm() {
                 />
               )}
               {loadingTeams && (
-                <div className="text-center py-8 text-gray-400">
-                  <div className="text-4xl mb-2">⚽</div>
-                  <p>Loading teams...</p>
+                <div className="py-8">
+                  <FootballLoader />
                 </div>
               )}
             </div>
