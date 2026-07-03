@@ -10,7 +10,7 @@
           "value": "fm-tracker.site"
         }
       ],
-      "destination": "https://fm-tracker.xyz/$1",
+      "destination": "https://fm-tracker.site/$1",
       "permanent": true
     },
     {
@@ -21,7 +21,7 @@
           "value": "www.fm-tracker.site"
         }
       ],
-      "destination": "https://fm-tracker.xyz/$1",
+      "destination": "https://fm-tracker.site/$1",
       "permanent": true
     },
     {
@@ -32,7 +32,7 @@
           "value": "fmtracker.site"
         }
       ],
-      "destination": "https://fm-tracker.xyz/$1",
+      "destination": "https://fm-tracker.site/$1",
       "permanent": true
     },
     {
@@ -43,7 +43,7 @@
           "value": "www.fmtracker.site"
         }
       ],
-      "destination": "https://fm-tracker.xyz/$1",
+      "destination": "https://fm-tracker.site/$1",
       "permanent": true
     }
   ]
