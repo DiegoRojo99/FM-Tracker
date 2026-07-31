@@ -15,15 +15,15 @@
 	- Goal: finalize spacing, responsive typography, and section rhythm.
 
 ## Phase 2: Core Product Pages
-- [ ] Login and onboarding visuals
+- [x] Login and onboarding visuals
 	- Files: src/app/login/page.tsx
 	- Goal: improve form hierarchy, card styling, and error states.
 
-- [ ] Saves page main experience
+- [x] Saves page main experience
 	- Files: src/app/saves/page.tsx, src/app/saves/SaveCard.tsx
 	- Goal: elevate header, filter controls, cards, and empty states.
 
-- [ ] Add save flow styling
+- [x] Add save flow styling
 	- Files: src/app/add-save/page.tsx, src/app/add-save/NewSaveForm.tsx
 	- Goal: improve form sections, field grouping, and action buttons.
 

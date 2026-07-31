@@ -9,6 +9,7 @@ import { SaveCard } from './SaveCard';
 import GradientButton from '../components/GradientButton';
 import { Game } from '@/lib/types/prisma/Game';
 import { PreviewSave, Save } from '@/lib/types/prisma/Save';
+import { PlusCircle, Save as SaveIcon, SlidersHorizontal } from 'lucide-react';
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
@@ -48,10 +49,9 @@ export default function SavesPage() {
   }, [user, userLoading]);
 
   
-  function handleDelete(event: React.MouseEvent, saveId: string) {
-    // Avoid default action of the link
-    event.preventDefault();
-    
+  function handleDelete(event: React.MouseEvent<HTMLButtonElement>, saveId: string) {
+    event.stopPropagation();
+
     // Check if user is logged in
     if (!user) return;
     
@@ -107,72 +107,108 @@ export default function SavesPage() {
 
   if (!user) {
     return (
-      <div className='p-6'>
-        <p className='text-gray-500'>Please log in to view your saves.</p>
+      <div className="mx-auto max-w-5xl p-6 sm:p-8">
+        <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-6 text-center shadow-xl backdrop-blur-sm sm:p-8">
+          <h1 className="text-2xl font-bold text-white">Your Saves</h1>
+          <p className="mt-2 text-sm text-[var(--color-text-muted)]">Please log in to view and manage your career saves.</p>
+          <Link href="/login" className="mt-5 inline-block">
+            <GradientButton>
+              Login to Continue
+            </GradientButton>
+          </Link>
+        </div>
       </div>
     );
   }
 
+  const selectedGameName = games.find((g) => g.id === selectedGameFilter)?.name || 'selected game';
+
   if (!saves || saves.length === 0) {
     return (
-      <div className='p-6'>
-        <div className='mb-6 flex flex-row items-center justify-between'>
-          <h1 className="text-2xl font-bold">Your Saves</h1>
+      <div className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Career Hub</p>
+            <h1 className="mt-1 text-3xl font-black text-white">Your Saves</h1>
+            <p className="mt-2 text-sm text-[var(--color-text-muted)]">Build your timeline, one save at a time.</p>
+          </div>
           <Link href="/add-save" className="inline-block">
-            <GradientButton>
+            <GradientButton className="inline-flex items-center gap-2">
+              <PlusCircle className="h-4 w-4" />
               Create New Save
             </GradientButton>
           </Link>
         </div>
-        <p className='text-gray-500'>No saves found.</p>
+
+        <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-8 text-center shadow-xl backdrop-blur-sm">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-surface-soft)] text-[var(--color-highlight)]">
+            <SaveIcon className="h-7 w-7" />
+          </div>
+          <h2 className="text-xl font-bold text-white">No saves yet</h2>
+          <p className="mt-2 text-sm text-[var(--color-text-muted)]">Create your first save and start tracking your FM legacy.</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      <div className='mb-6 flex flex-row items-center justify-between'>
-        <h1 className="text-2xl font-bold">Your Saves</h1>
+    <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Career Hub</p>
+          <h1 className="mt-1 text-3xl font-black text-white">Your Saves</h1>
+          <p className="mt-2 text-sm text-[var(--color-text-muted)]">
+            {filteredSaves.length} of {saves.length} saves visible
+          </p>
+        </div>
+
         <Link href="/add-save" className="inline-block">
-          <GradientButton>
+          <GradientButton className="inline-flex items-center gap-2">
+            <PlusCircle className="h-4 w-4" />
             Create New Save
           </GradientButton>
         </Link>
       </div>
       
-      {/* Game Filter - Responsive for mobile */}
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 w-full">
-        <div className="flex flex-col w-full sm:w-auto">
-          <label htmlFor="gameFilter" className="text-sm font-medium text-gray-300 mb-1 sm:mb-0">
-            Filter by Game:
-          </label>
-          <select
-            id="gameFilter"
-            value={selectedGameFilter}
-            onChange={(e) => setSelectedGameFilter(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-[var(--color-darker)] text-white border-2 border-[var(--color-primary)] focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
-          >
-            <option value="all">All Games</option>
-            {games.map((game) => (
-              <option key={game.id} value={game.id}>
-                {game.name}
-              </option>
-            ))}
-          </select>
+      <div className="mb-7 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-lg backdrop-blur-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="inline-flex items-center gap-2 text-sm font-semibold text-gray-200">
+            <SlidersHorizontal className="h-4 w-4 text-[var(--color-highlight)]" />
+            Filters
+          </div>
+
+          <div className="w-full sm:w-72">
+            <label htmlFor="gameFilter" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-300">
+              Game Version
+            </label>
+            <select
+              id="gameFilter"
+              value={selectedGameFilter}
+              onChange={(e) => setSelectedGameFilter(e.target.value)}
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-white focus:border-[var(--color-accent)] focus:outline-none"
+            >
+              <option value="all">All Games</option>
+              {games.map((game) => (
+                <option key={game.id} value={game.id}>
+                  {game.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
       {filteredSaves.length === 0 ? (
-        <div className="text-center py-8">
-          <p className="text-gray-400">
+        <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 py-12 text-center shadow-lg backdrop-blur-sm">
+          <p className="text-sm text-[var(--color-text-muted)]">
             {selectedGameFilter === 'all' 
               ? 'No saves found.' 
-              : `No saves found for ${games.find(g => g.id === selectedGameFilter)?.name || 'selected game'}.`
+              : `No saves found for ${selectedGameName}.`
             }
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredSaves.sort(sortSavesByDate).map(save => ( 
             <SaveCard key={save.id} save={save} handleDelete={handleDelete} /> 
           ))}
