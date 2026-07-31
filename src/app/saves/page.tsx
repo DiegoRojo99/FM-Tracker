@@ -102,7 +102,13 @@ export default function SavesPage() {
   });
 
   if (loading) {
-    return <FootballLoader />;
+    return (
+      <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+        <div className="flex min-h-[52vh] items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-xl backdrop-blur-sm">
+          <FootballLoader />
+        </div>
+      </div>
+    );
   }
 
   if (!user) {
@@ -209,7 +215,7 @@ export default function SavesPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filteredSaves.sort(sortSavesByDate).map(save => ( 
+          {[...filteredSaves].sort(sortSavesByDate).map(save => ( 
             <SaveCard key={save.id} save={save} handleDelete={handleDelete} /> 
           ))}
         </div>

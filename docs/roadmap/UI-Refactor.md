@@ -50,11 +50,11 @@
 	- Goal: replace placeholder styles with the shared FM design language.
 
 ## Phase 5: Shared Components and QA
-- [ ] Shared feedback components
+- [x] Shared feedback components
 	- Files: src/app/components/FootBallLoader.tsx, src/app/components/GradientButton.tsx, src/app/components/modals/ConfirmationModal.tsx
 	- Goal: align loader, button, and modal styling with palette and surfaces.
 
-- [ ] Final QA and responsive pass
+- [x] Final QA and responsive pass
 	- Files: src/app/page.tsx, src/app/saves/page.tsx, src/app/challenges/page.tsx, src/app/trophies/page.tsx, src/app/friends/page.tsx, src/app/login/page.tsx
 	- Goal: validate mobile breakpoints, focus/hover states, contrast, and consistency.
 

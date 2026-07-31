@@ -43,15 +43,18 @@ export const GradientButton: React.FC<GradientButtonProps> = ({
   const baseClasses = `
     ${sizeClasses[size]}
     ${widthClasses[width]}
-    font-bold text-white rounded-lg
-    transition-all duration-300 transform
-    hover:scale-[1.02] cursor-pointer
-    disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
-    shadow-lg border-1 border-white
+    inline-flex items-center justify-center gap-2
+    rounded-xl font-bold text-white
+    border border-[var(--color-surface-border)]
+    shadow-[0_10px_24px_var(--color-shadow-card)]
+    transition-all duration-200
+    hover:translate-y-[-1px] hover:brightness-105 cursor-pointer
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-highlight)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-dark)]
+    disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:hover:translate-y-0
   `.trim();
 
   const gradientClasses = destructive
-    ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700'
+    ? 'bg-gradient-to-r from-[#b42318] to-[#d92d20]'
     : 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] hover:from-[var(--color-highlight)] hover:to-[var(--color-accent)]';
 
   return (

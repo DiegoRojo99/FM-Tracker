@@ -12,7 +12,13 @@ export default function TrophiesPage() {
   const { countries, trophies, games, loading } = useTrophies(selectedGame);
 
   if (loading) {
-    return <FootballLoader />;
+    return (
+      <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+        <div className="flex min-h-[52vh] items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-xl backdrop-blur-sm">
+          <FootballLoader />
+        </div>
+      </div>
+    );
   }
 
   if (!countries?.length) {

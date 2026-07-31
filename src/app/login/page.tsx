@@ -70,7 +70,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative overflow-hidden px-4 py-12 sm:px-6 sm:py-16">
+    <div className="relative min-h-screen overflow-hidden px-4 py-12 sm:px-6 sm:py-16">
       <div className="absolute inset-0 -z-10">
         <div className="absolute left-[10%] top-[12%] h-40 w-40 rounded-full bg-[var(--color-accent)]/20 blur-3xl" />
         <div className="absolute right-[10%] top-[18%] h-48 w-48 rounded-full bg-[var(--color-highlight)]/20 blur-3xl" />
@@ -109,7 +109,7 @@ export default function LoginPage() {
               <input
                 type="email"
                 placeholder="you@club.com"
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-4 py-3 text-white placeholder:text-gray-400 focus:border-[var(--color-accent)] focus:outline-none"
+                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-4 py-3 text-white placeholder:text-gray-400 focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-highlight)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-dark)]"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
@@ -124,7 +124,7 @@ export default function LoginPage() {
               <input
                 type="password"
                 placeholder="Enter password"
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-4 py-3 text-white placeholder:text-gray-400 focus:border-[var(--color-accent)] focus:outline-none"
+                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-4 py-3 text-white placeholder:text-gray-400 focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-highlight)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-dark)]"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
@@ -133,7 +133,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] px-4 py-3 font-semibold text-white shadow-lg transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] px-4 py-3 font-semibold text-white shadow-lg transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-highlight)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-dark)] disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!email || !password || loadingEmailSignIn || loadingGoogleSignIn}
             >
               <LogIn className="h-4 w-4" />
@@ -145,7 +145,7 @@ export default function LoginPage() {
 
           <button
             onClick={handleGoogleSignIn}
-            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-3 font-semibold text-white transition hover:bg-[var(--color-surface-strong)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-3 font-semibold text-white transition hover:bg-[var(--color-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-highlight)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-dark)] disabled:cursor-not-allowed disabled:opacity-50"
             disabled={loadingEmailSignIn || loadingGoogleSignIn}
           >
             {loadingGoogleSignIn ? 'Connecting...' : 'Sign In with Google'}
