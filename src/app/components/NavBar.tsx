@@ -1,7 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import {
+  Menu,
+  X,
+  Save,
+  Trophy,
+  Target,
+  Shield,
+  Users,
+  Plus,
+  UserCircle,
+  LogIn,
+  LogOut,
+} from 'lucide-react'
 import Link from 'next/link'
 import { useAuth } from './AuthProvider';
 import { NavBarProfile } from './NavBarProfile';
@@ -16,11 +28,13 @@ interface FriendRequestsCount {
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
   const { user } = useAuth();
   const adminUID = process.env.NEXT_PUBLIC_ADMIN_UID;
   const router = useRouter();
   const [pendingCount, setPendingCount] = useState(0);
-  const desktopLinkClass = 'rounded-full px-4 py-2 text-sm font-medium text-[var(--color-foreground)]/85 hover:text-white hover:bg-white/10 transition';
+  const desktopLinkClass = 'inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-[var(--color-foreground)]/88 hover:text-white hover:bg-[var(--color-surface-strong)] transition';
+  const mobileLinkClass = 'mobile-menu-item flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-[var(--color-foreground)]/90 hover:bg-[var(--color-surface-soft)] hover:text-white transition';
 
   // Fetch pending friend requests for mobile navigation
   useEffect(() => {
@@ -54,6 +68,24 @@ export default function Navbar() {
     return () => clearInterval(interval)
   }, [user])
 
+  useEffect(() => {
+    if (!open) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [open]);
+
   const handleMobileLogout = async () => {
     try {
       await signOut(auth);
@@ -65,21 +97,21 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#0a0f1ede] text-[var(--color-foreground)] shadow-lg backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <nav ref={navRef} className="sticky top-0 z-50 border-b border-[var(--color-surface-border)] bg-[var(--color-background)]/90 text-[var(--color-foreground)] shadow-lg backdrop-blur-xl">
+      <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between my-1 px-4 sm:px-6 lg:px-8">
         <div className="text-xl font-bold tracking-tight">
-          <Link href="/" className="group inline-flex items-center gap-2">
+          <Link href="/" className="group inline-flex items-center gap-2" onClick={() => setOpen(false)}>
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-[var(--color-highlight)] shadow-[0_0_14px_var(--color-highlight)]" />
             <span className="text-white group-hover:text-[var(--color-highlight)] transition-colors">FM Tracker</span>
           </Link>
         </div>
 
-        <div className="hidden md:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2 py-1">
-          <Link href="/saves" className={desktopLinkClass}>Saves</Link>
-          <Link href="/trophies" className={desktopLinkClass}>Trophies</Link>
-          <Link href="/challenges" className={desktopLinkClass}>Challenges</Link>
+        <div className="my-2 hidden md:flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-1.5 py-1">
+          <Link href="/saves" className={desktopLinkClass}><Save className="h-4 w-4" />Saves</Link>
+          <Link href="/trophies" className={desktopLinkClass}><Trophy className="h-4 w-4" />Trophies</Link>
+          <Link href="/challenges" className={desktopLinkClass}><Target className="h-4 w-4" />Challenges</Link>
           {user && user.uid === adminUID && (
-            <Link href="/admin" className={desktopLinkClass}>Admin</Link>
+            <Link href="/admin" className={desktopLinkClass}><Shield className="h-4 w-4" />Admin</Link>
           )}
           <NavBarProfile />
         </div>
@@ -88,7 +120,7 @@ export default function Navbar() {
           <button
             aria-label="Toggle menu"
             onClick={() => setOpen(!open)}
-            className="rounded-md border border-white/15 bg-white/5 p-2 text-white"
+            className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-2 text-white"
           >
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -96,25 +128,24 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-white/10 bg-[#0a0f1eee] px-4 pb-4 pt-3">
-          <div className="glass-panel space-y-1 rounded-2xl p-3">
-            <Link href="/saves" className="block rounded-xl px-3 py-2 text-sm font-medium hover:bg-white/10" onClick={() => setOpen(false)}>Saves</Link>
-            <Link href="/trophies" className="block rounded-xl px-3 py-2 text-sm font-medium hover:bg-white/10" onClick={() => setOpen(false)}>Trophies</Link>
-            <Link href="/challenges" className="block rounded-xl px-3 py-2 text-sm font-medium hover:bg-white/10" onClick={() => setOpen(false)}>Challenges</Link>
+        <div className="md:hidden border-t border-[var(--color-surface-border)] bg-[var(--color-background)]/95 px-2 pb-2 pt-1">
+          <div className="mobile-menu-panel overflow-hidden rounded-md border border-[var(--color-surface-border)] bg-[var(--color-dark)]/95 backdrop-blur-sm">
+            <Link href="/saves" className={mobileLinkClass} style={{ animationDelay: '40ms' }} onClick={() => setOpen(false)}><Save className="h-4 w-4" />Saves</Link>
+            <Link href="/trophies" className={mobileLinkClass} style={{ animationDelay: '80ms' }} onClick={() => setOpen(false)}><Trophy className="h-4 w-4" />Trophies</Link>
+            <Link href="/challenges" className={mobileLinkClass} style={{ animationDelay: '120ms' }} onClick={() => setOpen(false)}><Target className="h-4 w-4" />Challenges</Link>
           
             {user && user.uid === adminUID && (
-              <Link href="/admin" className="block rounded-xl px-3 py-2 text-sm font-medium hover:bg-white/10" onClick={() => setOpen(false)}>
+              <Link href="/admin" className={mobileLinkClass} style={{ animationDelay: '160ms' }} onClick={() => setOpen(false)}>
+                <Shield className="h-4 w-4" />
                 Admin
               </Link>
             )}
           
             {user && (
               <>
-                <Link href="/friends" className="flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium hover:bg-white/10" onClick={() => setOpen(false)}>
+                <Link href="/friends" className={`${mobileLinkClass} justify-between`} style={{ animationDelay: '200ms' }} onClick={() => setOpen(false)}>
                   <div className="flex items-center">
-                    <svg className="mr-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
+                    <Users className="mr-3 h-4 w-4" />
                     <span>Friends</span>
                   </div>
                   {pendingCount > 0 && (
@@ -124,10 +155,8 @@ export default function Navbar() {
                   )}
                 </Link>
               
-                <Link href="/add-save" className="flex items-center rounded-xl px-3 py-2 text-sm font-medium hover:bg-white/10" onClick={() => setOpen(false)}>
-                  <svg className="mr-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
+                <Link href="/add-save" className={mobileLinkClass} style={{ animationDelay: '240ms' }} onClick={() => setOpen(false)}>
+                  <Plus className="h-4 w-4" />
                   Add Save
                 </Link>
               </>
@@ -135,25 +164,23 @@ export default function Navbar() {
           
             {user ? (
               <>
-                <Link href="/profile" className="flex items-center rounded-xl px-3 py-2 text-sm font-medium hover:bg-white/10" onClick={() => setOpen(false)}>
-                  <svg className="mr-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                <Link href="/profile" className={mobileLinkClass} style={{ animationDelay: '280ms' }} onClick={() => setOpen(false)}>
+                  <UserCircle className="h-4 w-4" />
                   View Profile
                 </Link>
               
                 <button
                   onClick={handleMobileLogout}
-                  className="flex w-full items-center rounded-xl px-3 py-2 text-left text-sm font-medium text-red-300 hover:bg-red-500/20"
+                  style={{ animationDelay: '320ms' }}
+                  className="mobile-menu-item flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm font-medium text-red-300 transition hover:bg-red-500/20"
                 >
-                  <svg className="mr-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                  </svg>
+                  <LogOut className="h-4 w-4" />
                   Sign Out
                 </button>
               </>
             ) : (
-              <Link href="/login" className="block rounded-xl px-3 py-2 text-sm font-medium hover:bg-white/10" onClick={() => setOpen(false)}>
+              <Link href="/login" className={mobileLinkClass} style={{ animationDelay: '200ms' }} onClick={() => setOpen(false)}>
+                <LogIn className="h-4 w-4" />
                 Login
               </Link>
             )}

@@ -1,7 +1,7 @@
 'use client'
 
 import { User } from 'firebase/auth'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import FootballLoader from '@/app/components/FootBallLoader'
 import { GradientButton } from '@/app/components/GradientButton'
 import { useRouter } from 'next/navigation'
@@ -41,7 +41,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
   const [error, setError] = useState<string | null>(null)
   const [selectedGame, setSelectedGame] = useState<string>('')
 
-  const fetchLeaderboard = async (gameId: string) => {
+  const fetchLeaderboard = useCallback(async (gameId: string) => {
     try {
       setLoading(true)
       setError(null)
@@ -50,28 +50,25 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
       const query = gameId ? `?gameId=${encodeURIComponent(gameId)}` : ''
 
       const response = await fetch(`/api/friends/leaderboard${query}`, {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
+        headers: { Authorization: `Bearer ${userToken}` },
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch leaderboard')
-      }
-
-      const result: LeaderboardResponse = await response.json()
-      setData(result)
-    } catch (err) {
+      if (!response.ok) throw new Error('Failed to fetch leaderboard');
+      const result: LeaderboardResponse = await response.json();
+      setData(result);
+    } 
+    catch (err) {
       console.error('Error fetching leaderboard:', err)
       setError('Failed to load leaderboard data')
-    } finally {
+    } 
+    finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
   useEffect(() => {
     fetchLeaderboard(selectedGame)
-  }, [selectedGame])
+  }, [fetchLeaderboard, selectedGame])
 
   const currentUserId = user.uid
   const myEntry = useMemo(

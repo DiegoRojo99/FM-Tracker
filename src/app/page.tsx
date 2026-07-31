@@ -42,7 +42,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen text-[var(--color-foreground)] font-sans">
-      <section className="relative overflow-hidden px-6 pb-18 pt-20 sm:pt-24">
+      <section className="relative overflow-hidden px-6 pb-16 pt-20 sm:pb-20 sm:pt-24">
         <div className="absolute inset-0 -z-10">
           <div className="absolute left-[10%] top-[8%] h-44 w-44 rounded-full bg-[var(--color-accent)]/20 blur-3xl" />
           <div className="absolute right-[8%] top-[22%] h-56 w-56 rounded-full bg-[var(--color-highlight)]/20 blur-3xl" />
@@ -63,13 +63,13 @@ export default function LandingPage() {
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
                 href="/saves"
-                className="rounded-xl bg-[var(--color-highlight)] px-6 py-3 text-sm font-bold uppercase tracking-wide text-[#0a0f1e] shadow-[0_14px_34px_#e664ff55] transition hover:translate-y-[-2px]"
+                className="rounded-xl bg-[var(--color-highlight)] px-6 py-3 text-sm font-bold uppercase tracking-wide text-[var(--color-background)] shadow-[0_14px_34px_var(--color-shadow-highlight)] transition hover:translate-y-[-2px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-highlight)]"
               >
                 Open My Saves
               </Link>
               <a
                 href="#features"
-                className="rounded-xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--color-surface-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-highlight)]"
               >
                 Explore Features
               </a>
@@ -108,13 +108,13 @@ export default function LandingPage() {
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {features.map(({ title, desc, available, icon }) => (
-            <div key={title} className="group rounded-2xl border border-white/10 bg-[var(--color-surface)]/70 p-6 shadow-[0_8px_30px_#0000002b] transition hover:-translate-y-1 hover:border-[var(--color-highlight)]/45">
+            <div key={title} className="group rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface)]/70 p-6 shadow-[0_8px_30px_var(--color-shadow-card)] transition hover:-translate-y-1 hover:border-[var(--color-highlight)]/45">
               <div className="mb-4 flex items-center justify-between">
                 <span className="text-2xl" aria-hidden>
                   {icon}
                 </span>
                 {!available && (
-                  <span className="rounded-full border border-[#ff646466] bg-[#ff64641a] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[#ff9e9e]">
+                  <span className="rounded-full border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--color-danger-soft-text)]">
                     Coming Soon
                   </span>
                 )}
@@ -132,7 +132,7 @@ export default function LandingPage() {
           </p>
           <Link
             href="/saves"
-            className="mt-5 inline-block rounded-xl bg-white px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[#0a0f1e] transition hover:opacity-90"
+            className="mt-5 inline-block rounded-xl bg-white px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[var(--color-background)] transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Continue To Saves
           </Link>
