@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import { getFullSave } from '@/lib/db/saves';
 import { prisma } from '@/lib/db/prisma';
+import { deleteCacheKey } from '@/lib/cache/redis';
 
 export async function GET(req: NextRequest) {
   return withOptionalAuth(req, async (uid) => {
@@ -83,6 +84,8 @@ export async function DELETE(req: NextRequest) {
       await prisma.save.delete({
         where: { id: saveId },
       });
+
+      await deleteCacheKey('stats:global');
       return new Response(JSON.stringify({ message: 'Save and all associated data deleted successfully' }), { 
         status: 200,
         headers: { 'Content-Type': 'application/json' }

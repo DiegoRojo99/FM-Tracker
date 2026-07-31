@@ -1,30 +1,29 @@
 import { NextRequest } from 'next/server';
-import { CompetitionGroup } from '../../../../prisma/generated/client';
-import { prisma } from '@/lib/db/prisma';
+import { readThroughCache } from '@/lib/cache/redis';
+import { getActiveCompetitions, normalizeCompetitionType } from '@/lib/db/competitions';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const countries = searchParams.getAll('country');
   const compType = searchParams.get('type');
-  let countriesToQuery: string[] = [];
+  const normalizedType = normalizeCompetitionType(compType) ?? 'all';
 
-  if (countries) countriesToQuery = countries
-  else {
-    // Fetch all country codes
-    const countries = await prisma.country.findMany({
-      where: { inFootballManager: true },
-      select: { code: true }
-    });
-    countriesToQuery = countries.map(c => c.code);
-  }
+  const normalizedCountries = countries.length > 0
+    ? [...countries].sort().join(',')
+    : 'all';
 
-  const competitions: CompetitionGroup[] = await prisma.competitionGroup.findMany({
-    where: {
-      isActive: true,
-      countryCode: { in: countriesToQuery },
-      ...(compType ? { type: compType.charAt(0).toUpperCase() + compType.slice(1).toLowerCase() } : {})
+  const cacheKey = `competitions:${normalizedType}:${normalizedCountries}`;
+  const { data: competitions, cacheStatus } = await readThroughCache(
+    cacheKey,
+    60 * 30,
+    () => getActiveCompetitions({ countries, type: compType })
+  );
+
+  return new Response(JSON.stringify(competitions), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'x-cache': cacheStatus,
     }
   });
-
-  return new Response(JSON.stringify(competitions), { status: 200 });
 }

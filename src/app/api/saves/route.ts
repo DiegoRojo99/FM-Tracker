@@ -7,6 +7,7 @@ import { Save } from '@/lib/types/prisma/Save';
 import { fetchTeam } from '@/lib/db/teams';
 import { prisma } from '@/lib/db/prisma';
 import { CareerStint } from '@/lib/types/prisma/Career';
+import { deleteCacheKey } from '@/lib/cache/redis';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -97,6 +98,7 @@ export async function POST(req: NextRequest) {
     // Check if the team has any matching challenges
     await addChallengeForTeam(docRef.id, Number(startingTeamId));
     await addChallengeForCountry(docRef.id, countryCode);
+    await deleteCacheKey('stats:global');
 
     return new Response(JSON.stringify(saveInputData), { status: 201 });
   });

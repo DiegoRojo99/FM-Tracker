@@ -1,6 +1,6 @@
-import { prisma } from '@/lib/db/prisma';
-import { Team } from '@/lib/types/prisma/Team';
 import { NextRequest, NextResponse } from 'next/server';
+import { readThroughCache } from '@/lib/cache/redis';
+import { fetchTeamsByLeague, fetchTeamsByName } from '@/lib/db/teams';
 
 export async function GET(req: NextRequest) {
   const leagueId = req.nextUrl.searchParams.get('leagueId');
@@ -9,66 +9,23 @@ export async function GET(req: NextRequest) {
 
   if (leagueId) {
     if (isNaN(Number(leagueId))) return NextResponse.json([], { status: 400 });
-    const teams = await searchTeamsByLeague(leagueId, gameId);
-    return NextResponse.json(teams, { status: 200 });
+    const cacheKey = `teams:league:${leagueId}:game:${gameId ?? 'any'}`;
+    const { data: teams, cacheStatus } = await readThroughCache(
+      cacheKey,
+      60 * 10,
+      () => fetchTeamsByLeague(Number(leagueId), gameId)
+    );
+
+    return NextResponse.json(teams, {
+      status: 200,
+      headers: { 'x-cache': cacheStatus }
+    });
   }
   else if (nameParam) {
     if (!nameParam) return NextResponse.json([], { status: 400 });
-    const teams = await searchTeamsByName(nameParam);
+    const teams = await fetchTeamsByName(nameParam);
     return NextResponse.json(teams, { status: 200 });
   }
-}
-
-function getSeasonFromGameId(gameId: string): string {
-  if (gameId.includes('fm24')) return '2023/2024';
-  if (gameId.includes('fm25')) return '2024/2025';
-  if (gameId.includes('fm26')) return '2025/2026';
-  return '2023/2024';
-}
-
-async function getApiCompetitionIdsFromLeagueId(leagueId: number): Promise<number[]> {
-  return await prisma.competitionGroup.findMany({
-    where: {
-      id: leagueId,
-    },
-    include: {
-      apiCompetitions: true,
-    },
-  }).then(results => results.flatMap(r => r.apiCompetitions.map(ac => ac.apiCompetitionId)));
-}
-
-async function searchTeamsByLeague(leagueId: string, gameId: string | null): Promise<Team[]> {
-    const season = gameId ? getSeasonFromGameId(gameId) : null;
-    console.log('Searching teams for leagueId:', leagueId, 'season:', season);
-    const apiCompetitionIds = await getApiCompetitionIdsFromLeagueId(Number(leagueId));
-    console.log('Found API Competition IDs:', apiCompetitionIds);
-
-    if (apiCompetitionIds.length === 0) {
-      return [];
-    }
-
-    console.log('Querying teams with API Competition IDs:', apiCompetitionIds, 'and season:', season);
-    const teams = await prisma.team.findMany({
-      where: {
-        teamSeasons: {
-          some: {
-            apiCompetitionId: { in: apiCompetitionIds },
-            ...(season ? { season } : {}),
-          },
-        },
-      },
-    });
-    console.log('Found teams:', teams.length);
-    return teams;
-}
-
-async function searchTeamsByName(name: string): Promise<Team[]> {
-  return await prisma.team.findMany({
-    where: {
-      name: {
-        contains: name,
-        mode: 'insensitive',
-      },
-    },
-  });
+  
+  return NextResponse.json([], { status: 400 });
 }
