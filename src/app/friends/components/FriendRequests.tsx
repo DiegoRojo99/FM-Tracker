@@ -73,33 +73,29 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
 
   const pendingReceived = receivedRequests.filter(req => req.status === 'PENDING')
   const processedReceived = receivedRequests.filter(req => req.status !== 'PENDING')
+  const subTabClass = (tab: 'received' | 'sent') => `flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+    activeSubTab === tab
+      ? 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white shadow-lg'
+      : 'text-gray-300 hover:bg-[var(--color-surface-soft)] hover:text-white'
+  }`
 
   return (
     <div>
-      {/* Sub-tab Navigation */}
-      <div className="flex space-x-1 bg-[var(--color-darker)] rounded-lg p-1 mb-6">
+      <div className="mb-6 flex space-x-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-2">
         <button
           onClick={() => setActiveSubTab('received')}
-          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
-            activeSubTab === 'received'
-              ? 'bg-[var(--color-accent)] text-white shadow-lg'
-              : 'text-gray-300 hover:text-white hover:bg-[var(--color-dark)]'
-          }`}
+          className={subTabClass('received')}
         >
           Received ({receivedRequests.length})
           {pendingReceived.length > 0 && (
-            <span className="ml-2 bg-yellow-500 text-black text-xs rounded-full px-2 py-1">
+            <span className="ml-2 rounded-full bg-yellow-400 px-2 py-0.5 text-xs text-black">
               {pendingReceived.length} pending
             </span>
           )}
         </button>
         <button
           onClick={() => setActiveSubTab('sent')}
-          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
-            activeSubTab === 'sent'
-              ? 'bg-[var(--color-accent)] text-white shadow-lg'
-              : 'text-gray-300 hover:text-white hover:bg-[var(--color-dark)]'
-          }`}
+          className={subTabClass('sent')}
         >
           Sent ({sentRequests.length})
         </button>
@@ -117,9 +113,9 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
                 {pendingReceived.map((request) => (
                   <div
                     key={request.id}
-                    className="bg-[var(--color-darker)] rounded-lg p-6 border-l-4 border-yellow-500"
+                    className="rounded-2xl border border-yellow-400/40 bg-[var(--color-darker)]/80 p-5"
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                       <div className="flex items-center space-x-4">
                         <div className="w-12 h-12 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white font-bold text-lg">
                           {request.requester?.displayName.charAt(0).toUpperCase()}
@@ -141,7 +137,7 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
                           )}
                         </div>
                       </div>
-                      <div className="flex space-x-2">
+                      <div className="flex flex-wrap gap-2">
                         <GradientButton
                           size="sm"
                           onClick={() => handleRespondToRequest(request.id, 'accept')}
@@ -187,7 +183,7 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
                 {processedReceived.map((request) => (
                   <div
                     key={request.id}
-                    className="bg-[var(--color-darker)] rounded-lg p-4 opacity-75"
+                    className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 opacity-85"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
@@ -235,7 +231,7 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
               {sentRequests.map((request) => (
                 <div
                   key={request.id}
-                  className="bg-[var(--color-darker)] rounded-lg p-4"
+                  className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/75 p-4"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">

@@ -7,6 +7,7 @@ import { User, UserWithStatus } from '@/lib/types/prisma/User'
 import { UserStats } from '@/lib/types/prisma/Stats'
 import { GradientButton } from '@/app/components/GradientButton'
 import FootballLoader from '@/app/components/FootBallLoader'
+import { Calendar, Crown, ShieldCheck, Sparkles, Trophy, Users, Volleyball } from 'lucide-react'
 
 interface ProfileViewProps {
   userId?: string // If provided, show that user's profile; otherwise show current user
@@ -218,22 +219,26 @@ export default function ProfileView({ userId }: ProfileViewProps) {
 
   if (userLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--color-darker)] to-[var(--color-dark)]">
-        <FootballLoader />
+      <div className="min-h-screen p-4 sm:p-6 lg:p-8">
+        <div className="mx-auto flex min-h-[60vh] max-w-6xl items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-2xl backdrop-blur-sm">
+          <FootballLoader />
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--color-darker)] to-[var(--color-dark)]">
-        <div className="text-center">
-          <div className="text-6xl mb-4">😕</div>
-          <h1 className="text-2xl font-bold text-white mb-2">Profile Not Found</h1>
-          <p className="text-gray-300 mb-6">{error}</p>
+      <div className="min-h-screen p-4 sm:p-6 lg:p-8">
+        <div className="mx-auto flex min-h-[60vh] max-w-6xl items-center justify-center rounded-3xl border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] p-8 text-center shadow-2xl">
+          <div>
+            <div className="mb-4 text-6xl">😕</div>
+            <h1 className="mb-2 text-2xl font-bold text-white">Profile Not Found</h1>
+            <p className="mb-6 text-[var(--color-danger-soft-text)]">{error}</p>
           <GradientButton onClick={() => router.back()}>
             Go Back
           </GradientButton>
+          </div>
         </div>
       </div>
     )
@@ -242,37 +247,40 @@ export default function ProfileView({ userId }: ProfileViewProps) {
   if (!profile) return null
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--color-darker)] to-[var(--color-dark)] p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Profile Header */}
-        <div className="bg-[var(--color-dark)] rounded-xl shadow-2xl p-4 mb-4 md:p-8 md:mb-8">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
-            <div className="flex items-center space-x-6 mb-6 md:mb-0">
-              {/* Avatar */}
-              <div className="w-24 h-24 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white text-lg md:text-3xl font-bold">
+    <div className="min-h-screen p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-6 rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-2xl backdrop-blur-sm sm:p-8">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-start gap-4 sm:gap-6">
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-highlight)] text-2xl font-black text-white shadow-lg sm:h-24 sm:w-24 sm:text-3xl">
                 {profile.user.displayName.charAt(0).toUpperCase()}
               </div>
-              
-              {/* User Info */}
+
               <div>
-                <h1 className="text-lg md:text-3xl font-bold text-white mb-2">
+                <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Player Profile
+                </p>
+                <h1 className="mt-2 text-2xl font-black text-white sm:text-3xl">
                   {profile.user.displayName}
                 </h1>
-                <p className="text-gray-300 mb-1">{profile.user.email}</p>
-                <p className="text-gray-400 text-sm">Joined {getJoinDate()}</p>
+                <p className="mt-1 text-sm text-gray-300 sm:text-base">{profile.user.email}</p>
+                <p className="mt-1 inline-flex items-center gap-2 text-sm text-[var(--color-text-muted)]">
+                  <Calendar className="h-3.5 w-3.5" />
+                  Joined {getJoinDate()}
+                </p>
                 {profile.isOwnProfile && (
-                  <p className="text-[var(--color-accent)] text-sm mt-2">This is your profile</p>
+                  <p className="mt-2 text-sm font-semibold text-[var(--color-accent)]">This is your profile</p>
                 )}
               </div>
             </div>
 
-            {/* Action Button */}
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap gap-3">
               {getFriendshipButton()}
               {profile.isOwnProfile && (
                 <GradientButton
                   onClick={() => router.push('/add-save')}
-                  className="flex items-center space-x-2"
+                  className="flex items-center gap-2"
                 >
                   <span>+</span>
                   <span>Add Save</span>
@@ -282,54 +290,53 @@ export default function ProfileView({ userId }: ProfileViewProps) {
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="bg-[var(--color-dark)] rounded-xl shadow-2xl p-8">
-          <h2 className="text-2xl font-bold text-white mb-6">
+        <div className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-2xl backdrop-blur-sm sm:p-8">
+          <h2 className="mb-6 text-2xl font-black text-white">
             📊 {profile.isOwnProfile ? 'Your' : `${profile.user.displayName}'s`} Career Statistics
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-[var(--color-darker)] rounded-lg p-6 border-2 border-[var(--color-primary)]">
+            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-300">Active Saves</h3>
                   <p className="text-3xl font-bold text-[var(--color-accent)]">{profile.stats.activeSaves}</p>
                 </div>
-                <div className="text-4xl">💾</div>
+                <ShieldCheck className="h-9 w-9 text-[var(--color-accent)]" />
               </div>
             </div>
 
-            <div className="bg-[var(--color-darker)] rounded-lg p-6 border-2 border-[var(--color-primary)]">
+            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-300">Total Trophies</h3>
                   <p className="text-3xl font-bold text-[var(--color-highlight)]">{profile.stats.totalTrophies}</p>
                 </div>
-                <div className="text-4xl">🏆</div>
+                <Trophy className="h-9 w-9 text-[var(--color-highlight)]" />
               </div>
             </div>
 
-            <div className="bg-[var(--color-darker)] rounded-lg p-6 border-2 border-[var(--color-primary)]">
+            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-300">Seasons Played</h3>
                   <p className="text-3xl font-bold text-[var(--color-success)]">{profile.stats.currentSeasons}</p>
                 </div>
-                <div className="text-4xl">📅</div>
+                <Calendar className="h-9 w-9 text-[var(--color-success)]" />
               </div>
             </div>
 
-            <div className="bg-[var(--color-darker)] rounded-lg p-6 border-2 border-[var(--color-primary)]">
+            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-300">Total Matches</h3>
                   <p className="text-3xl font-bold text-[var(--color-accent)]">{profile.stats.totalMatches}</p>
                 </div>
-                <div className="text-4xl">⚽</div>
+                <Volleyball className="h-9 w-9 text-[var(--color-accent)]" />
               </div>
             </div>
 
-            <div className="bg-[var(--color-darker)] rounded-lg p-6 border-2 border-[var(--color-primary)]">
+            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-300">Favorite Teams</h3>
@@ -337,11 +344,11 @@ export default function ProfileView({ userId }: ProfileViewProps) {
                     {showFavTeams()}
                   </p>
                 </div>
-                <div className="text-4xl">❤️</div>
+                <Users className="h-9 w-9 text-[var(--color-highlight)]" />
               </div>
             </div>
 
-            <div className="bg-[var(--color-darker)] rounded-lg p-6 border-2 border-[var(--color-primary)]">
+            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-300">Longest Save</h3>
@@ -350,17 +357,16 @@ export default function ProfileView({ userId }: ProfileViewProps) {
                     {profile.stats.longestSave?.seasons.length ? ` (${profile.stats.longestSave.seasons.length} seasons)` : ''}
                   </p>
                 </div>
-                <div className="text-4xl">🎖️</div>
+                <Crown className="h-9 w-9 text-[var(--color-success)]" />
               </div>
             </div>
           </div>
 
-          {/* Empty State for Own Profile */}
           {profile.isOwnProfile && profile.stats.activeSaves === 0 && (
-            <div className="bg-[var(--color-accent)]/20 border border-[var(--color-accent)] rounded-lg p-6 text-center mt-8">
-              <div className="text-4xl mb-4">🚀</div>
-              <h3 className="text-xl font-bold text-white mb-2">Ready to Start Your Journey?</h3>
-              <p className="text-gray-300 mb-4">You haven&apos;t created any saves yet. Start your Football Manager career!</p>
+            <div className="mt-8 rounded-2xl border border-[var(--color-accent)] bg-[var(--color-accent)]/15 p-6 text-center">
+              <div className="mb-4 text-4xl">🚀</div>
+              <h3 className="mb-2 text-xl font-bold text-white">Ready to Start Your Journey?</h3>
+              <p className="mb-4 text-gray-300">You haven&apos;t created any saves yet. Start your Football Manager career!</p>
               <GradientButton onClick={() => router.push('/add-save')}>
                 Create Your First Save
               </GradientButton>

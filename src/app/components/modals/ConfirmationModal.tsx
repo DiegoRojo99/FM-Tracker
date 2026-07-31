@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import BaseModal from './BaseModal';
-import LoadingButton from '../LoadingButton';
+import GradientButton from '../GradientButton';
 import Image from 'next/image';
 
 interface ConfirmationModalProps {
@@ -30,6 +30,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   message,
   confirmText = 'Confirm',
   cancelText = 'Cancel',
+  destructive = false,
 }) => {
   const [isConfirming, setIsConfirming] = useState(false);
 
@@ -57,37 +58,42 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         <Image
           src="/circle-alert.svg"
           alt="Alert Icon"
-          width={128}
-          height={128}
+          width={96}
+          height={96}
           className="mx-auto white-image"
         />
 
-        <p className="text-gray-200 text-center leading-relaxed">
+        <p className="text-center leading-relaxed text-[var(--color-text-muted)]">
           {message}
         </p>
         
-        <div className="flex space-x-4">
+        <div className="flex flex-col-reverse gap-3 sm:flex-row">
           <button
             onClick={onClose}
-            className="flex-1 bg-[var(--color-darker)] text-gray-300 font-medium py-3 px-6 rounded-lg border-2 border-[var(--color-primary)] hover:border-[var(--color-accent)] hover:text-white transition-all duration-200"
+            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-6 py-3 font-medium text-gray-200 transition hover:border-[var(--color-accent)] hover:text-white sm:flex-1"
             disabled={isConfirming}
           >
             {cancelText}
           </button>
-          
-          <LoadingButton
+
+          <GradientButton
             onClick={handleConfirm}
-            className="flex-1"
+            className="w-full sm:flex-1"
             size="lg"
-            isLoading={isConfirming}
-            loadingText={
-              confirmText.endsWith('e')
-                ? `${confirmText.slice(0, -1)}ing...`
-                : `${confirmText}ing...`
-            }
+            disabled={isConfirming}
+            destructive={destructive}
           >
-            {confirmText}
-          </LoadingButton>
+            {isConfirming ? (
+              <>
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                {confirmText.endsWith('e')
+                  ? `${confirmText.slice(0, -1)}ing...`
+                  : `${confirmText}ing...`}
+              </>
+            ) : (
+              confirmText
+            )}
+          </GradientButton>
         </div>
       </div>
     </BaseModal>

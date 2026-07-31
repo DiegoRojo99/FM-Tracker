@@ -5,22 +5,29 @@ import FootballLoader from '@/app/components/FootBallLoader';
 import TrophiesHeader from './TrophiesHeader';
 import TrophyCountry from './TrophyCountry';
 import { useTrophies } from './useTrophies';
+import { Trophy } from 'lucide-react';
 
 export default function TrophiesPage() {
   const [selectedGame, setSelectedGame] = useState<string>('all');
   const { countries, trophies, games, loading } = useTrophies(selectedGame);
 
   if (loading) {
-    return <FootballLoader />;
+    return (
+      <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+        <div className="flex min-h-[52vh] items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-xl backdrop-blur-sm">
+          <FootballLoader />
+        </div>
+      </div>
+    );
   }
 
   if (!countries?.length) {
     return (
-      <div className="p-6 flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <div className="text-6xl mb-4">🏆</div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Competitions Found</h2>
-          <p className="text-gray-600 dark:text-gray-400">Start tracking your trophies by adding competitions</p>
+      <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+        <div className="flex min-h-[55vh] flex-col items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-6 text-center shadow-xl backdrop-blur-sm">
+          <Trophy className="mb-4 h-12 w-12 text-[var(--color-highlight)]" />
+          <h2 className="text-2xl font-bold text-white">No Competitions Found</h2>
+          <p className="mt-2 text-sm text-[var(--color-text-muted)]">Start tracking your trophies by adding competitions.</p>
         </div>
       </div>
     );
@@ -41,7 +48,7 @@ export default function TrophiesPage() {
           totalCompetitions={totalCompetitions}
         />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {countries.sort((a, b) => a.name.localeCompare(b.name)).map((country) => {
             return <TrophyCountry key={country.code} country={country} trophies={trophies} />;
           })}

@@ -5,6 +5,7 @@ import { User as PrismaUser } from '@/lib/types/prisma/User'
 import { useState } from 'react'
 import { GradientButton } from '@/app/components/GradientButton'
 import { useRouter } from 'next/navigation'
+import { UserRoundPlus, Trash2 } from 'lucide-react'
 
 interface FriendsListProps {
   friends: (PrismaUser & { friendshipDate: Date })[]
@@ -57,21 +58,25 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
 
   if (friends.length === 0) {
     return (
-      <div className="text-center py-12">
-        <div className="text-6xl mb-4">👫</div>
-        <h3 className="text-xl font-semibold text-white mb-2">
+      <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/55 py-12 text-center">
+        <div className="mb-4 text-6xl">👫</div>
+        <h3 className="mb-2 text-xl font-semibold text-white">
           No friends yet
         </h3>
-        <p className="text-gray-300 mb-6">
+        <p className="mb-6 text-[var(--color-text-muted)]">
           Start building your network by searching for friends to connect with!
         </p>
+        <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs text-gray-200">
+          <UserRoundPlus className="h-3.5 w-3.5" />
+          Use Add Friends to begin
+        </span>
       </div>
     )
   }
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <h2 className="text-xl font-bold text-white">
           Your Friends ({friends.length})
         </h2>
@@ -81,7 +86,7 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
         {friends.map((friend) => (
           <div
             key={friend.uid}
-            className="bg-[var(--color-darker)] rounded-lg p-6 hover:bg-[var(--color-darker)]/80 transition-all duration-200"
+            className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-5 transition hover:-translate-y-0.5 hover:border-[var(--color-accent)]/60"
           >
             <div className="flex items-center space-x-4 mb-4">
               <div className="w-12 h-12 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white font-bold text-lg">
@@ -97,7 +102,7 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
               </div>
             </div>
 
-            <div className="text-gray-400 text-xs mb-4">
+            <div className="mb-4 text-xs text-[var(--color-text-muted)]">
               Friends since {formatDate(friend.friendshipDate)}
             </div>
 
@@ -120,7 +125,7 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
                 {removing === friend.uid ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  '🗑️'
+                  <Trash2 className="h-4 w-4" />
                 )}
               </GradientButton>
             </div>

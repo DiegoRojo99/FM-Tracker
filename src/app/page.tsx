@@ -1,76 +1,143 @@
-export default function LandingPage() {
-  return (
-    <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-foreground)] font-sans">
+import Link from 'next/link';
 
-      {/* Hero */}
-      <section className="text-center px-6 py-20 bg-gradient-to-b from-[var(--primary)] to-[var(--accent)] text-white">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4">Track Your Football Manager Legacy</h2>
-        <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto">Log your saves, earn achievements, complete challenges, and build your career history — all in one place.</p>
-        <a
-          href="saves"
-          className="inline-block bg-[var(--highlight)] text-white px-6 py-3 rounded-lg font-semibold shadow hover:opacity-90 transition"
-        >
-          Get Started
-        </a>
+export default function LandingPage() {
+  const features = [
+    {
+      title: 'Save Tracker',
+      desc: 'Log every club, season, and major result from your manager career.',
+      available: true,
+      icon: '📘',
+    },
+    {
+      title: 'Trophy Checklist',
+      desc: 'See your completed silverware and what is still missing from your cabinet.',
+      available: true,
+      icon: '🏆',
+    },
+    {
+      title: 'Challenges',
+      desc: 'Progress through iconic FM challenge paths and completion goals.',
+      available: true,
+      icon: '🎯',
+    },
+    {
+      title: 'Achievements',
+      desc: 'Unlock milestones like promotion runs, unbeaten streaks, and doubles.',
+      available: false,
+      icon: '⭐',
+    },
+    {
+      title: 'Friend Leaderboard',
+      desc: 'Compare progress and trophies with friends in your social circle.',
+      available: false,
+      icon: '👥',
+    },
+    {
+      title: 'Career Archive',
+      desc: 'Build your full timeline and revisit every era of your legacy.',
+      available: false,
+      icon: '🗂️',
+    },
+  ];
+
+  return (
+    <div className="min-h-screen text-[var(--color-foreground)] font-sans">
+      <section className="relative overflow-hidden px-6 pb-16 pt-20 sm:pb-20 sm:pt-24">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute left-[10%] top-[8%] h-44 w-44 rounded-full bg-[var(--color-accent)]/20 blur-3xl" />
+          <div className="absolute right-[8%] top-[22%] h-56 w-56 rounded-full bg-[var(--color-highlight)]/20 blur-3xl" />
+          <div className="absolute bottom-[-3rem] left-[30%] h-56 w-56 rounded-full bg-[var(--color-primary)]/25 blur-3xl" />
+        </div>
+
+        <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+          <div>
+            <p className="mb-4 inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-highlight)]">
+              Your FM Career, Organized
+            </p>
+            <h1 className="text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">
+              Build a living record of every save, challenge, and trophy.
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--text-muted)] sm:text-lg">
+              FM Tracker keeps your Football Manager story in one place, from first promotion to continental glory.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <Link
+                href="/saves"
+                className="rounded-xl bg-[var(--color-highlight)] px-6 py-3 text-sm font-bold uppercase tracking-wide text-[var(--color-background)] shadow-[0_14px_34px_var(--color-shadow-highlight)] transition hover:translate-y-[-2px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-highlight)]"
+              >
+                Open My Saves
+              </Link>
+              <a
+                href="#features"
+                className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--color-surface-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-highlight)]"
+              >
+                Explore Features
+              </a>
+            </div>
+          </div>
+
+          <div className="glass-panel rounded-3xl p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-highlight)]">At a Glance</p>
+            <div className="mt-6 grid grid-cols-2 gap-4">
+              <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                <p className="text-2xl font-extrabold text-white">All Saves</p>
+                <p className="mt-1 text-sm text-[var(--text-muted)]">Your complete manager journey</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                <p className="text-2xl font-extrabold text-white">Challenge Paths</p>
+                <p className="mt-1 text-sm text-[var(--text-muted)]">Track elite career objectives</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                <p className="text-2xl font-extrabold text-white">Trophies</p>
+                <p className="mt-1 text-sm text-[var(--text-muted)]">Country by country checklist</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                <p className="text-2xl font-extrabold text-white">Friends</p>
+                <p className="mt-1 text-sm text-[var(--text-muted)]">Compare and compete together</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Features */}
-      <section id="features" className="py-16 px-6 max-w-6xl mx-auto">
-        <h3 className="text-3xl font-bold text-center mb-12">Features</h3>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              title: 'Save Tracker',
-              desc: 'Log each club and season you manage, with trophies.',
-              available: true,
-            },
-            {
-              title: 'Trophy Checklist',
-              desc: 'See which trophies you’ve won and which are still pending.',
-              available: true,
-            },
-            {
-              title: 'Challenges',
-              desc: 'Take on legendary FM challenges like the Pentagon or Youth Only.',
-              available: true,
-            },
-            {
-              title: 'Achievements',
-              desc: 'Unlock milestones like unbeaten runs, treble wins, and promotions.',
-              available: false,
-            },
-            // {
-            //   title: 'Completeness Map',
-            //   desc: 'Track countries and competitions you’ve conquered.',
-            //   available: true,
-            // },
-            {
-              title: 'Friend Leaderboard',
-              desc: 'Compete with friends to see who can achieve the most in FM.',
-              available: false,
-            },
-            // {
-            //   title: 'Stats Dashboard',
-            //   desc: 'Visualize your total matches, goals, and club history over time.',
-            //   available: false,
-            // },
-            {
-              title: 'Career Archive',
-              desc: 'Build a timeline of your entire Football Manager journey.',
-              available: false,
-            },
-          ].map(({ title, desc, available }) => (
-            <div key={title} className="bg-[var(--surface)] rounded-xl p-6 shadow hover:shadow-md transition">
-              <h4 className="text-xl font-semibold mb-2">{title}</h4>
-              <p className="text-[var(--text-muted)]">{desc}</p>
-              {!available && (
-                <p className="text-red-500 mt-2">Coming Soon!</p>
-              )}
+      <section id="features" className="mx-auto max-w-7xl px-6 pb-20 pt-8 sm:pt-12">
+        <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+          <h2 className="text-3xl font-black text-white sm:text-4xl">Everything you need to track your legacy</h2>
+          <p className="max-w-md text-sm text-[var(--text-muted)]">Designed for quick updates after every session and deeper reflection over full careers.</p>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map(({ title, desc, available, icon }) => (
+            <div key={title} className="group rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface)]/70 p-6 shadow-[0_8px_30px_var(--color-shadow-card)] transition hover:-translate-y-1 hover:border-[var(--color-highlight)]/45">
+              <div className="mb-4 flex items-center justify-between">
+                <span className="text-2xl" aria-hidden>
+                  {icon}
+                </span>
+                {!available && (
+                  <span className="rounded-full border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--color-danger-soft-text)]">
+                    Coming Soon
+                  </span>
+                )}
+              </div>
+              <h3 className="text-xl font-bold text-white">{title}</h3>
+              <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">{desc}</p>
             </div>
           ))}
         </div>
+
+        <div className="mt-12 rounded-3xl border border-white/10 bg-gradient-to-r from-[var(--color-primary)]/40 via-[var(--color-accent)]/25 to-[var(--color-primary)]/40 p-6 sm:p-8">
+          <h3 className="text-2xl font-black text-white">Pick your story back up</h3>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-text-muted)]">
+            Your most-used side project deserves to feel premium again. This refresh is step one, and your existing features remain fully intact.
+          </p>
+          <Link
+            href="/saves"
+            className="mt-5 inline-block rounded-xl bg-white px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[var(--color-background)] transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            Continue To Saves
+          </Link>
+        </div>
       </section>
-      
     </div>
   )
 }
