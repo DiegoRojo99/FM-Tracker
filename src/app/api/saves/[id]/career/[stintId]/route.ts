@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
+import { invalidateUserPreviewSavesCache } from '@/lib/db/saves';
 
 export async function PUT(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -86,6 +87,7 @@ export async function PUT(req: NextRequest) {
         });
       }
 
+      await invalidateUserPreviewSavesCache(save.userId);
       return NextResponse.json(updatedCareerStint, { status: 200 });
     } 
     catch (error) {
@@ -130,6 +132,7 @@ export async function DELETE(req: NextRequest) {
         where: { id: Number(careerStintId) }
       });
 
+      await invalidateUserPreviewSavesCache(save.userId);
       return NextResponse.json({ message: 'Career stint deleted successfully' }, { status: 200 });
     } 
     catch (error) {

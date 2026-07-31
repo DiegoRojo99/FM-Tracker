@@ -1,6 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
 import { addTrophyToSave } from '@/lib/db/trophies';
+import { invalidateUserPreviewSavesCache } from '@/lib/db/saves';
 import { FullTrophy, TrophyGroup } from '@/lib/types/prisma/Trophy';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -61,6 +62,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!newTrophyId) return NextResponse.json({ error: 'Failed to add trophy' }, { status: 500 });
+    await invalidateUserPreviewSavesCache(uid);
     return NextResponse.json({ id: newTrophyId }, { status: 201 });
   });
 }

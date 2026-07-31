@@ -3,6 +3,15 @@ import { FullDetailsSave, PreviewSave } from "../types/prisma/Save";
 import { prisma } from "./prisma";
 import { Team } from "@/lib/types/prisma/Team";
 import { CompetitionGroup } from "../../../prisma/generated/client";
+import { deleteCacheKey } from "@/lib/cache/redis";
+
+export function getUserPreviewSavesCacheKey(userId: string): string {
+  return `saves:preview:user:${userId}`
+}
+
+export async function invalidateUserPreviewSavesCache(userId: string): Promise<void> {
+  await deleteCacheKey(getUserPreviewSavesCacheKey(userId))
+}
 
 /**
  * Updates the 'season' attribute of a save document for a user in Firestore.

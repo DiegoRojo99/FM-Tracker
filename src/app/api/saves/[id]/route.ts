@@ -1,7 +1,7 @@
 import { withAuth, withOptionalAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
-import { getFullSave } from '@/lib/db/saves';
+import { getFullSave, invalidateUserPreviewSavesCache } from '@/lib/db/saves';
 import { prisma } from '@/lib/db/prisma';
 import { deleteCacheKey } from '@/lib/cache/redis';
 
@@ -85,12 +85,17 @@ export async function DELETE(req: NextRequest) {
         where: { id: saveId },
       });
 
-      await deleteCacheKey('stats:global');
+      await Promise.all([
+        deleteCacheKey('stats:global'),
+        invalidateUserPreviewSavesCache(save.userId),
+      ]);
+
       return new Response(JSON.stringify({ message: 'Save and all associated data deleted successfully' }), { 
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       });
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error deleting save:', error);
       return new Response(JSON.stringify({ error: 'Failed to delete save' }), { 
         status: 500,
