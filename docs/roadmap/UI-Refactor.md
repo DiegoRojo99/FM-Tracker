@@ -37,15 +37,15 @@
 	- Goal: improve data density, visual grouping, and card readability.
 
 ## Phase 4: Social, Profile, and Admin
-- [ ] Friends and social area
+- [x] Friends and social area
 	- Files: src/app/friends/page.tsx, src/app/friends/components/FriendsList.tsx, src/app/friends/components/FriendRequests.tsx, src/app/friends/components/SearchFriends.tsx, src/app/friends/components/FriendsLeaderboard.tsx
 	- Goal: refine tabs, panel styles, badges, and interaction states.
 
-- [ ] Profile area refresh
+- [x] Profile area refresh
 	- Files: src/app/profile/page.tsx, src/app/profile/components/ProfileView.tsx
 	- Goal: modernize profile header, stat blocks, and action grouping.
 
-- [ ] Admin area visual consistency
+- [x] Admin area visual consistency
 	- Files: src/app/admin/page.tsx
 	- Goal: replace placeholder styles with the shared FM design language.
 

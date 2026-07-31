@@ -85,7 +85,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
 
   if (loading) {
     return (
-      <div className="py-12">
+      <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/60 py-12">
         <FootballLoader />
       </div>
     )
@@ -93,7 +93,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
 
   if (error) {
     return (
-      <div className="bg-red-500/20 border border-red-500 rounded-lg p-4 text-red-200 text-center">
+      <div className="rounded-2xl border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] p-4 text-center text-[var(--color-danger-soft-text)]">
         {error}
         <button
           onClick={() => fetchLeaderboard(selectedGame)}
@@ -107,7 +107,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
 
   if (!data || data.leaderboard.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/60 py-12 text-center">
         <div className="text-6xl mb-4">🏁</div>
         <h3 className="text-xl font-semibold text-white mb-2">No ranking data yet</h3>
         <p className="text-gray-300">Add saves and trophies to start climbing the leaderboard.</p>
@@ -117,7 +117,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/60 p-5 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="text-xl font-bold text-white">🏆 Friends Leaderboard</h2>
           <p className="text-sm text-gray-300">
@@ -131,7 +131,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
             id="leaderboard-game"
             value={selectedGame}
             onChange={(event) => setSelectedGame(event.target.value)}
-            className="bg-[var(--color-darker)] text-white border border-gray-600 rounded-lg px-3 py-2 text-sm"
+            className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)] px-3 py-2 text-sm text-white"
           >
             <option value="">All Games</option>
             {data.games.map((game) => (
@@ -142,7 +142,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
       </div>
 
       {myEntry && (
-        <div className="bg-[var(--color-darker)] border border-[var(--color-accent)] rounded-lg p-4 mb-6">
+        <div className="mb-6 rounded-2xl border border-[var(--color-accent)] bg-[var(--color-darker)]/85 p-4">
           <p className="text-sm text-gray-300">Your position</p>
           <div className="flex items-center justify-between mt-1">
             <p className="text-white font-semibold text-lg">
@@ -157,7 +157,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
         {data.leaderboard.map((entry) => (
           <div
             key={entry.userId}
-            className={`rounded-lg p-4 border ${entry.userId === currentUserId ? 'bg-[var(--color-darker)] border-[var(--color-accent)]' : 'bg-[var(--color-darker)]/70 border-transparent'}`}
+            className={`rounded-2xl border p-4 transition ${entry.userId === currentUserId ? 'border-[var(--color-accent)] bg-[var(--color-darker)]' : 'border-[var(--color-surface-border)] bg-[var(--color-darker)]/70 hover:border-gray-500'}`}
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex items-center gap-4 min-w-0">
@@ -185,9 +185,9 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 mt-4 text-xs">
-              <div className="bg-black/20 rounded-md p-2 text-gray-300">🏆 {entry.stats.totalTrophies} ({entry.breakdown.trophiesPoints} pts)</div>
-              <div className="bg-black/20 rounded-md p-2 text-gray-300">📈 {entry.stats.promotions} ({entry.breakdown.promotionsPoints} pts)</div>
+            <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+              <div className="rounded-lg border border-[var(--color-surface-border)] bg-black/20 p-2 text-gray-300">🏆 {entry.stats.totalTrophies} ({entry.breakdown.trophiesPoints} pts)</div>
+              <div className="rounded-lg border border-[var(--color-surface-border)] bg-black/20 p-2 text-gray-300">📈 {entry.stats.promotions} ({entry.breakdown.promotionsPoints} pts)</div>
             </div>
           </div>
         ))}
