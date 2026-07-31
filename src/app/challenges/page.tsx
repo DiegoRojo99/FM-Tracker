@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { CareerChallengeWithDetails, Challenge } from "@/lib/types/prisma/Challenge";
 import FootballLoader from "../components/FootBallLoader";
 import { useAuth } from "../components/AuthProvider";
+import { Flag, SlidersHorizontal } from 'lucide-react';
 
 function getChallengeStatus(userChallenge?: CareerChallengeWithDetails): 'completed' | 'in-progress' | 'not-started' {
   if (!userChallenge) return 'not-started';
@@ -122,32 +123,65 @@ export default function ChallengesPage() {
     { key: 'completed', label: 'Completed', icon: '🏆' },
   ];
 
+  const inProgressCount = challengeGroups['in-progress'].length;
+  const completedCount = challengeGroups['completed'].length;
+  const totalCount = challenges.length;
+
   return (
-    <div className="p-4 sm:p-6 mx-auto max-w-6xl">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white flex items-center gap-2">
-          <span role="img" aria-label="trophy">🏆</span> Challenges
-        </h1>
-        {gameOptions.length > 0 && (
-          <div className="flex items-center gap-2">
-            <label htmlFor="game-select" className="text-sm font-medium text-gray-700 dark:text-gray-200">
-              Game:
-            </label>
-            <select
-              id="game-select"
-              value={selectedGame}
-              onChange={e => setSelectedGame(e.target.value)}
-              className="border border-gray-300 dark:border-zinc-700 rounded-md px-3 py-1 text-sm bg-white dark:bg-zinc-900 text-black dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">All Games</option>
-              {gameOptions.map(game => (
-                <option key={game} value={game}>{game}</option>
-              ))}
-            </select>
+    <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+      <div className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-xl backdrop-blur-sm sm:p-7">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Progress Board</p>
+            <h1 className="mt-1 text-3xl font-black text-white sm:text-4xl">Challenges</h1>
+            <p className="mt-2 text-sm text-[var(--color-text-muted)]">Track long-term goals and milestone runs across saves.</p>
+          </div>
+
+          {gameOptions.length > 0 && (
+            <div className="w-full sm:w-72">
+              <label htmlFor="game-select" className="mb-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-300">
+                <SlidersHorizontal className="h-3.5 w-3.5 text-[var(--color-highlight)]" />
+                Filter by Game
+              </label>
+              <select
+                id="game-select"
+                value={selectedGame}
+                onChange={e => setSelectedGame(e.target.value)}
+                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              >
+                <option value="">All Games</option>
+                {gameOptions.map(game => (
+                  <option key={game} value={game}>{game}</option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
+            <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Total Challenges</p>
+            <p className="mt-1 text-3xl font-black text-white">{totalCount}</p>
+          </div>
+          <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
+            <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">In Progress</p>
+            <p className="mt-1 text-3xl font-black text-white">{inProgressCount}</p>
+          </div>
+          <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
+            <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Completed</p>
+            <p className="mt-1 text-3xl font-black text-white">{completedCount}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-8 space-y-8">
+        {totalCount === 0 && (
+          <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-8 text-center shadow-lg">
+            <Flag className="mx-auto h-8 w-8 text-[var(--color-highlight)]" />
+            <p className="mt-3 text-sm text-[var(--color-text-muted)]">No challenges available right now.</p>
           </div>
         )}
-      </div>
-      <div className="space-y-10">
+
           {sectionOrder.map(section => {
             const sectionChallenges = challengeGroups[section.key];
             return (

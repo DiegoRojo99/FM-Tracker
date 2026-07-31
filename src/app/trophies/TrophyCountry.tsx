@@ -23,58 +23,57 @@ const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
   const won = comps.filter((c) => hasWon(c.id)).length;
   const completionPercentage = total > 0 ? Math.round((won / total) * 100) : 0;
 
+  const completionClass =
+    completionPercentage === 100
+      ? 'border-emerald-400/60 bg-emerald-500/12 text-emerald-300'
+      : completionPercentage >= 50
+      ? 'border-[var(--color-highlight)]/60 bg-[var(--color-highlight)]/12 text-[var(--color-highlight)]'
+      : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] text-[var(--color-text-muted)]';
+
   return (
-    <div className="bg-zinc-800 dark:bg-zinc-900 rounded-xl border border-zinc-700 dark:border-zinc-700 overflow-hidden hover:shadow-xl hover:shadow-zinc-900/50 hover:border-zinc-600 dark:hover:border-zinc-600 transition-all duration-200 h-fit">
-      {/* Country Header */}
+    <div className="h-fit overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 shadow-lg transition-all duration-200 hover:border-[var(--color-accent)]/60 hover:shadow-xl">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-4 flex items-center justify-between hover:bg-zinc-700 dark:hover:bg-zinc-800 transition-colors"
+        className="flex w-full items-center justify-between gap-3 p-4 text-left transition-colors hover:bg-[var(--color-surface-soft)]"
       >
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 items-center gap-3">
           <Image
             src={country.flag} 
             alt={country.name} 
             width={32}
             height={32}
-            className="w-8 h-8 rounded shadow-sm"
+            className="h-8 w-8 rounded shadow-sm"
             unoptimized
           />
-          <div className="text-left">
-            <h3 className="font-semibold text-white">{country.name}</h3>
-            <p className="text-xs text-gray-400">
+          <div className="min-w-0">
+            <h3 className="truncate font-semibold text-white">{country.name}</h3>
+            <p className="truncate text-xs text-[var(--color-text-muted)]">
               {won} of {total} competitions
             </p>
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
-          {/* Progress Badge */}
-          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
-            completionPercentage === 100 
-              ? 'bg-green-900/40 text-green-400'
-              : completionPercentage >= 50
-              ? 'bg-blue-900/40 text-blue-400'
-              : 'bg-zinc-800 text-gray-400'
-          }`}>
+        <div className="flex shrink-0 items-center gap-2">
+          <div className={`rounded-full border px-3 py-1 text-xs font-semibold ${completionClass}`}>
             {completionPercentage}%
           </div>
           
-          {/* Expand Icon */}
-          <svg 
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 cursor-pointer ${isExpanded ? 'rotate-90' : ''}`}
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]">
+            <svg 
+              className={`h-4 w-4 text-[var(--color-text-muted)] transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </span>
         </div>
       </button>
 
-      {/* Competitions List */}
       {isExpanded && (
-        <div className="border-t border-zinc-700 dark:border-zinc-800 bg-zinc-800/50 dark:bg-zinc-900/50">
-          <ul className="divide-y divide-zinc-200/30 dark:divide-zinc-300/50">
+        <div className="border-t border-[var(--color-surface-border)] bg-[var(--color-darker)]/45">
+          <ul className="divide-y divide-[var(--color-surface-border)]">
             {comps.map((comp, index) => {
               const won = hasWon(comp.id);
               return (
@@ -82,8 +81,8 @@ const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
                   key={`${country.code}-${String(comp.id)}-${index}`}
                   className={`p-3 flex items-center gap-3 transition-colors ${
                     won 
-                      ? 'bg-green-900/20' 
-                      : 'hover:bg-zinc-800/50'
+                      ? 'bg-emerald-500/10' 
+                      : 'hover:bg-[var(--color-surface-soft)]'
                   }`}
                 >
                   {comp.logoUrl ? (
@@ -95,12 +94,10 @@ const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
                       className="w-5 h-5 flex-shrink-0"
                       unoptimized
                     />
-                  ) : (
-                    <div className="w-5 h-5 bg-zinc-700 rounded flex-shrink-0"></div>
-                  )}
+                  ) : <div className="h-5 w-5 flex-shrink-0 rounded bg-[var(--color-surface-strong)]" />}
                   <span className={`flex-1 text-sm ${
                     won 
-                      ? 'text-green-400 font-medium' 
+                      ? 'font-medium text-emerald-300' 
                       : 'text-gray-300'
                   }`}>
                     {comp.name}

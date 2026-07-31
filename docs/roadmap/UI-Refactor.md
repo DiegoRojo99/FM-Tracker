@@ -28,11 +28,11 @@
 	- Goal: improve form sections, field grouping, and action buttons.
 
 ## Phase 3: Progress and Collection Views
-- [ ] Challenges page system
+- [x] Challenges page system
 	- Files: src/app/challenges/page.tsx, src/app/challenges/ChallengeSection.tsx
 	- Goal: unify section containers, status chips, and filter controls.
 
-- [ ] Trophies page system
+- [x] Trophies page system
 	- Files: src/app/trophies/page.tsx, src/app/trophies/TrophiesHeader.tsx, src/app/trophies/TrophyCountry.tsx
 	- Goal: improve data density, visual grouping, and card readability.
 
