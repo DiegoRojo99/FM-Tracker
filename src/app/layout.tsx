@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Sora, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/NavBar";
 import Footer from "@/app/components/Footer";
 import { AuthProvider } from '@/app/components/AuthProvider'
 
-const geistSans = Geist({
+const sora = Sora({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-geist-mono",
+  weight: ["400", "500"],
   subsets: ["latin"],
 });
 
@@ -63,26 +64,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="theme-color" content="#270f3f" />
+        <meta name="theme-color" content="#0a0f1e" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="FM Tracker" />
         <link rel="apple-touch-icon" href="/logos/icon-192x192.png" />
         <meta name="msapplication-TileImage" content="/logos/icon-144x144.png" />
-        <meta name="msapplication-TileColor" content="#270f3f" />
+        <meta name="msapplication-TileColor" content="#0a0f1e" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
-      >        
+        className={`${sora.variable} ${ibmPlexMono.variable} antialiased flex flex-col min-h-screen`}
+      >
         <AuthProvider>
-          {/* Navbar should always be at the top */}
           <Navbar />
-          {/* Main content should take up the remaining space */}
           <div className="flex-grow">
             {children}
           </div>
-          {/* Footer should always be at the bottom */}
           <Footer />
         </AuthProvider>
       </body>

@@ -1,17 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  --darker: #1c0b2e;
-  --dark: #270f3f;
-  --primary: #4B1979;
-  --accent: #7E2FC2;
-  --highlight: #DA22FF;
-  --background: #4B1979;
-  --foreground: #171717;
-  --surface: #f4f4f4;
-  --text-muted: #666666;
-  --success: #00FF99;
-  --error: #FF4D4D;
+  --fm-midnight: #0a0f1e;
+  --fm-twilight: #6e0fd7;
+  --fm-horizon: #af78ff;
+  --fm-cloud: #d2c8f5;
+  --fm-air: #e6e6fa;
+  --fm-highlight-pink: #e664ff;
+  --fm-highlight-red: #ff4164;
+  --fm-highlight-orange: #ff5a28;
+
+  --darker: #080c18;
+  --dark: #10162a;
+  --primary: var(--fm-twilight);
+  --accent: var(--fm-horizon);
+  --highlight: var(--fm-highlight-pink);
+  --background: var(--fm-midnight);
+  --foreground: var(--fm-air);
+  --surface: #1b1733;
+  --text-muted: #c1b7e6;
+  --success: #9f89ff;
+  --error: var(--fm-highlight-red);
 }
 
 @theme inline {
@@ -30,22 +39,32 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary: #4B1979;
-    --accent: #7E2FC2;
-    --highlight: #DA22FF;
-    --background: #4B1979;
-    --foreground: #ededed;
-    --surface: #1C1C1E;
-    --text-muted: #A6A6B3;
-  }
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(60rem 42rem at -10% -20%, #6e0fd733 0%, transparent 55%),
+    radial-gradient(60rem 42rem at 115% -20%, #e664ff33 0%, transparent 50%),
+    radial-gradient(44rem 28rem at 50% 120%, #af78ff2a 0%, transparent 55%),
+    linear-gradient(180deg, #0a0f1e 0%, #0a0f1e 55%, #080c18 100%);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+a {
+  transition: color 180ms ease, opacity 180ms ease;
+}
+
+::selection {
+  background: #e664ff66;
+  color: #0a0f1e;
+}
+
+.glass-panel {
+  border: 1px solid #ffffff1f;
+  background: linear-gradient(145deg, #ffffff1f 0%, #ffffff0f 100%);
+  box-shadow: 0 12px 40px #00000033;
+  backdrop-filter: blur(10px);
 }
 
 .white-image {

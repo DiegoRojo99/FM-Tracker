@@ -77,7 +77,7 @@ export function NavBarProfile() {
   if (!user) {
     return (
       <div className="hidden md:flex items-center space-x-4">
-        <Link href="/login" className="hover:text-[var(--color-highlight)] px-4 py-2 rounded-lg transition-colors">
+        <Link href="/login" className="rounded-full border border-white/10 px-4 py-2 text-sm font-medium hover:bg-white/10 transition-colors">
           Login
         </Link>
       </div>
@@ -88,16 +88,16 @@ export function NavBarProfile() {
     <div className="hidden md:flex items-center space-x-4 relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-3 hover:bg-[var(--color-darker)] px-3 py-2 rounded-lg transition-colors"
+        className="flex items-center space-x-3 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 transition-colors hover:bg-white/10"
       >
-        <div className="w-8 h-8 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white font-bold text-sm">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-accent)] text-sm font-bold text-white shadow-[0_0_16px_#af78ff55]">
           {user.displayName?.charAt(0)?.toUpperCase() || user.email?.charAt(0)?.toUpperCase() || '?'}
         </div>
-        <span className="text-white text-sm font-medium truncate max-w-32">
+        <span className="max-w-32 truncate text-sm font-medium text-white">
           {user.displayName || user.email}
         </span>
         <svg 
-          className={`w-4 h-4 text-gray-300 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
+          className={`h-4 w-4 text-gray-300 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"
@@ -107,16 +107,16 @@ export function NavBarProfile() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-56 bg-[var(--color-dark)] rounded-lg shadow-xl border border-[var(--color-darker)] z-50">
-          <div className="p-3 border-b border-[var(--color-darker)]">
+        <div className="glass-panel absolute right-0 top-full z-50 mt-2 w-56 rounded-2xl border border-white/10">
+          <div className="border-b border-white/10 p-3">
             <p className="text-white font-semibold truncate">{user.displayName || 'User'}</p>
-            <p className="text-gray-400 text-sm truncate">{user.email}</p>
+            <p className="truncate text-sm text-gray-300">{user.email}</p>
           </div>
           
           <div className="py-2">
             <Link 
               href="/profile" 
-              className="flex items-center px-4 py-2 text-gray-300 hover:bg-[var(--color-darker)] hover:text-white transition-colors"
+              className="flex items-center px-4 py-2 text-gray-200 transition-colors hover:bg-white/10 hover:text-white"
               onClick={() => setIsOpen(false)}
             >
               <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,7 +127,7 @@ export function NavBarProfile() {
             
             <Link 
               href="/add-save" 
-              className="flex items-center px-4 py-2 text-gray-300 hover:bg-[var(--color-darker)] hover:text-white transition-colors"
+              className="flex items-center px-4 py-2 text-gray-200 transition-colors hover:bg-white/10 hover:text-white"
               onClick={() => setIsOpen(false)}
             >
               <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,7 +138,7 @@ export function NavBarProfile() {
             
             <Link 
               href="/friends" 
-              className="flex items-center px-4 py-2 text-gray-300 hover:bg-[var(--color-darker)] hover:text-white transition-colors"
+              className="flex items-center px-4 py-2 text-gray-200 transition-colors hover:bg-white/10 hover:text-white"
               onClick={() => setIsOpen(false)}
             >
               <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,10 +155,10 @@ export function NavBarProfile() {
             </Link>
           </div>
 
-          <div className="py-2 border-t border-[var(--color-darker)]">
+          <div className="border-t border-white/10 py-2">
             <button 
               onClick={handleLogout}
-              className="flex items-center w-full px-4 py-2 text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+              className="flex w-full items-center px-4 py-2 text-red-300 transition-colors hover:bg-red-500/20 hover:text-red-200"
             >
               <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
