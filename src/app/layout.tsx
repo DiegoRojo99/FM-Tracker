@@ -3,7 +3,7 @@ import { Sora, IBM_Plex_Mono } from "next/font/google";
 import Navbar from "@/app/components/NavBar";
 import Footer from "@/app/components/Footer";
 import { AuthProvider } from '@/app/components/AuthProvider'
-import { Analytics } from '@vercel/analytics/next'
+import AnalyticsGate from '@/app/components/AnalyticsGate'
 import "./globals.css";
 
 const sora = Sora({
@@ -83,8 +83,8 @@ export default function RootLayout({
             {children}
           </div>
           <Footer />
+          <AnalyticsGate />
         </AuthProvider>
-        <Analytics />
       </body>
     </html>
   );
