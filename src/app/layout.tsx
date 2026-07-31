@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "FM Tracker",
   },
   formatDetection: {
@@ -68,7 +68,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#0a0f1e" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="FM Tracker" />
         <link rel="apple-touch-icon" href="/logos/icon-192x192.png" />
         <meta name="msapplication-TileImage" content="/logos/icon-144x144.png" />

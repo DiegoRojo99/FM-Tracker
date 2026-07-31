@@ -4,8 +4,8 @@
   "description": "Track your Football Manager legacy with FM Tracker. Log saves, earn achievements, complete challenges, and build your career history.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#22c55e",
+  "background_color": "#0a0f1e",
+  "theme_color": "#0a0f1e",
   "orientation": "portrait-primary",
   "scope": "/",
   "icons": [
