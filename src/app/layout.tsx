@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Sora, IBM_Plex_Mono } from "next/font/google";
-import "./globals.css";
 import Navbar from "@/app/components/NavBar";
 import Footer from "@/app/components/Footer";
 import { AuthProvider } from '@/app/components/AuthProvider'
+import { Analytics } from '@vercel/analytics/next'
+import "./globals.css";
 
 const sora = Sora({
   variable: "--font-geist-sans",
@@ -83,6 +84,7 @@ export default function RootLayout({
           </div>
           <Footer />
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
