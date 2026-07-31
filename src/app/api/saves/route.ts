@@ -2,11 +2,13 @@ import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { fetchCompetition } from '@/lib/db/competitions';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
-import { getUserPreviewSaves } from '@/lib/db/saves';
+import { getUserPreviewSaves, getUserPreviewSavesCacheKey, invalidateUserPreviewSavesCache } from '@/lib/db/saves';
 import { Save } from '@/lib/types/prisma/Save';
 import { fetchTeam } from '@/lib/db/teams';
 import { prisma } from '@/lib/db/prisma';
 import { CareerStint } from '@/lib/types/prisma/Career';
+import { deleteCacheKey } from '@/lib/cache/redis';
+import { readThroughCache } from '@/lib/cache/redis';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -14,12 +16,26 @@ export async function GET(req: NextRequest) {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    const userSaves = await getUserPreviewSaves(uid);
+    const { data: userSaves, cacheStatus } = await readThroughCache(
+      getUserPreviewSavesCacheKey(uid),
+      60 * 5,
+      () => getUserPreviewSaves(uid)
+    );
+
     if (!userSaves || userSaves.length === 0) {
-      return new Response('No saves found', { status: 404 });
+      return new Response('No saves found', {
+        status: 404,
+        headers: { 'x-cache': cacheStatus }
+      });
     }
 
-    return new Response(JSON.stringify(userSaves), { status: 200 });
+    return new Response(JSON.stringify(userSaves), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-cache': cacheStatus,
+      }
+    });
   });
 }
 
@@ -97,6 +113,10 @@ export async function POST(req: NextRequest) {
     // Check if the team has any matching challenges
     await addChallengeForTeam(docRef.id, Number(startingTeamId));
     await addChallengeForCountry(docRef.id, countryCode);
+    await Promise.all([
+      deleteCacheKey('stats:global'),
+      invalidateUserPreviewSavesCache(uid),
+    ]);
 
     return new Response(JSON.stringify(saveInputData), { status: 201 });
   });

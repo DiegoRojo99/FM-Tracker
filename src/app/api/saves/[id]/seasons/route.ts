@@ -5,6 +5,7 @@ import { SeasonInput } from '@/lib/types/prisma/Season';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { getSaveSeasons } from '@/lib/db/seasons';
+import { invalidateUserPreviewSavesCache } from '@/lib/db/saves';
 
 export async function POST(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -90,6 +91,7 @@ export async function POST(req: NextRequest) {
 
     // Update the season in the save
     await updateSaveSeason(uid, saveId, body.season);
+    await invalidateUserPreviewSavesCache(uid);
     return NextResponse.json(createdSeason, { status: 201 });
   });
 }
@@ -147,6 +149,7 @@ export async function DELETE(req: NextRequest) {
         },
       });
 
+      await invalidateUserPreviewSavesCache(save.userId);
       return NextResponse.json({ message: 'Season deleted successfully' }, { status: 200 });
     } 
     catch (error) {

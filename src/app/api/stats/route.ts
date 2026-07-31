@@ -1,38 +1,39 @@
 import { prisma } from '@/lib/db/prisma';
 import { GlobalStats } from '@/lib/types/prisma/Stats';
 import { NextResponse } from 'next/server';
+import { readThroughCache } from '@/lib/cache/redis';
 
 export async function GET() {
   try {
-    // Get total number of users
-    const totalUsers = await prisma.user.count();
+    const { data: stats, cacheStatus } = await readThroughCache(
+      'stats:global',
+      60,
+      async () => {
+        const totalUsers = await prisma.user.count();
+        const totalSaves = await prisma.save.count();
+        const totalSeasons = await prisma.season.count();
+        const totalCareerStints = await prisma.careerStint.count();
+        const totalTrophies = await prisma.trophy.count();
+        const totalChallenges = await prisma.challenge.count();
 
-    // Get total number of saves across all users
-    const totalSaves = await prisma.save.count();
+        const result: GlobalStats = {
+          totalUsers,
+          totalSaves,
+          totalTrophies,
+          totalSeasons,
+          totalCareerStints,
+          totalChallenges,
+          timestamp: new Date().toISOString()
+        };
 
-    // Get total number of seasons across all saves
-    const totalSeasons = await prisma.season.count();
+        return result;
+      }
+    );
 
-    // Get total number of career stints across all saves
-    const totalCareerStints = await prisma.careerStint.count();
-
-    // Get total number of trophies
-    const totalTrophies = await prisma.trophy.count();
-
-    // Get total number of challenges
-    const totalChallenges = await prisma.challenge.count();
-
-    const stats: GlobalStats = {
-      totalUsers,
-      totalSaves,
-      totalTrophies,
-      totalSeasons,
-      totalCareerStints,
-      totalChallenges,
-      timestamp: new Date().toISOString()
-    };
-
-    return NextResponse.json(stats, { status: 200 });
+    return NextResponse.json(stats, {
+      status: 200,
+      headers: { 'x-cache': cacheStatus }
+    });
   } 
   catch (error) {
     console.error('Error fetching stats:', error);

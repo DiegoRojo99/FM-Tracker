@@ -4,6 +4,7 @@ import { fetchTeam } from '@/lib/db/teams';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
 import { prisma } from '@/lib/db/prisma';
 import { CareerStintInput } from '@/lib/types/prisma/Career';
+import { invalidateUserPreviewSavesCache } from '@/lib/db/saves';
 
 function formatDate(date: Date): string {
   const year = date.getFullYear();
@@ -107,6 +108,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         data: updateData,
       });
 
+      await invalidateUserPreviewSavesCache(uid);
       return NextResponse.json(docRef, { status: 201 });
     } 
     catch (error) {
