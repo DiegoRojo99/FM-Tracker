@@ -5,6 +5,7 @@ import { auth } from '@/lib/db/firebase'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { LogIn, Mail, Lock, Sparkles } from 'lucide-react'
+import { AnalyticsEvents, trackEvent } from '@/lib/analytics/events'
 
 function getFriendlyAuthError(err: unknown): string {
   const code = typeof err === 'object' && err !== null && 'code' in err
@@ -42,9 +43,13 @@ export default function LoginPage() {
 
     try {
       await signInWithPopup(auth, provider)
+      trackEvent(AnalyticsEvents.LoginSuccess, { method: 'google' })
       router.push('/')
     } 
     catch (err) {
+      const code = typeof err === 'object' && err !== null && 'code' in err
+        ? String((err as { code: unknown }).code) : 'unknown'
+      trackEvent(AnalyticsEvents.LoginFailed, { method: 'google', code })
       setError(getFriendlyAuthError(err))
     }
     finally {
@@ -59,9 +64,13 @@ export default function LoginPage() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password)
+      trackEvent(AnalyticsEvents.LoginSuccess, { method: 'email' })
       router.push('/')
     } 
     catch (err) {
+      const code = typeof err === 'object' && err !== null && 'code' in err
+        ? String((err as { code: unknown }).code) : 'unknown'
+      trackEvent(AnalyticsEvents.LoginFailed, { method: 'email', code })
       setError(getFriendlyAuthError(err))
     }
     finally {

@@ -5,6 +5,7 @@ import { UserWithRelationshipStatus } from '@/lib/types/prisma/Friends'
 import { useState } from 'react'
 import { GradientButton } from '@/app/components/GradientButton'
 import { useRouter } from 'next/navigation'
+import { AnalyticsEvents, trackEvent } from '@/lib/analytics/events'
 
 interface SearchFriendsProps {
   onUpdate: () => void
@@ -71,6 +72,11 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
         const errorData = await response.json()
         throw new Error(errorData.error || 'Failed to send friend request')
       }
+
+      trackEvent(AnalyticsEvents.FriendRequestSent, {
+        hasMessage: Boolean(message.trim()),
+        searchQueryLength: searchQuery.trim().length,
+      })
 
       // Update the search results to reflect the new status
       await handleSearch()

@@ -10,6 +10,7 @@ import { SaveInput } from '@/lib/types/prisma/Save';
 import FootballLoader from '@/app/components/FootBallLoader';
 import { useRouter } from 'next/navigation';
 import { CheckCircle2, ClipboardList, Gamepad2, Globe2, ShieldCheck, Sparkles } from 'lucide-react';
+import { AnalyticsEvents, trackEvent } from '@/lib/analytics/events';
 
 export default function NewSaveForm() {
   const router = useRouter();
@@ -100,6 +101,13 @@ export default function NewSaveForm() {
         setSavingGame(false);
         return;
       }
+
+      trackEvent(AnalyticsEvents.SaveCreated, {
+        gameId: selectedGame,
+        isUnemployedStart: isNoTeam,
+        hasSelectedCountry: Boolean(selectedCountry),
+        hasSelectedLeague: Boolean(selectedLeague),
+      });
 
       setSavingGame(false);
       setSubmitSuccess('Save created successfully. Redirecting to your saves...');

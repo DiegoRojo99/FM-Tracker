@@ -10,6 +10,7 @@ import GradientButton from '../components/GradientButton';
 import { Game } from '@/lib/types/prisma/Game';
 import { PreviewSave, Save } from '@/lib/types/prisma/Save';
 import { PlusCircle, Save as SaveIcon, SlidersHorizontal } from 'lucide-react';
+import { AnalyticsEvents, trackEvent } from '@/lib/analytics/events';
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
@@ -64,23 +65,25 @@ export default function SavesPage() {
 
   async function confirmDelete() {
     if (!deletingSave || !user) return;
+    const deletedSave = deletingSave;
     
     const token = await user.getIdToken();
-    
     const response = await fetch(`/api/saves/${deletingSave.id}`, {
       method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}`,},
     });
     
-    if (!response.ok) {
-      throw new Error('Failed to delete save');
-    }
+    if (!response.ok) throw new Error('Failed to delete save');
     
     // Remove the deleted save from the state
     setSaves(prevSaves => prevSaves.filter(save => save.id !== deletingSave.id));
     setDeletingSave(null);
+
+    trackEvent(AnalyticsEvents.SaveDeleted, {
+      gameId: deletedSave.gameId,
+      hadCurrentClub: Boolean(deletedSave.currentClub),
+      hadNationalTeam: Boolean(deletedSave.currentNT),
+    });
   }
 
   function getLatestDate(save: Save) {
