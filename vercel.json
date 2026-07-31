@@ -7,17 +7,6 @@
       "has": [
         {
           "type": "host",
-          "value": "fm-tracker.site"
-        }
-      ],
-      "destination": "https://fm-tracker.site/$1",
-      "permanent": true
-    },
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
           "value": "www.fm-tracker.site"
         }
       ],
