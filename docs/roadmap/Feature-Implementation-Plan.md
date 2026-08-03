@@ -5,7 +5,7 @@ This plan is ordered so each feature builds on prerequisites from earlier phases
 ## Phase 1: Foundations and Reliability
 
 ### 1) Data Model and Migration Hardening
-- [ ] Audit current Prisma schema for missing indexes and unique constraints
+- [x] Audit current Prisma schema for missing indexes and unique constraints
 - [ ] Define migration naming convention and rollback notes for each migration
 - [ ] Add seed/update scripts for core reference data integrity
 - [ ] Document safe migration workflow for local/staging/production
