@@ -21,6 +21,7 @@ type EvaluateAchievementsInput = {
   eventType: AchievementEventType;
   eventTimestamp?: Date;
   evaluateAll?: boolean;
+  skipSeed?: boolean;
 };
 
 type UserAggregates = {
@@ -53,7 +54,7 @@ export async function seedAchievementDefinitions(): Promise<void> {
         points: entry.points,
         icon: entry.icon ?? null,
         maxProgress: entry.maxProgress,
-        isActive: true,
+        isActive: entry.isActive ?? true,
       },
       create: {
         key: entry.key,
@@ -64,10 +65,42 @@ export async function seedAchievementDefinitions(): Promise<void> {
         points: entry.points,
         icon: entry.icon ?? null,
         maxProgress: entry.maxProgress,
-        isActive: true,
+        isActive: entry.isActive ?? true,
       },
     });
   }
+}
+
+export async function backfillAchievementsForAllUsers(): Promise<{
+  usersProcessed: number;
+  totalEvaluatedCount: number;
+  totalUnlockedNow: number;
+}> {
+  const users = await prisma.user.findMany({
+    select: { uid: true },
+  });
+
+  let totalEvaluatedCount = 0;
+  let totalUnlockedNow = 0;
+
+  for (const user of users) {
+    const result = await evaluateAchievementsForUser({
+      userId: user.uid,
+      eventType: 'season.created',
+      evaluateAll: true,
+      eventTimestamp: new Date(),
+      skipSeed: true,
+    });
+
+    totalEvaluatedCount += result.evaluatedCount;
+    totalUnlockedNow += result.unlockedNow.length;
+  }
+
+  return {
+    usersProcessed: users.length,
+    totalEvaluatedCount,
+    totalUnlockedNow,
+  };
 }
 
 export async function getAchievementDefinitions(): Promise<AchievementDefinition[]> {
@@ -130,7 +163,7 @@ export async function evaluateAchievementsForUser(input: EvaluateAchievementsInp
   evaluatedCount: number;
   unlockedNow: string[];
 }> {
-  await seedAchievementDefinitions();
+  if (!input.skipSeed) await seedAchievementDefinitions();
 
   const definitions = await getAchievementDefinitions();
   const relevantDefinitions = input.evaluateAll

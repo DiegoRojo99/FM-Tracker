@@ -13,6 +13,7 @@ export type AchievementCatalogEntry = {
   rarity: AchievementRarity;
   points: number;
   maxProgress: number;
+  isActive?: boolean;
   icon?: string;
   triggerEvents: AchievementEventType[];
 };
@@ -106,6 +107,7 @@ export const ACHIEVEMENT_CATALOG: AchievementCatalogEntry[] = [
     rarity: 'COMMON',
     points: 20,
     maxProgress: 1,
+    isActive: false,
     triggerEvents: ['challenge.progress.updated', 'trophy.added', 'season.created'],
   },
   {
@@ -116,6 +118,7 @@ export const ACHIEVEMENT_CATALOG: AchievementCatalogEntry[] = [
     rarity: 'RARE',
     points: 55,
     maxProgress: 10,
+    isActive: false,
     triggerEvents: ['challenge.progress.updated', 'trophy.added', 'season.created'],
   },
   {
@@ -126,6 +129,7 @@ export const ACHIEVEMENT_CATALOG: AchievementCatalogEntry[] = [
     rarity: 'EPIC',
     points: 90,
     maxProgress: 30,
+    isActive: false,
     triggerEvents: ['challenge.progress.updated', 'trophy.added', 'season.created'],
   },
   {
@@ -136,6 +140,7 @@ export const ACHIEVEMENT_CATALOG: AchievementCatalogEntry[] = [
     rarity: 'LEGENDARY',
     points: 220,
     maxProgress: 100,
+    isActive: false,
     triggerEvents: ['challenge.progress.updated', 'trophy.added', 'season.created'],
   },
   {
