@@ -33,6 +33,15 @@ type UserAggregates = {
 };
 
 export async function seedAchievementDefinitions(): Promise<void> {
+  const activeKeys = ACHIEVEMENT_CATALOG.map((entry) => entry.key);
+  await prisma.achievementDefinition.updateMany({
+    where: {
+      key: { notIn: activeKeys },
+      isActive: true,
+    },
+    data: { isActive: false },
+  });
+
   for (const entry of ACHIEVEMENT_CATALOG) {
     await prisma.achievementDefinition.upsert({
       where: { key: entry.key },
@@ -75,6 +84,7 @@ export async function getUserAchievements(
   return prisma.userAchievement.findMany({
     where: {
       userId,
+      achievement: { isActive: true },
       ...(gameId ? { OR: [{ gameId: null }, { gameId }] } : {}),
     },
     include: { achievement: true },
@@ -91,7 +101,10 @@ export async function getUserAchievementSummary(userId: string): Promise<{
   const [definitions, userAchievements] = await Promise.all([
     getAchievementDefinitions(),
     prisma.userAchievement.findMany({
-      where: { userId },
+      where: {
+        userId,
+        achievement: { isActive: true },
+      },
       select: {
         pointsAwarded: true,
         unlockedAt: true,
@@ -202,30 +215,12 @@ export async function evaluateAchievementsForUser(input: EvaluateAchievementsInp
 }
 
 function computeProgress(key: string, aggregates: UserAggregates, maxProgress: number): number {
-  switch (key) {
-    case 'trophies.first':
-    case 'trophies.ten':
-    case 'trophies.fifty':
-      return Math.min(aggregates.totalTrophies, maxProgress);
-    case 'promotions.first':
-    case 'promotions.five':
-    case 'promotions.ten':
-      return Math.min(aggregates.totalPromotions, maxProgress);
-    case 'challenges.first_complete':
-    case 'challenges.five_complete':
-      return Math.min(aggregates.completedChallenges, maxProgress);
-    case 'career.first_save':
-      return Math.min(aggregates.activeSaves, maxProgress);
-    case 'career.five_clubs':
-    case 'career.ten_clubs':
-      return Math.min(aggregates.distinctClubsManaged, maxProgress);
-    case 'seasons.first':
-    case 'seasons.ten':
-    case 'seasons.twenty_five':
-      return Math.min(aggregates.totalSeasons, maxProgress);
-    default:
-      return 0;
-  }
+  if (key.startsWith('trophies.')) return Math.min(aggregates.totalTrophies, maxProgress);
+  if (key.startsWith('promotions.')) return Math.min(aggregates.totalPromotions, maxProgress);
+  if (key.startsWith('challenges.')) return Math.min(aggregates.completedChallenges, maxProgress);
+  if (key.startsWith('career.')) return Math.min(aggregates.distinctClubsManaged, maxProgress);
+  if (key.startsWith('seasons.')) return Math.min(aggregates.totalSeasons, maxProgress);
+  return 0;
 }
 
 async function computeUserAggregates(userId: string): Promise<UserAggregates> {
