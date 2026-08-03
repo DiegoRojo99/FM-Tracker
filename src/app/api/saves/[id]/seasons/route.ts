@@ -1,6 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { updateSaveSeason } from '@/lib/db/saves';
 import { addTrophyToSave } from '@/lib/db/trophies';
+import { evaluateAchievementsForUser } from '@/lib/db/achievements';
 import { SeasonInput } from '@/lib/types/prisma/Season';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
     // Check if save exists first
     const save = await prisma.save.findUnique({
       where: { id: saveId },
-      select: { userId: true }
+      select: { userId: true, gameId: true }
     });
 
     if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
@@ -91,6 +92,14 @@ export async function POST(req: NextRequest) {
 
     // Update the season in the save
     await updateSaveSeason(uid, saveId, body.season);
+    await evaluateAchievementsForUser({
+      userId: uid,
+      saveId,
+      gameId: save.gameId,
+      eventType: 'season.created',
+      eventTimestamp: new Date(),
+    });
+
     await invalidateUserPreviewSavesCache(uid);
     return NextResponse.json(createdSeason, { status: 201 });
   });

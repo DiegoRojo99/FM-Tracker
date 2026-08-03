@@ -1,6 +1,7 @@
 import { CareerChallenge, CareerChallengeGoalInput, CareerChallengeWithDetails, CareerChallengeWithSaveDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '../types/prisma/Challenge';
 import { challengeGoalToCareerChallengeGoal } from '../dto/challenges';
 import { getTrophiesForSave } from './trophies';
+import { evaluateAchievementsForUser } from './achievements';
 import { prisma } from './prisma';
 import { getSaveById } from './saves';
 import { Trophy } from '../../../prisma/generated/client';
@@ -249,6 +250,14 @@ export async function upsertCareerChallenge(
       });
     }
   }
+
+  await evaluateAchievementsForUser({
+    userId: uid,
+    saveId,
+    gameId,
+    eventType: 'challenge.progress.updated',
+    eventTimestamp: new Date(),
+  });
 
   // Return the full CareerChallengeWithDetails
   return await prisma.careerChallenge.findUnique({

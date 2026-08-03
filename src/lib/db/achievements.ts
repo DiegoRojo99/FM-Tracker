@@ -1,0 +1,252 @@
+import {
+  AchievementDefinition,
+  Prisma,
+  UserAchievement,
+} from '../../../prisma/generated/client';
+import {
+  ACHIEVEMENT_CATALOG,
+  ACHIEVEMENT_CATALOG_BY_KEY,
+  AchievementEventType,
+} from '../achievements/catalog';
+import { prisma } from './prisma';
+
+type UserAchievementWithDefinition = UserAchievement & {
+  achievement: AchievementDefinition;
+};
+
+type EvaluateAchievementsInput = {
+  userId: string;
+  saveId?: string;
+  gameId?: string;
+  eventType: AchievementEventType;
+  eventTimestamp?: Date;
+  evaluateAll?: boolean;
+};
+
+type UserAggregates = {
+  totalTrophies: number;
+  totalPromotions: number;
+  completedChallenges: number;
+  activeSaves: number;
+  distinctClubsManaged: number;
+  totalSeasons: number;
+};
+
+export async function seedAchievementDefinitions(): Promise<void> {
+  for (const entry of ACHIEVEMENT_CATALOG) {
+    await prisma.achievementDefinition.upsert({
+      where: { key: entry.key },
+      update: {
+        title: entry.title,
+        description: entry.description,
+        category: entry.category,
+        rarity: entry.rarity,
+        points: entry.points,
+        icon: entry.icon ?? null,
+        maxProgress: entry.maxProgress,
+        isActive: true,
+      },
+      create: {
+        key: entry.key,
+        title: entry.title,
+        description: entry.description,
+        category: entry.category,
+        rarity: entry.rarity,
+        points: entry.points,
+        icon: entry.icon ?? null,
+        maxProgress: entry.maxProgress,
+        isActive: true,
+      },
+    });
+  }
+}
+
+export async function getAchievementDefinitions(): Promise<AchievementDefinition[]> {
+  return prisma.achievementDefinition.findMany({
+    where: { isActive: true },
+    orderBy: { key: 'asc' },
+  });
+}
+
+export async function getUserAchievements(
+  userId: string,
+  gameId?: string
+): Promise<UserAchievementWithDefinition[]> {
+  return prisma.userAchievement.findMany({
+    where: {
+      userId,
+      ...(gameId ? { OR: [{ gameId: null }, { gameId }] } : {}),
+    },
+    include: { achievement: true },
+    orderBy: [{ unlockedAt: 'desc' }, { achievementKey: 'asc' }],
+  });
+}
+
+export async function getUserAchievementSummary(userId: string): Promise<{
+  totalPoints: number;
+  unlockedCount: number;
+  totalCount: number;
+  progressPercent: number;
+}> {
+  const [definitions, userAchievements] = await Promise.all([
+    getAchievementDefinitions(),
+    prisma.userAchievement.findMany({
+      where: { userId },
+      select: {
+        pointsAwarded: true,
+        unlockedAt: true,
+      },
+    }),
+  ]);
+
+  const unlocked = userAchievements.filter((row) => row.unlockedAt !== null);
+  const totalPoints = unlocked.reduce((sum, row) => sum + row.pointsAwarded, 0);
+  const totalCount = definitions.length;
+  const unlockedCount = unlocked.length;
+  const progressPercent = totalCount === 0 ? 0 : Math.round((unlockedCount / totalCount) * 100);
+
+  return {
+    totalPoints,
+    unlockedCount,
+    totalCount,
+    progressPercent,
+  };
+}
+
+export async function evaluateAchievementsForUser(input: EvaluateAchievementsInput): Promise<{
+  evaluatedCount: number;
+  unlockedNow: string[];
+}> {
+  await seedAchievementDefinitions();
+
+  const definitions = await getAchievementDefinitions();
+  const relevantDefinitions = input.evaluateAll
+    ? definitions
+    : definitions.filter((definition) => {
+        const catalogEntry = ACHIEVEMENT_CATALOG_BY_KEY.get(definition.key);
+        return catalogEntry?.triggerEvents.includes(input.eventType) ?? false;
+      });
+
+  if (relevantDefinitions.length === 0) {
+    return { evaluatedCount: 0, unlockedNow: [] };
+  }
+
+  const relevantKeys = relevantDefinitions.map((definition) => definition.key);
+  const existing = await prisma.userAchievement.findMany({
+    where: {
+      userId: input.userId,
+      achievementKey: { in: relevantKeys },
+    },
+  });
+
+  const existingByKey = new Map(existing.map((row) => [row.achievementKey, row]));
+  const aggregates = await computeUserAggregates(input.userId);
+  const unlockedNow: string[] = [];
+
+  for (const definition of relevantDefinitions) {
+    const computedProgress = computeProgress(definition.key, aggregates, definition.maxProgress);
+    const existingRecord = existingByKey.get(definition.key);
+
+    const nextProgress = existingRecord
+      ? Math.max(existingRecord.progress, computedProgress)
+      : computedProgress;
+
+    const shouldUnlock = nextProgress >= definition.maxProgress;
+    const unlockedAt = existingRecord?.unlockedAt ?? (shouldUnlock ? (input.eventTimestamp ?? new Date()) : null);
+    const pointsAwarded = unlockedAt ? definition.points : 0;
+
+    if (!existingRecord?.unlockedAt && unlockedAt) {
+      unlockedNow.push(definition.key);
+    }
+
+    const sourceMetadata: Prisma.InputJsonValue = {
+      eventType: input.eventType,
+      eventTimestamp: (input.eventTimestamp ?? new Date()).toISOString(),
+      saveId: input.saveId ?? null,
+      gameId: input.gameId ?? null,
+      evaluateAll: !!input.evaluateAll,
+    };
+
+    await prisma.userAchievement.upsert({
+      where: {
+        userId_achievementKey: {
+          userId: input.userId,
+          achievementKey: definition.key,
+        },
+      },
+      update: {
+        progress: nextProgress,
+        unlockedAt,
+        pointsAwarded,
+        gameId: input.gameId ?? existingRecord?.gameId ?? null,
+        saveId: input.saveId ?? existingRecord?.saveId ?? null,
+        sourceMetadata,
+      },
+      create: {
+        userId: input.userId,
+        achievementKey: definition.key,
+        progress: nextProgress,
+        unlockedAt,
+        pointsAwarded,
+        gameId: input.gameId ?? null,
+        saveId: input.saveId ?? null,
+        sourceMetadata,
+      },
+    });
+  }
+
+  return {
+    evaluatedCount: relevantDefinitions.length,
+    unlockedNow,
+  };
+}
+
+function computeProgress(key: string, aggregates: UserAggregates, maxProgress: number): number {
+  switch (key) {
+    case 'trophies.first':
+    case 'trophies.ten':
+    case 'trophies.fifty':
+      return Math.min(aggregates.totalTrophies, maxProgress);
+    case 'promotions.first':
+    case 'promotions.five':
+    case 'promotions.ten':
+      return Math.min(aggregates.totalPromotions, maxProgress);
+    case 'challenges.first_complete':
+    case 'challenges.five_complete':
+      return Math.min(aggregates.completedChallenges, maxProgress);
+    case 'career.first_save':
+      return Math.min(aggregates.activeSaves, maxProgress);
+    case 'career.five_clubs':
+    case 'career.ten_clubs':
+      return Math.min(aggregates.distinctClubsManaged, maxProgress);
+    case 'seasons.first':
+    case 'seasons.ten':
+    case 'seasons.twenty_five':
+      return Math.min(aggregates.totalSeasons, maxProgress);
+    default:
+      return 0;
+  }
+}
+
+async function computeUserAggregates(userId: string): Promise<UserAggregates> {
+  const [totalTrophies, totalPromotions, completedChallenges, activeSaves, totalSeasons, distinctClubs] = await Promise.all([
+    prisma.trophy.count({ where: { save: { userId } } }),
+    prisma.leagueResult.count({ where: { promoted: true, season: { save: { userId } } } }),
+    prisma.careerChallenge.count({ where: { userId, completedAt: { not: null } } }),
+    prisma.save.count({ where: { userId } }),
+    prisma.season.count({ where: { save: { userId } } }),
+    prisma.careerStint.groupBy({
+      by: ['teamId'],
+      where: { save: { userId } },
+    }),
+  ]);
+
+  return {
+    totalTrophies,
+    totalPromotions,
+    completedChallenges,
+    activeSaves,
+    totalSeasons,
+    distinctClubsManaged: distinctClubs.length,
+  };
+}
