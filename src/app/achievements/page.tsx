@@ -57,6 +57,13 @@ const RARITY_STYLES: Record<AchievementRarity, string> = {
   LEGENDARY: 'bg-amber-500/20 text-amber-200 border-amber-400/30',
 };
 
+const RARITY_ORDER: Record<AchievementRarity, number> = {
+  COMMON: 0,
+  RARE: 1,
+  EPIC: 2,
+  LEGENDARY: 3,
+};
+
 export default function AchievementsPage() {
   const { user, userLoading } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -115,6 +122,16 @@ export default function AchievementsPage() {
 
     for (const definition of data?.definitions ?? []) {
       groups.get(definition.category)?.push(definition);
+    }
+
+    for (const [, definitions] of groups) {
+      definitions.sort((a, b) => {
+        const rarityDiff = RARITY_ORDER[a.rarity] - RARITY_ORDER[b.rarity];
+        if (rarityDiff !== 0) return rarityDiff;
+        const pointsDiff = a.points - b.points;
+        if (pointsDiff !== 0) return pointsDiff;
+        return a.title.localeCompare(b.title);
+      });
     }
 
     return groups;
