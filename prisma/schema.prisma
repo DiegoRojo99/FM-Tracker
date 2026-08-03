@@ -14,6 +14,21 @@ enum FriendRequestStatus {
   BLOCKED
 }
 
+enum AchievementCategory {
+  TROPHIES
+  PROMOTIONS
+  CHALLENGES
+  CAREER
+  SEASONS_CONSISTENCY
+}
+
+enum AchievementRarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
 model User {
   uid              String            @id
   email            String            @unique
@@ -31,9 +46,52 @@ model User {
   // Friendship relations  
   primaryFriendships   Friendship[] @relation("User1Friendships")
   secondaryFriendships Friendship[] @relation("User2Friendships")
+  achievements         UserAchievement[]
 
   @@index([email])
   @@index([createdAt])
+}
+
+model AchievementDefinition {
+  key            String              @id
+  title          String
+  description    String
+  category       AchievementCategory
+  rarity         AchievementRarity
+  points         Int
+  icon           String?
+  maxProgress    Int
+  isActive       Boolean             @default(true)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  userAchievements UserAchievement[]
+
+  @@index([category])
+  @@index([rarity])
+  @@index([isActive])
+}
+
+model UserAchievement {
+  id             String                @id @default(cuid())
+  userId         String
+  achievementKey String
+  progress       Int                   @default(0)
+  unlockedAt     DateTime?
+  pointsAwarded  Int                   @default(0)
+  gameId         String?
+  saveId         String?
+  sourceMetadata Json?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  achievement    AchievementDefinition @relation(fields: [achievementKey], references: [key], onDelete: Cascade, onUpdate: Cascade)
+  user           User                  @relation(fields: [userId], references: [uid], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, achievementKey])
+  @@index([userId])
+  @@index([achievementKey])
+  @@index([unlockedAt])
+  @@index([gameId])
+  @@index([saveId])
 }
 
 model FriendRequest {

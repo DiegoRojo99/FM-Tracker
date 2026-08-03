@@ -1,6 +1,7 @@
 import { fetchCompetition } from './competitions';
 import { fetchTeam } from './teams';
 import { addChallengeForTrophy } from './challenges';
+import { evaluateAchievementsForUser } from './achievements';
 import { Trophy } from '../../../prisma/generated/client';
 import { prisma } from './prisma';
 import { FullTrophy } from '../types/prisma/Trophy';
@@ -52,6 +53,14 @@ export async function addTrophyToSave(
 
     // Check if the trophy matches any existing challenges
     await addChallengeForTrophy(uid, saveId, trophy, competition.countryCode);
+
+    await evaluateAchievementsForUser({
+      userId: uid,
+      saveId,
+      gameId: save.gameId,
+      eventType: 'trophy.added',
+      eventTimestamp: new Date(),
+    });
 
     // Return the ID of the newly created trophy
     return trophy.id;
