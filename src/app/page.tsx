@@ -23,7 +23,7 @@ export default function LandingPage() {
     {
       title: 'Achievements',
       desc: 'Unlock milestones like promotion runs, unbeaten streaks, and doubles.',
-      available: false,
+      available: true,
       icon: '⭐',
     },
     {
