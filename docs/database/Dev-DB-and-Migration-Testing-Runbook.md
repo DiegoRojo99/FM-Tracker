@@ -52,6 +52,35 @@ Approach B:
 
 ## 3) Dev Import and Sanitization
 
+### 3.0 Local Node.js alternative (no Railway migrator, no pg_dump tools)
+
+Use this if Railway function-based migrator is unavailable.
+
+Prerequisites:
+- `.env.production.local` contains production `DATABASE_URL`
+- `.env.development.local` contains development `DATABASE_URL`
+- Both URLs must point to different databases
+
+Commands:
+
+1) Preview what will be copied:
+
+`npm run db:copy:prod-to-dev:dry-run`
+
+2) Execute copy + sanitization:
+
+`npm run db:copy:prod-to-dev`
+
+What it does:
+- Reads production as source and development as target
+- Truncates target public tables (except `_prisma_migrations`)
+- Copies all rows table-by-table using FK-aware ordering
+- Applies `scripts/data/sanitize-dev.sql` on target
+
+Important:
+- This replaces existing dev data.
+- Do not run this command if dev URL points to production.
+
 ## 3.1 Restore into Dev DB
 
 pg_restore --clean --if-exists --no-owner --no-privileges --dbname="<DEV_DATABASE_URL>" backups/prod_YYYYMMDD_HHMM.dump

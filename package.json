@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "migrate:data": "tsx scripts/migration/migrate-data.ts",
-    "migrate:help": "tsx scripts/migration/migrate-data.ts --help"
+    "migrate:help": "tsx scripts/migration/migrate-data.ts --help",
+    "db:copy:prod-to-dev:dry-run": "tsx scripts/data/copy-prod-to-dev.ts --dry-run",
+    "db:copy:prod-to-dev": "tsx scripts/data/copy-prod-to-dev.ts --confirm"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",
