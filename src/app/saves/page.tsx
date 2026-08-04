@@ -11,14 +11,17 @@ import { Game } from '@/lib/types/prisma/Game';
 import { PreviewSave, Save } from '@/lib/types/prisma/Save';
 import { PlusCircle, Save as SaveIcon, SlidersHorizontal } from 'lucide-react';
 import { AnalyticsEvents, trackEvent } from '@/lib/analytics/events';
+import { applyOptimisticSaveRemoval, rollbackOptimisticSaveRemoval } from '@/lib/saves/optimistic';
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
   const [saves, setSaves] = useState<PreviewSave[]>([]);
   const [games, setGames] = useState<Game[]>([]);
   const [selectedGameFilter, setSelectedGameFilter] = useState<string>('all');
+  const [sortOrder, setSortOrder] = useState<'latest' | 'oldest'>('latest');
   const [loading, setLoading] = useState(true);
   const [deletingSave, setDeletingSave] = useState<PreviewSave | null>(null);
+  const [optimisticPendingDeleteId, setOptimisticPendingDeleteId] = useState<string | null>(null);
   
   useEffect(() => {
     if (!user && userLoading) return;
@@ -66,24 +69,35 @@ export default function SavesPage() {
   async function confirmDelete() {
     if (!deletingSave || !user) return;
     const deletedSave = deletingSave;
-    
-    const token = await user.getIdToken();
-    const response = await fetch(`/api/saves/${deletingSave.id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}`,},
-    });
-    
-    if (!response.ok) throw new Error('Failed to delete save');
-    
-    // Remove the deleted save from the state
-    setSaves(prevSaves => prevSaves.filter(save => save.id !== deletingSave.id));
+    const previousSaves = saves;
+
+    setOptimisticPendingDeleteId(deletedSave.id);
+    setSaves(prevSaves => applyOptimisticSaveRemoval(prevSaves, deletedSave.id));
     setDeletingSave(null);
 
-    trackEvent(AnalyticsEvents.SaveDeleted, {
-      gameId: deletedSave.gameId,
-      hadCurrentClub: Boolean(deletedSave.currentClub),
-      hadNationalTeam: Boolean(deletedSave.currentNT),
-    });
+    try {
+      const token = await user.getIdToken();
+      const response = await fetch(`/api/saves/${deletedSave.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        setSaves(previousSaves);
+        setOptimisticPendingDeleteId(null);
+        throw new Error('Failed to delete save');
+      }
+
+      trackEvent(AnalyticsEvents.SaveDeleted, {
+        gameId: deletedSave.gameId,
+        hadCurrentClub: Boolean(deletedSave.currentClub),
+        hadNationalTeam: Boolean(deletedSave.currentNT),
+      });
+    } catch (error) {
+      setSaves(rollbackOptimisticSaveRemoval(previousSaves, deletedSave));
+      setOptimisticPendingDeleteId(null);
+      throw error;
+    }
   }
 
   function getLatestDate(save: Save) {
@@ -95,7 +109,9 @@ export default function SavesPage() {
   function sortSavesByDate(a: Save, b: Save) {
     const dateA = getLatestDate(a);
     const dateB = getLatestDate(b);
-    return dateB.getTime() - dateA.getTime();
+    return sortOrder === 'latest'
+      ? dateB.getTime() - dateA.getTime()
+      : dateA.getTime() - dateB.getTime();
   }
 
   // Filter saves based on selected game
@@ -186,23 +202,40 @@ export default function SavesPage() {
             Filters
           </div>
 
-          <div className="w-full sm:w-72">
-            <label htmlFor="gameFilter" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-300">
-              Game Version
-            </label>
-            <select
-              id="gameFilter"
-              value={selectedGameFilter}
-              onChange={(e) => setSelectedGameFilter(e.target.value)}
-              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-white focus:border-[var(--color-accent)] focus:outline-none"
-            >
-              <option value="all">All Games</option>
-              {games.map((game) => (
-                <option key={game.id} value={game.id}>
-                  {game.name}
-                </option>
-              ))}
-            </select>
+          <div className="grid w-full gap-3 sm:w-auto sm:grid-cols-2">
+            <div className="w-full sm:w-64">
+              <label htmlFor="gameFilter" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-300">
+                Game Version
+              </label>
+              <select
+                id="gameFilter"
+                value={selectedGameFilter}
+                onChange={(e) => setSelectedGameFilter(e.target.value)}
+                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-white focus:border-[var(--color-accent)] focus:outline-none"
+              >
+                <option value="all">All Games</option>
+                {games.map((game) => (
+                  <option key={game.id} value={game.id}>
+                    {game.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="w-full sm:w-44">
+              <label htmlFor="sortOrder" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-300">
+                Sort by
+              </label>
+              <select
+                id="sortOrder"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value as 'latest' | 'oldest')}
+                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-white focus:border-[var(--color-accent)] focus:outline-none"
+              >
+                <option value="latest">Latest updated</option>
+                <option value="oldest">Oldest updated</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -210,16 +243,20 @@ export default function SavesPage() {
       {filteredSaves.length === 0 ? (
         <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 py-12 text-center shadow-lg backdrop-blur-sm">
           <p className="text-sm text-[var(--color-text-muted)]">
-            {selectedGameFilter === 'all' 
-              ? 'No saves found.' 
-              : `No saves found for ${selectedGameName}.`
-            }
+            {selectedGameFilter === 'all'
+              ? 'No saves found yet. Create one to start tracking your FM legacy.'
+              : `No saves found for ${selectedGameName}. Try switching the game filter.`}
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {[...filteredSaves].sort(sortSavesByDate).map(save => ( 
-            <SaveCard key={save.id} save={save} handleDelete={handleDelete} /> 
+            <SaveCard
+              key={save.id}
+              save={save}
+              handleDelete={handleDelete}
+              isPendingDelete={optimisticPendingDeleteId === save.id}
+            />
           ))}
         </div>
       )}

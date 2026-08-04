@@ -26,21 +26,21 @@ This plan is ordered so each feature builds on prerequisites from earlier phases
 
 ### 4) Save Management (Create/Edit/Delete)
 - [x] Finalize save creation/edit UX and validation rules
-- [ ] Add optimistic UI for save updates with rollback on failure
-- [ ] Add filtering/sorting for saves list
-- [ ] Add tests for save lifecycle scenarios
+- [x] Add optimistic UI for save updates with rollback on failure
+- [x] Add filtering/sorting for saves list
+- [x] Add tests for save lifecycle scenarios
 
 ### 5) Challenges Engine Stability
 - [x] Validate challenge assignment rules and duplicate prevention
 - [x] Add completion progress calculation consistency checks
 - [x] Improve challenge detail page states (loading/empty/error)
-- [ ] Add tests for challenge progression and completion outcomes
+- [x] Add tests for challenge progression and completion outcomes
 
 ### 6) Trophy and Progress Tracking
 - [x] Define clear criteria mapping between events and trophy unlocks
 - [x] Implement deterministic unlock processing on backend
 - [x] Add user progress summary cards and historical timeline
-- [ ] Add tests for unlock edge cases and idempotency
+- [x] Add tests for unlock edge cases and idempotency
 
 ## Phase 3: Social Layer
 

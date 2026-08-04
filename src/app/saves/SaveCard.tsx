@@ -3,9 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
 
-export function SaveCard({ save, handleDelete }: { save: PreviewSave, handleDelete: (event: React.MouseEvent<HTMLButtonElement>, saveId: string) => void }) {
+export function SaveCard({ save, handleDelete, isPendingDelete }: { save: PreviewSave, handleDelete: (event: React.MouseEvent<HTMLButtonElement>, saveId: string) => void, isPendingDelete?: boolean }) {
   const teamName = save.currentClub?.name ?? save.currentNT?.name ?? 'No Team';
   const teamLogo = save.currentClub?.logo ?? save.currentNT?.logo ?? '/Free-Agent.png';
+
+  if (isPendingDelete) {
+    return (
+      <article className="group relative overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-lg backdrop-blur-sm opacity-70">
+        <div className="p-4 text-center text-sm text-[var(--color-text-muted)]">
+          Removing save…
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className="group relative overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-lg backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-[var(--color-accent)]/70">

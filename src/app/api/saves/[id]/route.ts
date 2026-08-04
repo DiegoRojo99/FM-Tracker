@@ -4,27 +4,16 @@ import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import { getFullSave, invalidateUserPreviewSavesCache } from '@/lib/db/saves';
 import { prisma } from '@/lib/db/prisma';
 import { deleteCacheKey } from '@/lib/cache/redis';
+import { apiError, badRequest, forbidden, notFound, ok, success } from '@/lib/api/response';
 
 export async function GET(req: NextRequest) {
   return withOptionalAuth(req, async (uid) => {
-    // Extract the save ID from the URL
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
-    
-    if (!saveId) {
-      return new Response(JSON.stringify({ error: 'Save ID is required' }), { 
-        status: 400, 
-        headers: { 'Content-Type': 'application/json' } 
-      });
-    }
+    if (!saveId) return badRequest('Save ID is required');
 
     const save: FullDetailsSave | null = await getFullSave(saveId);
-    if (!save) {
-      return new Response(JSON.stringify({ error: 'Save not found' }), { 
-        status: 404,
-        headers: { 'Content-Type': 'application/json' } 
-      });
-    }
+    if (!save) return notFound('Save not found');
 
     // Add ownership information to the response
     const responseData = {
@@ -32,32 +21,18 @@ export async function GET(req: NextRequest) {
       isOwner: uid === save.userId
     };
 
-    return new Response(JSON.stringify(responseData), { 
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return ok(responseData);
   });
 }
 
 export async function DELETE(req: NextRequest) {
   return withAuth(req, async (uid) => {
-    if (!uid) {
-      return new Response(JSON.stringify({ error: 'Authentication required' }), { 
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+    if (!uid) return apiError('Authentication required', 401);
 
     // Extract the save ID from the URL
     const url = new URL(req.url);
     const saveId = url.pathname.split('/')[3];
-    
-    if (!saveId) {
-      return new Response(JSON.stringify({ error: 'Save ID is required' }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+    if (!saveId) return badRequest('Save ID is required');
 
     // Check if save exists first
     const save = await prisma.save.findUnique({
@@ -65,20 +40,9 @@ export async function DELETE(req: NextRequest) {
       select: { userId: true }
     });
 
-    if (!save) {
-      return new Response(JSON.stringify({ error: 'Save not found' }), { 
-        status: 404,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-    
     // Check if user owns the save
-    if (save.userId !== uid) {
-      return new Response(JSON.stringify({ error: 'Forbidden: You can only delete your own saves' }), { 
-        status: 403,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+    if (!save) return notFound('Save not found');
+    if (save.userId !== uid) return forbidden('Forbidden: You can only delete your own saves');
 
     try {
       await prisma.save.delete({
@@ -90,17 +54,11 @@ export async function DELETE(req: NextRequest) {
         invalidateUserPreviewSavesCache(save.userId),
       ]);
 
-      return new Response(JSON.stringify({ message: 'Save and all associated data deleted successfully' }), { 
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return success({ message: 'Save and all associated data deleted successfully' });
     } 
     catch (error) {
       console.error('Error deleting save:', error);
-      return new Response(JSON.stringify({ error: 'Failed to delete save' }), { 
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return apiError('Failed to delete save', 500);
     }
   });
 }
