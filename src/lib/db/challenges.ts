@@ -1,6 +1,6 @@
 import { CareerChallenge, CareerChallengeGoalInput, CareerChallengeWithDetails, CareerChallengeWithSaveDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '../types/prisma/Challenge';
-import { challengeGoalToCareerChallengeGoal } from '../dto/challenges';
 import { getTrophiesForSave } from './trophies';
+import { filterCompletedChallengeGoalsBasedOnTrophies as evaluateChallengeProgression } from '../challenges/progression';
 import { evaluateAchievementsForUser } from './achievements';
 import { prisma } from './prisma';
 import { getSaveById } from './saves';
@@ -267,20 +267,23 @@ export async function upsertCareerChallenge(
 }
 
 /* FILTERS */
+export function dedupeTrophiesForChallengeEvaluation(trophies: Trophy[]): Trophy[] {
+  const seen = new Set<string>();
+  return trophies.filter((trophy) => {
+    const identity = [trophy.competitionGroupId, trophy.teamId, trophy.season, trophy.saveId, trophy.gameId]
+      .join(':');
+    if (seen.has(identity)) return false;
+    seen.add(identity);
+    return true;
+  });
+}
+
 export function filterCompletedChallengeGoalsBasedOnTrophies(
   challenge: ChallengeWithGoals,
   trophies: Trophy[],
   countryCode?: string
 ): CareerChallengeGoalInput[] {
-  const goals: CareerChallengeGoalInput[] = [];
-  
-  for (const goal of challenge.goals) {
-    const isCompleted = trophies.some(trophy => filterGoalByTrophy(goal, trophy, countryCode));
-    const careerGoal = challengeGoalToCareerChallengeGoal({ goal, isCompleted });
-    goals.push(careerGoal);
-  }
-
-  return goals;
+  return evaluateChallengeProgression(challenge, trophies, countryCode);
 }
 
 function filterGoalByTrophy(
