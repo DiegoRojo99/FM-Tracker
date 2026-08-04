@@ -11,9 +11,9 @@ import SearchFriends from './components/SearchFriends';
 import FootballLoader from '../components/FootBallLoader';
 import FriendsLeaderboard from './components/FriendsLeaderboard';
 import SocialFeed from './SocialFeed';
-import { Users, Inbox, Search, Trophy, Sparkles } from 'lucide-react';
+import { Users, Inbox, Search, Trophy, Sparkles, Activity } from 'lucide-react';
 
-type TabType = 'friends' | 'requests' | 'search' | 'leaderboard'
+type TabType = 'feed' | 'leaderboard' | 'friends' | 'requests' | 'search'
 
 interface FriendsData {
   friends: (User & { friendshipDate: Date })[]
@@ -26,11 +26,12 @@ interface FriendsData {
 export default function FriendsPage() {
   const { user } = useAuth()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState<TabType>('friends')
+  const [activeTab, setActiveTab] = useState<TabType>('feed')
   const [data, setData] = useState<FriendsData>({
     friends: [],
     friendRequests: { sent: [], received: [] }
   })
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const tabClass = (tab: TabType) => `inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
@@ -40,19 +41,16 @@ export default function FriendsPage() {
   }`
 
   useEffect(() => {
-    if (!user) {
-      // router.push('/login')
-      return;
-    }
+    if (!user) return;
   }, [user, router])
 
   const fetchFriendsData = useCallback(async () => {
-    if (!user) return
+    if (!user) return;
 
     try {
-      setLoading(true)
-      setError(null)
-      const userToken = await user.getIdToken()
+      setLoading(true);
+      setError(null);
+      const userToken = await user.getIdToken();
 
       // Fetch friends, sent requests, and received requests in parallel
       const [friendsRes, sentReqRes, receivedReqRes] = await Promise.all([
@@ -134,6 +132,14 @@ export default function FriendsPage() {
           </div>
 
           <div className="mt-5 flex gap-2 overflow-x-auto rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/60 p-2">
+            <button onClick={() => setActiveTab('feed')} className={tabClass('feed')}>
+              <Activity className="h-4 w-4" />
+              Feed
+            </button>
+            <button onClick={() => setActiveTab('leaderboard')} className={tabClass('leaderboard')}>
+              <Trophy className="h-4 w-4" />
+              Leaderboard
+            </button>
             <button onClick={() => setActiveTab('friends')} className={tabClass('friends')}>
               <Users className="h-4 w-4" />
               Friends ({data.friends.length})
@@ -150,10 +156,6 @@ export default function FriendsPage() {
             <button onClick={() => setActiveTab('search')} className={tabClass('search')}>
               <Search className="h-4 w-4" />
               Add Friends
-            </button>
-            <button onClick={() => setActiveTab('leaderboard')} className={tabClass('leaderboard')}>
-              <Trophy className="h-4 w-4" />
-              Leaderboard
             </button>
           </div>
         </div>
@@ -179,21 +181,21 @@ export default function FriendsPage() {
 
           {!loading && !error && (
             <>
-              {activeTab === 'friends' && (
-                <div className="space-y-6">
-                  <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/80 p-4 shadow-lg backdrop-blur-sm">
-                    <div className="mb-4">
-                      <h2 className="text-xl font-semibold text-white">Activity Feed</h2>
-                      <p className="mt-1 text-sm text-[var(--color-text-muted)]">Recent save milestones, challenge completions, and trophies.</p>
-                    </div>
-                    <SocialFeed />
+              {activeTab === 'feed' && (
+                <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/80 p-4 shadow-lg backdrop-blur-sm">
+                  <div className="mb-4">
+                    <h2 className="text-xl font-semibold text-white">Activity Feed</h2>
+                    <p className="mt-1 text-sm text-[var(--color-text-muted)]">Recent save milestones, challenge completions, trophies, and friend activity.</p>
                   </div>
-                  <FriendsList 
-                    friends={data.friends}
-                    onUpdate={handleDataUpdate}
-                    user={user}
-                  />
+                  <SocialFeed />
                 </div>
+              )}
+              {activeTab === 'friends' && (
+                <FriendsList 
+                  friends={data.friends}
+                  onUpdate={handleDataUpdate}
+                  user={user}
+                />
               )}
               {activeTab === 'requests' && (
                 <FriendRequests

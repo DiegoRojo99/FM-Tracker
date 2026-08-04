@@ -54,7 +54,7 @@ This plan is ordered so each feature builds on prerequisites from earlier phases
 - [x] Define event types to publish (save milestones, challenge completions, trophies)
 - [x] Build activity feed query with pagination and visibility rules
 - [x] Add feed UI with grouped timestamps and empty states
-- [ ] Add tests for privacy filtering and feed ordering
+- [x] Add tests for privacy filtering and feed ordering
 
 ## Phase 4: Discovery and Performance
 
