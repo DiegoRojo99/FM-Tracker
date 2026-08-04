@@ -12,9 +12,9 @@ This plan is ordered so each feature builds on prerequisites from earlier phases
 
 ### 2) Authentication and Authorization Baseline
 - [x] Review auth flows (login/session) for edge cases and expiry handling
-- [ ] Add route protection matrix (public/user/admin) across app routes
-- [ ] Add server-side permission checks for admin APIs
-- [ ] Add unauthorized access tests for protected endpoints
+- [x] Add route protection matrix (public/user/admin) across app routes
+- [x] Add server-side permission checks for admin APIs
+- [x] Add unauthorized access tests for protected endpoints
 
 ### 3) API Contract Consistency
 - [ ] Standardize API response shape for success/error payloads
