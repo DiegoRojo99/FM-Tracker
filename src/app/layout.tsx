@@ -4,6 +4,7 @@ import Navbar from "@/app/components/NavBar";
 import Footer from "@/app/components/Footer";
 import { AuthProvider } from '@/app/components/AuthProvider'
 import AnalyticsGate from '@/app/components/AnalyticsGate'
+import { RouteGuard } from '@/app/components/RouteGuard'
 import "./globals.css";
 
 const sora = Sora({
@@ -78,12 +79,14 @@ export default function RootLayout({
         className={`${sora.variable} ${ibmPlexMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <AuthProvider>
-          <Navbar />
-          <div className="flex-grow">
-            {children}
-          </div>
-          <Footer />
-          <AnalyticsGate />
+          <RouteGuard>
+            <Navbar />
+            <div className="flex-grow">
+              {children}
+            </div>
+            <Footer />
+            <AnalyticsGate />
+          </RouteGuard>
         </AuthProvider>
       </body>
     </html>

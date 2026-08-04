@@ -1,12 +1,13 @@
 {
   "name": "fm-tracker",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest run",
     "migrate:data": "tsx scripts/migration/migrate-data.ts",
     "migrate:help": "tsx scripts/migration/migrate-data.ts --help",
     "db:copy:prod-to-dev:dry-run": "tsx scripts/data/copy-prod-to-dev.ts --dry-run",
@@ -45,6 +46,7 @@
     "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^2.1.8"
   }
 }

@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
 
 async function updateTeamsCountryCode() {
@@ -39,19 +40,21 @@ async function updateTeamsCountryCode() {
   return { updatedCount, skippedCount };
 }
 
-export async function GET() {
-  try {
-    const result = await updateTeamsCountryCode();
-    return NextResponse.json({
-      success: true,
-      message: `✅ Done. ${result.updatedCount} teams updated, ${result.skippedCount} skipped.`,
-      ...result
-    });
-  } catch (error) {
-    console.error('Error updating teams:', error);
-    return NextResponse.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
-  }
+export async function GET(req: NextRequest) {
+  return withAuth(req, async () => {
+    try {
+      const result = await updateTeamsCountryCode();
+      return NextResponse.json({
+        success: true,
+        message: `✅ Done. ${result.updatedCount} teams updated, ${result.skippedCount} skipped.`,
+        ...result
+      });
+    } catch (error) {
+      console.error('Error updating teams:', error);
+      return NextResponse.json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      }, { status: 500 });
+    }
+  }, { requireAdmin: true });
 }
