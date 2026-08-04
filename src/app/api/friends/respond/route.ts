@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
 import { FriendRequestStatus, FriendRequestWithRequester } from '@/lib/types/prisma/Friends';
+import { normalizeFriendRequestAction } from '@/lib/friends/requestLifecycle';
 
 // POST /api/friends/respond - Accept or reject a friend request
 export async function POST(request: NextRequest) {
@@ -17,7 +18,8 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (!['accept', 'reject', 'block'].includes(action)) {
+      const normalizedAction = normalizeFriendRequestAction(action);
+      if (!normalizedAction) {
         return NextResponse.json(
           { error: 'Action must be accept, reject, or block' },
           { status: 400 }
@@ -43,7 +45,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (action === 'accept') {
+      if (normalizedAction === 'accept') {
         // Create friendship with consistent user ID ordering (smaller UID first)
         const user1Id = friendRequest.requesterId < uid ? friendRequest.requesterId : uid;
         const user2Id = friendRequest.requesterId < uid ? uid : friendRequest.requesterId;
@@ -91,7 +93,7 @@ export async function POST(request: NextRequest) {
       } 
       else {
         // Reject or block
-        const status: FriendRequestStatus = action === 'block' ? 'BLOCKED' : 'REJECTED';
+        const status: FriendRequestStatus = normalizedAction === 'block' ? 'BLOCKED' : 'REJECTED';
         
         const updatedRequest = await prisma.friendRequest.update({
           where: { id: requestId },
@@ -106,7 +108,7 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({
           success: true,
-          action: action,
+          action: normalizedAction,
           request: updatedRequest
         });
       }

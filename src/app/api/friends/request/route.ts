@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
+import { getFriendRequestState } from '@/lib/friends/requestLifecycle';
 
 // POST /api/friends/request - Send a friend request
 export async function POST(request: NextRequest) {
@@ -65,12 +66,15 @@ export async function POST(request: NextRequest) {
       });
 
       if (existingRequest) {
-        if (existingRequest.requesterId === uid) {
-          return NextResponse.json(
-            { error: 'Friend request already sent to this user' },
-            { status: 400 }
-          );
-        } else {
+        const requestState = getFriendRequestState(existingRequest.status);
+        if (requestState === 'pending') {
+          if (existingRequest.requesterId === uid) {
+            return NextResponse.json(
+              { error: 'Friend request already sent to this user' },
+              { status: 400 }
+            );
+          }
+
           return NextResponse.json(
             { error: 'This user has already sent you a friend request' },
             { status: 400 }

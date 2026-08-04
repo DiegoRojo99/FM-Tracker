@@ -48,7 +48,7 @@ This plan is ordered so each feature builds on prerequisites from earlier phases
 - [x] Finalize friend request states (pending/accepted/declined/cancelled)
 - [x] Add mutual friendship consistency checks in DB operations
 - [x] Add friend discovery and search UX improvements
-- [ ] Add tests for request lifecycle and duplicate prevention
+- [x] Add tests for request lifecycle and duplicate prevention
 
 ### 8) Activity Feed and Social Events
 - [ ] Define event types to publish (save milestones, challenge completions, trophies)
