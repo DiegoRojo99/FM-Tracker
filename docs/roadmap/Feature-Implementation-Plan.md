@@ -51,9 +51,9 @@ This plan is ordered so each feature builds on prerequisites from earlier phases
 - [x] Add tests for request lifecycle and duplicate prevention
 
 ### 8) Activity Feed and Social Events
-- [ ] Define event types to publish (save milestones, challenge completions, trophies)
-- [ ] Build activity feed query with pagination and visibility rules
-- [ ] Add feed UI with grouped timestamps and empty states
+- [x] Define event types to publish (save milestones, challenge completions, trophies)
+- [x] Build activity feed query with pagination and visibility rules
+- [x] Add feed UI with grouped timestamps and empty states
 - [ ] Add tests for privacy filtering and feed ordering
 
 ## Phase 4: Discovery and Performance

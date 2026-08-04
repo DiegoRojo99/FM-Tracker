@@ -10,6 +10,7 @@ import FriendRequests from './components/FriendRequests';
 import SearchFriends from './components/SearchFriends';
 import FootballLoader from '../components/FootBallLoader';
 import FriendsLeaderboard from './components/FriendsLeaderboard';
+import SocialFeed from './SocialFeed';
 import { Users, Inbox, Search, Trophy, Sparkles } from 'lucide-react';
 
 type TabType = 'friends' | 'requests' | 'search' | 'leaderboard'
@@ -179,11 +180,20 @@ export default function FriendsPage() {
           {!loading && !error && (
             <>
               {activeTab === 'friends' && (
-                <FriendsList 
-                  friends={data.friends}
-                  onUpdate={handleDataUpdate}
-                  user={user}
-                />
+                <div className="space-y-6">
+                  <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/80 p-4 shadow-lg backdrop-blur-sm">
+                    <div className="mb-4">
+                      <h2 className="text-xl font-semibold text-white">Activity Feed</h2>
+                      <p className="mt-1 text-sm text-[var(--color-text-muted)]">Recent save milestones, challenge completions, and trophies.</p>
+                    </div>
+                    <SocialFeed />
+                  </div>
+                  <FriendsList 
+                    friends={data.friends}
+                    onUpdate={handleDataUpdate}
+                    user={user}
+                  />
+                </div>
               )}
               {activeTab === 'requests' && (
                 <FriendRequests
