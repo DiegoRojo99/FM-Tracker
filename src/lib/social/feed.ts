@@ -1,4 +1,5 @@
 export type SocialEventType = 'save.milestone' | 'challenge.completed' | 'trophy.added' | 'season.created';
+export type SocialFeedVisibility = 'public' | 'friends';
 
 export type SocialFeedItem = {
   id: string;
@@ -6,9 +7,24 @@ export type SocialFeedItem = {
   title: string;
   message: string;
   createdAt: string;
+  visibility?: SocialFeedVisibility;
   saveId?: string;
   userId?: string;
   metadata?: Record<string, string | number | boolean | null | undefined>;
+};
+
+export type SocialFeedQuery = {
+  page?: number;
+  limit?: number;
+  viewerIsFriend?: boolean;
+};
+
+export type SocialFeedResult = {
+  items: SocialFeedItem[];
+  total: number;
+  page: number;
+  limit: number;
+  hasMore: boolean;
 };
 
 export function formatFeedItemTitle(type: SocialEventType): string {
@@ -39,4 +55,25 @@ export function formatFeedItemMessage(type: SocialEventType, fallback: string): 
     default:
       return fallback;
   }
+}
+
+export function buildSocialFeedItems(items: SocialFeedItem[], query: SocialFeedQuery = {}): SocialFeedResult {
+  const page = Math.max(1, query.page ?? 1);
+  const limit = Math.max(1, query.limit ?? 10);
+  const viewerIsFriend = query.viewerIsFriend ?? true;
+
+  const visibleItems = items
+    .filter((item) => item.visibility !== 'friends' || viewerIsFriend)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  const start = (page - 1) * limit;
+  const end = start + limit;
+
+  return {
+    items: visibleItems.slice(start, end),
+    total: visibleItems.length,
+    page,
+    limit,
+    hasMore: end < visibleItems.length,
+  };
 }
