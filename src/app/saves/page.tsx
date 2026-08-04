@@ -11,6 +11,7 @@ import { Game } from '@/lib/types/prisma/Game';
 import { PreviewSave, Save } from '@/lib/types/prisma/Save';
 import { PlusCircle, Save as SaveIcon, SlidersHorizontal } from 'lucide-react';
 import { AnalyticsEvents, trackEvent } from '@/lib/analytics/events';
+import { applyOptimisticSaveRemoval, rollbackOptimisticSaveRemoval } from '@/lib/saves/optimistic';
 
 export default function SavesPage() {
   const { user, userLoading } = useAuth();
@@ -20,6 +21,7 @@ export default function SavesPage() {
   const [sortOrder, setSortOrder] = useState<'latest' | 'oldest'>('latest');
   const [loading, setLoading] = useState(true);
   const [deletingSave, setDeletingSave] = useState<PreviewSave | null>(null);
+  const [optimisticPendingDeleteId, setOptimisticPendingDeleteId] = useState<string | null>(null);
   
   useEffect(() => {
     if (!user && userLoading) return;
@@ -67,24 +69,35 @@ export default function SavesPage() {
   async function confirmDelete() {
     if (!deletingSave || !user) return;
     const deletedSave = deletingSave;
-    
-    const token = await user.getIdToken();
-    const response = await fetch(`/api/saves/${deletingSave.id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}`,},
-    });
-    
-    if (!response.ok) throw new Error('Failed to delete save');
-    
-    // Remove the deleted save from the state
-    setSaves(prevSaves => prevSaves.filter(save => save.id !== deletingSave.id));
+    const previousSaves = saves;
+
+    setOptimisticPendingDeleteId(deletedSave.id);
+    setSaves(prevSaves => applyOptimisticSaveRemoval(prevSaves, deletedSave.id));
     setDeletingSave(null);
 
-    trackEvent(AnalyticsEvents.SaveDeleted, {
-      gameId: deletedSave.gameId,
-      hadCurrentClub: Boolean(deletedSave.currentClub),
-      hadNationalTeam: Boolean(deletedSave.currentNT),
-    });
+    try {
+      const token = await user.getIdToken();
+      const response = await fetch(`/api/saves/${deletedSave.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        setSaves(previousSaves);
+        setOptimisticPendingDeleteId(null);
+        throw new Error('Failed to delete save');
+      }
+
+      trackEvent(AnalyticsEvents.SaveDeleted, {
+        gameId: deletedSave.gameId,
+        hadCurrentClub: Boolean(deletedSave.currentClub),
+        hadNationalTeam: Boolean(deletedSave.currentNT),
+      });
+    } catch (error) {
+      setSaves(rollbackOptimisticSaveRemoval(previousSaves, deletedSave));
+      setOptimisticPendingDeleteId(null);
+      throw error;
+    }
   }
 
   function getLatestDate(save: Save) {
@@ -238,7 +251,12 @@ export default function SavesPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {[...filteredSaves].sort(sortSavesByDate).map(save => ( 
-            <SaveCard key={save.id} save={save} handleDelete={handleDelete} /> 
+            <SaveCard
+              key={save.id}
+              save={save}
+              handleDelete={handleDelete}
+              isPendingDelete={optimisticPendingDeleteId === save.id}
+            />
           ))}
         </div>
       )}

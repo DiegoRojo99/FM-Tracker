@@ -26,9 +26,9 @@ This plan is ordered so each feature builds on prerequisites from earlier phases
 
 ### 4) Save Management (Create/Edit/Delete)
 - [x] Finalize save creation/edit UX and validation rules
-- [ ] Add optimistic UI for save updates with rollback on failure
+- [x] Add optimistic UI for save updates with rollback on failure
 - [x] Add filtering/sorting for saves list
-- [ ] Add tests for save lifecycle scenarios
+- [x] Add tests for save lifecycle scenarios
 
 ### 5) Challenges Engine Stability
 - [x] Validate challenge assignment rules and duplicate prevention
