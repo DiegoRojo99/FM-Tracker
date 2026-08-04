@@ -1,26 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { createUserIfNotExists } from '@/lib/db/users';
+import { apiError, badRequest, success } from '@/lib/api/response';
 
 export async function POST(request: NextRequest) {
   try {
     const userData = await request.json();
     
-    if (!userData.uid || !userData.email) {
-      return NextResponse.json(
-        { error: 'User UID and email are required' },
-        { status: 400 }
-      );
-    }
-
+    if (!userData.uid || !userData.email) return badRequest('User UID and email are required');
     await createUserIfNotExists(userData);
     
-    return NextResponse.json({ success: true });
+    return success({ created: true });
   } 
   catch (error) {
     console.error('Error creating user:', error);
-    return NextResponse.json(
-      { error: 'Failed to create user' },
-      { status: 500 }
-    );
+    return apiError('Failed to create user', 500);
   }
 }

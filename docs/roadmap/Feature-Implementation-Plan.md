@@ -17,10 +17,10 @@ This plan is ordered so each feature builds on prerequisites from earlier phases
 - [x] Add unauthorized access tests for protected endpoints
 
 ### 3) API Contract Consistency
-- [ ] Standardize API response shape for success/error payloads
-- [ ] Add shared DTO/validation layer for request inputs
-- [ ] Add centralized error mapping (validation/auth/not-found/conflict)
-- [ ] Add basic API integration tests for key routes
+- [x] Standardize API response shape for success/error payloads
+- [x] Add shared DTO/validation layer for request inputs
+- [x] Add centralized error mapping (validation/auth/not-found/conflict)
+- [x] Add basic API integration tests for key routes
 
 ## Phase 2: Core User Product Flow
 
