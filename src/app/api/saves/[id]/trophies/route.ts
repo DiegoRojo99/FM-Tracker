@@ -61,7 +61,34 @@ export async function POST(req: NextRequest) {
       saveId
     });
 
-    if (!newTrophyId) return NextResponse.json({ error: 'Failed to add trophy' }, { status: 500 });
+    if (!newTrophyId) {
+      const recovered = await prisma.trophy.findFirst({
+        where: {
+          saveId,
+          competitionGroupId: Number(body.competitionId),
+          season,
+        },
+        select: { id: true },
+      });
+
+      if (recovered) {
+        await invalidateUserPreviewSavesCache(uid);
+        return NextResponse.json({ id: recovered.id, recovered: true }, { status: 201 });
+      }
+
+      return NextResponse.json(
+        {
+          error: 'Failed to add trophy',
+          details: {
+            saveId,
+            competitionId: Number(body.competitionId),
+            teamId: Number(body.teamId),
+            season,
+          },
+        },
+        { status: 500 }
+      );
+    }
     await invalidateUserPreviewSavesCache(uid);
     return NextResponse.json({ id: newTrophyId }, { status: 201 });
   });

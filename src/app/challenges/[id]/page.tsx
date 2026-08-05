@@ -45,16 +45,38 @@ export default function ChallengeDetailPage() {
     else if (Array.isArray(params.id) && params.id.length > 0) { fetchChallenge(params.id[0]); }
   }, [params.id, user]);
 
-  if (loading) return <div className="p-6 mx-auto max-w-2xl"><FootballLoader /></div>;
-  if (!challenge) return <div className="p-6 mx-auto max-w-2xl text-red-600">Challenge not found.</div>;
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
+        <div className="flex min-h-[50vh] items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 shadow-xl backdrop-blur-sm">
+          <FootballLoader />
+        </div>
+      </div>
+    );
+  }
+
+  if (!challenge) {
+    return (
+      <div className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
+        <div className="rounded-3xl border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] px-5 py-4 text-[var(--color-danger-soft-text)] shadow-lg">
+          Challenge not found.
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <main className="p-6 mx-auto max-w-4xl">
-      <header className="mb-8 border-b pb-4">
-        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">{challenge.name}</h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300 mb-2">{challenge.description}</p>
+    <main className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
+      <header className="relative overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-5 shadow-2xl backdrop-blur-sm sm:p-8">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute left-[8%] top-[-2rem] h-36 w-36 rounded-full bg-[var(--color-highlight)]/15 blur-3xl" />
+          <div className="absolute right-[10%] top-[8%] h-40 w-40 rounded-full bg-[var(--color-accent)]/20 blur-3xl" />
+        </div>
+
+        <h1 className="text-3xl font-black text-white sm:text-4xl">{challenge.name}</h1>
+        <p className="mt-2 text-base text-[var(--color-text-muted)] sm:text-lg">{challenge.description}</p>
         {challenge.bonus && (
-          <div className="inline-block bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded font-semibold text-sm mb-2">
+          <div className="mt-4 inline-flex items-center rounded-lg border border-amber-300/40 bg-amber-400/15 px-3 py-1 text-sm font-semibold text-amber-100">
             Bonus: {challenge.bonus}
           </div>
         )}
@@ -63,14 +85,14 @@ export default function ChallengeDetailPage() {
         {userChallenges.length > 0 && (() => {
           const selectedChallenge = userChallenges[selectedSaveIndex];
           return (
-            <div className="mt-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Your Progress</h3>
+            <div className="mt-6 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]/70 p-4">
+              <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <h3 className="text-lg font-bold text-white">Your Progress</h3>
                 {userChallenges.length > 1 && (
                   <select 
                     value={selectedSaveIndex} 
                     onChange={(e) => setSelectedSaveIndex(Number(e.target.value))}
-                    className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-dark)] px-3 py-1.5 text-sm text-white focus:border-[var(--color-highlight)] focus:outline-none"
                   >
                     {userChallenges.map((challenge, index) => (
                       <option key={challenge.id} value={index}>
@@ -83,22 +105,22 @@ export default function ChallengeDetailPage() {
               </div>
               
               {selectedChallenge && (
-                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
+                <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/65 p-4">
+                  <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <span className="text-sm font-semibold text-white">
                         {selectedChallenge.save ? (
                           `Save: ${selectedChallenge.save.season} Season`
                         ) : (
                           'Legacy Save'
                         )}
                       </span>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-[var(--color-text-muted)]">
                         Started: {new Date(selectedChallenge.startedAt).toLocaleDateString()}
                       </p>
                     </div>
                     {selectedChallenge.completedAt && (
-                      <span className="text-sm font-semibold text-green-600 dark:text-green-400">
+                      <span className="text-sm font-semibold text-emerald-300">
                         ✓ Completed {new Date(selectedChallenge.completedAt).toLocaleDateString()}
                       </span>
                     )}
@@ -115,8 +137,8 @@ export default function ChallengeDetailPage() {
         })()}
       </header>
       
-      <section className="mb-8">
-        <h2 className="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">Goals</h2>
+      <section className="mt-6 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+        <h2 className="mb-3 text-xl font-bold text-white">Goals</h2>
         <div className="space-y-3">
           {challenge.goals.map((goal: ChallengeGoalWithDetails) => 
             <ChallengeGoalCard 
