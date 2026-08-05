@@ -1,33 +1,46 @@
-import BlurredCard from "@/app/components/BlurredCard";
-import ProgressBar from "@/app/components/progress/ProgressBar";
 import { CareerChallengeGoal, CareerChallengeWithDetails, ChallengeGoalWithDetails } from "@/lib/types/prisma/Challenge";
 import React from "react";
+import { CheckCircle2, Circle, Flag, Target } from "lucide-react";
 
 type ChallengeSectionProps = {
   challenges: CareerChallengeWithDetails[];
 };
 
 const ChallengeSection: React.FC<ChallengeSectionProps> = ({ challenges }) => {
+  const hasChallenges = Boolean(challenges?.length);
 
-  if (!challenges || challenges.length === 0) {
+  if (!hasChallenges) {
     return (
-      <section className="mt-0">
-        <h2 className="text-xl font-semibold">Active Challenges</h2>
-        <p className="text-sm text-gray-500 mt-4">No challenges yet</p>
+      <section className="mt-0 min-w-0">
+        <div className="mb-4">
+          <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">
+            <Target className="h-3.5 w-3.5" />
+            Objective Tracker
+          </p>
+          <h2 className="mt-1 text-xl font-black text-white">Active Challenges</h2>
+        </div>
+
+        <div className="rounded-2xl border border-dashed border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-6 text-center">
+          <p className="text-sm text-[var(--color-text-muted)]">No challenges yet.</p>
+        </div>
       </section>
     );
   }
 
   return (
-    <section className="mt-0">
-      <h2 className="text-xl font-semibold">Active Challenges</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+    <section className="mt-0 min-w-0">
+      <div className="mb-4">
+        <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">
+          <Target className="h-3.5 w-3.5" />
+          Objective Tracker
+        </p>
+        <h2 className="mt-1 text-xl font-black text-white">Active Challenges</h2>
+        <p className="mt-1 text-sm text-[var(--color-text-muted)]">Track milestone progress across your current career journey.</p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {challenges.map((challenge) => (
-          <div key={challenge.id} style={{ marginBottom: "1rem" }}>
-            <BlurredCard>
-              <ChallengeCard careerChallenge={challenge} />
-            </BlurredCard>
-          </div>
+          <ChallengeCard key={challenge.id} careerChallenge={challenge} />
         ))}
       </div>
     </section>
@@ -35,40 +48,72 @@ const ChallengeSection: React.FC<ChallengeSectionProps> = ({ challenges }) => {
 };
 
 const ChallengeCard: React.FC<{ careerChallenge: CareerChallengeWithDetails }> = ({ careerChallenge }) => {
-  const totalGoals = careerChallenge.goalProgress.length;
-  const completedGoals = careerChallenge.goalProgress.filter(gp => gp.isComplete).length;
+  const totalGoals = careerChallenge.challenge.goals.length;
+  const completedGoals = careerChallenge.goalProgress.filter((gp) => gp.isComplete).length;
+  const progress = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
   const challenge = careerChallenge.challenge;
-  
+
   return (
-    <div>
-      <h3 className="text-lg font-semibold text-center">{challenge.name}</h3>
-      <p className="text-sm text-gray-400 my-2">{challenge.description}</p>
-      <ProgressBar completed={completedGoals} total={totalGoals} showText={false} />
-      <div className="mt-2">
+    <article className="glass-panel h-full rounded-2xl p-4">
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="text-base font-black leading-tight text-white">{challenge.name}</h3>
+        <span className="inline-flex shrink-0 items-center rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-2.5 py-1 text-xs font-semibold text-[var(--color-text-muted)]">
+          {completedGoals}/{totalGoals}
+        </span>
+      </div>
+
+      <p className="mt-2 text-sm text-[var(--color-text-muted)]">{challenge.description}</p>
+
+      <div className="mt-3">
+        <div className="mb-1 flex items-center justify-between text-xs text-[var(--color-text-muted)]">
+          <span>Progress</span>
+          <span>{progress}%</span>
+        </div>
+        <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--color-surface-soft)]">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-[var(--color-highlight)] to-[var(--color-accent)] transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+
+      <div className="mt-4 space-y-2 border-t border-[var(--color-surface-border)] pt-3">
         {challenge.goals.map((goal) => {
-          const careerGoalProgress: CareerChallengeGoal | undefined = careerChallenge.goalProgress.find(gp => gp.challengeGoalId === goal.id);
+          const careerGoalProgress: CareerChallengeGoal | undefined = careerChallenge.goalProgress.find((gp) => gp.challengeGoalId === goal.id);
           return <ChallengeGoalUI key={goal.id} goal={goal} careerGoal={careerGoalProgress} />;
         })}
       </div>
-    </div>
+    </article>
   );
 };
 
 const ChallengeGoalUI: React.FC<{ goal: ChallengeGoalWithDetails, careerGoal?: CareerChallengeGoal }> = ({ goal, careerGoal }) => {
   const isCompleted = careerGoal?.isComplete ?? false;
+
   return (
-    <div className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300 my-1">
-      <span className={`flex-1 ${isCompleted ? "line-through" : ""}`}>
-        {goal.description}
-      </span>
-      <span
-        style={{
-          color: isCompleted ? "green" : "gray",
-          fontWeight: "bold",
-          marginLeft: "1em",
-        }}
-      >
-        {isCompleted ? "✓ Completed" : "Incomplete"}
+    <div className="flex min-w-0 items-start gap-2">
+      <div className="mt-0.5 shrink-0">
+        {isCompleted ? (
+          <CheckCircle2 className="h-4 w-4 text-emerald-300" />
+        ) : (
+          <Circle className="h-4 w-4 text-[var(--color-text-muted)]" />
+        )}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <p className={`text-sm ${isCompleted ? "text-[var(--color-text-muted)] line-through" : "text-white"}`}>
+          {goal.description}
+        </p>
+      </div>
+
+      <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold ${isCompleted ? "bg-emerald-500/15 text-emerald-300" : "bg-[var(--color-surface-soft)] text-[var(--color-text-muted)]"}`}>
+        {isCompleted ? (
+          <>
+            <Flag className="h-3 w-3" /> Complete
+          </>
+        ) : (
+          "Pending"
+        )}
       </span>
     </div>
   );
