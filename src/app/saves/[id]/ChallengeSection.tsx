@@ -11,7 +11,7 @@ const ChallengeSection: React.FC<ChallengeSectionProps> = ({ challenges }) => {
 
   if (!challenges || challenges.length === 0) {
     return (
-      <section className="mt-8 mb-4">
+      <section className="mt-0">
         <h2 className="text-xl font-semibold">Active Challenges</h2>
         <p className="text-sm text-gray-500 mt-4">No challenges yet</p>
       </section>
@@ -19,7 +19,7 @@ const ChallengeSection: React.FC<ChallengeSectionProps> = ({ challenges }) => {
   }
 
   return (
-    <section className="mt-8">
+    <section className="mt-0">
       <h2 className="text-xl font-semibold">Active Challenges</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         {challenges.map((challenge) => (

@@ -3,7 +3,7 @@
 import { FullCareerStint } from '@/lib/types/prisma/Career';
 import { FullDetailsSaveWithOwnership } from '@/lib/types/prisma/Save';
 import Image from 'next/image';
-import { useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
 
 type Props = {
   saveDetails: FullDetailsSaveWithOwnership;
@@ -36,33 +36,28 @@ function formatDate(datePassed: string): string {
 }
 
 export default function CareerTimeline({ saveDetails, onUpdateStint, onDeleteStint }: Props) {
-  const grouped = groupStintsByStart(saveDetails.careerStints);
+  const grouped = groupStintsByStart(saveDetails.careerStints).reverse();
 
   return (
-    <div className="overflow-auto py-6">
-      <div className="relative flex flex-col gap-8 md:flex-row md:gap-12 md:min-w-max items-center">
+    <div className="relative py-2">
+      <div className="absolute bottom-2 left-3 top-2 w-px bg-[var(--color-surface-border)] sm:left-4" />
 
-        {/* Timeline Line */}
-        <div className="absolute top-0 left-2/7 -translate-x-1/2 h-full w-0.5 bg-purple-500 md:top-4 md:h-0.5 md:w-full z-0" />
-
+      <div className="space-y-6">
         {grouped.map(({ startDate, entries }, idx) => (
-          <div
-            key={idx}
-            className="relative flex sm:flex-row-reverse items-start gap-4 md:flex-col md:items-center md:gap-2"
-          >
-            {/* Dot */}
-            <div className="hidden md:block z-10 h-4 w-4 rounded-full bg-purple-600 border-2 border-white shadow-md md:mt-2 md:self-center md:h-4 md:w-4" />
+          <div key={idx} className="relative pl-8 sm:pl-10">
+            <span className="absolute left-0 top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[var(--color-surface-border)] bg-[var(--color-dark)] text-[10px] font-semibold text-[var(--color-highlight)] sm:h-8 sm:w-8">
+              {idx + 1}
+            </span>
 
-            {/* Date + Entries */}
-            <div className="flex flex-col gap-1 md:mt-1 md:items-center">
-              <div className="text-sm text-gray-500 md:text-center ml-[25%] sm:ml-0">
-                {formatDate(startDate)}
-              </div>
+            <div className="mb-3 inline-flex rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+              Started {formatDate(startDate)}
+            </div>
 
+            <div className={`grid grid-cols-1 gap-3 ${entries.length > 1 ? 'xl:grid-cols-2' : ''}`}>
               {entries.map((stint, sIdx) => (
-                <CareerStintCard 
-                  key={sIdx} 
-                  stint={stint} 
+                <CareerStintCard
+                  key={sIdx}
+                  stint={stint}
                   onUpdate={onUpdateStint}
                   onDelete={onDeleteStint}
                   isOwner={saveDetails.isOwner}
@@ -88,10 +83,7 @@ function CareerStintCard({
   onDelete?: (stintId: number) => void;
   isOwner?: boolean;
 }) {
-  const [showActions, setShowActions] = useState(false);
-
   const handleDelete = () => {
-    console.log('Deleting career stint:', stint);
     if (!stint.id) return;
     const deleteConfirmed = window.confirm(`Are you sure you want to delete the career stint at ${stint.team?.name}?`);
     if (deleteConfirmed) {
@@ -105,61 +97,52 @@ function CareerStintCard({
   };
 
   return (
-    <div 
-      className="bg-purple-50 dark:bg-purple-900 border border-purple-600 rounded-lg shadow p-3 w-60 flex flex-col items-center text-center relative group"
-      onMouseEnter={() => setShowActions(true)}
-      onMouseLeave={() => setShowActions(false)}
-    >
+    <article className="relative rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-4 shadow-lg backdrop-blur-sm">
       {/* Action buttons */}
       {isOwner && (onUpdate || onDelete) && (
-        <div className={`absolute top-2 right-2 flex gap-1 transition-opacity duration-200 ${showActions ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="absolute right-3 top-3 flex gap-1">
           {onUpdate && (
             <button
               onClick={handleUpdate}
-              className="p-1 text-white rounded text-xs transition-colors"
+              className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-1.5 text-[var(--color-text-muted)] transition hover:text-white"
               title="Edit career stint"
             >
-              <Image
-                src="/pencil.svg"
-                alt="Edit Icon"
-                width={16}
-                height={16}
-                className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform"
-              />
+              <Pencil className="h-3.5 w-3.5" />
             </button>
           )}
           {onDelete && (
             <button
               onClick={handleDelete}
-              className="p-1 text-white rounded text-xs transition-colors"
+              className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-1.5 text-red-300 transition hover:text-red-200"
               title="Delete career stint"
             >
-              <Image
-                src="/trash.svg"
-                alt="Trash Icon"
-                width={16}
-                height={16}
-                className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform"
-              />
+              <Trash2 className="h-3.5 w-3.5" />
             </button>
           )}
         </div>
       )}
 
-      {stint.team && stint.team.logo && (
-        <Image
-          width={128}
-          height={128}
-          src={stint.team.logo}
-          alt={stint.team.name}
-          className="h-20 w-20 object-contain mb-2"
-        />
-      )}
-      <div className="font-semibold">{stint.team?.name}</div>
-      <div className="text-xs text-gray-500">
-        {formatDate(stint.startDate)} —{' '}
-        {stint.endDate ? formatDate(stint.endDate) : 'Present'}
+      <div className="flex items-start gap-3 pr-16">
+        {stint.team && stint.team.logo && (
+          <Image
+            width={72}
+            height={72}
+            src={stint.team.logo}
+            alt={stint.team.name}
+            className="h-14 w-14 flex-none object-contain sm:h-16 sm:w-16"
+          />
+        )}
+
+        <div className="min-w-0">
+          <h4 className="truncate text-base font-bold text-white">{stint.team?.name}</h4>
+          <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+            {formatDate(stint.startDate)} - {stint.endDate ? formatDate(stint.endDate) : 'Present'}
+          </p>
+          <div className="mt-2 inline-flex rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+            {stint.isNational ? 'National Team' : 'Club'}
+          </div>
+        </div>
       </div>
-    </div>
+    </article>
   );
 }

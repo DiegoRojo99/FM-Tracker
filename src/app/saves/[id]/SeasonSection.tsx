@@ -80,18 +80,21 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
   };
 
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", marginTop: "16px" }}>
-        <h2 className="text-xl font-semibold" style={{ margin: 0 }}>Seasons</h2>
+    <div className="min-w-0">
+      <div className="mb-4 mt-2 flex flex-col gap-3 sm:mt-4 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-xl font-semibold">Seasons</h2>
         {saveDetails.isOwner && (
           <GradientButton
+            className="w-full sm:w-auto"
             onClick={() => setModalOpen(true)}
           >
             + Add season
           </GradientButton>
         )}
       </div>
-      <div className="flex flex-row gap-4 overflow-x-auto">
+
+      <div className="-mx-1 overflow-x-auto px-1 pb-2">
+        <div className="flex flex-row gap-4">
         {!saveDetails.seasons?.length ? (
           <p className='text-sm text-gray-500'>No seasons available.</p>
         ) : (
@@ -103,6 +106,7 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
             />
           ))
         )}
+        </div>
       </div>
 
       <AddSeasonModal 

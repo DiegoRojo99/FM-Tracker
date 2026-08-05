@@ -134,19 +134,19 @@ export default function SavePage() {
       </section>
 
       <div className="mt-6 grid gap-6">
-        <section id="stints" className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+        <section id="stints" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
           <CareerStintsSection saveDetails={saveDetails} setRefresh={setRefresh} />
         </section>
 
-        <section id="seasons" className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+        <section id="seasons" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
           <SeasonSection saveDetails={saveDetails} setRefresh={setRefresh} />
         </section>
 
-        <section id="trophies" className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+        <section id="trophies" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
           <TrophyCase save={saveDetails} setRefresh={setRefresh} />
         </section>
 
-        <section id="challenges" className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+        <section id="challenges" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
           <ChallengeSection challenges={saveDetails.challenges ?? []} />
         </section>
       </div>

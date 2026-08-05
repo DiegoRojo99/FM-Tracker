@@ -31,7 +31,7 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
   };
 
   return (
-    <BlurredCard className="min-w-[320px]">
+    <BlurredCard className="min-w-[270px] sm:min-w-[320px]">
       <div className="flex flex-col h-full w-full p-2 gap-4">
       {/* Delete button */}
       {onDelete && (
