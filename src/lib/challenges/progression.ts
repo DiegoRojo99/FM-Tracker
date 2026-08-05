@@ -16,13 +16,14 @@ export function dedupeTrophiesForChallengeEvaluation(trophies: Trophy[]): Trophy
 export function filterCompletedChallengeGoalsBasedOnTrophies(
   challenge: ChallengeWithGoals,
   trophies: Trophy[],
-  countryCode?: string
+  countryCode?: string | string[]
 ): CareerChallengeGoalInput[] {
   const goals: CareerChallengeGoalInput[] = [];
   const uniqueTrophies = dedupeTrophiesForChallengeEvaluation(trophies);
+  const countryCodes = normalizeCountryCodes(countryCode);
 
   for (const goal of challenge.goals) {
-    const isCompleted = uniqueTrophies.some((trophy) => filterGoalByTrophy(goal, trophy, countryCode));
+    const isCompleted = uniqueTrophies.some((trophy) => filterGoalByTrophy(goal, trophy, countryCodes));
     const careerGoal = challengeGoalToCareerChallengeGoal({ goal, isCompleted });
     goals.push(careerGoal);
   }
@@ -33,7 +34,7 @@ export function filterCompletedChallengeGoalsBasedOnTrophies(
 function filterGoalByTrophy(
   goal: ChallengeWithGoals['goals'][number],
   trophy: Trophy,
-  countryCode?: string
+  countryCodes: string[]
 ): boolean {
   if (goal.competitionId && goal.competitionId !== trophy.competitionGroupId) {
     return false;
@@ -41,11 +42,16 @@ function filterGoalByTrophy(
   if (goal.teams?.length && goal.teams.every((team) => team.teamId !== trophy.teamId)) {
     return false;
   }
-  if (goal.country && countryCode && goal.country.code !== countryCode) {
-    return false;
-  }
-  if (goal.country && !countryCode) {
+  if (goal.country && !countryCodes.includes(goal.country.code)) {
     return false;
   }
   return true;
+}
+
+function normalizeCountryCodes(countryCode?: string | string[]): string[] {
+  if (!countryCode) return [];
+  if (Array.isArray(countryCode)) {
+    return countryCode.filter((code): code is string => typeof code === 'string' && code.length > 0);
+  }
+  return countryCode.length > 0 ? [countryCode] : [];
 }

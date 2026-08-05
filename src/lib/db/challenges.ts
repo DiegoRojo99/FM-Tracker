@@ -1,6 +1,7 @@
 import { CareerChallenge, CareerChallengeGoalInput, CareerChallengeWithDetails, CareerChallengeWithSaveDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '../types/prisma/Challenge';
 import { getTrophiesForSave } from './trophies';
-import { filterCompletedChallengeGoalsBasedOnTrophies as evaluateChallengeProgression } from '../challenges/progression';
+import { dedupeTrophiesForChallengeEvaluation } from '../challenges/progression';
+import { challengeGoalToCareerChallengeGoal } from '../dto/challenges';
 import { evaluateAchievementsForUser } from './achievements';
 import { prisma } from './prisma';
 import { getSaveById } from './saves';
@@ -27,6 +28,12 @@ const CareerChallengeWithDetailsInclude = {
   goalProgress: true,
   game: true,
   save: true
+};
+
+type TrophyMatchContext = {
+  competitionNameById: Map<number, string>;
+  competitionCountryById: Map<number, string>;
+  teamCountryById: Map<number, string>;
 };
 
 export async function getAllChallenges(): Promise<ChallengeWithGoals[]> {
@@ -110,15 +117,12 @@ export async function getChallengesForSave(saveId: string): Promise<CareerChalle
   });
 }
 
-export async function checkForMatchingChallenges(trophyData: Trophy) {
-  const countryCode = await prisma.competitionGroup.findUnique({
-    where: { id: trophyData.competitionGroupId },
-  }).then(comp => comp?.countryCode);
+export async function checkForMatchingChallenges(trophyData: Trophy, context: TrophyMatchContext) {
 
   // Get all challenges and filter them based on whether AT LEAST ONE goal can be fully satisfied
   const allChallenges = await getAllChallenges();
   const matchingChallenges = allChallenges.filter(challenge => {
-    return challenge.goals.some(goal => filterGoalByTrophy(goal, trophyData, countryCode));
+    return challenge.goals.some(goal => filterGoalByTrophy(goal, trophyData, context));
   });
 
   return matchingChallenges;
@@ -128,23 +132,47 @@ export async function checkForMatchingChallenges(trophyData: Trophy) {
 export async function addChallengeForTrophy(
   uid: string,
   saveId: string,
-  trophyData: Trophy,
-  countryCode?: string
+  trophyData: Trophy
 ): Promise<void> {
-  const resolvedCountryCode = countryCode ?? await prisma.competitionGroup.findUnique({
-    where: { id: trophyData.competitionGroupId },
-    select: { countryCode: true },
-  }).then((competition) => competition?.countryCode);
-
-  const matchingChallenges = await checkForMatchingChallenges(trophyData);
   const saveTrophies = await getTrophiesForSave(saveId);
   if (!saveTrophies.includes(trophyData)) saveTrophies.push(trophyData);
+
+  const uniqueTrophies = dedupeTrophiesForChallengeEvaluation([...saveTrophies, trophyData]);
+  const competitionIds = [...new Set(uniqueTrophies.map((trophy) => trophy.competitionGroupId))];
+  const teamIds = [...new Set(uniqueTrophies.map((trophy) => trophy.teamId))];
+
+  const [competitions, teams] = await Promise.all([
+    prisma.competitionGroup.findMany({
+      where: { id: { in: competitionIds } },
+      select: { id: true, name: true, countryCode: true },
+    }),
+    prisma.team.findMany({
+      where: { id: { in: teamIds } },
+      select: { id: true, countryCode: true },
+    }),
+  ]);
+
+  const context: TrophyMatchContext = {
+    competitionNameById: new Map(competitions.map((competition) => [competition.id, competition.name])),
+    competitionCountryById: new Map(
+      competitions
+        .filter((competition): competition is typeof competition & { countryCode: string } => !!competition.countryCode)
+        .map((competition) => [competition.id, competition.countryCode])
+    ),
+    teamCountryById: new Map(
+      teams
+        .filter((team): team is typeof team & { countryCode: string } => !!team.countryCode)
+        .map((team) => [team.id, team.countryCode])
+    ),
+  };
+
+  const matchingChallenges = await checkForMatchingChallenges(trophyData, context);
 
   for (const challenge of matchingChallenges) {
     const processedGoals: CareerChallengeGoalInput[] = filterCompletedChallengeGoalsBasedOnTrophies(
       challenge,
-      [...saveTrophies, trophyData],
-      resolvedCountryCode
+      uniqueTrophies,
+      context
     );
 
     await upsertCareerChallenge(uid, saveId, trophyData.gameId, challenge.id, processedGoals);
@@ -272,41 +300,85 @@ export async function upsertCareerChallenge(
 }
 
 /* FILTERS */
-export function dedupeTrophiesForChallengeEvaluation(trophies: Trophy[]): Trophy[] {
-  const seen = new Set<string>();
-  return trophies.filter((trophy) => {
-    const identity = [trophy.competitionGroupId, trophy.teamId, trophy.season, trophy.saveId, trophy.gameId]
-      .join(':');
-    if (seen.has(identity)) return false;
-    seen.add(identity);
-    return true;
-  });
-}
 
 export function filterCompletedChallengeGoalsBasedOnTrophies(
   challenge: ChallengeWithGoals,
   trophies: Trophy[],
-  countryCode?: string
+  context: TrophyMatchContext
 ): CareerChallengeGoalInput[] {
-  return evaluateChallengeProgression(challenge, trophies, countryCode);
+  const uniqueTrophies = dedupeTrophiesForChallengeEvaluation(trophies);
+
+  return challenge.goals.map((goal) => {
+    const isCompleted = uniqueTrophies.some((trophy) => filterGoalByTrophy(goal, trophy, context));
+    return challengeGoalToCareerChallengeGoal({ goal, isCompleted });
+  });
 }
 
 function filterGoalByTrophy(
   goal: ChallengeGoalWithDetails,
   trophy: Trophy,
-  countryCode?: string
+  context: TrophyMatchContext
 ): boolean {
   if (goal.competitionId && goal.competitionId !== trophy.competitionGroupId) {
-    return false;  
+    const goalCompetitionName = goal.competition?.name ?? goal.description;
+    const trophyCompetitionName = context.competitionNameById.get(trophy.competitionGroupId);
+
+    const matchesByNormalizedName =
+      !!goalCompetitionName &&
+      !!trophyCompetitionName &&
+      normalizeCompetitionName(goalCompetitionName) === normalizeCompetitionName(trophyCompetitionName);
+
+    const matchesByCompetitionFamily =
+      !!goalCompetitionName &&
+      !!trophyCompetitionName &&
+      getCompetitionFamily(goalCompetitionName) !== null &&
+      getCompetitionFamily(goalCompetitionName) === getCompetitionFamily(trophyCompetitionName);
+
+    if (!matchesByNormalizedName && !matchesByCompetitionFamily) {
+      return false;
+    }
   }
+
   if (goal.teams?.length && goal.teams.every(team => team.teamId !== trophy.teamId)) {
     return false;
   }
-  if (goal.country && countryCode && goal.country.code !== countryCode) {
-    return false;
+
+  if (goal.country) {
+    const trophyCountryCodes = getCountryCodesForTrophy(trophy, context);
+    if (!trophyCountryCodes.includes(goal.country.code)) {
+      return false;
+    }
   }
-  if (goal.country && !countryCode) {
-    return false;
-  }
+
   return true;
+}
+
+function getCountryCodesForTrophy(trophy: Trophy, context: TrophyMatchContext): string[] {
+  const codes = [
+    context.competitionCountryById.get(trophy.competitionGroupId),
+    context.teamCountryById.get(trophy.teamId),
+  ].filter((code): code is string => typeof code === 'string' && code.length > 0);
+
+  return [...new Set(codes)];
+}
+
+function normalizeCompetitionName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/uefa/g, '')
+    .replace(/europa\s+conference/g, 'conference')
+    .replace(/champions\s+league/g, 'championsleague')
+    .replace(/europa\s+league/g, 'europaleague')
+    .replace(/conference\s+league/g, 'conferenceleague')
+    .replace(/[^a-z0-9]/g, '');
+}
+
+function getCompetitionFamily(name: string): 'champions' | 'europa' | 'conference' | null {
+  const normalized = normalizeCompetitionName(name);
+
+  if (normalized.includes('championsleague')) return 'champions';
+  if (normalized.includes('europaleague')) return 'europa';
+  if (normalized.includes('conferenceleague') || normalized.includes('conference')) return 'conference';
+
+  return null;
 }

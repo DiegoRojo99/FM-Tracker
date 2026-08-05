@@ -125,6 +125,46 @@ async function createTrophyWithIdSequenceRecovery(data: {
   }
 }
 
+async function runTrophySideEffects(params: {
+  uid: string;
+  saveId: string;
+  trophy: Trophy;
+  gameId: string;
+  competitionCountryCode?: string;
+}): Promise<void> {
+  const { uid, saveId, trophy, gameId, competitionCountryCode } = params;
+
+  try {
+    await addChallengeForTrophy(uid, saveId, trophy, competitionCountryCode);
+  }
+  catch (challengeError) {
+    if (isPrismaP2002(challengeError)) {
+      console.error('Challenge side-effect P2002 target:', getPrismaP2002Target(challengeError), 'meta:', getPrismaMetaJson(challengeError));
+    }
+    else {
+      console.error('Challenge side-effect failed:', challengeError);
+    }
+  }
+
+  try {
+    await evaluateAchievementsForUser({
+      userId: uid,
+      saveId,
+      gameId,
+      eventType: 'trophy.added',
+      eventTimestamp: new Date(),
+    });
+  }
+  catch (achievementError) {
+    if (isPrismaP2002(achievementError)) {
+      console.error('Achievement side-effect P2002 target:', getPrismaP2002Target(achievementError), 'meta:', getPrismaMetaJson(achievementError));
+    }
+    else {
+      console.error('Achievement side-effect failed:', achievementError);
+    }
+  }
+}
+
 export async function addTrophyToSave(
   { teamId, competitionId, uid, season, saveId }: 
   {
@@ -136,6 +176,12 @@ export async function addTrophyToSave(
   }
 ): Promise<number | null> {
   try {
+    const competition = await fetchCompetition(competitionId);
+    if (!competition) throw new Error('Competition not found');
+
+    const save = await prisma.save.findUnique({ where: { id: saveId } });
+    if (!save) throw new Error('Save not found');
+
     // Check for existing trophy
     const existingTrophy = await prisma.trophy.findFirst({
       where: {
@@ -152,19 +198,29 @@ export async function addTrophyToSave(
           where: { id: existingTrophy.id },
           data: { teamId: Number(teamId) },
         });
+
+        await runTrophySideEffects({
+          uid,
+          saveId,
+          trophy: updatedExistingTrophy,
+          gameId: save.gameId,
+          competitionCountryCode: competition.countryCode,
+        });
         return updatedExistingTrophy.id;
       }
+
+      await runTrophySideEffects({
+        uid,
+        saveId,
+        trophy: existingTrophy,
+        gameId: save.gameId,
+        competitionCountryCode: competition.countryCode,
+      });
       return existingTrophy.id;
     }
 
-    const competition = await fetchCompetition(competitionId);
-    if (!competition) throw new Error('Competition not found');
-
     const team = await fetchTeam(teamId);
     if (!team) throw new Error('Team not found');
-
-    const save = await prisma.save.findUnique({ where: { id: saveId } });
-    if (!save) throw new Error('Save not found');
     
     let trophy: Trophy;
     try {
@@ -183,34 +239,13 @@ export async function addTrophyToSave(
       throw createError;
     }
 
-    // Side-effects should not hide successful trophy creation.
-    try { await addChallengeForTrophy(uid, saveId, trophy, competition.countryCode); }
-    catch (challengeError) {
-      if (isPrismaP2002(challengeError)) {
-        console.error('Challenge side-effect P2002 target:', getPrismaP2002Target(challengeError), 'meta:', getPrismaMetaJson(challengeError));
-      }
-      else {
-        console.error('Challenge side-effect failed:', challengeError);
-      }
-    }
-
-    try {
-      await evaluateAchievementsForUser({
-        userId: uid,
-        saveId,
-        gameId: save.gameId,
-        eventType: 'trophy.added',
-        eventTimestamp: new Date(),
-      });
-    }
-    catch (achievementError) {
-      if (isPrismaP2002(achievementError)) {
-        console.error('Achievement side-effect P2002 target:', getPrismaP2002Target(achievementError), 'meta:', getPrismaMetaJson(achievementError));
-      }
-      else {
-        console.error('Achievement side-effect failed:', achievementError);
-      }
-    }
+    await runTrophySideEffects({
+      uid,
+      saveId,
+      trophy,
+      gameId: save.gameId,
+      competitionCountryCode: competition.countryCode,
+    });
 
     return trophy.id;
   } 

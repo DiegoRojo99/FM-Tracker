@@ -1,5 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { updateTrophy, deleteTrophy } from '@/lib/db/trophies';
+import { addChallengeForTrophy } from '@/lib/db/challenges';
+import { evaluateAchievementsForUser } from '@/lib/db/achievements';
 import { prisma } from '@/lib/db/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -17,7 +19,7 @@ export async function PUT(req: NextRequest) {
       // Check if save exists and user owns it
       const save = await prisma.save.findUnique({
         where: { id: saveId },
-        select: { userId: true }
+        select: { userId: true, gameId: true }
       });
 
       if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });      
@@ -58,6 +60,36 @@ export async function PUT(req: NextRequest) {
 
       const success = await updateTrophy(Number(trophyId), updates);
       if (!success) return NextResponse.json({ error: 'Failed to update trophy' }, { status: 500 });
+
+      const updatedTrophy = await prisma.trophy.findFirst({
+        where: {
+          id: Number(trophyId),
+          saveId,
+        },
+      });
+
+      if (updatedTrophy) {
+        try {
+          await addChallengeForTrophy(uid, saveId, updatedTrophy);
+        }
+        catch (challengeError) {
+          console.error('Error refreshing challenge progress after trophy update:', challengeError);
+        }
+
+        try {
+          await evaluateAchievementsForUser({
+            userId: uid,
+            saveId,
+            gameId: save.gameId,
+            eventType: 'trophy.added',
+            eventTimestamp: new Date(),
+          });
+        }
+        catch (achievementError) {
+          console.error('Error refreshing achievements after trophy update:', achievementError);
+        }
+      }
+
       return NextResponse.json({ message: 'Trophy updated successfully' }, { status: 200 });
     } 
     catch (error) {
