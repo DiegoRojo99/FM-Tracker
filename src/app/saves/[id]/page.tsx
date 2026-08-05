@@ -7,9 +7,8 @@ import FootballLoader from '@/app/components/FootBallLoader';
 import CareerStintsSection from './CareerStintSection';
 import TrophyCase from './TrophyCase';
 import SeasonSection from './SeasonSection';
-import ChallengeSection from './ChallengeSection';
 import { FullDetailsSaveWithOwnership } from '@/lib/types/prisma/Save';
-import { ArrowLeft, CalendarDays, Flag, Shield, Trophy } from 'lucide-react';
+import { ArrowLeft, CalendarDays, Flag, Trophy } from 'lucide-react';
 
 export default function SavePage() {
   const params = useParams();
@@ -76,8 +75,6 @@ export default function SavePage() {
   const stintsCount = saveDetails.careerStints?.length ?? 0;
   const seasonsCount = saveDetails.seasons?.length ?? 0;
   const trophiesCount = saveDetails.trophies?.length ?? 0;
-  const activeChallengesCount = saveDetails.challenges?.length ?? 0;
-  const completedChallengeCount = (saveDetails.challenges ?? []).filter((challenge) => Boolean(challenge.completedAt)).length;
 
   return (
     <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
@@ -103,7 +100,7 @@ export default function SavePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3">
             <StatChip
               label="Stints"
               value={String(stintsCount)}
@@ -122,12 +119,6 @@ export default function SavePage() {
               subtitle="wins"
               icon={<Trophy className="h-4 w-4" />}
             />
-            <StatChip
-              label="Challenges"
-              value={`${completedChallengeCount}/${activeChallengesCount}`}
-              subtitle="done/active"
-              icon={<Shield className="h-4 w-4" />}
-            />
           </div>
         </div>
 
@@ -144,10 +135,6 @@ export default function SavePage() {
 
         <section id="trophies" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
           <TrophyCase save={saveDetails} setRefresh={setRefresh} />
-        </section>
-
-        <section id="challenges" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
-          <ChallengeSection challenges={saveDetails.challenges ?? []} />
         </section>
       </div>
     </div>
