@@ -1,10 +1,10 @@
 import { fetchCompetition } from './competitions';
-import { fetchTeam } from './teams';
 import { addChallengeForTrophy } from './challenges';
 import { evaluateAchievementsForUser } from './achievements';
 import { Trophy } from '../../../prisma/generated/client';
 import { prisma } from './prisma';
 import { FullTrophy } from '../types/prisma/Trophy';
+import { fetchTeam } from './teams';
 
 function isPrismaP2002(error: unknown): boolean {
   return typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === 'P2002';
@@ -13,8 +13,44 @@ function isPrismaP2002(error: unknown): boolean {
 function hasUniqueIdTarget(error: unknown): boolean {
   if (typeof error !== 'object' || error === null || !('meta' in error)) return false;
   const meta = (error as { meta?: { target?: unknown } }).meta;
-  if (!meta || !Array.isArray(meta.target)) return false;
-  return meta.target.includes('id');
+  if (!meta) return false;
+
+  if (Array.isArray(meta.target)) {
+    return meta.target.some((target) => {
+      if (typeof target !== 'string') return false;
+      const normalized = target.toLowerCase();
+      return normalized === 'id' || normalized.includes('trophy_pkey');
+    });
+  }
+
+  if (typeof meta.target === 'string') {
+    const normalized = meta.target.toLowerCase();
+    return normalized === 'id' || normalized.includes('trophy_pkey');
+  }
+
+  return false;
+}
+
+function getPrismaP2002Target(error: unknown): string {
+  if (typeof error !== 'object' || error === null || !('meta' in error)) return 'unknown';
+  const meta = (error as { meta?: { target?: unknown } }).meta;
+  if (!meta || !('target' in meta)) return 'unknown';
+
+  const target = meta.target;
+  if (Array.isArray(target)) return target.map(String).join(', ');
+  if (typeof target === 'string') return target;
+  return 'unknown';
+}
+
+function getPrismaMetaJson(error: unknown): string {
+  if (typeof error !== 'object' || error === null || !('meta' in error)) return 'unknown';
+  const meta = (error as { meta?: unknown }).meta;
+  if (!meta) return 'unknown';
+  try {
+    return JSON.stringify(meta);
+  } catch {
+    return 'unserializable-meta';
+  }
 }
 
 async function repairTrophyIdSequence(): Promise<void> {
@@ -34,16 +70,58 @@ async function createTrophyWithIdSequenceRecovery(data: {
   teamId: number;
   competitionGroupId: number;
 }): Promise<Trophy> {
-  try {
-    return await prisma.trophy.create({ data });
-  } catch (error) {
-    if (!isPrismaP2002(error) || !hasUniqueIdTarget(error)) {
+  const findExistingByNaturalKey = async (): Promise<Trophy | null> => {
+    return prisma.trophy.findFirst({
+      where: {
+        competitionGroupId: data.competitionGroupId,
+        season: data.season,
+        saveId: data.saveId,
+      },
+    });
+  };
+
+  try { return await prisma.trophy.create({ data }); } 
+  catch (error) {
+    if (!isPrismaP2002(error)) throw error;
+    const existingByNaturalKey = await findExistingByNaturalKey();
+    if (existingByNaturalKey) return existingByNaturalKey;
+
+    if (!hasUniqueIdTarget(error)) {
+      console.error('Trophy create failed with non-id P2002 target:', getPrismaP2002Target(error), 'meta:', getPrismaMetaJson(error));
       throw error;
     }
 
     console.warn('Detected Trophy.id sequence drift. Repairing sequence and retrying create once...');
     await repairTrophyIdSequence();
-    return await prisma.trophy.create({ data });
+    try { return await prisma.trophy.create({ data }); } 
+    catch (retryError) {
+      if (!isPrismaP2002(retryError)) throw retryError;
+
+      const existingAfterRetry = await findExistingByNaturalKey();
+      
+      if (existingAfterRetry) return existingAfterRetry;
+      console.error('Trophy create still failing after sequence repair. P2002 target:', getPrismaP2002Target(retryError), 'meta:', getPrismaMetaJson(retryError));
+
+      const maxIdResult = await prisma.trophy.aggregate({ _max: { id: true } });
+      const nextId = (maxIdResult._max.id ?? 0) + 1;
+
+      try {
+        return await prisma.trophy.create({
+          data: {
+            id: nextId,
+            ...data,
+          },
+        });
+      }
+      catch (manualIdError) {
+        if (!isPrismaP2002(manualIdError)) throw manualIdError;
+
+        const existingAfterManualInsert = await findExistingByNaturalKey();
+        if (existingAfterManualInsert) return existingAfterManualInsert;
+        console.error('Trophy create failed after explicit id fallback. P2002 target:', getPrismaP2002Target(manualIdError), 'meta:', getPrismaMetaJson(manualIdError));
+        throw manualIdError;
+      }
+    }
   }
 }
 
@@ -69,7 +147,14 @@ export async function addTrophyToSave(
     
     if (existingTrophy) {
       console.log('Trophy already exists for this competition and season');
-      return null;
+      if (existingTrophy.teamId !== Number(teamId)) {
+        const updatedExistingTrophy = await prisma.trophy.update({
+          where: { id: existingTrophy.id },
+          data: { teamId: Number(teamId) },
+        });
+        return updatedExistingTrophy.id;
+      }
+      return existingTrophy.id;
     }
 
     const competition = await fetchCompetition(competitionId);
@@ -81,27 +166,52 @@ export async function addTrophyToSave(
     const save = await prisma.save.findUnique({ where: { id: saveId } });
     if (!save) throw new Error('Save not found');
     
-    // Add new trophy
-    const trophy: Trophy = await createTrophyWithIdSequenceRecovery({
-      gameId: save.gameId,
-      saveId: saveId,
-      season: season,
-      teamId: Number(teamId),
-      competitionGroupId: competitionId,
-    });
+    let trophy: Trophy;
+    try {
+      trophy = await createTrophyWithIdSequenceRecovery({
+        gameId: save.gameId,
+        saveId: saveId,
+        season: season,
+        teamId: Number(teamId),
+        competitionGroupId: competitionId,
+      });
+    }
+    catch (createError) {
+      if (isPrismaP2002(createError)) {
+        console.error('Trophy insert P2002 target:', getPrismaP2002Target(createError), 'meta:', getPrismaMetaJson(createError));
+      }
+      throw createError;
+    }
 
-    // Check if the trophy matches any existing challenges
-    await addChallengeForTrophy(uid, saveId, trophy, competition.countryCode);
+    // Side-effects should not hide successful trophy creation.
+    try { await addChallengeForTrophy(uid, saveId, trophy, competition.countryCode); }
+    catch (challengeError) {
+      if (isPrismaP2002(challengeError)) {
+        console.error('Challenge side-effect P2002 target:', getPrismaP2002Target(challengeError), 'meta:', getPrismaMetaJson(challengeError));
+      }
+      else {
+        console.error('Challenge side-effect failed:', challengeError);
+      }
+    }
 
-    await evaluateAchievementsForUser({
-      userId: uid,
-      saveId,
-      gameId: save.gameId,
-      eventType: 'trophy.added',
-      eventTimestamp: new Date(),
-    });
+    try {
+      await evaluateAchievementsForUser({
+        userId: uid,
+        saveId,
+        gameId: save.gameId,
+        eventType: 'trophy.added',
+        eventTimestamp: new Date(),
+      });
+    }
+    catch (achievementError) {
+      if (isPrismaP2002(achievementError)) {
+        console.error('Achievement side-effect P2002 target:', getPrismaP2002Target(achievementError), 'meta:', getPrismaMetaJson(achievementError));
+      }
+      else {
+        console.error('Achievement side-effect failed:', achievementError);
+      }
+    }
 
-    // Return the ID of the newly created trophy
     return trophy.id;
   } 
   catch (error) {
