@@ -12,38 +12,29 @@ export default function ChallengeGoalCard({ goal, selectedUserChallenge }: Chall
   const isCompleted = goalProgress?.isComplete || false;
   
   return (
-    <div 
-      key={goal.id} 
-      className={`p-4 rounded-lg transition-all duration-200 border-l-4 ${
-        isCompleted 
-          ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 border-l-green-500' 
-          : 'bg-gray-50 dark:bg-zinc-800/40 border border-gray-200 dark:border-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-800/60 border-l-amber-400'
+    <div
+      key={goal.id}
+      className={`rounded-2xl border p-4 transition-all duration-200 ${
+        isCompleted
+          ? 'border-emerald-400/45 bg-emerald-400/10'
+          : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]/70 hover:border-[var(--color-highlight)]/45'
       }`}
     >
-      <div className="flex items-start gap-4">
-        {/* Completion icon - vertically centered */}
-        <div className="flex-shrink-0 flex items-center justify-center">
-          <span className={`text-2xl ${isCompleted ? 'text-green-600' : 'text-amber-500'}`}>
-            {isCompleted ? '✅' : '⏳'}
-          </span>
+      <div className="flex items-start gap-3">
+        <div className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-black ${
+          isCompleted
+            ? 'bg-emerald-300/20 text-emerald-200'
+            : 'bg-amber-300/20 text-amber-200'
+        }`}>
+          {isCompleted ? '✓' : '•'}
         </div>
-        
-        {/* Content section */}
-        <div className="flex-1 space-y-3 border-l pl-4">
-          {/* Goal description */}
-          <div className={`text-base ${
-            isCompleted 
-              ? 'text-gray-700 dark:text-gray-200' 
-              : 'text-gray-700 dark:text-gray-200'
-          }`}>
-            {goal.description}
-          </div>
-          
-          {/* Related entities */}
-          <div className="flex flex-wrap gap-2 items-center">
-            {/* Country flag */}
+
+        <div className="min-w-0 flex-1 space-y-3">
+          <div className="text-base text-white">{goal.description}</div>
+
+          <div className="flex flex-wrap items-center gap-2">
             {goal.country && (
-              <div className="flex items-center gap-1.5 px-2 py-1 bg-blue-50 dark:bg-blue-900/20 rounded-md">
+              <div className="flex items-center gap-1.5 rounded-md border border-sky-300/35 bg-sky-400/15 px-2 py-1">
                 <Image 
                   src={goal.country.flag} 
                   alt={goal.country.name}
@@ -51,15 +42,14 @@ export default function ChallengeGoalCard({ goal, selectedUserChallenge }: Chall
                   height={12}
                   className="rounded-sm"
                 />
-                <span className="text-xs font-medium text-blue-700 dark:text-blue-300">
+                <span className="text-xs font-semibold text-sky-100">
                   {goal.country.name}
                 </span>
               </div>
             )}
-            
-            {/* Competition logo */}
+
             {goal.competition && (
-              <div className="flex items-center gap-1.5 px-2 py-1 bg-purple-50 dark:bg-purple-900/20 rounded-md">
+              <div className="flex items-center gap-1.5 rounded-md border border-white/35 bg-white/85 px-2 py-1 text-slate-800">
                 {goal.competition.logoUrl && (
                   <Image 
                     src={goal.competition.logoUrl} 
@@ -69,19 +59,18 @@ export default function ChallengeGoalCard({ goal, selectedUserChallenge }: Chall
                     className="rounded-sm"
                   />
                 )}
-                <span className="text-xs font-medium text-purple-700 dark:text-purple-300">
+                <span className="text-xs font-semibold text-slate-800">
                   {goal.competition.displayName}
                 </span>
               </div>
             )}
-            
-            {/* Team logos */}
+
             {goal.teams && goal.teams.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
                 {goal.teams.map((goalTeam) => (
                   <div 
                     key={goalTeam.id} 
-                    className="flex items-center gap-1.5 px-2 py-1 bg-orange-50 dark:bg-orange-900/20 rounded-md"
+                    className="flex items-center gap-1.5 rounded-md border border-amber-300/30 bg-amber-300/12 px-2 py-1"
                   >
                     <Image 
                       src={goalTeam.team.logo} 
@@ -90,7 +79,7 @@ export default function ChallengeGoalCard({ goal, selectedUserChallenge }: Chall
                       height={16}
                       className="rounded-sm"
                     />
-                    <span className="text-xs font-medium text-orange-700 dark:text-orange-300">
+                    <span className="text-xs font-semibold text-amber-100">
                       {goalTeam.team.name}
                     </span>
                   </div>
