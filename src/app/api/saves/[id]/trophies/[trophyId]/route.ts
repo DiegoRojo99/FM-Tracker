@@ -39,7 +39,24 @@ export async function PUT(req: NextRequest) {
         return NextResponse.json({ error: 'At least one field must be provided for update' }, { status: 400 });
       }
 
-      const success = await updateTrophy(Number(trophyId), body);
+      const normalizedTeamId = body.teamId !== undefined ? Number(body.teamId) : undefined;
+      const normalizedCompetitionId = body.competitionId !== undefined ? Number(body.competitionId) : undefined;
+
+      if (body.teamId !== undefined && Number.isNaN(normalizedTeamId)) {
+        return NextResponse.json({ error: 'Invalid teamId. Expected a number.' }, { status: 400 });
+      }
+
+      if (body.competitionId !== undefined && Number.isNaN(normalizedCompetitionId)) {
+        return NextResponse.json({ error: 'Invalid competitionId. Expected a number.' }, { status: 400 });
+      }
+
+      const updates = {
+        teamId: normalizedTeamId,
+        season: body.season,
+        competitionId: normalizedCompetitionId,
+      };
+
+      const success = await updateTrophy(Number(trophyId), updates);
       if (!success) return NextResponse.json({ error: 'Failed to update trophy' }, { status: 500 });
       return NextResponse.json({ message: 'Trophy updated successfully' }, { status: 200 });
     } 

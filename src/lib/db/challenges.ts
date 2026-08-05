@@ -131,6 +131,11 @@ export async function addChallengeForTrophy(
   trophyData: Trophy,
   countryCode?: string
 ): Promise<void> {
+  const resolvedCountryCode = countryCode ?? await prisma.competitionGroup.findUnique({
+    where: { id: trophyData.competitionGroupId },
+    select: { countryCode: true },
+  }).then((competition) => competition?.countryCode);
+
   const matchingChallenges = await checkForMatchingChallenges(trophyData);
   const saveTrophies = await getTrophiesForSave(saveId);
   if (!saveTrophies.includes(trophyData)) saveTrophies.push(trophyData);
@@ -139,7 +144,7 @@ export async function addChallengeForTrophy(
     const processedGoals: CareerChallengeGoalInput[] = filterCompletedChallengeGoalsBasedOnTrophies(
       challenge,
       [...saveTrophies, trophyData],
-      countryCode
+      resolvedCountryCode
     );
 
     await upsertCareerChallenge(uid, saveId, trophyData.gameId, challenge.id, processedGoals);
@@ -297,7 +302,10 @@ function filterGoalByTrophy(
   if (goal.teams?.length && goal.teams.every(team => team.teamId !== trophy.teamId)) {
     return false;
   }
-  if (goal.countryId && goal.countryId !== countryCode) {
+  if (goal.country && countryCode && goal.country.code !== countryCode) {
+    return false;
+  }
+  if (goal.country && !countryCode) {
     return false;
   }
   return true;

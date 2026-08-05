@@ -250,23 +250,34 @@ export async function countAllTrophiesForUser(userId: string): Promise<number> {
 
 export async function updateTrophy(
   trophyId: number,
-  updates: { teamId?: number; season?: string; competitionId?: number }
+  updates: { teamId?: number | string; season?: string; competitionId?: number | string }
 ): Promise<boolean> {
   try {
     const trophy = await getTrophyById(trophyId);
     if (!trophy) throw new Error('Trophy not found');
+
+    const normalizedTeamId = updates.teamId !== undefined ? Number(updates.teamId) : undefined;
+    const normalizedCompetitionId = updates.competitionId !== undefined ? Number(updates.competitionId) : undefined;
+
+    if (updates.teamId !== undefined && Number.isNaN(normalizedTeamId)) {
+      throw new Error('Invalid teamId for updateTrophy');
+    }
+
+    if (updates.competitionId !== undefined && Number.isNaN(normalizedCompetitionId)) {
+      throw new Error('Invalid competitionId for updateTrophy');
+    }
     
     // Prepare updated data
     const updateData: Partial<Trophy> = {};
     
     // If team is being updated, fetch new team data
-    if (updates.teamId && updates.teamId !== trophy.teamId) {
-      updateData.teamId = updates.teamId;
+    if (normalizedTeamId !== undefined && normalizedTeamId !== trophy.teamId) {
+      updateData.teamId = normalizedTeamId;
     }
     
     // If competition is being updated, fetch new competition data
-    if (updates.competitionId && updates.competitionId !== trophy.competitionGroupId) {
-      updateData.competitionGroupId = updates.competitionId;
+    if (normalizedCompetitionId !== undefined && normalizedCompetitionId !== trophy.competitionGroupId) {
+      updateData.competitionGroupId = normalizedCompetitionId;
     }
     
     // Update season if provided

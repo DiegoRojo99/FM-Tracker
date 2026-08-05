@@ -41,7 +41,10 @@ function filterGoalByTrophy(
   if (goal.teams?.length && goal.teams.every((team) => team.teamId !== trophy.teamId)) {
     return false;
   }
-  if (goal.countryId && goal.countryId !== countryCode) {
+  if (goal.country && countryCode && goal.country.code !== countryCode) {
+    return false;
+  }
+  if (goal.country && !countryCode) {
     return false;
   }
   return true;

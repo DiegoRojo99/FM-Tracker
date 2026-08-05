@@ -98,9 +98,9 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
           'Authorization': `Bearer ${userToken}`,
         },
         body: JSON.stringify({
-          teamId: selectedTeam.id.toString(),
+          teamId: selectedTeam.id,
           season: season,
-          competitionId: competition.id.toString(),
+          competitionId: competition.id,
           countryCode: competition.countryCode.toString(),
         }),
       });
