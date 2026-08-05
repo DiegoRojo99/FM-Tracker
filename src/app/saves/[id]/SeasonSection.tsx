@@ -63,7 +63,7 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
 
   const handleAddSeason = async (season: SeasonInput) => {
     const result = await onAddSeason(season);
-    if (!result) return;
+    if (!result) return false;
     setRefresh(true);
     setModalOpen(false);
     return true;
