@@ -130,9 +130,8 @@ async function runTrophySideEffects(params: {
   saveId: string;
   trophy: Trophy;
   gameId: string;
-  competitionCountryCode?: string;
 }): Promise<void> {
-  const { uid, saveId, trophy, gameId, competitionCountryCode } = params;
+  const { uid, saveId, trophy, gameId } = params;
 
   try {
     await addChallengeForTrophy(uid, saveId, trophy);
@@ -204,7 +203,6 @@ export async function addTrophyToSave(
           saveId,
           trophy: updatedExistingTrophy,
           gameId: save.gameId,
-          competitionCountryCode: competition.countryCode,
         });
         return updatedExistingTrophy.id;
       }
@@ -214,7 +212,6 @@ export async function addTrophyToSave(
         saveId,
         trophy: existingTrophy,
         gameId: save.gameId,
-        competitionCountryCode: competition.countryCode,
       });
       return existingTrophy.id;
     }
@@ -244,7 +241,6 @@ export async function addTrophyToSave(
       saveId,
       trophy,
       gameId: save.gameId,
-      competitionCountryCode: competition.countryCode,
     });
 
     return trophy.id;
