@@ -1,8 +1,8 @@
-import BlurredCard from "@/app/components/BlurredCard";
 import ConfirmationModal from "@/app/components/modals/ConfirmationModal";
 import { useState } from "react";
 import Image from "next/image";
 import { SeasonSummary } from "@/lib/types/prisma/Season";
+import { ArrowDown, ArrowUp, Medal, Trash2, Trophy } from "lucide-react";
 
 type SeasonCardProps = {
   season: SeasonSummary;
@@ -20,6 +20,7 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const leagueResult = season.leagueResult;
   const cupResults = season.cupResults;
+  const hasCupRuns = Boolean(cupResults?.length);
 
   const handleDelete = () => {
     setShowDeleteConfirmation(true);
@@ -30,95 +31,116 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
     setShowDeleteConfirmation(false);
   };
 
-  return (
-    <BlurredCard className="min-w-[270px] sm:min-w-[320px]">
-      <div className="flex flex-col h-full w-full p-2 gap-4">
-      {/* Delete button */}
-      {onDelete && (
-        <div className="flex justify-end">
-          <Image 
-            src="/trash.svg" 
-            alt="Delete season" 
-            width={16} 
-            height={16} 
-            onClick={handleDelete}
-            className="h-4 w-4 white-image hover:cursor-pointer hover:opacity-80 hover:scale-110 transition-transform" 
-          />
-        </div>
-      )}
-      
-      {/* Team information */}
-      <div className="flex flex-col items-center mb-2">
-        <Image
-          src={season.team.logo}
-          alt={season.team.name}
-          className="h-16 w-auto object-contain"
-          width={128}
-          height={128}
-          unoptimized
-        />
-        <span className="font-medium">{season.team.name}</span>
-      </div>
+  const hasLeagueTitle = leagueResult?.position === 1;
+  const movementLabel = leagueResult?.promoted
+    ? "Promoted"
+    : leagueResult?.relegated
+      ? "Relegated"
+      : null;
 
-      {/* League result */}
-      {leagueResult && (
-        <div className="border-t pt-3">
-          <h3 className="font-semibold mb-2">League</h3>
-          <div className="flex items-center gap-3">
-            {leagueResult.competition.logoUrl && (
-              <Image
-                src={leagueResult.competition.logoUrl}
-                alt={leagueResult.competition.name ?? 'League Logo'}
-                className="h-10 w-auto"
-                width={150}
-                height={150}
-                unoptimized
-              />
-            )}
-            <p className="text-sm font-medium ml-1">{leagueResult.competition.name}</p>
-            <span className="ml-auto text-sm">
-              {leagueResult.position ? `${getOrdinal(leagueResult.position)}` : 'N/A'}
-              {leagueResult.position === 1 && ' 🏆'}
-              {leagueResult.promoted && ' ⬆️'}
-              {leagueResult.relegated && ' ⬇️'}
-            </span>
+  const movementClass = leagueResult?.promoted
+    ? "bg-emerald-500/15 text-emerald-300"
+    : "bg-rose-500/15 text-rose-300";
+
+  return (
+    <div className="glass-panel h-full w-full overflow-hidden rounded-2xl p-4 transition-transform duration-300 hover:-translate-y-0.5">
+      <div className="flex h-full w-full flex-col gap-4 text-white">
+        <div className="flex items-start justify-between gap-3">
+          <div className="inline-flex items-center rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+            {season.season}
+          </div>
+
+          {onDelete && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-700 transition-colors hover:bg-rose-500/20"
+              aria-label="Delete season"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        <div className="flex min-w-0 items-center gap-3 border-b border-[var(--color-surface-border)] pb-3">
+          <Image
+            src={season.team.logo}
+            alt={season.team.name}
+            className="h-12 w-12 shrink-0 rounded-lg object-contain"
+            width={96}
+            height={96}
+            unoptimized
+          />
+          <div className="min-w-0">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">Club</p>
+            <p className="truncate text-base font-bold text-white">{season.team.name}</p>
           </div>
         </div>
-      )}
-      
-      {/* Cup results */}
-      {cupResults?.length ? (
-        <div className="pt-3">
-          <h3 className="font-semibold mb-2">Cup Runs</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-            {cupResults.map(cup => (
-              <div key={cup.competitionId} className="flex items-center gap-2 text-sm">
-                {cup.competition.logoUrl && <Image
-                  src={cup.competition.logoUrl}
-                  alt={cup.competition.name}
-                  className="h-10 w-auto"
-                  width={150}
-                  height={150}
+
+        {leagueResult && (
+          <div className={`space-y-2 ${hasCupRuns ? "border-b border-[var(--color-surface-border)] pb-3" : ""}`}>
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">League</h3>
+              {movementLabel ? (
+                <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold ${movementClass}`}>
+                  {leagueResult.promoted && <ArrowUp className="h-3 w-3" />}
+                  {leagueResult.relegated && <ArrowDown className="h-3 w-3" />}
+                  {movementLabel}
+                </span>
+              ) : null}
+            </div>
+
+            <div className="flex min-w-0 items-center gap-3">
+              {leagueResult.competition.logoUrl && (
+                <Image
+                  src={leagueResult.competition.logoUrl}
+                  alt={leagueResult.competition.name ?? "League Logo"}
+                  className="h-9 w-9 shrink-0 object-contain"
+                  width={72}
+                  height={72}
                   unoptimized
-                />}
-                <div className="flex flex-col ml-2">
-                  <span className="font-medium">{cup.competition.name}</span>
-                  <span className="text-zinc-500">{cup.reachedRound}{cup.reachedRound === 'Winners' && ' 🏆'}</span>
-                </div>
+                />
+              )}
+              <p className="min-w-0 flex-1 truncate text-sm font-semibold text-white">{leagueResult.competition.name}</p>
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-2 py-1 text-xs font-bold text-[var(--color-text-muted)]">
+                <Medal className="h-3.5 w-3.5" />
+                {leagueResult.position ? getOrdinal(leagueResult.position) : "N/A"}
+              </span>
+            </div>
+
+            {hasLeagueTitle && (
+              <div className="mt-2 inline-flex items-center gap-1 rounded-lg bg-amber-500/20 px-2 py-1 text-xs font-semibold text-amber-300">
+                <Trophy className="h-3.5 w-3.5" />
+                Champions
+              </div>
+            )}
+          </div>
+        )}
+
+        {hasCupRuns ? (
+          <>
+            <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">Cup Runs</h3>
+            {cupResults.map((cup) => (
+              <div key={cup.competitionId} className="flex min-w-0 items-center gap-3 py-1">
+                {cup.competition.logoUrl && (
+                  <Image
+                    src={cup.competition.logoUrl}
+                    alt={cup.competition.name}
+                    className="h-8 w-8 shrink-0 object-contain"
+                    width={64}
+                    height={64}
+                    unoptimized
+                  />
+                )}
+                <p className="min-w-0 flex-1 truncate text-sm font-semibold text-white">{cup.competition.name}</p>
+                <span className="shrink-0 text-xs font-semibold text-[var(--color-text-muted)]">
+                  {cup.reachedRound}
+                  {cup.reachedRound === "Winners" && " • Winners"}
+                </span>
               </div>
             ))}
-          </div>
-        </div>
-      ) : (
-        <div className="pt-3">
-          <h3 className="font-semibold mb-2">Cup Runs</h3>
-          <p className="text-zinc-500">No cup runs to display</p>
-        </div>
-      )}
-
-      {/* Season info */}
-      <div className="flex-grow w-full h-full" />
-      <h3 className="text-lg font-semibold text-center">{season.season}</h3>
+          </>
+        ) : null}
       </div>
 
       <ConfirmationModal
@@ -130,6 +152,6 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
         confirmText="Delete"
         destructive={true}
       />
-    </BlurredCard>
+    </div>
   )
 }
