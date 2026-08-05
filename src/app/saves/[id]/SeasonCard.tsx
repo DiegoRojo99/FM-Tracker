@@ -146,9 +146,8 @@ export function SeasonCard({ season, onDelete, onEdit }: SeasonCardProps) {
                   />
                 )}
                 <p className="min-w-0 flex-1 truncate text-sm font-semibold text-white">{cup.competition.name}</p>
-                <span className="shrink-0 text-xs font-semibold text-[var(--color-text-muted)]">
+                <span className={`shrink-0 text-xs font-semibold ${cup.reachedRound !== "Winners" ? "text-[var(--color-text-muted)]" : "text-green-400"}`}>
                   {cup.reachedRound}
-                  {cup.reachedRound === "Winners" && " • Winners"}
                 </span>
               </div>
             ))}
