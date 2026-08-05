@@ -1,97 +1,121 @@
-# Feature Implementation Plan (Dependency-Ordered)
+# User-Centered Feature Roadmap (Dependency-Ordered)
 
-This plan is ordered so each feature builds on prerequisites from earlier phases.
+This roadmap is organized around user outcomes first. Each phase targets a clear user problem and includes measurable success signals.
 
-## Phase 1: Foundations and Reliability
+## Target Users
 
-### 1) Data Model and Migration Hardening
-- [x] Audit current Prisma schema for missing indexes and unique constraints
-- [x] Define migration naming convention and rollback notes for each migration
-- [x] Add seed/update scripts for core reference data integrity
-- [x] Document safe migration workflow for local/staging/production
+- New players: users creating their first tracked save
+- Active solo players: users tracking progress weekly
+- Social competitors: users comparing and sharing progress with friends
+- Returning users: users who went inactive and need a reason to come back
 
-### 2) Authentication and Authorization Baseline
-- [x] Review auth flows (login/session) for edge cases and expiry handling
-- [x] Add route protection matrix (public/user/admin) across app routes
-- [x] Add server-side permission checks for admin APIs
-- [x] Add unauthorized access tests for protected endpoints
+## Phase 1: New User Activation (First 10 Minutes)
 
-### 3) API Contract Consistency
-- [x] Standardize API response shape for success/error payloads
-- [x] Add shared DTO/validation layer for request inputs
-- [x] Add centralized error mapping (validation/auth/not-found/conflict)
-- [x] Add basic API integration tests for key routes
+### 1) Fast Onboarding Flow
+- [x] Add guided first-save setup with 3 steps max
+- [x] Add starter challenge recommendation based on save type
+- [x] Add onboarding checklist on dashboard (first save, first challenge, first milestone)
+- [x] Add empty-state CTAs across saves/challenges/trophies
 
-## Phase 2: Core User Product Flow
+### 2) First Value Moments
+- [x] Show instant progress card after creating a save
+- [ ] Add quick-win achievements designed to unlock in session one
+- [x] Add "What to do next" module after each major user action
+- [ ] Add welcome feed item that explains social features without forcing them
 
-### 4) Save Management (Create/Edit/Delete)
-- [x] Finalize save creation/edit UX and validation rules
-- [x] Add optimistic UI for save updates with rollback on failure
-- [x] Add filtering/sorting for saves list
-- [x] Add tests for save lifecycle scenarios
+### Activation Success Metrics
+- [ ] Increase first-save completion rate
+- [ ] Increase first-challenge-start rate within same session
+- [ ] Reduce time-to-first-meaningful-action
 
-### 5) Challenges Engine Stability
-- [x] Validate challenge assignment rules and duplicate prevention
-- [x] Add completion progress calculation consistency checks
-- [x] Improve challenge detail page states (loading/empty/error)
-- [x] Add tests for challenge progression and completion outcomes
+## Phase 2: Weekly Habit Loop (Core Retention)
 
-### 6) Trophy and Progress Tracking
-- [x] Define clear criteria mapping between events and trophy unlocks
-- [x] Implement deterministic unlock processing on backend
-- [x] Add user progress summary cards and historical timeline
-- [x] Add tests for unlock edge cases and idempotency
+### 3) Save Update Experience
+- [ ] Add one-click "log session" flow (date, key result, optional notes)
+- [ ] Add lightweight weekly summary auto-generated from save activity
+- [ ] Add streak tracking based on consistent updates
+- [ ] Add reminder preferences (in-app cadence control)
 
-## Phase 3: Social Layer
+### 4) Progress Motivation System
+- [ ] Add milestone ladder view for each active save
+- [ ] Add challenge progress confidence indicator (on track, at risk, behind)
+- [ ] Add trophy path preview showing nearest unlocks
+- [ ] Add personal best timeline (longest save, fastest challenge completion, etc.)
 
-### 7) Friends System Completion
-- [x] Finalize friend request states (pending/accepted/declined/cancelled)
-- [x] Add mutual friendship consistency checks in DB operations
-- [x] Add friend discovery and search UX improvements
-- [x] Add tests for request lifecycle and duplicate prevention
+### Retention Success Metrics
+- [ ] Increase 7-day and 30-day returning user rate
+- [ ] Increase average updates per active save per week
+- [ ] Increase challenge completion rate
 
-### 8) Activity Feed and Social Events
-- [x] Define event types to publish (save milestones, challenge completions, trophies)
-- [x] Build activity feed query with pagination and visibility rules
-- [x] Add feed UI with grouped timestamps and empty states
-- [x] Add tests for privacy filtering and feed ordering
+## Phase 3: Social Motivation (Meaningful Multiplayer Layer)
 
-## Phase 4: Discovery and Performance
+### 5) Better Friend Discovery and Conversion
+- [ ] Add smarter friend search with mutual context (shared leagues/challenges)
+- [ ] Add profile previews before sending friend requests
+- [ ] Add "suggested friends" module based on activity similarity
+- [ ] Add clearer request-state UX with next-best action
 
-### 9) Search and Indexing Improvements
-- [x] Review Algolia indexing coverage and missing entities
-- [ ] Add index sync/rebuild script with verification output
-- [ ] Improve search relevance settings and typo tolerance
-- [ ] Add smoke tests for common search scenarios
+### 6) Competitive and Cooperative Loops
+- [ ] Add friend leaderboards (opt-in) for selected challenge categories
+- [ ] Add monthly mini-leagues with simple rules and auto-reset
+- [ ] Add "challenge a friend" flow with acceptance and tracking
+- [ ] Add social badges for participation, wins, and consistency
 
-### 10) Performance and Caching
-- [ ] Profile slow pages and APIs (DB query + render time)
-- [x] Add cache strategy for read-heavy endpoints
-- [x] Add pagination/limits where payloads are large
-- [ ] Add performance budgets for key pages and endpoints
+### Social Success Metrics
+- [ ] Increase friend request acceptance rate
+- [ ] Increase users with at least one social interaction per week
+- [ ] Increase retention delta for social users vs solo users
 
-## Phase 5: Quality, Operations, and Release
+## Phase 4: Personalization and Discovery
 
-### 11) Observability and Monitoring
-- [ ] Add structured logging for API and background jobs
-- [ ] Add error tracking integration for client/server
-- [ ] Add health checks for DB and critical integrations
-- [ ] Define on-call runbook for high-impact failures
+### 7) Personalized Home and Recommendations
+- [ ] Add dynamic home sections based on user behavior (new, active, returning)
+- [ ] Add personalized challenge recommendations using recent progress and interests
+- [ ] Add "because you completed" recommendation trails
+- [ ] Add profile-level goals users can set and adjust monthly
 
-### 12) Test Coverage and CI Hardening
-- [ ] Expand unit/integration tests for high-risk modules
-- [ ] Add end-to-end tests for core user journeys
-- [ ] Enforce lint/type/test gates in CI
-- [ ] Add migration checks in CI for schema drift detection
+### 8) Search That Feels Useful
+- [ ] Add user-intent search presets (challenges, friends, saves, trophies)
+- [ ] Add typo-tolerant and synonym-aware search tuning
+- [ ] Add quick filters for difficulty, duration, and popularity
+- [ ] Add search result explanations for recommended items
 
-### 13) Release Readiness and Docs
-- [ ] Create release checklist (migrations, env vars, rollback)
-- [ ] Update README with setup, scripts, and architecture notes
-- [ ] Add admin operations guide for content/data maintenance
-- [ ] Draft post-release verification checklist
+### Personalization Success Metrics
+- [ ] Increase click-through on recommended challenges
+- [ ] Increase search-to-action conversion (view -> start/join)
+- [ ] Reduce no-result and abandoned-search sessions
+
+## Phase 5: Re-Engagement and Long-Term Value
+
+### 9) Comeback Journeys for Inactive Users
+- [ ] Add return screen with "since you were away" summary
+- [ ] Add comeback challenge packs with low-friction restart goals
+- [ ] Add friend activity highlights relevant to user interests
+- [ ] Add paused-save reactivation prompts
+
+### 10) Seasonal Content and Community Moments
+- [ ] Add rotating seasonal challenge sets
+- [ ] Add time-limited community goals with shared progress bars
+- [ ] Add milestone recap cards users can share externally
+- [ ] Add end-of-month performance recap for every active user
+
+### Re-Engagement Success Metrics
+- [ ] Increase reactivation rate of inactive users
+- [ ] Increase second-month retention after reactivation
+- [ ] Increase participation in limited-time events
 
 ## Dependencies Summary
 
-- Phases 1-2 should be completed before major social expansion.
-- Social features (Phase 3) should be in place before ranking/discovery improvements.
-- Performance and observability (Phases 4-5) should run continuously, but hardening is most valuable after core flows stabilize.
+- Phase 1 must be completed before optimization of retention and social loops.
+- Phase 2 habit loops should stabilize before competitive layers in Phase 3.
+- Phase 3 social signals improve recommendation quality in Phase 4.
+- Phase 5 is most effective once Phases 1-4 provide stable core value.
+
+## Working Rule for Future Prioritization
+
+Only prioritize features that directly improve one of these user outcomes:
+- faster first value
+- stronger weekly habit
+- meaningful social motivation
+- better personalized discovery
+- higher comeback rate

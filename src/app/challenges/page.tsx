@@ -1,6 +1,7 @@
 'use client';
 import ChallengeSection from './ChallengeSection';
 import { useEffect, useState } from "react";
+import Link from 'next/link';
 import { CareerChallengeWithDetails, Challenge } from "@/lib/types/prisma/Challenge";
 import FootballLoader from "../components/FootBallLoader";
 import { useAuth } from "../components/AuthProvider";
@@ -183,13 +184,39 @@ export default function ChallengesPage() {
       </div>
 
       <div className="mt-8 space-y-8">
+        {user && totalCount > 0 && filteredUserChallenges.length === 0 && (
+          <div className="rounded-2xl border border-[var(--color-highlight)]/35 bg-[var(--color-highlight)]/10 p-5 shadow-lg">
+            <h2 className="text-lg font-bold text-white">No active challenges yet</h2>
+            <p className="mt-1 text-sm text-[var(--color-text-muted)]">
+              Start one challenge now to unlock progression, achievement momentum, and clearer next steps for this save.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a href="#challenge-sections" className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-[var(--color-background)] transition hover:opacity-90">
+                Pick a Starter Challenge
+              </a>
+              <Link href="/saves" className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+                Back to Saves
+              </Link>
+            </div>
+          </div>
+        )}
+
         {totalCount === 0 && (
           <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-8 text-center shadow-lg">
             <Flag className="mx-auto h-8 w-8 text-[var(--color-highlight)]" />
             <p className="mt-3 text-sm text-[var(--color-text-muted)]">No challenges available right now.</p>
+            <div className="mt-4 flex flex-wrap justify-center gap-3">
+              <Link href="/saves" className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-[var(--color-background)] transition hover:opacity-90">
+                Create or Open a Save
+              </Link>
+              <Link href="/trophies" className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+                Explore Trophy Tracker
+              </Link>
+            </div>
           </div>
         )}
 
+        <div id="challenge-sections" className="space-y-8">
           {sectionOrder.map(section => {
             const sectionChallenges = challengeGroups[section.key];
             return (
@@ -201,6 +228,7 @@ export default function ChallengesPage() {
               />
             );
           })}
+        </div>
       </div>
     </div>
   );

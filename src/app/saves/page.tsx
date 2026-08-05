@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useAuth } from '../components/AuthProvider';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
 import FootballLoader from '../components/FootBallLoader';
@@ -9,14 +10,17 @@ import { SaveCard } from './SaveCard';
 import GradientButton from '../components/GradientButton';
 import { Game } from '@/lib/types/prisma/Game';
 import { PreviewSave, Save } from '@/lib/types/prisma/Save';
-import { PlusCircle, Save as SaveIcon, SlidersHorizontal } from 'lucide-react';
+import { CheckCircle2, Compass, PlusCircle, Save as SaveIcon, SlidersHorizontal, Target, Trophy, Users } from 'lucide-react';
 import { AnalyticsEvents, trackEvent } from '@/lib/analytics/events';
 import { applyOptimisticSaveRemoval, rollbackOptimisticSaveRemoval } from '@/lib/saves/optimistic';
 
 export default function SavesPage() {
+  const searchParams = useSearchParams();
   const { user, userLoading } = useAuth();
   const [saves, setSaves] = useState<PreviewSave[]>([]);
   const [games, setGames] = useState<Game[]>([]);
+  const [startedChallengesCount, setStartedChallengesCount] = useState(0);
+  const [trophyGroupsCount, setTrophyGroupsCount] = useState(0);
   const [selectedGameFilter, setSelectedGameFilter] = useState<string>('all');
   const [sortOrder, setSortOrder] = useState<'latest' | 'oldest'>('latest');
   const [loading, setLoading] = useState(true);
@@ -33,19 +37,29 @@ export default function SavesPage() {
     const fetchData = async () => {
       const token = await user.getIdToken();
       
-      // Fetch saves and games in parallel
-      const [savesResponse, gamesResponse] = await Promise.all([
+      // Fetch onboarding-relevant data in parallel
+      const [savesResponse, gamesResponse, userChallengesResponse, trophiesResponse] = await Promise.all([
         fetch('/api/saves', {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch('/api/games?active=true')
+        fetch('/api/games?active=true'),
+        fetch('/api/challenges/user', {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch('/api/trophies', {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
       ]);
 
       const savesData = await savesResponse.json();
       const gamesData = await gamesResponse.json();
+      const userChallengesData = userChallengesResponse.ok ? await userChallengesResponse.json() : [];
+      const trophiesData = trophiesResponse.ok ? await trophiesResponse.json() : [];
       
       setSaves(savesData);
       setGames(gamesData.games || []);
+      setStartedChallengesCount(Array.isArray(userChallengesData) ? userChallengesData.length : 0);
+      setTrophyGroupsCount(Array.isArray(trophiesData) ? trophiesData.length : 0);
       setLoading(false);
     };
 
@@ -147,6 +161,13 @@ export default function SavesPage() {
   }
 
   const selectedGameName = games.find((g) => g.id === selectedGameFilter)?.name || 'selected game';
+  const hasFirstSave = saves.length > 0;
+  const hasFirstChallenge = startedChallengesCount > 0;
+  const hasFirstMilestone = trophyGroupsCount > 0;
+  const onboardingStepsDone = [hasFirstSave, hasFirstChallenge, hasFirstMilestone].filter(Boolean).length;
+  const showOnboardingChecklist = hasFirstSave && onboardingStepsDone < 3;
+  const createdContext = searchParams.get('created') === '1';
+  const startType = searchParams.get('start') === 'unemployed' ? 'unemployed' : 'club';
 
   if (!saves || saves.length === 0) {
     return (
@@ -171,6 +192,14 @@ export default function SavesPage() {
           </div>
           <h2 className="text-xl font-bold text-white">No saves yet</h2>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Create your first save and start tracking your FM legacy.</p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <Link href="/challenges" className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+              Browse Challenges
+            </Link>
+            <Link href="/trophies" className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+              Explore Trophy Tracker
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -178,6 +207,53 @@ export default function SavesPage() {
 
   return (
     <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+      {createdContext && (
+        <div className="mb-6 rounded-2xl border border-[var(--color-highlight)]/45 bg-[var(--color-highlight)]/10 p-5 shadow-lg backdrop-blur-sm">
+          <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            First Value Unlocked
+          </p>
+          <h2 className="mt-2 text-2xl font-black text-white">Your save is live. Keep momentum going.</h2>
+          <p className="mt-2 text-sm text-[var(--color-text-muted)]">
+            Starter recommendation: {startType === 'unemployed' ? 'Journeyman Starter' : 'Club Builder Starter'} challenge path.
+          </p>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/70 p-3">
+              <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Saves</p>
+              <p className="mt-1 text-2xl font-black text-white">{saves.length}</p>
+            </div>
+            <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/70 p-3">
+              <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Challenges Started</p>
+              <p className="mt-1 text-2xl font-black text-white">{startedChallengesCount}</p>
+            </div>
+            <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/70 p-3">
+              <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Trophy Groups Won</p>
+              <p className="mt-1 text-2xl font-black text-white">{trophyGroupsCount}</p>
+            </div>
+          </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <Link href="/challenges" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-bold text-[var(--color-background)] transition hover:opacity-90">
+              <Target className="h-4 w-4" />
+              Start First Challenge
+            </Link>
+            <Link href="/trophies" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+              <Trophy className="h-4 w-4" />
+              Log Trophy Progress
+            </Link>
+            <Link href="/friends" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+              <Users className="h-4 w-4" />
+              Discover Friends
+            </Link>
+            <Link href="/profile" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+              <Compass className="h-4 w-4" />
+              Open Profile
+            </Link>
+          </div>
+        </div>
+      )}
+
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Career Hub</p>
@@ -194,6 +270,35 @@ export default function SavesPage() {
           </GradientButton>
         </Link>
       </div>
+
+      {showOnboardingChecklist && (
+        <div className="mb-7 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-lg backdrop-blur-sm">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Onboarding Checklist</p>
+              <h2 className="mt-1 text-xl font-black text-white">Complete your first milestone loop</h2>
+            </div>
+            <span className="rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs font-semibold text-[var(--color-text-muted)]">
+              {onboardingStepsDone}/3 complete
+            </span>
+          </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className={`rounded-xl border p-3 ${hasFirstSave ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
+              <p className="text-sm font-semibold text-white">First Save</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">Create your first tracked career save.</p>
+            </div>
+            <div className={`rounded-xl border p-3 ${hasFirstChallenge ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
+              <p className="text-sm font-semibold text-white">First Challenge</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">Start one challenge path to unlock momentum.</p>
+            </div>
+            <div className={`rounded-xl border p-3 ${hasFirstMilestone ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
+              <p className="text-sm font-semibold text-white">First Milestone</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">Record your first trophy milestone.</p>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="mb-7 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-lg backdrop-blur-sm">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -247,6 +352,12 @@ export default function SavesPage() {
               ? 'No saves found yet. Create one to start tracking your FM legacy.'
               : `No saves found for ${selectedGameName}. Try switching the game filter.`}
           </p>
+          <Link href="/add-save" className="mt-4 inline-block">
+            <GradientButton className="inline-flex items-center gap-2">
+              <PlusCircle className="h-4 w-4" />
+              Create New Save
+            </GradientButton>
+          </Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

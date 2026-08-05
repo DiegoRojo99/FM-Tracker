@@ -26,6 +26,7 @@ export default function NewSaveForm() {
   const [selectedTeam, setSelectedTeam] = useState('');
   const [selectedGame, setSelectedGame] = useState('fm26'); // Default to FM26
   const [isNoTeam, setIsNoTeam] = useState(false);
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   
   const [savingGame, setSavingGame] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -112,7 +113,7 @@ export default function NewSaveForm() {
       setSavingGame(false);
       setSubmitSuccess('Save created successfully. Redirecting to your saves...');
       setTimeout(() => {
-        router.push('/saves');
+        router.push(`/saves?created=1&start=${isNoTeam ? 'unemployed' : 'club'}`);
       }, 800);
     }
     catch (error) {
@@ -128,6 +129,17 @@ export default function NewSaveForm() {
     return new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime();
   }
 
+  function canProceedFromStep(step: 1 | 2 | 3): boolean {
+    if (step === 1) return Boolean(selectedGame);
+    if (step === 2) return isNoTeam || Boolean(selectedCountry && selectedLeague && selectedTeam);
+    return true;
+  }
+
+  const starterChallengeTitle = isNoTeam ? 'Journeyman Starter' : 'Club Builder Starter';
+  const starterChallengeDescription = isNoTeam
+    ? 'Start with a broad challenge path focused on your first appointment and survival milestones.'
+    : 'Start with a challenge path focused on squad building and first-season stability goals.';
+
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-6 rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/86 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
@@ -142,126 +154,169 @@ export default function NewSaveForm() {
       </div>
       
       <form onSubmit={handleSubmit} className="space-y-5 rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-5 shadow-2xl backdrop-blur-sm sm:p-8">
-        <div className="grid gap-5 md:grid-cols-2">
-          <div className="space-y-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
-            <label className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
-              <Gamepad2 className="h-4 w-4 text-[var(--color-highlight)]" />
-              Game Version
-            </label>
-            <select 
-              value={selectedGame}
-              onChange={e => setSelectedGame(e.target.value)} 
-              className={inputClass}
-            >
-              {[...games].sort(sortGamesByReleaseDate).map((game) => (
-                <option key={game.id} value={game.id}>
-                  {game.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="space-y-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
-            <label className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
-              <Globe2 className="h-4 w-4 text-[var(--color-highlight)]" />
-              Country
-            </label>
-            <select 
-              value={selectedCountry}
-              onChange={e => setSelectedCountry(e.target.value)} 
-              className={inputClass}
-              disabled={!countries.length || isNoTeam}
-            >
-              <option value="">-- Select a country --</option>
-              {countries.sort((a, b) => a.name.localeCompare(b.name)).map((c: Country) => (
-                <option key={c.code} value={c.code ?? ''}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="space-y-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
-          <label className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
-            <ShieldCheck className="h-4 w-4 text-[var(--color-highlight)]" />
-            League
-          </label>
-          <select 
-            value={selectedLeague}
-            onChange={e => setSelectedLeague(e.target.value)} 
-            disabled={!selectedCountry || isNoTeam} 
-            className={inputClass}
-          >
-            <option value="">-- Select a league --</option>
-            {leagues.map((l) => (
-              <option key={l.id} value={l.id}>{l.name}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="space-y-4 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
-          <label className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
-            <ClipboardList className="h-4 w-4 text-[var(--color-highlight)]" />
-            Starting Option
-          </label>
-          
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <button
-              type="button"
-              onClick={() => {
-                setIsNoTeam(false);
-                setSelectedTeam('');
-              }}
-              className={`rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 ${
-                !isNoTeam 
-                  ? 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white shadow-lg' 
-                  : 'border border-[var(--color-surface-border)] bg-[var(--color-dark)] text-gray-300'
-              }`}
-            >
-              Choose Team
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsNoTeam(true);
-                setSelectedTeam('');
-                setSelectedCountry('');
-                setSelectedLeague('');
-              }}
-              className={`rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 ${
-                isNoTeam 
-                  ? 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white shadow-lg' 
-                  : 'border border-[var(--color-surface-border)] bg-[var(--color-dark)] text-gray-300'
-              }`}
-            >
-              Unemployed
-            </button>
-          </div>
-
-          {isNoTeam ? (
-            <div className="rounded-xl border border-dashed border-[var(--color-accent)] bg-[var(--color-dark)] p-6 text-center">
-              <div className="text-6xl mb-4">🆓</div>
-              <h3 className="text-xl font-bold text-white mb-2">Unemployed Mode</h3>
-              <p className="text-gray-300">Start your career without being tied to any specific team. Perfect for a challenging journey!</p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {[1, 2, 3].map((step) => (
+            <div key={step} className={`rounded-xl border px-3 py-2 text-xs font-semibold uppercase tracking-wide ${currentStep === step ? 'border-[var(--color-highlight)] bg-[var(--color-surface-soft)] text-white' : 'border-[var(--color-surface-border)] bg-[var(--color-darker)]/70 text-[var(--color-text-muted)]'}`}>
+              Step {step}: {step === 1 ? 'Setup' : step === 2 ? 'Team' : 'Review'}
             </div>
-          ) : (
-            <div className={`transition-opacity duration-200 ${!selectedLeague ? 'opacity-50 pointer-events-none' : ''}`}>
-              { !loadingTeams && (
-                <TeamGrid
-                  teams={teams}
-                  selectedTeamId={selectedTeam}
-                  onSelect={setSelectedTeam}
-                />
-              )}
-              {loadingTeams && (
-                <div className="py-8">
-                  <FootballLoader />
+          ))}
+        </div>
+
+        {currentStep === 1 && (
+          <>
+            <div className="space-y-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
+              <label className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
+                <Gamepad2 className="h-4 w-4 text-[var(--color-highlight)]" />
+                Game Version
+              </label>
+              <select
+                value={selectedGame}
+                onChange={e => setSelectedGame(e.target.value)}
+                className={inputClass}
+              >
+                {[...games].sort(sortGamesByReleaseDate).map((game) => (
+                  <option key={game.id} value={game.id}>
+                    {game.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-4 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
+              <label className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
+                <ClipboardList className="h-4 w-4 text-[var(--color-highlight)]" />
+                Starting Option
+              </label>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsNoTeam(false);
+                    setSelectedTeam('');
+                  }}
+                  className={`rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 ${
+                    !isNoTeam
+                      ? 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white shadow-lg'
+                      : 'border border-[var(--color-surface-border)] bg-[var(--color-dark)] text-gray-300'
+                  }`}
+                >
+                  Choose Team
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsNoTeam(true);
+                    setSelectedTeam('');
+                    setSelectedCountry('');
+                    setSelectedLeague('');
+                  }}
+                  className={`rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 ${
+                    isNoTeam
+                      ? 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white shadow-lg'
+                      : 'border border-[var(--color-surface-border)] bg-[var(--color-dark)] text-gray-300'
+                  }`}
+                >
+                  Unemployed
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {currentStep === 2 && (
+          <>
+            {isNoTeam ? (
+              <div className="rounded-xl border border-dashed border-[var(--color-accent)] bg-[var(--color-dark)] p-6 text-center">
+                <div className="mb-4 text-6xl">🆓</div>
+                <h3 className="mb-2 text-xl font-bold text-white">Unemployed Mode</h3>
+                <p className="text-gray-300">Start your career without a team and take your first job from the market.</p>
+              </div>
+            ) : (
+              <>
+                <div className="grid gap-5 md:grid-cols-2">
+                  <div className="space-y-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
+                    <label className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
+                      <Globe2 className="h-4 w-4 text-[var(--color-highlight)]" />
+                      Country
+                    </label>
+                    <select
+                      value={selectedCountry}
+                      onChange={e => setSelectedCountry(e.target.value)}
+                      className={inputClass}
+                      disabled={!countries.length}
+                    >
+                      <option value="">-- Select a country --</option>
+                      {countries.sort((a, b) => a.name.localeCompare(b.name)).map((c: Country) => (
+                        <option key={c.code} value={c.code ?? ''}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
+                    <label className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
+                      <ShieldCheck className="h-4 w-4 text-[var(--color-highlight)]" />
+                      League
+                    </label>
+                    <select
+                      value={selectedLeague}
+                      onChange={e => setSelectedLeague(e.target.value)}
+                      disabled={!selectedCountry}
+                      className={inputClass}
+                    >
+                      <option value="">-- Select a league --</option>
+                      {leagues.map((l) => (
+                        <option key={l.id} value={l.id}>{l.name}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              )}
+
+                <div className={`rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 transition-opacity duration-200 sm:p-5 ${!selectedLeague ? 'pointer-events-none opacity-50' : ''}`}>
+                  {!loadingTeams && (
+                    <TeamGrid
+                      teams={teams}
+                      selectedTeamId={selectedTeam}
+                      onSelect={setSelectedTeam}
+                    />
+                  )}
+                  {loadingTeams && (
+                    <div className="py-8">
+                      <FootballLoader />
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </>
+        )}
+
+        {currentStep === 3 && (
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
+              <h3 className="text-lg font-bold text-white">Review Your Setup</h3>
+              <ul className="mt-3 space-y-2 text-sm text-[var(--color-text-muted)]">
+                <li>Game: <span className="font-semibold text-white">{selectedGame || 'Not selected'}</span></li>
+                <li>Start type: <span className="font-semibold text-white">{isNoTeam ? 'Unemployed' : 'Choose Team'}</span></li>
+                {!isNoTeam && (
+                  <>
+                    <li>Country: <span className="font-semibold text-white">{selectedCountry || 'Not selected'}</span></li>
+                    <li>League: <span className="font-semibold text-white">{selectedLeague || 'Not selected'}</span></li>
+                    <li>Team: <span className="font-semibold text-white">{selectedTeam || 'Not selected'}</span></li>
+                  </>
+                )}
+              </ul>
             </div>
-          )}
-        </div>
+
+            <div className="rounded-2xl border border-[var(--color-highlight)]/40 bg-[var(--color-highlight)]/10 p-4 sm:p-5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-highlight)]">Starter Challenge Recommendation</p>
+              <h4 className="mt-1 text-lg font-bold text-white">{starterChallengeTitle}</h4>
+              <p className="mt-1 text-sm text-[var(--color-text-muted)]">{starterChallengeDescription}</p>
+            </div>
+          </div>
+        )}
 
         {submitError && (
           <div className="rounded-xl border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] px-4 py-3 text-sm text-[var(--color-danger-soft-text)]">
@@ -276,18 +331,40 @@ export default function NewSaveForm() {
           </div>
         )}
 
-        <button
-          type="submit"
-          disabled={ !selectedGame || (!selectedTeam && !isNoTeam) || savingGame }
-          className="w-full rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] px-6 py-4 font-bold text-white shadow-lg transition-all duration-300 hover:from-[var(--color-highlight)] hover:to-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {savingGame
-            ? 'Creating Save...'
-            : isNoTeam
-              ? 'Create Unemployed Save'
-              : 'Create Save'
-          }
-        </button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
+          <button
+            type="button"
+            onClick={() => setCurrentStep((prev) => (prev > 1 ? (prev - 1) as 1 | 2 | 3 : prev))}
+            disabled={currentStep === 1 || savingGame}
+            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-6 py-3 font-semibold text-white transition hover:border-[var(--color-highlight)] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+          >
+            Back
+          </button>
+
+          {currentStep < 3 ? (
+            <button
+              type="button"
+              onClick={() => setCurrentStep((prev) => (prev < 3 ? (prev + 1) as 1 | 2 | 3 : prev))}
+              disabled={!canProceedFromStep(currentStep)}
+              className="w-full rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:from-[var(--color-highlight)] hover:to-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+            >
+              Continue
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={!selectedGame || (!selectedTeam && !isNoTeam) || savingGame}
+              className="w-full rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:from-[var(--color-highlight)] hover:to-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+            >
+              {savingGame
+                ? 'Creating Save...'
+                : isNoTeam
+                  ? 'Create Unemployed Save'
+                  : 'Create Save'
+              }
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );
