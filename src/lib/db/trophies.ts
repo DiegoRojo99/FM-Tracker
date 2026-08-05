@@ -135,7 +135,7 @@ async function runTrophySideEffects(params: {
   const { uid, saveId, trophy, gameId, competitionCountryCode } = params;
 
   try {
-    await addChallengeForTrophy(uid, saveId, trophy, competitionCountryCode);
+    await addChallengeForTrophy(uid, saveId, trophy);
   }
   catch (challengeError) {
     if (isPrismaP2002(challengeError)) {
