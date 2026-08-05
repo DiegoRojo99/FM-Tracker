@@ -1,21 +1,39 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { formatFeedItemTitle, SocialFeedItem } from '@/lib/social/feed';
+import { useAuth } from '@/app/components/AuthProvider';
 
 export default function SocialFeed() {
+  const { user } = useAuth();
   const [items, setItems] = useState<SocialFeedItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const loadFeed = async (nextPage = 1, append = false) => {
+  const loadFeed = useCallback(async (nextPage = 1, append = false) => {
+    if (!user) {
+      setItems([]);
+      setLoading(false);
+      return;
+    }
+
     if (append) setLoadingMore(true);
     else setLoading(true);
 
     try {
-      const response = await fetch(`/api/social/feed?page=${nextPage}&limit=5`);
+      const token = await user.getIdToken();
+      const response = await fetch(`/api/social/feed?page=${nextPage}&limit=5`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to load social feed');
+      }
+
       const data = await response.json();
       const nextItems = data.items ?? [];
       setItems((current) => (append ? [...current, ...nextItems] : nextItems));
@@ -25,14 +43,19 @@ export default function SocialFeed() {
       setLoading(false);
       setLoadingMore(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
     loadFeed(1, false).catch(() => {
       setLoading(false);
       setLoadingMore(false);
     });
-  }, []);
+  }, [user, loadFeed]);
 
   if (loading) return <p className="text-sm text-[var(--color-text-muted)]">Loading your social activity…</p>;
   if (items.length === 0) return (

@@ -1,4 +1,4 @@
-export type SocialEventType = 'save.milestone' | 'challenge.completed' | 'trophy.added' | 'season.created';
+export type SocialEventType = 'save.milestone' | 'challenge.completed' | 'trophy.added' | 'season.created' | 'onboarding.welcome';
 export type SocialFeedVisibility = 'public' | 'friends';
 
 export type SocialFeedItem = {
@@ -37,6 +37,8 @@ export function formatFeedItemTitle(type: SocialEventType): string {
       return 'Trophy unlocked';
     case 'season.created':
       return 'Season added';
+    case 'onboarding.welcome':
+      return 'Welcome to social';
     default:
       return 'Activity';
   }
@@ -52,6 +54,8 @@ export function formatFeedItemMessage(type: SocialEventType, fallback: string): 
       return fallback || 'A trophy was added to the save.';
     case 'season.created':
       return fallback || 'A new season was added to the save.';
+    case 'onboarding.welcome':
+      return fallback || 'Welcome to your social feed.';
     default:
       return fallback;
   }

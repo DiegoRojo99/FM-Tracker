@@ -28,6 +28,7 @@ type UserAggregates = {
   totalTrophies: number;
   totalPromotions: number;
   completedChallenges: number;
+  startedChallenges: number;
   activeSaves: number;
   distinctClubsManaged: number;
   totalSeasons: number;
@@ -248,6 +249,9 @@ export async function evaluateAchievementsForUser(input: EvaluateAchievementsInp
 }
 
 function computeProgress(key: string, aggregates: UserAggregates, maxProgress: number): number {
+  if (key === 'quickwin.first_save') return Math.min(aggregates.activeSaves, maxProgress);
+  if (key === 'quickwin.first_challenge_started') return Math.min(aggregates.startedChallenges, maxProgress);
+  if (key === 'quickwin.first_season_logged') return Math.min(aggregates.totalSeasons, maxProgress);
   if (key.startsWith('trophies.')) return Math.min(aggregates.totalTrophies, maxProgress);
   if (key.startsWith('promotions.')) return Math.min(aggregates.totalPromotions, maxProgress);
   if (key.startsWith('challenges.')) return Math.min(aggregates.completedChallenges, maxProgress);
@@ -257,10 +261,11 @@ function computeProgress(key: string, aggregates: UserAggregates, maxProgress: n
 }
 
 async function computeUserAggregates(userId: string): Promise<UserAggregates> {
-  const [totalTrophies, totalPromotions, completedChallenges, activeSaves, totalSeasons, distinctClubs] = await Promise.all([
+  const [totalTrophies, totalPromotions, completedChallenges, startedChallenges, activeSaves, totalSeasons, distinctClubs] = await Promise.all([
     prisma.trophy.count({ where: { save: { userId } } }),
     prisma.leagueResult.count({ where: { promoted: true, season: { save: { userId } } } }),
     prisma.careerChallenge.count({ where: { userId, completedAt: { not: null } } }),
+    prisma.careerChallenge.count({ where: { userId } }),
     prisma.save.count({ where: { userId } }),
     prisma.season.count({ where: { save: { userId } } }),
     prisma.careerStint.groupBy({
@@ -273,6 +278,7 @@ async function computeUserAggregates(userId: string): Promise<UserAggregates> {
     totalTrophies,
     totalPromotions,
     completedChallenges,
+    startedChallenges,
     activeSaves,
     totalSeasons,
     distinctClubsManaged: distinctClubs.length,

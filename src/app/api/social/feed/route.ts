@@ -166,6 +166,18 @@ export async function GET(req: NextRequest) {
       })),
     ];
 
+    if (feed.length === 0) {
+      feed.push({
+        id: `welcome-${uid}`,
+        type: 'onboarding.welcome',
+        title: 'Welcome to social',
+        message: 'Follow your own milestones here first, then add friends when you want comparisons and shared progress. Social is optional and works best once your first save is active.',
+        createdAt: new Date().toISOString(),
+        visibility: 'public',
+        metadata: { onboarding: true },
+      });
+    }
+
     const result = buildSocialFeedItems(feed, {
       page,
       limit,

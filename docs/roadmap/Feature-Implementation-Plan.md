@@ -19,9 +19,9 @@ This roadmap is organized around user outcomes first. Each phase targets a clear
 
 ### 2) First Value Moments
 - [x] Show instant progress card after creating a save
-- [ ] Add quick-win achievements designed to unlock in session one
+- [x] Add quick-win achievements designed to unlock in session one
 - [x] Add "What to do next" module after each major user action
-- [ ] Add welcome feed item that explains social features without forcing them
+- [x] Add welcome feed item that explains social features without forcing them
 
 ### Activation Success Metrics
 - [ ] Increase first-save completion rate

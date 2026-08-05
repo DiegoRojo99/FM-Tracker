@@ -9,6 +9,7 @@ import { prisma } from '@/lib/db/prisma';
 import { CareerStint } from '@/lib/types/prisma/Career';
 import { deleteCacheKey } from '@/lib/cache/redis';
 import { readThroughCache } from '@/lib/cache/redis';
+import { evaluateAchievementsForUser } from '@/lib/db/achievements';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -60,14 +61,17 @@ export async function POST(req: NextRequest) {
     // Parse request body
     const body = await req.json();
     const { countryCode, leagueId, startingTeamId, gameId } = body;
+    const isUnemployedStart = !startingTeamId;
 
-    // Validate team id
-    const startingTeam = !startingTeamId ? null : await fetchTeam(Number(startingTeamId));
-    if (!startingTeam) return new Response('Invalid starting team ID', { status: 400 });
+    // Validate team id for non-unemployed starts
+    const startingTeam = isUnemployedStart ? null : await fetchTeam(Number(startingTeamId));
+    if (!isUnemployedStart && !startingTeam) return new Response('Invalid starting team ID', { status: 400 });
 
-    // Validate league id
-    const currentLeagueData = await fetchCompetition(Number(leagueId));
-    if (!currentLeagueData) return new Response('Invalid league ID', { status: 400 });
+    // Validate league id for non-unemployed starts
+    if (!isUnemployedStart) {
+      const currentLeagueData = await fetchCompetition(Number(leagueId));
+      if (!currentLeagueData) return new Response('Invalid league ID', { status: 400 });
+    }
 
     // Validate required fields
     const gameIdToUse = gameId || 'fm26';
@@ -95,24 +99,35 @@ export async function POST(req: NextRequest) {
     });
 
     // Create a starting career stint
-    const careerStintInputData: Omit<CareerStint, 'id'> = {
-      saveId: docRef.id,
-      teamId: Number(startingTeamId),
-      startDate: getStartDateFromGameId(gameIdToUse),
-      endDate: null,
-      isNational: startingTeam ? startingTeam.national : false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    if (!isUnemployedStart && startingTeamId) {
+      const careerStintInputData: Omit<CareerStint, 'id'> = {
+        saveId: docRef.id,
+        teamId: Number(startingTeamId),
+        startDate: getStartDateFromGameId(gameIdToUse),
+        endDate: null,
+        isNational: startingTeam ? startingTeam.national : false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
 
-    // Create career stint in database
-    await prisma.careerStint.create({
-      data: careerStintInputData,
-    });
+      // Create career stint in database
+      await prisma.careerStint.create({
+        data: careerStintInputData,
+      });
+    }
     
     // Check if the team has any matching challenges
-    await addChallengeForTeam(docRef.id, Number(startingTeamId));
-    await addChallengeForCountry(docRef.id, countryCode);
+    if (!isUnemployedStart && startingTeamId) await addChallengeForTeam(docRef.id, Number(startingTeamId));
+    if (countryCode) await addChallengeForCountry(docRef.id, countryCode);
+
+    await evaluateAchievementsForUser({
+      userId: uid,
+      saveId: docRef.id,
+      gameId: gameIdToUse,
+      eventType: 'save.created',
+      eventTimestamp: new Date(),
+    });
+
     await Promise.all([
       deleteCacheKey('stats:global'),
       invalidateUserPreviewSavesCache(uid),

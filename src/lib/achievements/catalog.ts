@@ -1,6 +1,7 @@
 import { AchievementCategory, AchievementRarity } from '../../../prisma/generated/client';
 
 export type AchievementEventType =
+  | 'save.created'
   | 'season.created'
   | 'trophy.added'
   | 'challenge.progress.updated';
@@ -19,6 +20,39 @@ export type AchievementCatalogEntry = {
 };
 
 export const ACHIEVEMENT_CATALOG: AchievementCatalogEntry[] = [
+  {
+    key: 'quickwin.first_save',
+    title: 'Journey Begins',
+    description: 'Create your first save',
+    category: 'CAREER',
+    rarity: 'COMMON',
+    points: 10,
+    maxProgress: 1,
+    icon: '🚀',
+    triggerEvents: ['save.created', 'season.created', 'trophy.added'],
+  },
+  {
+    key: 'quickwin.first_challenge_started',
+    title: 'Challenge Accepted',
+    description: 'Start your first challenge track',
+    category: 'CHALLENGES',
+    rarity: 'COMMON',
+    points: 10,
+    maxProgress: 1,
+    icon: '🎯',
+    triggerEvents: ['save.created', 'challenge.progress.updated', 'season.created'],
+  },
+  {
+    key: 'quickwin.first_season_logged',
+    title: 'Campaign Underway',
+    description: 'Log your first season',
+    category: 'SEASONS_CONSISTENCY',
+    rarity: 'COMMON',
+    points: 10,
+    maxProgress: 1,
+    icon: '📅',
+    triggerEvents: ['season.created'],
+  },
   {
     key: 'trophies.common',
     title: 'First Silverware',
