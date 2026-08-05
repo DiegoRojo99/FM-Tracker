@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import AddSeasonModal from "@/app/components/modals/AddSeasonModal";
 import { useAuth } from "@/app/components/AuthProvider";
 import { FullDetailsSaveWithOwnership } from "@/lib/types/prisma/Save";
-import { SeasonInput, SeasonSummary } from "@/lib/types/prisma/Season";
+import { SeasonInput, SeasonSummary, SeasonUpdateInput } from "@/lib/types/prisma/Season";
 import { SeasonCard } from "./SeasonCard";
 import GradientButton from "@/app/components/GradientButton";
 import { CalendarDays, ChevronDown, Trophy, TrendingUp } from "lucide-react";
@@ -15,6 +15,7 @@ interface SeasonSectionProps {
 const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }) => {
   const { user } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingSeason, setEditingSeason] = useState<SeasonSummary | null>(null);
 
   const sortedSeasons = useMemo(() => {
     return [...(saveDetails.seasons ?? [])].sort((a, b) => {
@@ -35,21 +36,26 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
       console.log("Adding season:", season);
 
       const token = await user.getIdToken();
-      await fetch(`/api/saves/${saveDetails.id}/seasons`, {
+      const response = await fetch(`/api/saves/${saveDetails.id}/seasons`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(season),
-      }).then((res) => {
-        if (!res.ok) throw new Error("Failed to add season");
-        return res.json();
       });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        const message = payload && typeof payload.error === "string" ? payload.error : "Failed to add season";
+        throw new Error(message);
+      }
+
+      await response.json();
       return true;
     } 
     catch (error) {
-      alert("Error adding season. Please try again.");
+      alert(error instanceof Error ? error.message : "Error adding season. Please try again.");
       console.error(error);
       return false;
     }      
@@ -60,6 +66,51 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
     if (!result) return;
     setRefresh(true);
     setModalOpen(false);
+    return true;
+  };
+
+  const handleUpdateSeason = async (season: SeasonUpdateInput) => {
+    try {
+      if (!user) throw new Error("User is not authenticated");
+      if (!saveDetails.id) throw new Error("Save ID is not available");
+
+      const token = await user.getIdToken();
+      const response = await fetch(`/api/saves/${saveDetails.id}/seasons`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(season),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        const message = payload && typeof payload.error === "string" ? payload.error : "Failed to update season";
+        throw new Error(message);
+      }
+
+      setRefresh(true);
+      setEditingSeason(null);
+      setModalOpen(false);
+      return true;
+    }
+    catch (error) {
+      alert(error instanceof Error ? error.message : "Error updating season. Please try again.");
+      console.error(error);
+      return false;
+    }
+  };
+
+  const handleSaveSeason = async (season: SeasonInput) => {
+    if (!editingSeason) {
+      return await handleAddSeason(season);
+    }
+
+    return await handleUpdateSeason({
+      ...season,
+      seasonId: editingSeason.id,
+    });
   };
 
   const handleDeleteSeason = async (season: SeasonSummary) => {
@@ -106,7 +157,10 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
         {saveDetails.isOwner && (
           <GradientButton
             className="w-full sm:w-auto"
-            onClick={() => setModalOpen(true)}
+            onClick={() => {
+              setEditingSeason(null);
+              setModalOpen(true);
+            }}
           >
             + Add season
           </GradientButton>
@@ -152,6 +206,10 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
             <SeasonCard
               key={`${String(season.teamId)}-${String(season.season)}`}
               season={season}
+              onEdit={saveDetails.isOwner ? (seasonToEdit) => {
+                setEditingSeason(seasonToEdit);
+                setModalOpen(true);
+              } : undefined}
               onDelete={saveDetails.isOwner ? handleDeleteSeason : undefined}
             />
           ))}
@@ -160,9 +218,15 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
 
       <AddSeasonModal 
         open={modalOpen} 
-        onClose={() => setModalOpen(false)} 
-        onSave={handleAddSeason} 
+        onClose={() => {
+          setModalOpen(false);
+          setEditingSeason(null);
+        }} 
+        onSave={handleSaveSeason}
         saveDetails={saveDetails}
+        initialSeason={editingSeason}
+        title={editingSeason ? "Edit Season" : "Add Season"}
+        submitLabel={editingSeason ? "Update Season" : "Save Season"}
       />
     </div>
   );

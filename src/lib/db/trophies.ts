@@ -6,6 +6,47 @@ import { Trophy } from '../../../prisma/generated/client';
 import { prisma } from './prisma';
 import { FullTrophy } from '../types/prisma/Trophy';
 
+function isPrismaP2002(error: unknown): boolean {
+  return typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === 'P2002';
+}
+
+function hasUniqueIdTarget(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null || !('meta' in error)) return false;
+  const meta = (error as { meta?: { target?: unknown } }).meta;
+  if (!meta || !Array.isArray(meta.target)) return false;
+  return meta.target.includes('id');
+}
+
+async function repairTrophyIdSequence(): Promise<void> {
+  await prisma.$executeRawUnsafe(`
+    SELECT setval(
+      pg_get_serial_sequence('"Trophy"', 'id'),
+      COALESCE((SELECT MAX(id) FROM "Trophy"), 0) + 1,
+      false
+    )
+  `);
+}
+
+async function createTrophyWithIdSequenceRecovery(data: {
+  gameId: string;
+  saveId: string;
+  season: string;
+  teamId: number;
+  competitionGroupId: number;
+}): Promise<Trophy> {
+  try {
+    return await prisma.trophy.create({ data });
+  } catch (error) {
+    if (!isPrismaP2002(error) || !hasUniqueIdTarget(error)) {
+      throw error;
+    }
+
+    console.warn('Detected Trophy.id sequence drift. Repairing sequence and retrying create once...');
+    await repairTrophyIdSequence();
+    return await prisma.trophy.create({ data });
+  }
+}
+
 export async function addTrophyToSave(
   { teamId, competitionId, uid, season, saveId }: 
   {
@@ -41,14 +82,12 @@ export async function addTrophyToSave(
     if (!save) throw new Error('Save not found');
     
     // Add new trophy
-    const trophy: Trophy = await prisma.trophy.create({
-      data: {
-        gameId: save.gameId,
-        saveId: saveId,
-        season: season,
-        teamId: Number(teamId),
-        competitionGroupId: competitionId,
-      }
+    const trophy: Trophy = await createTrophyWithIdSequenceRecovery({
+      gameId: save.gameId,
+      saveId: saveId,
+      season: season,
+      teamId: Number(teamId),
+      competitionGroupId: competitionId,
     });
 
     // Check if the trophy matches any existing challenges

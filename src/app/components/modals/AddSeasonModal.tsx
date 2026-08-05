@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput } from "@/lib/types/prisma/Season";
+import React, { useEffect, useState } from "react";
+import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput, SeasonSummary } from "@/lib/types/prisma/Season";
 import CompetitionDropdown from "../dropdowns/CompetitionDropdown";
 import CompetitionWithWorldDropdown from "../dropdowns/CompetitionWithWorldDropdown";
 import { FullDetailsSave } from "@/lib/types/prisma/Save";
@@ -13,8 +13,11 @@ import { FullCareerStint } from "@/lib/types/prisma/Career";
 type AddSeasonModalProps = {
   open: boolean;
   onClose: () => void;
-  onSave: (season: SeasonInput) => void;
+  onSave: (season: SeasonInput) => Promise<boolean>;
   saveDetails: FullDetailsSave;
+  initialSeason?: SeasonSummary | null;
+  title?: string;
+  submitLabel?: string;
 };
 
 /**
@@ -37,8 +40,11 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   onClose,
   onSave,
   saveDetails,
+  initialSeason = null,
+  title = "Add Season",
+  submitLabel = "Save Season",
 }) => {
-  const [season, setSeason] = useState<string>(pullNextSeasonFromSave(saveDetails));
+  const [season, setSeason] = useState<string>(initialSeason?.season ?? pullNextSeasonFromSave(saveDetails));
   const [leaguePosition, setLeaguePosition] = useState<number | "">("");
   const [promoted, setPromoted] = useState(false);
   const [relegated, setRelegated] = useState(false);
@@ -47,8 +53,37 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   const uniqueTeams = getUniqueTeams();
   
   // New state for team and league selection
-  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
-  const [selectedLeague, setSelectedLeague] = useState<CompetitionGroup | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<Team | null>(initialSeason?.team ?? null);
+  const [selectedLeague, setSelectedLeague] = useState<CompetitionGroup | null>(initialSeason?.leagueResult?.competition ?? null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    if (initialSeason) {
+      setSeason(initialSeason.season);
+      setSelectedTeam(initialSeason.team);
+      setSelectedLeague(initialSeason.leagueResult?.competition ?? null);
+      setLeaguePosition(initialSeason.leagueResult?.position ?? "");
+      setPromoted(initialSeason.leagueResult?.promoted ?? false);
+      setRelegated(initialSeason.leagueResult?.relegated ?? false);
+      setCupResults(
+        initialSeason.cupResults.map((cup) => ({
+          competitionId: String(cup.competitionId),
+          countryCode: cup.competition.countryCode,
+          reachedRound: cup.reachedRound as CupRound,
+        }))
+      );
+      return;
+    }
+
+    setSeason(pullNextSeasonFromSave(saveDetails));
+    setLeaguePosition("");
+    setPromoted(false);
+    setRelegated(false);
+    setCupResults([]);
+    setSelectedTeam(null);
+    setSelectedLeague(null);
+  }, [open, initialSeason, saveDetails]);
 
   const handleAddCup = () => {
     setCupResults([
@@ -79,12 +114,22 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   };
 
   const handleSave = async () => {
-    if (!selectedTeam || !selectedLeague) {
-      alert("Please select both a team and a league.");
+    if (!selectedTeam) {
+      alert("Please select a team.");
       return;
     }
-    if (!season || leaguePosition === "") {
+    if (!season) {
       alert("Please fill in all required fields.");
+      return;
+    }
+    if ((selectedLeague && leaguePosition === "") || (!selectedLeague && leaguePosition !== "")) {
+      alert("League and league position must be provided together.");
+      return;
+    }
+
+    const hasInvalidCup = cupResults.some((cup) => !cup.competitionId || Number(cup.competitionId) <= 0);
+    if (hasInvalidCup) {
+      alert("Please select a valid competition for every cup result.");
       return;
     }
 
@@ -93,15 +138,18 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
       const seasonResult: SeasonInput = {
         season,
         teamId: String(selectedTeam.id),
-        leagueId: String(selectedLeague.id),
-        leaguePosition: Number(leaguePosition),
-        promoted,
-        relegated,
         cupResults,
       };
 
-      await onSave(seasonResult);
-      onClose();
+      if (selectedLeague && leaguePosition !== "") {
+        seasonResult.leagueId = String(selectedLeague.id);
+        seasonResult.leaguePosition = Number(leaguePosition);
+        seasonResult.promoted = promoted;
+        seasonResult.relegated = relegated;
+      }
+
+      const didSave = await onSave(seasonResult);
+      if (didSave) onClose();
     } catch (error) {
       console.error('Error saving season:', error);
       alert('Failed to save season. Please try again.');
@@ -113,7 +161,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   {/* Get unique teams from career stints */}
   function getUniqueTeams(): Team[] {
     if (!saveDetails.careerStints) return [];
-    const uniqueMap = new Map<string, Team>();
+    const uniqueMap = new Map<number, Team>();
     saveDetails.careerStints.forEach((stint) => {
       if (!uniqueMap.has(stint.teamId)) {
         uniqueMap.set(stint.teamId, stint.team);
@@ -125,7 +173,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   if (!open) return null;
   
   return (
-    <BaseModal open={open} onClose={onClose} title="Add Season">
+    <BaseModal open={open} onClose={onClose} title={title}>
       <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
         <div>
           <label className="block text-sm mb-2 font-medium text-gray-200">Season (e.g. 2023/24)</label>
@@ -194,10 +242,10 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
           )}
         </div>
 
-        {/* League Selection - only show if team is selected */}
+        {/* League Selection - optional, only show if team is selected */}
         {selectedTeam ? (
           <div>
-            <label className="block text-sm mb-2 font-medium text-gray-200">League</label>
+            <label className="block text-sm mb-2 font-medium text-gray-200">League (optional)</label>
             <CompetitionDropdown
               type="League"
               country={selectedTeam.countryCode}
@@ -319,11 +367,11 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
           type="submit"
           width="full"
           size="lg"
-          disabled={!season || !selectedTeam || !selectedLeague || leaguePosition === "" || saving}
+          disabled={!season || !selectedTeam || saving}
           isLoading={saving}
-          loadingText="Saving Season..."
+          loadingText={initialSeason ? "Updating Season..." : "Saving Season..."}
         >
-          Save Season
+          {submitLabel}
         </LoadingButton>
       </form>
     </BaseModal>

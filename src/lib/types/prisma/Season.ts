@@ -73,3 +73,7 @@ export type SeasonInput = {
   cupResults?: CupResultInput[];
   isCurrent?: boolean;
 };
+
+export type SeasonUpdateInput = SeasonInput & {
+  seasonId: number;
+};

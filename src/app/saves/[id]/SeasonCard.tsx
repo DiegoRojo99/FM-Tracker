@@ -2,11 +2,12 @@ import ConfirmationModal from "@/app/components/modals/ConfirmationModal";
 import { useState } from "react";
 import Image from "next/image";
 import { SeasonSummary } from "@/lib/types/prisma/Season";
-import { ArrowDown, ArrowUp, Medal, Trash2, Trophy } from "lucide-react";
+import { ArrowDown, ArrowUp, Medal, Pencil, Trash2, Trophy } from "lucide-react";
 
 type SeasonCardProps = {
   season: SeasonSummary;
   onDelete?: (season: SeasonSummary) => void;
+  onEdit?: (season: SeasonSummary) => void;
 };
 
 function getOrdinal(n: number): string {
@@ -16,7 +17,7 @@ function getOrdinal(n: number): string {
 }
 
 
-export function SeasonCard({ season, onDelete }: SeasonCardProps) {
+export function SeasonCard({ season, onDelete, onEdit }: SeasonCardProps) {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const leagueResult = season.leagueResult;
   const cupResults = season.cupResults;
@@ -50,16 +51,28 @@ export function SeasonCard({ season, onDelete }: SeasonCardProps) {
             {season.season}
           </div>
 
-          {onDelete && (
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-700 transition-colors hover:bg-rose-500/20"
-              aria-label="Delete season"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            {onEdit && (
+              <button
+                type="button"
+                onClick={() => onEdit(season)}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] text-[var(--color-text-muted)] transition-colors hover:text-white"
+                aria-label="Edit season"
+              >
+                <Pencil className="h-4 w-4" />
+              </button>
+            )}
+            {onDelete && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-700 transition-colors hover:bg-rose-500/20"
+                aria-label="Delete season"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="flex min-w-0 items-center gap-3 border-b border-[var(--color-surface-border)] pb-3">
