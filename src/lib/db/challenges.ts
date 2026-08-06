@@ -628,9 +628,36 @@ export function filterCompletedChallengeGoalsBasedOnTrophies(
   const uniqueTrophies = dedupeTrophiesForChallengeEvaluation(trophies);
 
   return challenge.goals.map((goal) => {
-    const isCompleted = uniqueTrophies.some((trophy) => filterGoalByTrophy(goal, trophy, context));
+    const isCompleted = evaluateGoalCompletion(goal, uniqueTrophies, context);
     return challengeGoalToCareerChallengeGoal({ goal, isCompleted });
   });
+}
+
+function evaluateGoalCompletion(
+  goal: ChallengeGoalWithDetails,
+  trophies: Trophy[],
+  context: TrophyMatchContext
+): boolean {
+  const distinctCountryRule = goal.rules.find((rule) => rule.kind.toLowerCase() === 'country.distinct-titles-min');
+  if (distinctCountryRule) {
+    const minCountries =
+      readNumber((distinctCountryRule.config as Record<string, unknown>).minCountries) ??
+      readNumber((distinctCountryRule.config as Record<string, unknown>).minimum) ??
+      readNumber((distinctCountryRule.config as Record<string, unknown>).min) ??
+      1;
+
+    return getDistinctTrophyCountryCodes(trophies, context).size >= minCountries;
+  }
+
+  if (goal.rules.some((rule) => rule.kind.toLowerCase() === 'domestic.league.any-country')) {
+    return trophies.some((trophy) => isDomesticLeagueTrophy(trophy, context));
+  }
+
+  if (goal.rules.some((rule) => rule.kind.toLowerCase() === 'domestic.double.same-country')) {
+    return hasDomesticDoubleInSameCountry(trophies, context);
+  }
+
+  return trophies.some((trophy) => filterGoalByTrophy(goal, trophy, context));
 }
 
 function filterGoalByTrophy(
@@ -679,4 +706,58 @@ function getCountryCodesForTrophy(trophy: Trophy, context: TrophyMatchContext): 
   ].filter((code): code is string => typeof code === 'string' && code.length > 0);
 
   return [...new Set(codes)];
+}
+
+function getDistinctTrophyCountryCodes(trophies: Trophy[], context: TrophyMatchContext): Set<string> {
+  const countryCodes = new Set<string>();
+
+  for (const trophy of trophies) {
+    for (const code of getCountryCodesForTrophy(trophy, context)) {
+      countryCodes.add(code);
+    }
+  }
+
+  return countryCodes;
+}
+
+function hasDomesticDoubleInSameCountry(trophies: Trophy[], context: TrophyMatchContext): boolean {
+  const leaguesByCountry = new Set<string>();
+  const cupsByCountry = new Set<string>();
+
+  for (const trophy of trophies) {
+    const countryCode = context.competitionCountryById.get(trophy.competitionGroupId);
+    if (!countryCode) continue;
+
+    if (isDomesticLeagueTrophy(trophy, context)) {
+      leaguesByCountry.add(countryCode);
+    }
+
+    if (isDomesticCupTrophy(trophy, context)) {
+      cupsByCountry.add(countryCode);
+    }
+  }
+
+  return [...leaguesByCountry].some((countryCode) => cupsByCountry.has(countryCode));
+}
+
+function isDomesticLeagueTrophy(trophy: Trophy, context: TrophyMatchContext): boolean {
+  const competitionName = context.competitionNameById.get(trophy.competitionGroupId);
+  const countryCode = context.competitionCountryById.get(trophy.competitionGroupId);
+  if (!competitionName || !countryCode) return false;
+
+  const normalized = normalizeCompetitionName(competitionName);
+
+  const isCup = /cup|copa|coppa|coupe|pokal|ta[c\u0327]a/.test(normalized);
+  if (isCup) return false;
+
+  return /league|liga|bundesliga|seriea|ligue1|premierleague|eredivisie|division/.test(normalized);
+}
+
+function isDomesticCupTrophy(trophy: Trophy, context: TrophyMatchContext): boolean {
+  const competitionName = context.competitionNameById.get(trophy.competitionGroupId);
+  const countryCode = context.competitionCountryById.get(trophy.competitionGroupId);
+  if (!competitionName || !countryCode) return false;
+
+  const normalized = normalizeCompetitionName(competitionName);
+  return /cup|copa|coppa|coupe|pokal|supercup|ta[c\u0327]a/.test(normalized);
 }

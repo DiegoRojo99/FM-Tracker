@@ -41,64 +41,27 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     goals: [
       {
         position: 1,
-        description: 'Win the domestic league title',
+        description: 'Win a domestic league title in any country',
         logic: 'ALL',
         rules: [
           {
-            kind: 'competition.equals',
+            kind: 'domestic.league.any-country',
             subjectType: 'competition',
-            operator: 'eq',
-            config: { competitionId: 39 },
+            operator: 'achieved',
+            config: { minimum: 1 },
           },
         ],
       },
       {
         position: 2,
-        description: 'Win the domestic cup',
+        description: 'Win a domestic cup in the same country as one of your league titles',
         logic: 'ALL',
         rules: [
           {
-            kind: 'competition.equals',
+            kind: 'domestic.double.same-country',
             subjectType: 'competition',
-            operator: 'eq',
-            config: { competitionId: 45 },
-          },
-        ],
-      },
-    ],
-  },
-  {
-    key: 'starter.road-to-europe',
-    title: 'Road To Europe',
-    description: 'Win one domestic title and one UEFA title in the same save.',
-    summary: 'A domestic and continental combo.',
-    status: 'PUBLISHED',
-    sortOrder: 20,
-    tags: ['starter', 'europe', 'progression'],
-    goals: [
-      {
-        position: 1,
-        description: 'Win any domestic title in your save country',
-        logic: 'ALL',
-        rules: [
-          {
-            kind: 'country.equals',
-            subjectType: 'country',
-            operator: 'eq',
-            config: { countryCode: 'ENG' },
-          },
-        ],
-      },
-      {
-        position: 2,
-        description: 'Win a UEFA Champions League title',
-        logic: 'ALL',
-        rules: [
-          {
-            kind: 'competition.equals',
-            subjectType: 'competition',
-            operator: 'eq',
-            config: { competitionId: 2 },
+            operator: 'achieved',
+            config: { minimum: 1 },
           },
         ],
       },
@@ -115,78 +78,37 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     goals: [
       {
         position: 1,
-        description: 'Win a title in England',
+        description: 'Win titles in at least 1 country',
         rules: [
           {
-            kind: 'country.equals',
+            kind: 'country.distinct-titles-min',
             subjectType: 'country',
-            operator: 'eq',
-            config: { countryCode: 'ENG' },
+            operator: 'gte',
+            config: { minCountries: 1 },
           },
         ],
       },
       {
         position: 2,
-        description: 'Win a title in Spain',
+        description: 'Win titles in at least 2 different countries',
         rules: [
           {
-            kind: 'country.equals',
+            kind: 'country.distinct-titles-min',
             subjectType: 'country',
-            operator: 'eq',
-            config: { countryCode: 'ESP' },
+            operator: 'gte',
+            config: { minCountries: 2 },
           },
         ],
       },
       {
         position: 3,
-        description: 'Win a title in Germany',
+        description: 'Win titles in at least 3 different countries',
         rules: [
           {
-            kind: 'country.equals',
+            kind: 'country.distinct-titles-min',
             subjectType: 'country',
-            operator: 'eq',
-            config: { countryCode: 'DEU' },
-          },
-        ],
-      },
-    ],
-  },
-  {
-    key: 'club.identity.one-club-icons',
-    title: 'One-Club Icons',
-    description: 'Win major trophies while staying with one identity-defining club group.',
-    summary: 'Build a dynasty around a single club identity.',
-    status: 'PUBLISHED',
-    sortOrder: 40,
-    tags: ['club-identity', 'team', 'dynasty'],
-    goals: [
-      {
-        position: 1,
-        description: 'Win one domestic trophy with a target club',
-        rules: [
-          {
-            kind: 'team.in',
-            subjectType: 'team',
-            operator: 'in',
-            config: { teamIds: [33, 34, 40] },
-          },
-        ],
-      },
-      {
-        position: 2,
-        description: 'Win one continental trophy with the same club family',
-        rules: [
-          {
-            kind: 'team.in',
-            subjectType: 'team',
-            operator: 'in',
-            config: { teamIds: [33, 34, 40] },
-          },
-          {
-            kind: 'competition.equals',
-            subjectType: 'competition',
-            operator: 'eq',
-            config: { competitionId: 2 },
+            operator: 'gte',
+            config: { minCountries: 3 },
           },
         ],
       },
