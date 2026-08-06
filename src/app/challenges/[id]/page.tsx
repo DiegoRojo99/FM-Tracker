@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { CareerChallengeWithSaveDetails, ChallengeGoalWithDetails, ChallengeWithGoals } from '@/lib/types/prisma/Challenge';
 import FootballLoader from '../../components/FootBallLoader';
@@ -22,6 +22,17 @@ export default function ChallengeDetailPage() {
   const [userChallenges, setUserChallenges] = useState<CareerChallengeWithSaveDetails[]>([]);
   const [selectedSaveIndex, setSelectedSaveIndex] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+
+  const sortedUserChallenges = useMemo(() => {
+    return [...userChallenges].sort((left, right) => {
+      const leftCompleted = Boolean(left.completedAt);
+      const rightCompleted = Boolean(right.completedAt);
+
+      // Show active runs first, then completed runs.
+      if (leftCompleted !== rightCompleted) return leftCompleted ? 1 : -1;
+      return new Date(right.startedAt).getTime() - new Date(left.startedAt).getTime();
+    });
+  }, [userChallenges]);
 
   useEffect(() => {
     async function fetchChallenge(challengeKey: string) {
@@ -89,19 +100,19 @@ export default function ChallengeDetailPage() {
         )}
         
         {/* Display user progress if logged in */}
-        {userChallenges.length > 0 && (() => {
-          const selectedChallenge = userChallenges[selectedSaveIndex];
+        {sortedUserChallenges.length > 0 && (() => {
+          const selectedChallenge = sortedUserChallenges[selectedSaveIndex];
           return (
             <div className="mt-6 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]/70 p-4">
               <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <h3 className="text-lg font-bold text-white">Your Progress</h3>
-                {userChallenges.length > 1 && (
+                {sortedUserChallenges.length > 1 && (
                   <select 
                     value={selectedSaveIndex} 
                     onChange={(e) => setSelectedSaveIndex(Number(e.target.value))}
                     className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-dark)] px-3 py-1.5 text-sm text-white focus:border-[var(--color-highlight)] focus:outline-none"
                   >
-                    {userChallenges.map((challenge, index) => (
+                    {sortedUserChallenges.map((challenge, index) => (
                       <option key={challenge.id} value={index}>
                         {formatSaveLabel(challenge)}
                         {challenge.completedAt ? ' (Completed)' : ' (In Progress)'}
@@ -182,7 +193,7 @@ export default function ChallengeDetailPage() {
             <ChallengeGoalCard 
               key={goal.id} 
               goal={goal} 
-              selectedUserChallenge={userChallenges.length > 0 ? userChallenges[selectedSaveIndex] : null} 
+              selectedUserChallenge={sortedUserChallenges.length > 0 ? sortedUserChallenges[selectedSaveIndex] : null} 
             />
           )}
         </div>
