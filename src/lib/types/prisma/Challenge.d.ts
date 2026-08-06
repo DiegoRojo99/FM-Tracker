@@ -8,7 +8,6 @@ import {
   CompetitionGroup,
   Country,
   Game,
-  Save,
   Team,
 } from "../../../../prisma/generated/client";
 

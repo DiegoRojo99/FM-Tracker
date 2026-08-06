@@ -862,18 +862,6 @@ function getCountryCodesForTrophy(trophy: Trophy, context: TrophyMatchContext): 
   return [...new Set(codes)];
 }
 
-function getDistinctTrophyCountryCodes(trophies: Trophy[], context: TrophyMatchContext): Set<string> {
-  const countryCodes = new Set<string>();
-
-  for (const trophy of trophies) {
-    for (const code of getCountryCodesForTrophy(trophy, context)) {
-      countryCodes.add(code);
-    }
-  }
-
-  return countryCodes;
-}
-
 function getDistinctPrimaryTrophyCountryCodes(trophies: Trophy[], context: TrophyMatchContext): Set<string> {
   const countryCodes = new Set<string>();
 
