@@ -17,7 +17,7 @@ export default function ChallengeDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchChallenge(id: string) {
+    async function fetchChallenge(challengeKey: string) {
       const headers: HeadersInit = {};
       
       // Add auth token if user is logged in
@@ -26,7 +26,7 @@ export default function ChallengeDetailPage() {
         headers['Authorization'] = `Bearer ${token}`;
       }
       
-      const res = await fetch(`/api/challenges/${id}`, { headers });
+      const res = await fetch(`/api/challenges/${encodeURIComponent(challengeKey)}`, { headers });
       if (!res.ok) {
         setChallenge(null);
         setUserChallenges([]);
@@ -41,7 +41,7 @@ export default function ChallengeDetailPage() {
       setLoading(false);
     }
 
-    if (typeof params.id === 'string') { fetchChallenge(params.id); } 
+    if (typeof params.id === 'string') { fetchChallenge(params.id); }
     else if (Array.isArray(params.id) && params.id.length > 0) { fetchChallenge(params.id[0]); }
   }, [params.id, user]);
 

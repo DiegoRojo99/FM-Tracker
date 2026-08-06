@@ -16,10 +16,10 @@ async function run() {
 
   console.log('Challenge catalog seeded successfully.');
   console.log(
-    `Definitions created=${result.definitionsCreated}, updated=${result.definitionsUpdated}, goals upserted=${result.goalsUpserted}, rules created=${result.rulesCreated}`
+    `Definitions created=${result.definitionsCreated}, updated=${result.definitionsUpdated}, deleted=${result.definitionsDeleted}, archived=${result.definitionsArchived}, goals upserted=${result.goalsUpserted}, rules created=${result.rulesCreated}`
   );
   console.log(
-    `Stale goals deleted=${result.staleGoalsDeleted}, stale goals skipped (runs exist)=${result.staleGoalDeleteSkipped}`
+    `Stale goals deleted=${result.staleGoalsDeleted}, stale goals skipped (runs exist)=${result.staleGoalDeleteSkipped}, definition delete skipped (runs exist)=${result.definitionDeleteSkipped}`
   );
 }
 

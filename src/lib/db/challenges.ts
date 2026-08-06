@@ -189,6 +189,7 @@ function buildChallengeWithGoals(
 
 async function loadChallengeDefinitions(): Promise<ChallengeDefinitionWithGoals[]> {
   return prisma.challengeDefinition.findMany({
+    where: { status: 'PUBLISHED' },
     include: {
       goals: {
         include: {
@@ -335,6 +336,25 @@ export async function getChallengeById(challengeId: number): Promise<ChallengeWi
   });
 
   if (!challenge) return null;
+  if (challenge.status !== 'PUBLISHED') return null;
+
+  const lookups = await loadChallengeLookups([challenge as ChallengeDefinitionWithGoals]);
+  return mapChallengeDefinition(challenge as ChallengeDefinitionWithGoals, lookups);
+}
+
+export async function getChallengeByKey(challengeKey: string): Promise<ChallengeWithGoals | null> {
+  const challenge = await prisma.challengeDefinition.findUnique({
+    where: { key: challengeKey },
+    include: {
+      goals: {
+        include: { rules: true },
+        orderBy: { position: 'asc' },
+      },
+    },
+  });
+
+  if (!challenge) return null;
+  if (challenge.status !== 'PUBLISHED') return null;
 
   const lookups = await loadChallengeLookups([challenge as ChallengeDefinitionWithGoals]);
   return mapChallengeDefinition(challenge as ChallengeDefinitionWithGoals, lookups);
@@ -346,6 +366,16 @@ export async function getUserChallenges(userId: string): Promise<CareerChallenge
 
 export async function getUserChallengesByChallenge(challengeId: number, userId: string): Promise<CareerChallengeWithSaveDetails[]> {
   return (await loadUserChallengeRuns(userId, challengeId)) as CareerChallengeWithSaveDetails[];
+}
+
+export async function getUserChallengesByChallengeKey(challengeKey: string, userId: string): Promise<CareerChallengeWithSaveDetails[]> {
+  const challenge = await prisma.challengeDefinition.findUnique({
+    where: { key: challengeKey },
+    select: { id: true, status: true },
+  });
+
+  if (!challenge || challenge.status !== 'PUBLISHED') return [];
+  return (await loadUserChallengeRuns(userId, challenge.id)) as CareerChallengeWithSaveDetails[];
 }
 
 export async function getDetailedChallengesForSave(saveId: string): Promise<CareerChallengeWithDetails[]> {
