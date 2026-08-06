@@ -5,6 +5,38 @@ import { Team } from "@/lib/types/prisma/Team";
 import { CompetitionGroup } from "../../../prisma/generated/client";
 import { deleteCacheKey } from "@/lib/cache/redis";
 
+const fullSaveInclude = {
+  currentLeague: true,
+  currentClub: true,
+  currentNT: true,
+  game: true,
+  careerStints: {
+    include: {
+      team: true,
+    },
+  },
+  trophies: {
+    include: {
+      team: true,
+      competitionGroup: true,
+    },
+  },
+  seasons: {
+    include: {
+      team: true,
+      leagueResult: { include: { competition: true } },
+      cupResults: { include: { competition: true } },
+    },
+  },
+} as const;
+
+function withChallengesCompatibility<T extends Omit<FullDetailsSave, 'challenges'>>(save: T): FullDetailsSave {
+  return {
+    ...save,
+    challenges: [],
+  };
+}
+
 export function getUserPreviewSavesCacheKey(userId: string): string {
   return `saves:preview:user:${userId}`
 }
@@ -76,52 +108,14 @@ export async function getPreviewSaveById(saveId: string): Promise<PreviewSave | 
 }
 
 export async function getFullSave(saveId: string): Promise<FullDetailsSave | null> {
-  return await prisma.save.findUnique({
+  const save = await prisma.save.findUnique({
     where: {
       id: saveId,
     },
-    include: {
-      currentLeague: true,
-      currentClub: true,
-      currentNT: true,
-      game: true,
-      careerStints: {
-        include: {
-          team: true,
-        },
-      },
-      trophies: {
-        include: {
-          team: true,
-          competitionGroup: true,
-        },
-      },
-      seasons: {
-        include: {
-          team: true,
-          leagueResult: {include: {competition: true}},
-          cupResults: {include: {competition: true}},
-        },
-      },
-      challenges: {
-        include: {
-          challenge: {
-            include: {
-              goals: {
-                include: {
-                  competition: true,
-                  country: true,
-                  teams: true,
-                },
-              },
-            },
-          },
-          goalProgress: true,
-          game: true,
-        },
-      }
-    },
+    include: fullSaveInclude,
   });
+
+  return save ? withChallengesCompatibility(save) : null;
 }
 
 export async function getUserPreviewSaves(userId: string): Promise<PreviewSave[]> {
@@ -137,52 +131,14 @@ export async function getUserPreviewSaves(userId: string): Promise<PreviewSave[]
 }
 
 export async function getFullUserSaves(userId: string): Promise<FullDetailsSave[]> {
-  return await prisma.save.findMany({
+  const saves = await prisma.save.findMany({
     where: {
       userId: userId,
     },
-    include: {
-      currentLeague: true,
-      currentClub: true,
-      currentNT: true,
-      game: true,
-      careerStints: {
-        include: {
-          team: true,
-        },
-      },
-      trophies: {
-        include: {
-          team: true,
-          competitionGroup: true,
-        },
-      },
-      seasons: {
-        include: {
-          team: true,
-          leagueResult: {include: {competition: true}},
-          cupResults: {include: {competition: true}},
-        },
-      },
-      challenges: {
-        include: {
-          challenge: {
-            include: {
-              goals: {
-                include: {
-                  competition: true,
-                  country: true,
-                  teams: true,
-                },
-              },
-            },
-          },
-          goalProgress: true,
-          game: true,
-        },
-      }
-    },
+    include: fullSaveInclude,
   });
+
+  return saves.map(withChallengesCompatibility);
 }
 export async function countUserSaves(userId: string): Promise<number> {
   return await prisma.save.count({
@@ -193,49 +149,8 @@ export async function countUserSaves(userId: string): Promise<number> {
 }
 
 export async function getAllFullSaves(): Promise<FullDetailsSave[] | null> {
-  return await prisma.save.findMany({
-    include: {
-      currentLeague: true,
-      currentClub: true,
-      currentNT: true,
-      game: true,
-      careerStints: {
-        include: {
-          team: true,
-        },
-      },
-      trophies: {
-        include: {
-          team: true,
-          competitionGroup: true,
-        },
-      },
-      seasons: {
-        include: {
-          team: true,
-          leagueResult: {include: {competition: true}},
-          cupResults: {include: {competition: true}},
-        },
-      },
-      challenges: {
-        include: {
-          challenge: {
-            include: {
-              goals: {
-                include: {
-                  competition: true,
-                  country: true,
-                  teams: true,
-                },
-              },
-            },
-          },
-          goalProgress: true,
-          game: true,
-        },
-      }
-    },
-  });
+  const saves = await prisma.save.findMany({ include: fullSaveInclude });
+  return saves.map(withChallengesCompatibility);
 }
 
 export async function getAllTeamsInSaves(): Promise<Team[]> {
