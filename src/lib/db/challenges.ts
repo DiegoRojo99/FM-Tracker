@@ -3,7 +3,6 @@ import { getTrophiesForSave } from './trophies';
 import { dedupeTrophiesForChallengeEvaluation } from '../challenges/progression';
 import { challengeGoalToCareerChallengeGoal } from '../dto/challenges';
 import { evaluateAchievementsForUser } from './achievements';
-import { getSaveById } from './saves';
 import { Prisma } from '../../../prisma/generated/client';
 import type {
   ChallengeGoalWithDetails,
@@ -270,11 +269,15 @@ function mapRunWithDetails(
 }
 
 async function loadUserChallengeRuns(userId: string, challengeId?: number): Promise<CareerChallengeWithDetails[]> {
+  return loadChallengeRuns({
+    userId,
+    ...(challengeId !== undefined ? { challengeDefinitionId: challengeId } : {}),
+  });
+}
+
+async function loadChallengeRuns(where: Prisma.ChallengeRunWhereInput): Promise<CareerChallengeWithDetails[]> {
   const runs = await prisma.challengeRun.findMany({
-    where: {
-      userId,
-      ...(challengeId !== undefined ? { challengeDefinitionId: challengeId } : {}),
-    },
+    where,
     include: {
       challengeDefinition: {
         include: {
@@ -343,6 +346,25 @@ export async function getUserChallenges(userId: string): Promise<CareerChallenge
 
 export async function getUserChallengesByChallenge(challengeId: number, userId: string): Promise<CareerChallengeWithSaveDetails[]> {
   return (await loadUserChallengeRuns(userId, challengeId)) as CareerChallengeWithSaveDetails[];
+}
+
+export async function getDetailedChallengesForSave(saveId: string): Promise<CareerChallengeWithDetails[]> {
+  return loadChallengeRuns({ saveId });
+}
+
+export async function getDetailedChallengesForSaves(saveIds: string[]): Promise<Map<string, CareerChallengeWithDetails[]>> {
+  if (saveIds.length === 0) return new Map();
+
+  const runs = await loadChallengeRuns({ saveId: { in: saveIds } });
+  const grouped = new Map<string, CareerChallengeWithDetails[]>();
+
+  for (const run of runs) {
+    const existing = grouped.get(run.saveId) ?? [];
+    existing.push(run);
+    grouped.set(run.saveId, existing);
+  }
+
+  return grouped;
 }
 
 // Keep the old function name for backward compatibility, but now it reads challenge runs.
@@ -455,7 +477,10 @@ export async function addNewEmptyCareerChallenges(
   saveId: string,
   challenges: ChallengeWithGoals[]
 ): Promise<void> {
-  const save = await getSaveById(saveId);
+  const save = await prisma.save.findUnique({
+    where: { id: saveId },
+    select: { id: true, userId: true, gameId: true },
+  });
   if (!save) return;
 
   const userChallenges = await getChallengesForSave(saveId);

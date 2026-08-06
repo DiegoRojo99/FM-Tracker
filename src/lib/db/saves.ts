@@ -4,6 +4,7 @@ import { prisma } from "./prisma";
 import { Team } from "@/lib/types/prisma/Team";
 import { CompetitionGroup } from "../../../prisma/generated/client";
 import { deleteCacheKey } from "@/lib/cache/redis";
+import { getDetailedChallengesForSave, getDetailedChallengesForSaves } from "./challenges";
 
 const fullSaveInclude = {
   currentLeague: true,
@@ -30,10 +31,13 @@ const fullSaveInclude = {
   },
 } as const;
 
-function withChallengesCompatibility<T extends Omit<FullDetailsSave, 'challenges'>>(save: T): FullDetailsSave {
+function withHydratedChallenges<T extends Omit<FullDetailsSave, 'challenges'>>(
+  save: T,
+  challenges: FullDetailsSave['challenges']
+): FullDetailsSave {
   return {
     ...save,
-    challenges: [],
+    challenges,
   };
 }
 
@@ -115,7 +119,10 @@ export async function getFullSave(saveId: string): Promise<FullDetailsSave | nul
     include: fullSaveInclude,
   });
 
-  return save ? withChallengesCompatibility(save) : null;
+  if (!save) return null;
+
+  const challenges = await getDetailedChallengesForSave(save.id);
+  return withHydratedChallenges(save, challenges);
 }
 
 export async function getUserPreviewSaves(userId: string): Promise<PreviewSave[]> {
@@ -138,7 +145,8 @@ export async function getFullUserSaves(userId: string): Promise<FullDetailsSave[
     include: fullSaveInclude,
   });
 
-  return saves.map(withChallengesCompatibility);
+  const challengesBySaveId = await getDetailedChallengesForSaves(saves.map((save) => save.id));
+  return saves.map((save) => withHydratedChallenges(save, challengesBySaveId.get(save.id) ?? []));
 }
 export async function countUserSaves(userId: string): Promise<number> {
   return await prisma.save.count({
@@ -150,7 +158,8 @@ export async function countUserSaves(userId: string): Promise<number> {
 
 export async function getAllFullSaves(): Promise<FullDetailsSave[] | null> {
   const saves = await prisma.save.findMany({ include: fullSaveInclude });
-  return saves.map(withChallengesCompatibility);
+  const challengesBySaveId = await getDetailedChallengesForSaves(saves.map((save) => save.id));
+  return saves.map((save) => withHydratedChallenges(save, challengesBySaveId.get(save.id) ?? []));
 }
 
 export async function getAllTeamsInSaves(): Promise<Team[]> {

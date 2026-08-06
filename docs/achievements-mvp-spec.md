@@ -78,7 +78,7 @@ Evaluator input payload (minimum):
 
 | Key | Title | Description | Points | Rarity | Trigger Events | Unlock Rule | Progress Rule | Max Progress | Example |
 |---|---|---|---:|---|---|---|---|---:|---|
-| challenges.first_complete | Challenger | Complete your first challenge | 20 | Common | challenge.progress.updated, trophy.added, season.created | User completed career challenges >= 1 | min(completedChallenges, 1) | 1 | First challenge record gets completedAt |
+| challenges.first_complete | Challenger | Complete your first challenge | 20 | Common | challenge.progress.updated, trophy.added, season.created | User completed challenge runs >= 1 | min(completedChallenges, 1) | 1 | First challenge run record gets completedAt |
 | challenges.five_complete | Elite Challenger | Complete 5 challenges | 90 | Epic | challenge.progress.updated, trophy.added, season.created | User completed challenges >= 5 | min(completedChallenges, 5) | 5 | User has completed five distinct challenge runs |
 
 ## 4.4 Career
@@ -108,7 +108,7 @@ General rules:
 Aggregation definitions:
 - totalTrophies: count of trophies where trophy.save.userId = userId
 - totalPromotions: count of league results where promoted=true and season.save.userId = userId
-- completedChallenges: count of career challenges where completedAt is not null and userId matches
+- completedChallenges: count of challenge runs where completedAt is not null and userId matches
 - activeSaves: count of saves where save.userId = userId
 - distinctClubsManaged: count of distinct careerStint.teamId joined through save.userId
 - totalSeasons: count of seasons joined through save.userId
@@ -135,7 +135,7 @@ Backfill behavior:
 This catalog is intentionally based on currently available entities:
 - Trophy and Save relations for trophy milestones
 - LeagueResult.promoted for promotion milestones
-- CareerChallenge.completedAt for challenge milestones
+- ChallengeRun.completedAt for challenge milestones
 - CareerStint.teamId for distinct clubs managed
 - Season records for season milestones
 
