@@ -49,7 +49,7 @@ type ChallengeRunWithDetails = ChallengeRun & {
   challengeDefinition: ChallengeDefinitionWithGoals;
   runGoals: ChallengeRunGoal[];
   game: Game;
-  save: Save | null;
+  save: (Save & { currentClub: Team | null }) | null;
 };
 
 function extractBonus(metadata: unknown): string | null {
@@ -290,7 +290,11 @@ async function loadChallengeRuns(where: Prisma.ChallengeRunWhereInput): Promise<
       },
       runGoals: true,
       game: true,
-      save: true,
+      save: {
+        include: {
+          currentClub: true,
+        },
+      },
     },
     orderBy: { startedAt: 'desc' },
   }) as ChallengeRunWithDetails[];
@@ -785,7 +789,7 @@ function evaluateGoalCompletion(
       readNumber((distinctCountryRule.config as Record<string, unknown>).min) ??
       1;
 
-    return getDistinctTrophyCountryCodes(trophies, context).size >= minCountries;
+    return getDistinctPrimaryTrophyCountryCodes(trophies, context).size >= minCountries;
   }
 
   if (goal.rules.some((rule) => rule.kind.toLowerCase() === 'domestic.league.any-country')) {
@@ -857,6 +861,28 @@ function getDistinctTrophyCountryCodes(trophies: Trophy[], context: TrophyMatchC
   }
 
   return countryCodes;
+}
+
+function getDistinctPrimaryTrophyCountryCodes(trophies: Trophy[], context: TrophyMatchContext): Set<string> {
+  const countryCodes = new Set<string>();
+
+  for (const trophy of trophies) {
+    const primaryCode = getPrimaryCountryCodeForTrophy(trophy, context);
+    if (primaryCode) countryCodes.add(primaryCode);
+  }
+
+  return countryCodes;
+}
+
+function getPrimaryCountryCodeForTrophy(trophy: Trophy, context: TrophyMatchContext): string | null {
+  // For country-distinct challenge goals, use club country as primary source.
+  const teamCountryCode = context.teamCountryById.get(trophy.teamId);
+  if (teamCountryCode) return teamCountryCode;
+
+  const competitionCountryCode = context.competitionCountryById.get(trophy.competitionGroupId);
+  if (competitionCountryCode) return competitionCountryCode;
+
+  return null;
 }
 
 function hasDomesticDoubleInSameCountry(trophies: Trophy[], context: TrophyMatchContext): boolean {

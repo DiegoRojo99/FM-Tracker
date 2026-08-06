@@ -8,6 +8,13 @@ import ProgressBar from '../../components/progress/ProgressBar';
 import { useAuth } from '../../components/AuthProvider';
 import ChallengeGoalCard from "./ChallengeGoalCard";
 
+function formatSaveLabel(run: CareerChallengeWithSaveDetails): string {
+  if (!run.save) return `Save record missing - ${run.game.shortName}`;
+  const shortSaveId = run.save.id.slice(0, 8);
+  const clubName = run.save.currentClub?.name ?? 'No club';
+  return `${run.save.season} - ${clubName} - ${run.game.shortName} - ${shortSaveId}`;
+}
+
 export default function ChallengeDetailPage() {
   const params = useParams();
   const { user } = useAuth();
@@ -96,7 +103,7 @@ export default function ChallengeDetailPage() {
                   >
                     {userChallenges.map((challenge, index) => (
                       <option key={challenge.id} value={index}>
-                        {challenge.save ? `${challenge.save.season} Season` : 'Legacy Save'}
+                        {formatSaveLabel(challenge)}
                         {challenge.completedAt ? ' (Completed)' : ' (In Progress)'}
                       </option>
                     ))}
@@ -106,21 +113,52 @@ export default function ChallengeDetailPage() {
               
               {selectedChallenge && (
                 <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/65 p-4">
-                  <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <span className="text-sm font-semibold text-white">
-                        {selectedChallenge.save ? (
-                          `Save: ${selectedChallenge.save.season} Season`
-                        ) : (
-                          'Legacy Save'
-                        )}
-                      </span>
-                      <p className="text-xs text-[var(--color-text-muted)]">
-                        Started: {new Date(selectedChallenge.startedAt).toLocaleDateString()}
-                      </p>
+                  <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="w-full">
+                      {selectedChallenge.save ? (
+                        <div className="flex flex-col items-center gap-3 text-center sm:items-start sm:text-left">
+                          <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                            <span className="rounded-full border border-[var(--color-surface-border)] bg-[var(--color-dark)]/70 px-3 py-1 text-xs font-semibold text-[var(--color-text-muted)]">
+                              {selectedChallenge.save.season}
+                            </span>
+                            <span className="rounded-full border border-[var(--color-surface-border)] bg-[var(--color-dark)]/70 px-3 py-1 text-xs font-semibold text-[var(--color-text-muted)]">
+                              {selectedChallenge.game.shortName}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-3 py-2">
+                            {selectedChallenge.save.currentClub?.logo ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={selectedChallenge.save.currentClub.logo}
+                                alt={selectedChallenge.save.currentClub?.name ?? 'Current club'}
+                                className="h-16 w-16 rounded-full object-cover"
+                              />
+                            ) : (
+                              <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-base font-bold text-white/85 shadow-md">
+                                FC
+                              </span>
+                            )}
+
+                            <div>
+                              <p className="text-lg font-black leading-tight text-white sm:text-xl">
+                                {selectedChallenge.save.currentClub?.name ?? 'No current club'}
+                              </p>
+                            </div>
+                          </div>
+
+                          <p className="text-xs text-[var(--color-text-muted)]/90">
+                            Started {new Date(selectedChallenge.startedAt).toLocaleDateString()} · ID: {selectedChallenge.save.id.slice(0, 12)}
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="rounded-lg border border-amber-300/35 bg-amber-400/10 px-3 py-2 text-center text-xs text-amber-100 sm:text-left">
+                          Save data is missing for this run. New runs should always be linked to a save.
+                        </div>
+                      )}
                     </div>
                     {selectedChallenge.completedAt && (
-                      <span className="text-sm font-semibold text-emerald-300">
+                      <span className="self-center text-sm font-semibold text-emerald-300 sm:self-start">
                         ✓ Completed {new Date(selectedChallenge.completedAt).toLocaleDateString()}
                       </span>
                     )}

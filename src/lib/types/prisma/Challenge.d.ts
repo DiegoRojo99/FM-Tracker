@@ -1,4 +1,5 @@
 import {
+  Prisma,
   ChallengeDefinition,
   ChallengeGoal,
   ChallengeRun,
@@ -48,8 +49,12 @@ export type CareerChallengeWithDetails = ChallengeRun & {
   game: Game;
 };
 
+export type ChallengeSaveWithCurrentClub = Prisma.SaveGetPayload<{
+  include: { currentClub: true };
+}>;
+
 export type CareerChallengeWithSaveDetails = CareerChallengeWithDetails & {
-  save: Save | null;
+  save: ChallengeSaveWithCurrentClub | null;
 };
 
 export type CareerChallenge = ChallengeRun;
