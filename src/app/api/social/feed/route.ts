@@ -37,9 +37,9 @@ export async function GET(req: NextRequest) {
         orderBy: { createdAt: 'desc' },
         take: 10,
       }),
-      prisma.careerChallenge.findMany({
+      prisma.challengeRun.findMany({
         where: { userId: uid, completedAt: { not: null } },
-        include: { challenge: true, save: true },
+        include: { challengeDefinition: true, save: true },
         orderBy: { completedAt: 'desc' },
         take: 10,
       }),
@@ -66,9 +66,9 @@ export async function GET(req: NextRequest) {
           })
         : [],
       friendIds.length > 0
-        ? prisma.careerChallenge.findMany({
+        ? prisma.challengeRun.findMany({
             where: { userId: { in: friendIds }, completedAt: { not: null } },
-            include: { challenge: true, save: true, user: true },
+          include: { challengeDefinition: true, save: true, user: true },
             orderBy: { completedAt: 'desc' },
             take: 10,
           })
@@ -108,11 +108,11 @@ export async function GET(req: NextRequest) {
         id: `challenge-${challenge.id}`,
         type: 'challenge.completed' as const,
         title: 'Challenge completed',
-        message: `Completed ${challenge.challenge.name} in ${challenge.save?.gameId ? 'your save' : 'your profile'}.`,
+        message: `Completed ${challenge.challengeDefinition.title} in ${challenge.save?.gameId ? 'your save' : 'your profile'}.`,
         createdAt: challenge.completedAt?.toISOString() ?? challenge.startedAt.toISOString(),
         visibility: 'friends' as const,
         saveId: challenge.saveId ?? undefined,
-        metadata: { challenge: challenge.challenge.name },
+        metadata: { challenge: challenge.challengeDefinition.title },
       })),
       ...seasons.map((season) => ({
         id: `season-${season.id}`,
@@ -148,11 +148,11 @@ export async function GET(req: NextRequest) {
         id: `friend-challenge-${challenge.id}`,
         type: 'challenge.completed' as const,
         title: 'Challenge completed',
-        message: `${challenge.user.displayName} completed ${challenge.challenge.name}.`,
+        message: `${challenge.user.displayName} completed ${challenge.challengeDefinition.title}.`,
         createdAt: challenge.completedAt?.toISOString() ?? challenge.startedAt.toISOString(),
         visibility: 'friends' as const,
         saveId: challenge.saveId ?? undefined,
-        metadata: { challenge: challenge.challenge.name, user: challenge.user.displayName },
+        metadata: { challenge: challenge.challengeDefinition.title, user: challenge.user.displayName },
       })),
       ...friendSeasons.map((season) => ({
         id: `friend-season-${season.id}`,

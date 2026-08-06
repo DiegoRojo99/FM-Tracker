@@ -1,46 +1,63 @@
-import { 
-  Challenge, 
-  ChallengeGoal, 
-  CareerChallenge, 
+import {
+  ChallengeDefinition,
+  ChallengeGoal,
+  ChallengeRun,
+  ChallengeRunGoal,
+  ChallengeRule,
   CompetitionGroup,
   Country,
-  ChallengeGoalTeam,
-  CareerChallengeGoal,
   Game,
+  Save,
   Team,
-  Save
 } from "../../../../prisma/generated/client";
 
-export type ChallengeWithGoals = Challenge & {
-  goals: ChallengeGoalWithDetails[];
+export type ChallengeGoalTeamLink = {
+  teamId: number;
+  team: Team;
 };
 
 export type ChallengeGoalWithDetails = ChallengeGoal & {
+  challengeId: number;
+  competitionId: number | null;
+  countryId: string | null;
   competition: CompetitionGroup | null;
   country: Country | null;
-  teams: (ChallengeGoalTeam & { team: Team })[];
+  teams: ChallengeGoalTeamLink[];
+  rules: ChallengeRule[];
 };
 
-export type CareerChallengeWithDetails = CareerChallenge & {
+export type ChallengeWithGoals = ChallengeDefinition & {
+  name: string;
+  bonus: string | null;
+  goals: ChallengeGoalWithDetails[];
+};
+
+export type Challenge = ChallengeWithGoals;
+
+export type CareerChallengeGoal = ChallengeRunGoal;
+
+export type CareerChallengeGoalInput = Omit<
+  ChallengeRunGoal,
+  'id' | 'challengeRunId' | 'createdAt' | 'updatedAt'
+>;
+
+export type CareerChallengeWithDetails = ChallengeRun & {
+  challengeId: number;
   challenge: ChallengeWithGoals;
   goalProgress: CareerChallengeGoal[];
   game: Game;
 };
 
-export type CareerChallengeWithSaveDetails = CareerChallenge & {
-  challenge: ChallengeWithGoals;
-  goalProgress: CareerChallengeGoal[];
-  game: Game;
+export type CareerChallengeWithSaveDetails = CareerChallengeWithDetails & {
   save: Save | null;
 };
 
-export type CareerChallengeGoalInput = Omit<CareerChallengeGoal, 'id' | 'careerChallengeId'>;
+export type CareerChallenge = ChallengeRun;
 
 export type {
-  Challenge,
+  ChallengeDefinition,
   ChallengeGoal,
-  CareerChallenge,
-  CareerChallengeGoal,
-  CareerChallengeGoalInput,
-  CareerChallengeWithSaveDetails
-}
+  ChallengeRun,
+  ChallengeRunGoal,
+  CareerChallengeWithSaveDetails,
+};
