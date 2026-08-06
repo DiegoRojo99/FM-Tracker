@@ -5,6 +5,7 @@ import { Trophy } from '../../../prisma/generated/client';
 import { prisma } from './prisma';
 import { FullTrophy } from '../types/prisma/Trophy';
 import { fetchTeam } from './teams';
+import { isCupWinningRound } from './seasons';
 
 function isPrismaP2002(error: unknown): boolean {
   return typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === 'P2002';
@@ -271,6 +272,113 @@ export async function getAllTrophiesForUser(userId: string): Promise<FullTrophy[
       competitionGroup: true,
     },
   });
+}
+
+export async function backfillTrophiesFromSeasonResults(): Promise<{
+  seasonsProcessed: number;
+  leagueTrophiesCreated: number;
+  cupTrophiesCreated: number;
+  trophiesUpdated: number;
+}> {
+  const seasons = await prisma.season.findMany({
+    include: {
+      save: {
+        select: {
+          id: true,
+          gameId: true,
+        },
+      },
+      leagueResult: {
+        select: {
+          competitionId: true,
+          position: true,
+        },
+      },
+      cupResults: {
+        select: {
+          competitionId: true,
+          reachedRound: true,
+        },
+      },
+    },
+  });
+
+  let leagueTrophiesCreated = 0;
+  let cupTrophiesCreated = 0;
+  let trophiesUpdated = 0;
+
+  for (const season of seasons) {
+    if (season.leagueResult?.position === 1) {
+      const existingLeague = await prisma.trophy.findUnique({
+        where: {
+          competitionGroupId_season_saveId: {
+            competitionGroupId: season.leagueResult.competitionId,
+            season: season.season,
+            saveId: season.saveId,
+          },
+        },
+      });
+
+      if (!existingLeague) {
+        await prisma.trophy.create({
+          data: {
+            competitionGroupId: season.leagueResult.competitionId,
+            teamId: season.teamId,
+            season: season.season,
+            saveId: season.saveId,
+            gameId: season.save.gameId,
+          },
+        });
+        leagueTrophiesCreated += 1;
+      } else if (existingLeague.teamId !== season.teamId) {
+        await prisma.trophy.update({
+          where: { id: existingLeague.id },
+          data: { teamId: season.teamId },
+        });
+        trophiesUpdated += 1;
+      }
+    }
+
+    for (const cup of season.cupResults) {
+      if (!isCupWinningRound(cup.reachedRound)) continue;
+
+      const existingCup = await prisma.trophy.findUnique({
+        where: {
+          competitionGroupId_season_saveId: {
+            competitionGroupId: cup.competitionId,
+            season: season.season,
+            saveId: season.saveId,
+          },
+        },
+      });
+
+      if (!existingCup) {
+        await prisma.trophy.create({
+          data: {
+            competitionGroupId: cup.competitionId,
+            teamId: season.teamId,
+            season: season.season,
+            saveId: season.saveId,
+            gameId: season.save.gameId,
+          },
+        });
+        cupTrophiesCreated += 1;
+      } else if (existingCup.teamId !== season.teamId) {
+        await prisma.trophy.update({
+          where: { id: existingCup.id },
+          data: { teamId: season.teamId },
+        });
+        trophiesUpdated += 1;
+      }
+    }
+  }
+
+  return {
+    seasonsProcessed: seasons.length,
+    leagueTrophiesCreated,
+    cupTrophiesCreated,
+    trophiesUpdated,
+  };
 }
 
 export async function countAllTrophiesForUser(userId: string): Promise<number> {

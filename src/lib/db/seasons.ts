@@ -47,6 +47,21 @@ export function normalizeCupResultsStrict(cupResults: SeasonInput["cupResults"] 
   return Array.from(dedupedByCompetition.values());
 }
 
+export function isCupWinningRound(reachedRound: string | null | undefined): boolean {
+  if (!reachedRound) return false;
+
+  const normalized = reachedRound
+    .trim()
+    .toLowerCase()
+    .replace(/[-_\s]+/g, ' ');
+
+  return normalized === 'winners'
+    || normalized === 'winner'
+    || normalized === 'champions'
+    || normalized === 'champion'
+    || normalized === 'won';
+}
+
 export async function syncSeasonCompetitionData(
   tx: Prisma.TransactionClient,
   seasonId: number,

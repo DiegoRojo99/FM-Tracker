@@ -5,7 +5,7 @@ import { evaluateAchievementsForUser } from '@/lib/db/achievements';
 import { SeasonInput, SeasonUpdateInput } from '@/lib/types/prisma/Season';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
-import { getSaveSeasons, SeasonValidationError, syncSeasonCompetitionData, validateLeagueInputShape } from '@/lib/db/seasons';
+import { getSaveSeasons, isCupWinningRound, SeasonValidationError, syncSeasonCompetitionData, validateLeagueInputShape } from '@/lib/db/seasons';
 import { invalidateUserPreviewSavesCache } from '@/lib/db/saves';
 
 function isUniqueConstraintError(error: unknown): boolean {
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
 
     // If the season is a cup win, add the trophy
     for (const cup of cups) {
-      if (cup.reachedRound === 'Winners') {
+      if (isCupWinningRound(cup.reachedRound)) {
         await addTrophyToSave({
           uid,
           saveId,
@@ -223,7 +223,7 @@ export async function PUT(req: NextRequest) {
       }
 
       for (const cup of cups) {
-        if (cup.reachedRound !== 'Winners') continue;
+        if (!isCupWinningRound(cup.reachedRound)) continue;
         await addTrophyToSave({
           uid,
           saveId,

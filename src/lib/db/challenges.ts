@@ -30,6 +30,7 @@ import type {
 type TrophyMatchContext = {
   competitionNameById: Map<number, string>;
   competitionCountryById: Map<number, string>;
+  competitionTypeById: Map<number, string>;
   teamCountryById: Map<number, string>;
 };
 
@@ -430,9 +431,9 @@ export async function backfillChallengeProgressForAllSaves(): Promise<{
       competitionIds.length > 0
         ? prisma.competitionGroup.findMany({
             where: { id: { in: competitionIds } },
-            select: { id: true, name: true, countryCode: true },
+              select: { id: true, name: true, countryCode: true, type: true },
           })
-        : Promise.resolve([] as Array<{ id: number; name: string; countryCode: string | null }>),
+          : Promise.resolve([] as Array<{ id: number; name: string; countryCode: string | null; type: string }>),
       teamIds.length > 0
         ? prisma.team.findMany({
             where: { id: { in: teamIds } },
@@ -452,6 +453,7 @@ export async function backfillChallengeProgressForAllSaves(): Promise<{
           .filter((competition): competition is typeof competition & { countryCode: string } => !!competition.countryCode)
           .map((competition) => [competition.id, competition.countryCode])
       ),
+      competitionTypeById: new Map(competitions.map((competition) => [competition.id, competition.type])),
       teamCountryById: new Map(
         teams
           .filter((team): team is typeof team & { countryCode: string } => !!team.countryCode)
@@ -565,7 +567,7 @@ export async function addChallengeForTrophy(
   const [competitions, teams] = await Promise.all([
     prisma.competitionGroup.findMany({
       where: { id: { in: competitionIds } },
-      select: { id: true, name: true, countryCode: true },
+      select: { id: true, name: true, countryCode: true, type: true },
     }),
     prisma.team.findMany({
       where: { id: { in: teamIds } },
@@ -580,6 +582,7 @@ export async function addChallengeForTrophy(
         .filter((competition): competition is typeof competition & { countryCode: string } => !!competition.countryCode)
         .map((competition) => [competition.id, competition.countryCode])
     ),
+    competitionTypeById: new Map(competitions.map((competition) => [competition.id, competition.type])),
     teamCountryById: new Map(
       teams
         .filter((team): team is typeof team & { countryCode: string } => !!team.countryCode)
@@ -587,14 +590,22 @@ export async function addChallengeForTrophy(
     ),
   };
 
-  const matchingChallenges = await checkForMatchingChallenges(trophyData, context);
+  const challenges = await getAllChallenges();
+  const existingRuns = await prisma.challengeRun.findMany({
+    where: { userId: uid, saveId },
+    select: { challengeDefinitionId: true },
+  });
+  const existingChallengeIds = new Set(existingRuns.map((run) => run.challengeDefinitionId));
 
-  for (const challenge of matchingChallenges) {
+  for (const challenge of challenges) {
     const processedGoals: CareerChallengeGoalInput[] = filterCompletedChallengeGoalsBasedOnTrophies(
       challenge,
       uniqueTrophies,
       context
     );
+
+    const hasProgress = processedGoals.some((goal) => goal.isComplete);
+    if (!hasProgress && !existingChallengeIds.has(challenge.id)) continue;
 
     await upsertCareerChallenge(uid, saveId, trophyData.gameId, challenge.id, processedGoals);
   }
@@ -890,7 +901,7 @@ function hasDomesticDoubleInSameCountry(trophies: Trophy[], context: TrophyMatch
   const cupsByCountry = new Set<string>();
 
   for (const trophy of trophies) {
-    const countryCode = context.competitionCountryById.get(trophy.competitionGroupId);
+    const countryCode = getPrimaryCountryCodeForTrophy(trophy, context);
     if (!countryCode) continue;
 
     if (isDomesticLeagueTrophy(trophy, context)) {
@@ -907,22 +918,29 @@ function hasDomesticDoubleInSameCountry(trophies: Trophy[], context: TrophyMatch
 
 function isDomesticLeagueTrophy(trophy: Trophy, context: TrophyMatchContext): boolean {
   const competitionName = context.competitionNameById.get(trophy.competitionGroupId);
-  const countryCode = context.competitionCountryById.get(trophy.competitionGroupId);
-  if (!competitionName || !countryCode) return false;
+  if (!competitionName) return false;
 
   const normalized = normalizeCompetitionName(competitionName);
+  const hasCupLikeName = /cup|copa|coppa|coupe|pokal|kupa|supercup|ta[c\u0327]a/.test(normalized);
+  if (hasCupLikeName) return false;
 
-  const isCup = /cup|copa|coppa|coupe|pokal|ta[c\u0327]a/.test(normalized);
-  if (isCup) return false;
+  const competitionType = context.competitionTypeById.get(trophy.competitionGroupId)?.toLowerCase();
+  if (competitionType === 'league') return true;
+  if (competitionType === 'cup' || competitionType === 'supercup') return false;
 
-  return /league|liga|bundesliga|seriea|ligue1|premierleague|eredivisie|division/.test(normalized);
+  return /league|liga|bundesliga|seriea|ligue1|premierleague|eredivisie|division|nbi|bajnoksag/.test(normalized);
 }
 
 function isDomesticCupTrophy(trophy: Trophy, context: TrophyMatchContext): boolean {
   const competitionName = context.competitionNameById.get(trophy.competitionGroupId);
-  const countryCode = context.competitionCountryById.get(trophy.competitionGroupId);
-  if (!competitionName || !countryCode) return false;
+  if (!competitionName) return false;
 
   const normalized = normalizeCompetitionName(competitionName);
-  return /cup|copa|coppa|coupe|pokal|supercup|ta[c\u0327]a/.test(normalized);
+  if (/cup|copa|coppa|coupe|pokal|kupa|ta[c\u0327]a/.test(normalized)) return true;
+
+  const competitionType = context.competitionTypeById.get(trophy.competitionGroupId)?.toLowerCase();
+  if (competitionType === 'cup') return true;
+  if (competitionType === 'league' || competitionType === 'supercup') return false;
+
+  return false;
 }
