@@ -115,12 +115,12 @@ const MIGRATION_STEPS: MigrationStep[] = [
   },
   {
     name: 'global-challenges',
-    description: 'Migrate global challenge templates from Firebase to PostgreSQL (depends on teams, competition-junctions, countries)',
+    description: 'Deprecated after challenge schema rebuild; use ChallengeDefinition seeding scripts instead',
     migrate: migrateGlobalChallenges,
   },
   {
     name: 'career-challenges',
-    description: 'Migrate user career challenge progress from save subcollections (depends on global-challenges, saves, games)',
+    description: 'Deprecated after challenge schema rebuild; use ChallengeRun migration/seeding scripts instead',
     migrate: migrateCareerChallenges,
   },
 ];

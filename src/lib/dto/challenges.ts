@@ -1,4 +1,4 @@
-import { CareerChallenge, CareerChallengeGoalInput, ChallengeGoalWithDetails } from "../types/prisma/Challenge";
+import { ChallengeGoalWithDetails, CareerChallengeGoalInput, CareerChallenge } from "../types/prisma/Challenge";
 
 type goalToCareerGoal = {
   goal: ChallengeGoalWithDetails;
@@ -10,12 +10,13 @@ export function challengeGoalToCareerChallengeGoal(props: goalToCareerGoal): Car
     challengeGoalId: props.goal.id,
     isComplete: props.isCompleted,
     completedAt: props.isCompleted ? new Date() : null,
-    createdAt: new Date(),
+    progress: props.isCompleted ? 1 : 0,
+    evidence: null,
   };
 }
 
 export function getChallengeWithoutStartingAt(challenge: CareerChallenge): Omit<CareerChallenge, 'startedAt'> {
   const { startedAt, ...rest } = challenge;
-  console.log('Career challenge started at:', startedAt);
+  console.log('Challenge run started at:', startedAt);
   return rest;
 }

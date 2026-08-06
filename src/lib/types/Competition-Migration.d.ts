@@ -82,7 +82,7 @@ export interface CompetitionMigrationMapping {
       countryCode: string; // from api.countryCode
       type: string; // from api.type
       logoUrl: string | null; // from api.logo
-      tier: number | null; // TBD - may need to be derived
+      tier: number | null; // Preserve API tier when provided; null otherwise
       isActive: boolean; // from api.inFootballManager
       createdAt: Date;
       updatedAt: Date;

@@ -264,8 +264,8 @@ async function computeUserAggregates(userId: string): Promise<UserAggregates> {
   const [totalTrophies, totalPromotions, completedChallenges, startedChallenges, activeSaves, totalSeasons, distinctClubs] = await Promise.all([
     prisma.trophy.count({ where: { save: { userId } } }),
     prisma.leagueResult.count({ where: { promoted: true, season: { save: { userId } } } }),
-    prisma.careerChallenge.count({ where: { userId, completedAt: { not: null } } }),
-    prisma.careerChallenge.count({ where: { userId } }),
+    prisma.challengeRun.count({ where: { userId, completedAt: { not: null } } }),
+    prisma.challengeRun.count({ where: { userId } }),
     prisma.save.count({ where: { userId } }),
     prisma.season.count({ where: { save: { userId } } }),
     prisma.careerStint.groupBy({

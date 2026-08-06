@@ -14,7 +14,7 @@ export async function GET() {
         const totalSeasons = await prisma.season.count();
         const totalCareerStints = await prisma.careerStint.count();
         const totalTrophies = await prisma.trophy.count();
-        const totalChallenges = await prisma.challenge.count();
+        const totalChallenges = await prisma.challengeDefinition.count();
 
         const result: GlobalStats = {
           totalUsers,

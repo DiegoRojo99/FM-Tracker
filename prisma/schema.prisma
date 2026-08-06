@@ -29,6 +29,24 @@ enum AchievementRarity {
   LEGENDARY
 }
 
+enum ChallengeStatus {
+  DRAFT
+  HIDDEN
+  PUBLISHED
+  RETIRED
+}
+
+enum ChallengeGoalLogic {
+  ALL
+  ANY
+}
+
+enum ChallengeRunStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
 model User {
   uid              String            @id
   email            String            @unique
@@ -36,7 +54,7 @@ model User {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   avatarURL        String?
-  careerChallenges CareerChallenge[]
+  challengeRuns    ChallengeRun[]
   saves            Save[]
   
   // Friend request relations
@@ -141,7 +159,7 @@ model Save {
   season          String
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
-  challenges      CareerChallenge[]
+  challengeRuns   ChallengeRun[]
   careerStints    CareerStint[]
   currentClub     Team?             @relation("SaveCurrentClub", fields: [currentClubId], references: [id])
   currentLeague   CompetitionGroup? @relation(fields: [currentLeagueId], references: [id])
@@ -242,84 +260,34 @@ model Trophy {
   @@index([season])
 }
 
-model Challenge {
-  id               Int               @id @default(autoincrement())
-  name             String            @unique
-  description      String
-  bonus            String?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  careerChallenges CareerChallenge[]
-  goals            ChallengeGoal[]
+model CompetitionGroupApiCompetition {
+  id                 Int              @id @default(autoincrement())
+  competitionGroupId Int
+  apiCompetitionId   Int
+  createdAt          DateTime         @default(now())
+  apiCompetition     ApiCompetition   @relation(fields: [apiCompetitionId], references: [id], onDelete: Cascade)
+  competitionGroup   CompetitionGroup @relation(fields: [competitionGroupId], references: [id], onDelete: Cascade)
 
-  @@index([name])
+  @@unique([competitionGroupId, apiCompetitionId])
+  @@index([competitionGroupId])
+  @@index([apiCompetitionId])
 }
 
-model ChallengeGoal {
-  id                   Int                   @id @default(autoincrement())
-  description          String
-  competitionId        Int?
-  countryId            String?
-  challengeId          Int
-  careerChallengeGoals CareerChallengeGoal[]
-  challenge            Challenge             @relation(fields: [challengeId], references: [id], onDelete: Cascade)
-  competition          CompetitionGroup?     @relation(fields: [competitionId], references: [id])
-  country              Country?              @relation(fields: [countryId], references: [code])
-  teams                ChallengeGoalTeam[]
+model PromotionRelegation {
+  id           Int              @id @default(autoincrement())
+  fromGroupId  Int
+  toGroupId    Int
+  type         String
+  slots        Int
+  playoffSlots Int?
+  createdAt    DateTime         @default(now())
+  fromGroup    CompetitionGroup @relation("PromotionsFrom", fields: [fromGroupId], references: [id], onDelete: Cascade)
+  toGroup      CompetitionGroup @relation("PromotionsTo", fields: [toGroupId], references: [id], onDelete: Cascade)
 
-  @@unique([description, challengeId])
-  @@index([challengeId])
-  @@index([competitionId])
-  @@index([countryId])
-}
-
-model ChallengeGoalTeam {
-  id              Int           @id @default(autoincrement())
-  challengeGoalId Int
-  teamId          Int
-  challengeGoal   ChallengeGoal @relation(fields: [challengeGoalId], references: [id], onDelete: Cascade)
-  team            Team          @relation(fields: [teamId], references: [id])
-
-  @@unique([challengeGoalId, teamId])
-  @@index([challengeGoalId])
-  @@index([teamId])
-}
-
-model CareerChallenge {
-  id           Int                   @id @default(autoincrement())
-  userId       String
-  challengeId  Int
-  startedAt    DateTime              @default(now())
-  completedAt  DateTime?
-  gameId       String
-  saveId       String?
-  challenge    Challenge             @relation(fields: [challengeId], references: [id])
-  game         Game                  @relation(fields: [gameId], references: [id])
-  save         Save?                 @relation(fields: [saveId], references: [id], onDelete: Cascade)
-  user         User                  @relation(fields: [userId], references: [uid], onDelete: Cascade)
-  goalProgress CareerChallengeGoal[]
-
-  @@unique([userId, challengeId, saveId])
-  @@index([userId])
-  @@index([challengeId])
-  @@index([gameId])
-  @@index([saveId])
-}
-
-model CareerChallengeGoal {
-  id                Int             @id @default(autoincrement())
-  careerChallengeId Int
-  challengeGoalId   Int
-  isComplete        Boolean         @default(false)
-  completedAt       DateTime?
-  createdAt         DateTime        @default(now())
-  careerChallenge   CareerChallenge @relation(fields: [careerChallengeId], references: [id], onDelete: Cascade)
-  challengeGoal     ChallengeGoal   @relation(fields: [challengeGoalId], references: [id], onDelete: Cascade)
-
-  @@unique([careerChallengeId, challengeGoalId])
-  @@index([careerChallengeId])
-  @@index([challengeGoalId])
-  @@index([isComplete])
+  @@unique([fromGroupId, toGroupId, type])
+  @@index([fromGroupId])
+  @@index([toGroupId])
+  @@index([type])
 }
 
 model TeamSeason {
@@ -350,7 +318,7 @@ model Game {
   isActive         Boolean
   sortOrder        Int
   variant          String
-  careerChallenges CareerChallenge[]
+  challengeRuns    ChallengeRun[]
   saves            Save[]
   trophies         Trophy[]
 
@@ -370,7 +338,6 @@ model Team {
   lng                Float?
   isFemale           Boolean?
   careerStints       CareerStint[]
-  challengeGoalTeams ChallengeGoalTeam[]
   currentClubSaves   Save[]              @relation("SaveCurrentClub")
   currentNTSaves     Save[]              @relation("SaveCurrentNT")
   seasons            Season[]
@@ -389,7 +356,6 @@ model Country {
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   apiCompetitions   ApiCompetition[]
-  challengeGoals    ChallengeGoal[]
   competitionGroups CompetitionGroup[]
   teams             Team[]
 
@@ -429,7 +395,6 @@ model CompetitionGroup {
   isActive        Boolean
   createdAt       DateTime                         @default(now())
   updatedAt       DateTime                         @updatedAt
-  challengeGoals  ChallengeGoal[]
   country         Country                          @relation(fields: [countryCode], references: [code])
   apiCompetitions CompetitionGroupApiCompetition[]
   cupResults      CupResult[]                      @relation("CupResults")
@@ -447,32 +412,102 @@ model CompetitionGroup {
   @@index([name])
 }
 
-model CompetitionGroupApiCompetition {
-  id                 Int              @id @default(autoincrement())
-  competitionGroupId Int
-  apiCompetitionId   Int
-  createdAt          DateTime         @default(now())
-  apiCompetition     ApiCompetition   @relation(fields: [apiCompetitionId], references: [id], onDelete: Cascade)
-  competitionGroup   CompetitionGroup @relation(fields: [competitionGroupId], references: [id], onDelete: Cascade)
+model ChallengeDefinition {
+  id            Int                @id @default(autoincrement())
+  key           String             @unique
+  title         String
+  description   String
+  summary       String?
+  status        ChallengeStatus    @default(HIDDEN)
+  sortOrder     Int                @default(0)
+  tags          String[]
+  metadata      Json?
+  publishedAt   DateTime?
+  archivedAt    DateTime?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  goals         ChallengeGoal[]
+  runs          ChallengeRun[]
 
-  @@unique([competitionGroupId, apiCompetitionId])
-  @@index([competitionGroupId])
-  @@index([apiCompetitionId])
+  @@index([status])
+  @@index([sortOrder])
+  @@index([key])
 }
 
-model PromotionRelegation {
-  id           Int              @id @default(autoincrement())
-  fromGroupId  Int
-  toGroupId    Int
-  type         String
-  slots        Int
-  playoffSlots Int?
-  createdAt    DateTime         @default(now())
-  fromGroup    CompetitionGroup @relation("PromotionsFrom", fields: [fromGroupId], references: [id], onDelete: Cascade)
-  toGroup      CompetitionGroup @relation("PromotionsTo", fields: [toGroupId], references: [id], onDelete: Cascade)
+model ChallengeGoal {
+  id                   Int                  @id @default(autoincrement())
+  challengeDefinitionId Int
+  position             Int
+  title                String?
+  description          String
+  logic                ChallengeGoalLogic   @default(ALL)
+  metadata             Json?
+  createdAt            DateTime             @default(now())
+  challengeDefinition  ChallengeDefinition   @relation(fields: [challengeDefinitionId], references: [id], onDelete: Cascade)
+  rules                ChallengeRule[]
+  runGoals             ChallengeRunGoal[]
 
-  @@unique([fromGroupId, toGroupId, type])
-  @@index([fromGroupId])
-  @@index([toGroupId])
-  @@index([type])
+  @@unique([challengeDefinitionId, position])
+  @@index([challengeDefinitionId])
+  @@map("ChallengeDefinitionGoal")
+}
+
+model ChallengeRule {
+  id              Int            @id @default(autoincrement())
+  challengeGoalId Int
+  kind            String
+  subjectType     String?
+  operator        String
+  config          Json
+  weight          Int            @default(1)
+  createdAt       DateTime       @default(now())
+  challengeGoal   ChallengeGoal  @relation(fields: [challengeGoalId], references: [id], onDelete: Cascade)
+
+  @@index([challengeGoalId])
+  @@index([kind])
+  @@index([subjectType])
+}
+
+model ChallengeRun {
+  id                    Int                  @id @default(autoincrement())
+  userId                String
+  saveId                String
+  gameId                String
+  challengeDefinitionId  Int
+  status                ChallengeRunStatus   @default(ACTIVE)
+  startedAt             DateTime             @default(now())
+  completedAt           DateTime?
+  progressSnapshot      Json?
+  metadata              Json?
+  challengeDefinition   ChallengeDefinition   @relation(fields: [challengeDefinitionId], references: [id], onDelete: Cascade)
+  user                  User                 @relation(fields: [userId], references: [uid], onDelete: Cascade)
+  save                  Save                 @relation(fields: [saveId], references: [id], onDelete: Cascade)
+  game                  Game                 @relation(fields: [gameId], references: [id])
+  runGoals              ChallengeRunGoal[]
+
+  @@unique([userId, challengeDefinitionId, saveId])
+  @@index([userId])
+  @@index([challengeDefinitionId])
+  @@index([saveId])
+  @@index([gameId])
+  @@index([status])
+}
+
+model ChallengeRunGoal {
+  id               Int             @id @default(autoincrement())
+  challengeRunId   Int
+  challengeGoalId  Int
+  isComplete       Boolean         @default(false)
+  progress         Int             @default(0)
+  completedAt      DateTime?
+  evidence         Json?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  challengeRun     ChallengeRun    @relation(fields: [challengeRunId], references: [id], onDelete: Cascade)
+  challengeGoal    ChallengeGoal   @relation(fields: [challengeGoalId], references: [id], onDelete: Cascade)
+
+  @@unique([challengeRunId, challengeGoalId])
+  @@index([challengeRunId])
+  @@index([challengeGoalId])
+  @@index([isComplete])
 }

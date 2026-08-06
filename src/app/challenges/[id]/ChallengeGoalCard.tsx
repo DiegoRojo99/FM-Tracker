@@ -1,4 +1,4 @@
-import { CareerChallengeGoal, CareerChallengeWithSaveDetails, ChallengeGoalWithDetails } from "@/lib/types/prisma/Challenge";
+import { CareerChallengeGoal, CareerChallengeWithSaveDetails, ChallengeGoalTeamLink, ChallengeGoalWithDetails } from "@/lib/types/prisma/Challenge";
 import Image from "next/image";
 
 type ChallengeGoalCardProps = {
@@ -67,9 +67,9 @@ export default function ChallengeGoalCard({ goal, selectedUserChallenge }: Chall
 
             {goal.teams && goal.teams.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
-                {goal.teams.map((goalTeam) => (
+                {goal.teams.map((goalTeam: ChallengeGoalTeamLink) => (
                   <div 
-                    key={goalTeam.id} 
+                    key={`${goal.id}-${goalTeam.teamId}`} 
                     className="flex items-center gap-1.5 rounded-md border border-amber-300/30 bg-amber-300/12 px-2 py-1"
                   >
                     <Image 

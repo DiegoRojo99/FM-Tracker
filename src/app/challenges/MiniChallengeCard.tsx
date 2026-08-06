@@ -35,12 +35,12 @@ const MiniChallengeCard: React.FC<MiniChallengeCardProps> = ({ userChallenge }) 
   const status = getChallengeStatus(userChallenge);
   const cardStyle = statusStyles[status];
   const hasChallengeData = 'challenge' in userChallenge;
-  const challengeId = hasChallengeData ? userChallenge.challenge.id : userChallenge.id;
+  const challengeSlug = hasChallengeData ? userChallenge.challenge.key : userChallenge.key;
   const challengeName = hasChallengeData ? userChallenge.challenge.name : userChallenge.name;
   
   return (
     <Link
-      href={`/challenges/${challengeId}`}
+      href={`/challenges/${challengeSlug}`}
       className={`group relative flex aspect-square w-full flex-col overflow-hidden rounded-xl border ${cardStyle} p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-highlight)]`}
       title={challengeName}
     >
