@@ -7,6 +7,7 @@ import FootballLoader from '@/app/components/FootBallLoader';
 import CareerStintsSection from './CareerStintSection';
 import TrophyCase from './TrophyCase';
 import SeasonSection from './SeasonSection';
+import ChallengeSection from './ChallengeSection';
 import { FullDetailsSaveWithOwnership } from '@/lib/types/prisma/Save';
 import { ArrowLeft, CalendarDays, Flag, Trophy } from 'lucide-react';
 
@@ -135,6 +136,10 @@ export default function SavePage() {
 
         <section id="trophies" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
           <TrophyCase save={saveDetails} setRefresh={setRefresh} />
+        </section>
+
+        <section id="challenges" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+          <ChallengeSection challenges={saveDetails.challenges ?? []} />
         </section>
       </div>
     </div>
