@@ -12,6 +12,7 @@ else config();
 
 async function run() {
   const { seedChallengeCatalog } = await import('../../src/lib/db/challengeCatalog');
+  const { backfillChallengeProgressForAllSaves } = await import('../../src/lib/db/challenges');
   const result = await seedChallengeCatalog();
 
   console.log('Challenge catalog seeded successfully.');
@@ -20,6 +21,12 @@ async function run() {
   );
   console.log(
     `Stale goals deleted=${result.staleGoalsDeleted}, stale goals skipped (runs exist)=${result.staleGoalDeleteSkipped}, definition delete skipped (runs exist)=${result.definitionDeleteSkipped}`
+  );
+
+  const backfill = await backfillChallengeProgressForAllSaves();
+  console.log('Challenge progress backfill completed.');
+  console.log(
+    `Saves processed=${backfill.savesProcessed}, runs updated=${backfill.runsUpdated}, runs created=${backfill.runsCreated}, runs skipped=${backfill.runsSkipped}`
   );
 }
 

@@ -378,6 +378,115 @@ export async function getUserChallengesByChallengeKey(challengeKey: string, user
   return (await loadUserChallengeRuns(userId, challenge.id)) as CareerChallengeWithSaveDetails[];
 }
 
+export async function backfillChallengeProgressForAllSaves(): Promise<{
+  savesProcessed: number;
+  runsUpdated: number;
+  runsCreated: number;
+  runsSkipped: number;
+}> {
+  const challenges = await getAllChallenges();
+  if (challenges.length === 0) {
+    return {
+      savesProcessed: 0,
+      runsUpdated: 0,
+      runsCreated: 0,
+      runsSkipped: 0,
+    };
+  }
+
+  const saves = await prisma.save.findMany({
+    select: {
+      id: true,
+      userId: true,
+      gameId: true,
+      trophies: {
+        select: {
+          id: true,
+          competitionGroupId: true,
+          teamId: true,
+          season: true,
+          saveId: true,
+          gameId: true,
+        },
+      },
+    },
+  });
+
+  let runsUpdated = 0;
+  let runsCreated = 0;
+  let runsSkipped = 0;
+
+  for (const save of saves) {
+    const uniqueTrophies = dedupeTrophiesForChallengeEvaluation(save.trophies as Trophy[]);
+
+    const competitionIds = [...new Set(uniqueTrophies.map((trophy) => trophy.competitionGroupId))];
+    const teamIds = [...new Set(uniqueTrophies.map((trophy) => trophy.teamId))];
+
+    const [competitions, teams, existingRuns] = await Promise.all([
+      competitionIds.length > 0
+        ? prisma.competitionGroup.findMany({
+            where: { id: { in: competitionIds } },
+            select: { id: true, name: true, countryCode: true },
+          })
+        : Promise.resolve([] as Array<{ id: number; name: string; countryCode: string | null }>),
+      teamIds.length > 0
+        ? prisma.team.findMany({
+            where: { id: { in: teamIds } },
+            select: { id: true, countryCode: true },
+          })
+        : Promise.resolve([] as Array<{ id: number; countryCode: string }>),
+      prisma.challengeRun.findMany({
+        where: { saveId: save.id },
+        select: { id: true, challengeDefinitionId: true },
+      }),
+    ]);
+
+    const context: TrophyMatchContext = {
+      competitionNameById: new Map(competitions.map((competition) => [competition.id, competition.name])),
+      competitionCountryById: new Map(
+        competitions
+          .filter((competition): competition is typeof competition & { countryCode: string } => !!competition.countryCode)
+          .map((competition) => [competition.id, competition.countryCode])
+      ),
+      teamCountryById: new Map(
+        teams
+          .filter((team): team is typeof team & { countryCode: string } => !!team.countryCode)
+          .map((team) => [team.id, team.countryCode])
+      ),
+    };
+
+    const existingChallengeIds = new Set(existingRuns.map((run) => run.challengeDefinitionId));
+
+    for (const challenge of challenges) {
+      const goalProgress = filterCompletedChallengeGoalsBasedOnTrophies(
+        challenge,
+        uniqueTrophies,
+        context
+      );
+
+      const hasProgress = goalProgress.some((goal) => goal.isComplete);
+      const hasExistingRun = existingChallengeIds.has(challenge.id);
+
+      if (!hasProgress && !hasExistingRun) {
+        runsSkipped += 1;
+        continue;
+      }
+
+      await upsertCareerChallenge(save.userId, save.id, save.gameId, challenge.id, goalProgress);
+
+      if (hasExistingRun) runsUpdated += 1;
+      else runsCreated += 1;
+    }
+  }
+
+  return {
+    savesProcessed: saves.length,
+    runsUpdated,
+    runsCreated,
+    runsSkipped,
+  };
+}
+
 export async function getDetailedChallengesForSave(saveId: string): Promise<CareerChallengeWithDetails[]> {
   return loadChallengeRuns({ saveId });
 }
