@@ -6,6 +6,7 @@ import {
   X,
   Save,
   Trophy,
+  Target,
   Star,
   Shield,
   Users,
@@ -109,6 +110,7 @@ export default function Navbar() {
         <div className="my-2 hidden md:flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-1.5 py-1">
           <Link href="/saves" className={desktopLinkClass}><Save className="h-4 w-4" />Saves</Link>
           <Link href="/trophies" className={desktopLinkClass}><Trophy className="h-4 w-4" />Trophies</Link>
+          <Link href="/challenges" className={desktopLinkClass}><Target className="h-4 w-4" />Challenges</Link>
           <Link href="/achievements" className={desktopLinkClass}><Star className="h-4 w-4" />Achievements</Link>
           {user && user.uid === adminUID && (
             <Link href="/admin" className={desktopLinkClass}><Shield className="h-4 w-4" />Admin</Link>
@@ -132,10 +134,11 @@ export default function Navbar() {
           <div className="mobile-menu-panel overflow-hidden rounded-md border border-[var(--color-surface-border)] bg-[var(--color-dark)]/95 backdrop-blur-sm">
             <Link href="/saves" className={mobileLinkClass} style={{ animationDelay: '40ms' }} onClick={() => setOpen(false)}><Save className="h-4 w-4" />Saves</Link>
             <Link href="/trophies" className={mobileLinkClass} style={{ animationDelay: '80ms' }} onClick={() => setOpen(false)}><Trophy className="h-4 w-4" />Trophies</Link>
-            <Link href="/achievements" className={mobileLinkClass} style={{ animationDelay: '120ms' }} onClick={() => setOpen(false)}><Star className="h-4 w-4" />Achievements</Link>
+            <Link href="/challenges" className={mobileLinkClass} style={{ animationDelay: '120ms' }} onClick={() => setOpen(false)}><Target className="h-4 w-4" />Challenges</Link>
+            <Link href="/achievements" className={mobileLinkClass} style={{ animationDelay: '160ms' }} onClick={() => setOpen(false)}><Star className="h-4 w-4" />Achievements</Link>
           
             {user && user.uid === adminUID && (
-              <Link href="/admin" className={mobileLinkClass} style={{ animationDelay: '140ms' }} onClick={() => setOpen(false)}>
+              <Link href="/admin" className={mobileLinkClass} style={{ animationDelay: '180ms' }} onClick={() => setOpen(false)}>
                 <Shield className="h-4 w-4" />
                 Admin
               </Link>
