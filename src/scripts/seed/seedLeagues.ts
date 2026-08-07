@@ -1,9 +1,10 @@
-import 'dotenv/config';
 import { fetchFromApi } from '@/lib/apiFootball';
 import { ApiLeague, ApiLeagueSeason } from '@/lib/types/FootballAPI';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
 import { seededLeaguesIds } from '../data/leagues';
 import { prisma } from '@/lib/db/prisma';
+import { loadNodeEnv } from '@/lib/env/loadNodeEnv';
+loadNodeEnv();
 
 // List of FM-supported countries (can expand)
 const fmCountries = [

@@ -1,11 +1,3 @@
-import dotenv from 'dotenv';
-
-// Load environment variables for server-side scripts
-if (typeof window === 'undefined') {
-  dotenv.config({ path: '.env' });
-  dotenv.config({ path: '.env.local' });
-}
-
 const API_KEY = process.env.API_FOOTBALL_KEY!;
 const BASE_URL = 'https://v3.football.api-sports.io';
 

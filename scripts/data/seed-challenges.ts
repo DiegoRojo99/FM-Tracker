@@ -1,14 +1,6 @@
-import { config } from 'dotenv';
-import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { loadNodeEnv } from '../../src/lib/env/loadNodeEnv';
 
-const envFile = process.env.NODE_ENV === 'production'
-  ? '.env.production.local'
-  : '.env.development.local';
-
-const envPath = resolve(process.cwd(), envFile);
-if (existsSync(envPath)) config({ path: envPath });
-else config();
+loadNodeEnv();
 
 async function run() {
   const { seedChallengeCatalog } = await import('../../src/lib/db/challengeCatalog');

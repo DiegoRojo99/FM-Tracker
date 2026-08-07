@@ -1,14 +1,5 @@
-import { config } from 'dotenv';
-import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
-
-const envFile = process.env.NODE_ENV === 'production'
-  ? '.env.production.local'
-  : '.env.development.local';
-
-const envPath = resolve(process.cwd(), envFile);
-if (existsSync(envPath)) config({ path: envPath });
-else config();
+import { loadNodeEnv } from '../../src/lib/env/loadNodeEnv';
+loadNodeEnv();
 
 async function run() {
   const { seedAchievementDefinitions, backfillAchievementsForAllUsers } = await import('../../src/lib/db/achievements');

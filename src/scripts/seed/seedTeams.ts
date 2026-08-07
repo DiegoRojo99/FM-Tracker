@@ -1,9 +1,10 @@
-import 'dotenv/config';
 import { fetchFromApi } from '@/lib/apiFootball';
 import { ApiTeam } from '@/lib/types/FootballAPI';
 import { leaguesToSeed, seededLeagues } from '../data/leagues';
 import { algoliaWriteClient } from '@/lib/algolia/algolia';
 import { prisma } from '@/lib/db/prisma';
+import { loadNodeEnv } from '@/lib/env/loadNodeEnv';
+loadNodeEnv();
 
 const teamsIndex = algoliaWriteClient.initIndex('teams_index');
 async function seedTeams() {

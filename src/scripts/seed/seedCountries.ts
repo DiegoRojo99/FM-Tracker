@@ -1,6 +1,7 @@
-import 'dotenv/config';
 import { fetchFromApi } from '@/lib/apiFootball';
 import { prisma } from '@/lib/db/prisma';
+import { loadNodeEnv } from '@/lib/env/loadNodeEnv';
+loadNodeEnv();
 
 async function seedCountries() {
   const countries = await fetchFromApi('/countries');

@@ -1,6 +1,6 @@
-import { config } from 'dotenv';
 import admin from 'firebase-admin';
 import pkg from 'pg';
+import { loadNodeEnv } from '../../src/lib/env/loadNodeEnv';
 const { Pool } = pkg;
 
 // Import migration functions
@@ -23,8 +23,7 @@ import { migrateCareerChallenges } from './migrations/migrate-career-challenges'
 import { migrateCompetitions } from './migrations/migrate-competitions';
 import { migrateGroupCompetitions } from './migrations/migrate-group-competitions';
 
-// Load environment variables
-config();
+loadNodeEnv();
 
 interface MigrationStep {
   name: string;

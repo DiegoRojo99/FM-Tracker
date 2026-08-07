@@ -1,5 +1,6 @@
-import 'dotenv/config';
 import admin from 'firebase-admin';
+import { loadNodeEnv } from '../env/loadNodeEnv';
+loadNodeEnv();
 
 if (!admin.apps.length) {
   admin.initializeApp({
