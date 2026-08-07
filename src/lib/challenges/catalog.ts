@@ -845,6 +845,544 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
       },
     ],
   },
+  {
+    key: 'legends.forest-european-return',
+    title: 'Forest, Back On Top',
+    description: 'Win the UEFA Champions League with Nottingham Forest.',
+    summary: 'Bring European glory back to the City Ground.',
+    status: 'PUBLISHED',
+    sortOrder: 170,
+    tags: ['team-specific', 'legends', 'europe'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win UEFA Champions League with Nottingham Forest',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'nottingham-forest' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'uefa.champions-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'legends.arsenal-europe-missing-piece',
+    title: 'The Missing Piece',
+    description: 'Win the UEFA Champions League with Arsenal.',
+    summary: 'Deliver the one major trophy missing in modern Arsenal history.',
+    status: 'PUBLISHED',
+    sortOrder: 180,
+    tags: ['team-specific', 'legends', 'europe'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win UEFA Champions League with Arsenal',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'arsenal' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'uefa.champions-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'legends.atletico-european-crown',
+    title: 'Final Step in Madrid',
+    description: 'Win the UEFA Champions League with Atletico Madrid.',
+    summary: 'Complete Atleti\'s European dream.',
+    status: 'PUBLISHED',
+    sortOrder: 190,
+    tags: ['team-specific', 'legends', 'europe'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win UEFA Champions League with Atletico Madrid',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'atletico-madrid' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'uefa.champions-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'legends.roma-european-summit',
+    title: 'Roman Summit',
+    description: 'Win the UEFA Champions League with Roma.',
+    summary: 'Take Roma to the top of Europe.',
+    status: 'PUBLISHED',
+    sortOrder: 200,
+    tags: ['team-specific', 'legends', 'europe'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win UEFA Champions League with Roma',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'roma' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'uefa.champions-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'giants.benfica-modern-crown',
+    title: 'Lisbon Renaissance',
+    description: 'Win the UEFA Champions League with Benfica.',
+    summary: 'Bring Europe\'s top prize back to Benfica in the modern era.',
+    status: 'PUBLISHED',
+    sortOrder: 210,
+    tags: ['team-specific', 'giants', 'europe'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win UEFA Champions League with Benfica',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'benfica' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'uefa.champions-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'giants.ajax-modern-crown',
+    title: 'Amsterdam Reawakened',
+    description: 'Win the UEFA Champions League with Ajax.',
+    summary: 'Restore Ajax to European supremacy.',
+    status: 'PUBLISHED',
+    sortOrder: 220,
+    tags: ['team-specific', 'giants', 'europe'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win UEFA Champions League with Ajax',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'ajax' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'uefa.champions-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'giants.celtic-continental-return',
+    title: 'Celtic Continental Return',
+    description: 'Win the UEFA Champions League with Celtic.',
+    summary: 'Bring a European crown back to Celtic Park.',
+    status: 'PUBLISHED',
+    sortOrder: 230,
+    tags: ['team-specific', 'giants', 'europe'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win UEFA Champions League with Celtic',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'celtic' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'uefa.champions-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'underdogs.fulham-first-trophy',
+    title: 'Fulham First Silver',
+    description: 'Win a trophy with Fulham.',
+    summary: 'Deliver a first major piece of silverware for the Cottagers.',
+    status: 'PUBLISHED',
+    sortOrder: 240,
+    tags: ['team-specific', 'underdogs', 'history'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a trophy with Fulham',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'fulham' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'underdogs.freiburg-first-trophy',
+    title: 'Breisgau Breakthrough',
+    description: 'Win a trophy with Freiburg.',
+    summary: 'Write the first silver chapter in Freiburg history.',
+    status: 'PUBLISHED',
+    sortOrder: 250,
+    tags: ['team-specific', 'underdogs', 'history'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a trophy with Freiburg',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'freiburg' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'underdogs.brighton-first-trophy',
+    title: 'Seagulls First Crown',
+    description: 'Win a trophy with Brighton.',
+    summary: 'Bring silverware to the Amex.',
+    status: 'PUBLISHED',
+    sortOrder: 260,
+    tags: ['team-specific', 'underdogs', 'history'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a trophy with Brighton',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'brighton' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'underdogs.union-berlin-first-trophy',
+    title: 'Eisern Silver Day',
+    description: 'Win a trophy with Union Berlin.',
+    summary: 'Land Union Berlin\'s first modern-era silverware moment.',
+    status: 'PUBLISHED',
+    sortOrder: 270,
+    tags: ['team-specific', 'underdogs', 'history'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a trophy with Union Berlin',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'union-berlin' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'underdogs.watford-first-trophy',
+    title: 'Hornets Historic Win',
+    description: 'Win a trophy with Watford.',
+    summary: 'Give Watford their breakthrough silverware moment.',
+    status: 'PUBLISHED',
+    sortOrder: 280,
+    tags: ['team-specific', 'underdogs', 'history'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a trophy with Watford',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'watford' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'underdogs.new-york-red-bulls-first-trophy',
+    title: 'Red Bulls, At Last',
+    description: 'Win a trophy with New York Red Bulls.',
+    summary: 'Secure long-awaited silverware for NY Red Bulls.',
+    status: 'PUBLISHED',
+    sortOrder: 290,
+    tags: ['team-specific', 'underdogs', 'history'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a trophy with New York Red Bulls',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'redbull.new-york-red-bulls' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'underdogs.cd-maldonado-first-trophy',
+    title: 'Maldonado Milestone',
+    description: 'Win a trophy with CD Maldonado.',
+    summary: 'Capture the first silverware chapter for Deportivo Maldonado.',
+    status: 'PUBLISHED',
+    sortOrder: 300,
+    tags: ['team-specific', 'underdogs', 'history'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a trophy with CD Maldonado',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'cd-maldonado' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'cross-border.andorra-spanish-crown',
+    title: 'Pyrenees To The Summit',
+    description: 'Win LaLiga with FC Andorra.',
+    summary: 'Take Andorra\'s project all the way to the Spanish top-flight crown.',
+    status: 'PUBLISHED',
+    sortOrder: 310,
+    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win LaLiga with FC Andorra',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'fc-andorra' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'spain.laliga' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'cross-border.ceuta-spanish-crown',
+    title: 'Across The Strait',
+    description: 'Win LaLiga with AD Ceuta FC.',
+    summary: 'Lead Ceuta from the North African coast to Spain\'s highest title.',
+    status: 'PUBLISHED',
+    sortOrder: 320,
+    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win LaLiga with AD Ceuta FC',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'ad-ceuta' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'spain.laliga' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'cross-border.cardiff-english-crown',
+    title: 'Dragon On The Throne',
+    description: 'Win the Premier League with Cardiff City.',
+    summary: 'Bring the English title across the Severn to Cardiff.',
+    status: 'PUBLISHED',
+    sortOrder: 330,
+    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win the Premier League with Cardiff City',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'cardiff-city' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'england.premier-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'cross-border.swansea-english-crown',
+    title: 'Swansea Sea Change',
+    description: 'Win the Premier League with Swansea City.',
+    summary: 'Turn Welsh momentum into an English top-flight crown.',
+    status: 'PUBLISHED',
+    sortOrder: 340,
+    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win the Premier League with Swansea City',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'swansea-city' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'england.premier-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'cross-border.wrexham-english-crown',
+    title: 'From Racecourse To Royalty',
+    description: 'Win the Premier League with Wrexham.',
+    summary: 'Complete the Hollywood dream with an English league title.',
+    status: 'PUBLISHED',
+    sortOrder: 350,
+    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win the Premier League with Wrexham',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'wrexham' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'england.premier-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'cross-border.vaduz-swiss-crown',
+    title: 'Liechtenstein Lightning Strike',
+    description: 'Win the Swiss Super League with FC Vaduz.',
+    summary: 'Break the ceiling and claim the Swiss title with Vaduz.',
+    status: 'PUBLISHED',
+    sortOrder: 360,
+    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win the Swiss Super League with FC Vaduz',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'vaduz' },
+          },
+          {
+            kind: 'competition.equals',
+            subjectType: 'competition',
+            operator: 'eq',
+            config: { competitionKey: 'switzerland.super-league' },
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export const CHALLENGE_CATALOG_BY_KEY = new Map(CHALLENGE_CATALOG.map((entry) => [entry.key, entry]));
