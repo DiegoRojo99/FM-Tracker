@@ -398,11 +398,11 @@ async function resolveRuleConfig(
       'union-berlin': { names: ['Union Berlin', '1. FC Union Berlin', 'FC Union Berlin'], countryCodes: ['DEU', 'DE'] },
       'watford': { names: ['Watford', 'Watford FC'], countryCodes: ['GB-ENG', 'ENG', 'GBR', 'UK'] },
       'cd-maldonado': { names: ['CD Maldonado', 'Deportivo Maldonado', 'Club Deportivo Maldonado'], countryCodes: ['URY', 'UY'] },
-      'fc-andorra': { names: ['FC Andorra', 'Andorra'], countryCodes: ['AND', 'AD', 'ESP', 'ES'] },
-      'ad-ceuta': { names: ['AD Ceuta FC', 'Ceuta', 'Ceuta FC'], countryCodes: ['ESP', 'ES'] },
-      'cardiff-city': { names: ['Cardiff City', 'Cardiff City FC'], countryCodes: ['GB-WLS', 'WAL', 'GBR', 'UK'] },
-      'swansea-city': { names: ['Swansea City', 'Swansea City AFC'], countryCodes: ['GB-WLS', 'WAL', 'GBR', 'UK'] },
-      'wrexham': { names: ['Wrexham', 'Wrexham AFC'], countryCodes: ['GB-WLS', 'WAL', 'GBR', 'UK'] },
+      'fc-andorra': { names: ['FC Andorra', 'F.C. Andorra', 'Andorra FC', 'Andorra'], countryCodes: ['AND', 'AD', 'ESP', 'ES'] },
+      'ad-ceuta': { names: ['AD Ceuta FC', 'AD Ceuta', 'Ceuta FC', 'Ceuta'], countryCodes: ['ESP', 'ES'] },
+      'cardiff-city': { names: ['Cardiff City', 'Cardiff City FC', 'Cardiff'], countryCodes: ['GB-WLS', 'WAL', 'GBR', 'UK', 'GB-ENG', 'ENG'] },
+      'swansea-city': { names: ['Swansea City', 'Swansea City AFC', 'Swansea'], countryCodes: ['GB-WLS', 'WAL', 'GBR', 'UK', 'GB-ENG', 'ENG'] },
+      'wrexham': { names: ['Wrexham', 'Wrexham AFC', 'Wrexham A.F.C.'], countryCodes: ['GB-WLS', 'WAL', 'GBR', 'UK', 'GB-ENG', 'ENG'] },
     } as const;
 
     const search = teamLookup[teamKey];
