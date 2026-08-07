@@ -36,7 +36,7 @@ export default function NewSaveForm() {
 
   // Fetch countries and games on mount
   useEffect(() => {
-    fetch('/api/countries').then(res => res.json()).then(setCountries);
+    fetch('/api/countries?fmOnly=true').then(res => res.json()).then(setCountries);
     fetch('/api/games?active=true').then(res => res.json()).then(data => setGames(data.games || []));
   }, []);
 

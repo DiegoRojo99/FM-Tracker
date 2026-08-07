@@ -1,4 +1,5 @@
 import { ChallengeGoalLogic, ChallengeStatus } from '../../../prisma/generated/client';
+import { CHALLENGE_COUNTRY_CODES } from '../data/countryReference';
 
 export type ChallengeRuleCatalogEntry = {
   kind: string;
@@ -296,7 +297,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
             kind: 'country.equals',
             subjectType: 'country',
             operator: 'eq',
-            config: { countryCode: 'DNK' },
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.DENMARK },
           },
         ],
       },
@@ -308,7 +309,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
             kind: 'country.equals',
             subjectType: 'country',
             operator: 'eq',
-            config: { countryCode: 'SWE' },
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.SWEDEN },
           },
         ],
       },
@@ -320,7 +321,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
             kind: 'country.equals',
             subjectType: 'country',
             operator: 'eq',
-            config: { countryCode: 'NOR' },
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.NORWAY },
           },
         ],
       },
@@ -343,7 +344,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
             kind: 'country.equals',
             subjectType: 'country',
             operator: 'eq',
-            config: { countryCode: 'USA' },
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.UNITED_STATES },
           },
         ],
       },
@@ -355,7 +356,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
             kind: 'country.equals',
             subjectType: 'country',
             operator: 'eq',
-            config: { countryCode: 'MEX' },
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.MEXICO },
           },
         ],
       },
@@ -367,7 +368,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
             kind: 'country.equals',
             subjectType: 'country',
             operator: 'eq',
-            config: { countryCode: 'CAN' },
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.CANADA },
           },
         ],
       },
@@ -498,6 +499,347 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
             subjectType: 'competition',
             operator: 'eq',
             config: { competitionKey: 'ofc.champions-league' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'regions.british-isles-circuit',
+    title: 'British Isles Circuit',
+    description: 'Win domestic titles across the British Isles.',
+    summary: 'England, Scotland, Wales, Ireland, Northern Ireland.',
+    status: 'PUBLISHED',
+    sortOrder: 100,
+    tags: ['regions', 'british-isles', 'journeyman'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a title in England',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.ENGLAND },
+          },
+        ],
+      },
+      {
+        position: 2,
+        description: 'Win a title in Scotland',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.SCOTLAND },
+          },
+        ],
+      },
+      {
+        position: 3,
+        description: 'Win a title in Wales',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.WALES },
+          },
+        ],
+      },
+      {
+        position: 4,
+        description: 'Win a title in Ireland',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.IRELAND },
+          },
+        ],
+      },
+      {
+        position: 5,
+        description: 'Win a title in Northern Ireland',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.NORTHERN_IRELAND },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'regions.iberian-peninsula',
+    title: 'Iberian Peninsula',
+    description: 'Win domestic titles across Iberia.',
+    summary: 'Spain and Portugal.',
+    status: 'PUBLISHED',
+    sortOrder: 110,
+    tags: ['regions', 'iberia', 'journeyman'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a title in Spain',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.SPAIN },
+          },
+        ],
+      },
+      {
+        position: 2,
+        description: 'Win a title in Portugal',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.PORTUGAL },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'regions.benelux-tour',
+    title: 'Benelux Tour',
+    description: 'Win across the core Benelux path available in-game.',
+    summary: 'Netherlands, Belgium, and a trophy with Vaduz.',
+    status: 'PUBLISHED',
+    sortOrder: 120,
+    tags: ['regions', 'benelux', 'journeyman'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a title in the Netherlands',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.NETHERLANDS },
+          },
+        ],
+      },
+      {
+        position: 2,
+        description: 'Win a title in Belgium',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.BELGIUM },
+          },
+        ],
+      },
+      {
+        position: 3,
+        description: 'Win a trophy with Vaduz',
+        rules: [
+          {
+            kind: 'team.in',
+            subjectType: 'team',
+            operator: 'in',
+            config: { teamKey: 'vaduz' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'regions.balkans-sweep',
+    title: 'Balkans Sweep',
+    description: 'Win domestic titles across a Balkan trio.',
+    summary: 'Croatia, Serbia, Slovenia.',
+    status: 'PUBLISHED',
+    sortOrder: 130,
+    tags: ['regions', 'balkans', 'journeyman'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a title in Croatia',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.CROATIA },
+          },
+        ],
+      },
+      {
+        position: 2,
+        description: 'Win a title in Serbia',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.SERBIA },
+          },
+        ],
+      },
+      {
+        position: 3,
+        description: 'Win a title in Slovenia',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.SLOVENIA },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'regions.central-european-climb',
+    title: 'Central European Climb',
+    description: 'Win domestic titles across Central Europe.',
+    summary: 'Austria, Switzerland, Czech Republic, Poland.',
+    status: 'PUBLISHED',
+    sortOrder: 140,
+    tags: ['regions', 'central-europe', 'journeyman'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a title in Austria',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.AUSTRIA },
+          },
+        ],
+      },
+      {
+        position: 2,
+        description: 'Win a title in Switzerland',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.SWITZERLAND },
+          },
+        ],
+      },
+      {
+        position: 3,
+        description: 'Win a title in the Czech Republic',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.CZECH_REPUBLIC },
+          },
+        ],
+      },
+      {
+        position: 4,
+        description: 'Win a title in Poland',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.POLAND },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'continents.south-america-big-3',
+    title: 'South America Big 3',
+    description: 'Win domestic titles in South America\'s heavyweight trio.',
+    summary: 'Brazil, Argentina, Uruguay.',
+    status: 'PUBLISHED',
+    sortOrder: 150,
+    tags: ['continents', 'south-america', 'journeyman'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a title in Brazil',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.BRAZIL },
+          },
+        ],
+      },
+      {
+        position: 2,
+        description: 'Win a title in Argentina',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.ARGENTINA },
+          },
+        ],
+      },
+      {
+        position: 3,
+        description: 'Win a title in Uruguay',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.URUGUAY },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'continents.africa-north-south',
+    title: 'Africa North to South',
+    description: 'Win domestic titles at both ends of the African continent.',
+    summary: 'Egypt and South Africa.',
+    status: 'PUBLISHED',
+    sortOrder: 160,
+    tags: ['continents', 'africa', 'journeyman'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a title in Egypt',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.EGYPT },
+          },
+        ],
+      },
+      {
+        position: 2,
+        description: 'Win a title in South Africa',
+        rules: [
+          {
+            kind: 'country.equals',
+            subjectType: 'country',
+            operator: 'eq',
+            config: { countryCode: CHALLENGE_COUNTRY_CODES.SOUTH_AFRICA },
           },
         ],
       },

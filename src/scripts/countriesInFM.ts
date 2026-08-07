@@ -1,23 +1,14 @@
 import { prisma } from '../lib/db/prisma';
-
-const countriesInFM = [
-  'Argentina', 'Australia', 'Austria', 'Belarus', 'Belgium', 'Brazil', 'Bulgaria',
-  'Canada', 'Chile', 'China PR', 'Colombia', 'Croatia', 'Czech Republic', 'Denmark',
-  'England', 'Finland', 'France', 'Germany', 'Greece', 'Hong Kong', 'Hungary',
-  'Iceland', 'India', 'Indonesia', 'Israel', 'Italy', 'Japan', 'Korea Republic',
-  'Latvia', 'Malaysia', 'Mexico', 'Netherlands', 'Northern Ireland', 'Norway',
-  'Peru', 'Poland', 'Portugal', 'Republic Ireland', 'Romania', 'Russia', 'Scotland',
-  'Serbia', 'Singapore', 'Slovakia', 'Slovenia', 'South Africa', 'Spain', 'Sweden',
-  'Switzerland', 'Turkey', 'Ukraine', 'Uruguay', 'USA', 'Wales',
-];
+import { FM_COUNTRY_CODES } from '../lib/data/countryReference';
 
 async function updateCountries() {
   const countries = await prisma.country.findMany();
   
   for (const country of countries) {
-    const isInFM = countriesInFM.includes(country.name);
+    const code = country.code as string;
+    const isInFM = FM_COUNTRY_CODES.has(code);
     await prisma.country.update({
-      where: { code: country.code },
+      where: { code },
       data: { inFootballManager: isInFM }
     });
   }

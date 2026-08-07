@@ -22,6 +22,7 @@ type TeamKey =
   | 'city.new-york-city'
   | 'city.melbourne-city'
   | 'city.troyes'
+  | 'vaduz'
   | 'blueco.chelsea'
   | 'blueco.strasbourg';
 
@@ -70,6 +71,7 @@ function readTeamKey(value: unknown): TeamKey | null {
   if (normalized === 'city.new-york-city') return normalized;
   if (normalized === 'city.melbourne-city') return normalized;
   if (normalized === 'city.troyes') return normalized;
+  if (normalized === 'vaduz') return normalized;
   if (normalized === 'blueco.chelsea') return normalized;
   if (normalized === 'blueco.strasbourg') return normalized;
 
@@ -302,6 +304,7 @@ async function resolveRuleConfig(
       'city.new-york-city': { names: ['New York City', 'New York City FC', 'NYCFC'], countryCodes: ['USA', 'US'] },
       'city.melbourne-city': { names: ['Melbourne City', 'Melbourne City FC'], countryCodes: ['AUS', 'AU'] },
       'city.troyes': { names: ['Troyes', 'ESTAC Troyes', 'ES Troyes AC'], countryCodes: ['FRA', 'FR'] },
+      'vaduz': { names: ['Vaduz', 'FC Vaduz'], countryCodes: ['LIE', 'LI', 'CHE', 'CH'] },
       'blueco.chelsea': { names: ['Chelsea', 'Chelsea FC'], countryCodes: ['ENG', 'GBR', 'UK'] },
       'blueco.strasbourg': { names: ['Strasbourg', 'RC Strasbourg', 'RC Strasbourg Alsace'], countryCodes: ['FRA', 'FR'] },
     } as const;
