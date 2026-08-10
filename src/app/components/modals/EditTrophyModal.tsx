@@ -137,66 +137,64 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
 
   return (
     <BaseModal open={open} onClose={onClose} title="Edit Trophy" maxWidth="max-w-md">
-      <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-        {/* Team Selection */}
+      <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+
+        {/* Team */}
         <div>
-          <label className="block text-sm mb-3 font-medium text-gray-200">Team</label>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Team</label>
           {saveDetails.careerStints && saveDetails.careerStints.length > 0 ? (
             <select
               value={selectedTeam ? selectedTeam.id : ''}
-              onChange={async (e) => {
-                const teamId = e.target.value;
-                await selectTeam(teamId);
-              }}
-              className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+              onChange={async (e) => selectTeam(e.target.value)}
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
               disabled={saving}
             >
-              <option value="">Select a team...</option>
+              <option value="">Select a team</option>
               {saveDetails.careerStints
-                ?.filter((stint: FullCareerStint, index, self) => 
+                .filter((stint: FullCareerStint, index, self) =>
                   index === self.findIndex((s: FullCareerStint) => s.teamId === stint.teamId)
                 )
                 .map((stint: FullCareerStint) => (
-                  <option key={stint.teamId} value={stint.teamId}>
-                    {stint.team.name}
-                  </option>
+                  <option key={stint.teamId} value={stint.teamId}>{stint.team.name}</option>
                 ))}
             </select>
           ) : (
-            <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-4 border border-[var(--color-primary)] text-center">
-              <div className="text-gray-500 mb-1">⚽</div>
-              No career stints found. Add career stints first to select teams.
-            </div>
+            <p className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm text-[var(--color-text-muted)]">
+              No career stints found. Add career stints first.
+            </p>
           )}
         </div>
 
-        {/* Competition Selection - filtered by team's country or international */}
+        {/* Competition */}
         <div>
-          <label className="block text-sm mb-3 font-medium text-gray-200">Competition</label>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Competition</label>
           {selectedTeam ? (
-            <div>
-              <CompetitionWithWorldDropdown
-                country={selectedTeam.countryCode}
-                value={competition?.id ? String(competition.id) : ""}
-                onChange={(comp: CompetitionGroup) => setCompetition(comp)}
-                placeholder="Select competition"
-              />
-            </div>
+            <CompetitionWithWorldDropdown
+              country={selectedTeam.countryCode}
+              value={competition?.id ? String(competition.id) : ""}
+              onChange={(comp: CompetitionGroup) => setCompetition(comp)}
+              placeholder="Select competition"
+            />
           ) : (
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              Please select a team first to filter competitions.
-            </div>
+            <p className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm text-[var(--color-text-muted)]">
+              Select a team to choose a competition
+            </p>
+          )}
+          {competition && (
+            <p className="mt-1.5 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm font-semibold text-white">
+              {competition.name}
+            </p>
           )}
         </div>
 
         {/* Date Won */}
         <div>
-          <label className="block text-sm mb-2 font-medium text-gray-200">Date Won</label>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Date Won</label>
           <input
             type="date"
             value={dateWon}
             onChange={(e) => setDateWon(e.target.value)}
-            className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
             required
             disabled={saving}
           />

@@ -47,34 +47,32 @@ export const BaseModal: React.FC<BaseModalProps> = ({
         <Dialog.Panel 
           className={`
             w-full ${maxWidth} ${maxHeight} h-fit my-auto 
-            bg-[var(--color-dark)] 
-            border-2 border-[var(--color-primary)]
-            p-6 rounded-xl shadow-2xl relative
+            bg-[var(--color-dark)]/95 backdrop-blur-sm
+            border border-[var(--color-surface-border)]
+            rounded-2xl shadow-2xl relative
             text-white
             ${panelClassName}
           `}
         >
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            {/* Title */}
-            <Dialog.Title className="text-2xl font-bold text-white pr-8">
+          <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-[var(--color-surface-border)]">
+            <Dialog.Title className="text-lg font-black text-white">
               {title}
             </Dialog.Title>
             
-            {/* Close button */}
             {showCloseButton && (
               <button
-                className="text-gray-400 hover:text-white transition-colors duration-200 z-10"
+                className="rounded-lg p-1 text-[var(--color-text-muted)] transition hover:bg-white/10 hover:text-white"
                 onClick={onClose}
                 aria-label="Close modal"
               >
-                <X className="w-8 h-8" />
+                <X className="w-5 h-5" />
               </button>
             )}
           </div>
 
           {/* Modal content */}
-          <div className="overflow-y-auto max-h-[calc(80vh-8rem)] px-2">
+          <div className="overflow-y-auto max-h-[calc(80vh-6rem)] px-6 py-5">
             {children}
           </div>
         </Dialog.Panel>

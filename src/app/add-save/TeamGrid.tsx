@@ -25,10 +25,10 @@ export default function TeamGrid({ teams, selectedTeamId, onSelect }: Props) {
         <div
           key={team.id}
           onClick={() => onSelect(team.id.toString())}
-          className={`rounded-xl border-2 p-4 cursor-pointer text-center shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105
-            ${selectedTeamId === team.id.toString() 
-              ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/20 shadow-[var(--color-accent)]/20' 
-              : 'border-[var(--color-primary)] bg-[var(--color-darker)] hover:border-[var(--color-accent)]'}`}
+          className={`rounded-xl border p-4 cursor-pointer text-center shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg
+            ${selectedTeamId === team.id.toString()
+              ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/15'
+              : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] hover:border-[var(--color-accent)]/60'}`}
         >
           <Image
             src={team.logo}

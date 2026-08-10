@@ -15,20 +15,22 @@ export default function SearchDropdown({ onCompetitionSelect }: SearchDropdownPr
 
   return (
     <InstantSearch indexName="competitions_index" searchClient={algoliaClient}>
-      <CustomSearchBox
-        query={query}
-        setQuery={setQuery}
-        setShowDropdown={setShowDropdown}
-      />
-      {showDropdown && (
-        <CustomHits
-          onCompetitionSelect={(competition) => {
-            setQuery(competition.name);
-            setShowDropdown(false);
-            onCompetitionSelect(competition);
-          }}
+      <div className="relative">
+        <CustomSearchBox
+          query={query}
+          setQuery={setQuery}
+          setShowDropdown={setShowDropdown}
         />
-      )}
+        {showDropdown && (
+          <CustomHits
+            onCompetitionSelect={(competition) => {
+              setQuery(competition.name);
+              setShowDropdown(false);
+              onCompetitionSelect(competition);
+            }}
+          />
+        )}
+      </div>
     </InstantSearch>
   );
 }
@@ -57,7 +59,7 @@ function CustomSearchBox({
       value={query}
       onChange={handleChange}
       placeholder="Search for a competition..."
-      style={{ width: '100%', padding: '8px' }}
+      className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
     />
   );
 }
@@ -67,33 +69,18 @@ function CustomHits({ onCompetitionSelect }: { onCompetitionSelect: (competition
   if (!hits.length) return null;
 
   return (
-    <ul
-      style={{
-        position: 'absolute',
-        zIndex: 10,
-        width: '100%',
-        background: 'white',
-        border: '1px solid #ccc',
-        margin: 0,
-        padding: 0,
-        listStyle: 'none',
-        maxHeight: 200,
-        overflowY: 'auto',
-      }}
-    >
+    <ul className="absolute z-20 mt-1 w-full overflow-y-auto rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] shadow-xl" style={{ maxHeight: 220 }}>
       {hits.map((hit) => {
         const competition = hit as AlgoliaCompetition;
         return (
           <li
             key={competition.id}
-            style={{ padding: '8px', cursor: 'pointer', borderBottom: '1px solid #eee' }}
-            onMouseDown={() => onCompetitionSelect(competition)} // prevents input blur interruption
+            className="flex cursor-pointer items-center justify-between px-3 py-2 text-sm text-white transition hover:bg-white/8"
+            onMouseDown={() => onCompetitionSelect(competition)}
           >
-            {competition.name}
+            <span className="font-medium">{competition.name}</span>
             {competition.countryName && (
-              <span style={{ marginLeft: '8px', fontSize: '12px', color: '#666' }}>
-                ({competition.countryName})
-              </span>
+              <span className="text-xs text-[var(--color-text-muted)]">{competition.countryName}</span>
             )}
           </li>
         );

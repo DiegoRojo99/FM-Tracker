@@ -138,78 +138,62 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
 
   return (
     <BaseModal open={open} onClose={handleClose} title={editingStint ? "Edit Career Stint" : "Add Career Stint"} maxWidth="max-w-md">
-      <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+      <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+
+        {/* Team search */}
         <div>
-          <label className="block text-sm mb-2 font-medium text-gray-200">Team</label>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Team</label>
           <TeamSearchDropdown
             onTeamSelect={(team: Team) => {
-              setForm((prev) => ({ ...prev, teamId: String(team.id) })); 
+              setForm((prev) => ({ ...prev, teamId: String(team.id) }));
               setCountryCode(team.countryCode);
               setSelectedTeam(team);
             }}
           />
+          <input hidden name="teamId" value={form.teamId} onChange={handleChange} required />
         </div>
-        
-        <div>
-          <input
-            hidden
-            name="teamId"
-            value={form.teamId}
-            onChange={handleChange}
-            className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white"
-            placeholder="Enter team ID"
-            required
-          />
-        </div>
-        
+
+        {/* League */}
         {form.teamId && countryCode ? (
           <div>
-            <label className="block text-sm mb-2 font-medium text-gray-200">League</label>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">League</label>
             <CompetitionDropdown
               onChange={(competition: CompetitionGroup) => setForm((prev) => ({ ...prev, leagueId: String(competition.id) }))}
               type="DOMESTIC_LEAGUE"
               country={countryCode}
               value={form.leagueId}
             />
+            <input hidden name="leagueId" value={form.leagueId} onChange={handleChange} />
           </div>
         ) : (
-          <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-3 border border-[var(--color-primary)]">
+          <p className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm text-[var(--color-text-muted)]">
             Select a team to view available leagues
-          </div>
+          </p>
         )}
-        
-        <div>
-          <input
-            hidden
-            name="leagueId"
-            value={form.leagueId}
-            onChange={handleChange}
-            className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white"
-            placeholder="Enter league ID"
-          />
-        </div>
 
-        <div>
-          <label className="block text-sm mb-2 font-medium text-gray-200">Start Date</label>
-          <input
-            type="date"
-            name="startDate"
-            value={form.startDate}
-            onChange={handleChange}
-            className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm mb-2 font-medium text-gray-200">End Date (optional)</label>
-          <input
-            type="date"
-            name="endDate"
-            value={form.endDate}
-            onChange={handleChange}
-            className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
-          />
+        {/* Dates */}
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Start Date</label>
+            <input
+              type="date"
+              name="startDate"
+              value={form.startDate}
+              onChange={handleChange}
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              required
+            />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">End Date <span className="normal-case font-normal">(optional)</span></label>
+            <input
+              type="date"
+              name="endDate"
+              value={form.endDate}
+              onChange={handleChange}
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+            />
+          </div>
         </div>
 
         <LoadingButton
