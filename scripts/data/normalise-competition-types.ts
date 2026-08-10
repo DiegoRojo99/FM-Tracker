@@ -12,7 +12,9 @@ async function run() {
     prisma.competitionGroup.updateMany({ where: { type: 'International' }, data: { type: 'INTERNATIONAL_NT' } }),
   ]);
 
-  // Step 2: Reclassify by name — these came in as DOMESTIC_CUP/DOMESTIC_LEAGUE but are not domestic.
+  // Step 2: Reclassify by name — only touch competitions still at DOMESTIC_* types.
+  // Competitions already set via admin UI to any other type are left alone.
+  const domesticFilter = { type: { in: ['DOMESTIC_LEAGUE', 'DOMESTIC_CUP'] } } as const;
   const CONTINENTAL_PATTERNS = [
     'champions league', 'europa league', 'conference league',
     'copa libertadores', 'libertadores', 'copa sudamericana', 'sudamericana',
@@ -34,15 +36,15 @@ async function run() {
 
   const [continental, international, superCup] = await Promise.all([
     prisma.competitionGroup.updateMany({
-      where: { type: { in: ['DOMESTIC_LEAGUE', 'DOMESTIC_CUP'] }, OR: buildNameFilter(CONTINENTAL_PATTERNS) },
+      where: { ...domesticFilter, OR: buildNameFilter(CONTINENTAL_PATTERNS) },
       data: { type: 'CONTINENTAL_CLUB' },
     }),
     prisma.competitionGroup.updateMany({
-      where: { type: { in: ['DOMESTIC_LEAGUE', 'DOMESTIC_CUP'] }, OR: buildNameFilter(INTERNATIONAL_PATTERNS) },
+      where: { ...domesticFilter, OR: buildNameFilter(INTERNATIONAL_PATTERNS) },
       data: { type: 'INTERNATIONAL_NT' },
     }),
     prisma.competitionGroup.updateMany({
-      where: { type: { in: ['DOMESTIC_LEAGUE', 'DOMESTIC_CUP'] }, OR: buildNameFilter(SUPER_CUP_PATTERNS) },
+      where: { ...domesticFilter, OR: buildNameFilter(SUPER_CUP_PATTERNS) },
       data: { type: 'SUPER_CUP' },
     }),
   ]);
