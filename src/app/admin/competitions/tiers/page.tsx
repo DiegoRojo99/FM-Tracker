@@ -40,7 +40,7 @@ export default function CompetitionTiersPage() {
   const [editTier, setEditTier] = useState<Record<number, string>>({});
   const [editType, setEditType] = useState<Record<number, string>>({});
 
-  const COMPETITION_TYPES = ['DOMESTIC_LEAGUE', 'DOMESTIC_CUP', 'International', 'Other'];
+  const COMPETITION_TYPES = ['DOMESTIC_LEAGUE', 'DOMESTIC_CUP', 'CONTINENTAL_CLUB', 'INTERNATIONAL_NT', 'SUPER_CUP', 'Other'];
 
   useEffect(() => {
     const adminUID = process.env.NEXT_PUBLIC_ADMIN_UID;

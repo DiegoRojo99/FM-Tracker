@@ -43,7 +43,7 @@ export default function NewSaveForm() {
   // Fetch leagues when country changes
   useEffect(() => {
     if (selectedCountry) {
-      fetch(`/api/competitions?country=${selectedCountry}&type=League&gameId=${selectedGame}`)
+      fetch(`/api/competitions?country=${selectedCountry}&type=DOMESTIC_LEAGUE&gameId=${selectedGame}`)
         .then(res => res.json())
         .then(setLeagues);
     } 

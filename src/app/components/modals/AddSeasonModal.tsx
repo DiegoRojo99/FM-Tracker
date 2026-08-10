@@ -326,7 +326,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
               <label className="block text-sm mb-2 font-medium text-gray-200">Cup</label>
               {selectedTeam ? (
                 <CompetitionWithWorldDropdown
-                  type="DOMESTIC_CUP"
+                  type="DOMESTIC_CUP,CONTINENTAL_CLUB"
                   country={selectedTeam.countryCode}
                   value={cup.competitionId}
                   onChange={(value) => handleCupChange(idx, "competition", value)}

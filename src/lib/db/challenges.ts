@@ -914,7 +914,7 @@ function isDomesticLeagueTrophy(trophy: Trophy, context: TrophyMatchContext): bo
 
   const competitionType = context.competitionTypeById.get(trophy.competitionGroupId)?.toLowerCase();
   if (competitionType === 'domestic_league' || competitionType === 'league') return true;
-  if (competitionType === 'domestic_cup' || competitionType === 'cup' || competitionType === 'supercup') return false;
+  if (competitionType === 'domestic_cup' || competitionType === 'cup' || competitionType === 'super_cup' || competitionType === 'supercup' || competitionType === 'continental_club' || competitionType === 'international_nt') return false;
 
   return /league|liga|bundesliga|seriea|ligue1|premierleague|eredivisie|division|nbi|bajnoksag/.test(normalized);
 }
@@ -928,7 +928,7 @@ function isDomesticCupTrophy(trophy: Trophy, context: TrophyMatchContext): boole
 
   const competitionType = context.competitionTypeById.get(trophy.competitionGroupId)?.toLowerCase();
   if (competitionType === 'domestic_cup' || competitionType === 'cup') return true;
-  if (competitionType === 'domestic_league' || competitionType === 'league' || competitionType === 'supercup') return false;
+  if (competitionType === 'domestic_league' || competitionType === 'league' || competitionType === 'super_cup' || competitionType === 'supercup' || competitionType === 'continental_club' || competitionType === 'international_nt') return false;
 
   return false;
 }

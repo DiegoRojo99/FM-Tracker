@@ -34,7 +34,7 @@ export async function PATCH(req: NextRequest) {
     if (tier !== undefined && tier !== null && (typeof tier !== 'number' || !Number.isInteger(tier) || tier < 1)) {
       return badRequest('tier must be a positive integer or null');
     }
-    const VALID_TYPES = ['DOMESTIC_LEAGUE', 'DOMESTIC_CUP', 'International', 'Other'];
+    const VALID_TYPES = ['DOMESTIC_LEAGUE', 'DOMESTIC_CUP', 'CONTINENTAL_CLUB', 'INTERNATIONAL_NT', 'SUPER_CUP', 'Other'];
     if (type !== undefined && !VALID_TYPES.includes(type)) {
       return badRequest(`type must be one of: ${VALID_TYPES.join(', ')}`);
     }

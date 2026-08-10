@@ -12,8 +12,10 @@ export async function fetchCompetition(competitionId: number): Promise<Competiti
 }
 
 export function normalizeCompetitionType(type: string | null): string | null {
-  if (!type) return null
-  return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()
+  if (!type) return null;
+  // Canonical ALL_CAPS types are passed through as-is.
+  if (type === type.toUpperCase() && type.includes('_')) return type;
+  return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
 }
 
 export async function getInFootballManagerCountryCodes(): Promise<string[]> {
@@ -28,6 +30,7 @@ export async function getInFootballManagerCountryCodes(): Promise<string[]> {
 interface GetActiveCompetitionsOptions {
   countries?: string[]
   type?: string | null
+  types?: string[]
 }
 
 export async function getActiveCompetitions(options: GetActiveCompetitionsOptions = {}): Promise<CompetitionGroup[]> {
@@ -35,12 +38,17 @@ export async function getActiveCompetitions(options: GetActiveCompetitionsOption
     ? options.countries
     : await getInFootballManagerCountryCodes();
 
-  const normalizedType = normalizeCompetitionType(options.type ?? null)
+  const typeFilter = options.types && options.types.length > 0
+    ? { type: { in: options.types } }
+    : options.type
+      ? { type: normalizeCompetitionType(options.type) ?? undefined }
+      : {};
+
   return prisma.competitionGroup.findMany({
     where: {
       isActive: true,
       countryCode: { in: countriesToQuery },
-      ...(normalizedType ? { type: normalizedType } : {}),
+      ...typeFilter,
     },
-  })
+  });
 }
