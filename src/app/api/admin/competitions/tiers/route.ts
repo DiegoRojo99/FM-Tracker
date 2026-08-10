@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   return withAuth(req, async () => {
     const body = await req.json();
-    const { id, tier, type } = body;
+    const { id, tier, type, isActive } = body;
 
     if (typeof id !== 'number') return badRequest('id required');
     if (tier !== undefined && tier !== null && (typeof tier !== 'number' || !Number.isInteger(tier) || tier < 1)) {
@@ -38,10 +38,14 @@ export async function PATCH(req: NextRequest) {
     if (type !== undefined && !VALID_TYPES.includes(type)) {
       return badRequest(`type must be one of: ${VALID_TYPES.join(', ')}`);
     }
+    if (isActive !== undefined && typeof isActive !== 'boolean') {
+      return badRequest('isActive must be a boolean');
+    }
 
     const data: Record<string, unknown> = {};
     if (tier !== undefined) data.tier = tier ?? null;
     if (type !== undefined) data.type = type;
+    if (isActive !== undefined) data.isActive = isActive;
 
     const updated = await prisma.competitionGroup.update({
       where: { id },

@@ -110,6 +110,22 @@ export default function CompetitionTiersPage() {
     }
   };
 
+  const toggleActive = async (id: number, current: boolean) => {
+    if (!user) return;
+    setSaving(prev => ({ ...prev, [id]: true }));
+    try {
+      const token = await user.getIdToken();
+      await fetch('/api/admin/competitions/tiers', {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, isActive: !current }),
+      });
+      setCompetitions(prev => prev.map(c => c.id === id ? { ...c, isActive: !current } : c));
+    } finally {
+      setSaving(prev => ({ ...prev, [id]: false }));
+    }
+  };
+
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-5xl space-y-6">
@@ -250,6 +266,19 @@ export default function CompetitionTiersPage() {
                                     )}
                                   </div>
                                 </td>
+                                <td className="px-4 py-2">
+                                  <button
+                                    onClick={() => toggleActive(c.id, c.isActive)}
+                                    disabled={saving[c.id]}
+                                    className={`rounded-full border px-2 py-0.5 text-xs font-bold transition disabled:opacity-50 ${
+                                      c.isActive
+                                        ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-400 hover:bg-rose-500/15 hover:text-rose-400 hover:border-rose-500/40'
+                                        : 'border-rose-500/40 bg-rose-500/15 text-rose-400 hover:bg-emerald-500/15 hover:text-emerald-400 hover:border-emerald-500/40'
+                                    }`}
+                                  >
+                                    {c.isActive ? 'Active' : 'Inactive'}
+                                  </button>
+                                </td>
                               </tr>
                             );
                           })}
@@ -269,6 +298,7 @@ export default function CompetitionTiersPage() {
                   <th className="px-4 py-3">Type</th>
                   <th className="px-4 py-3 w-48">Edit Type</th>
                   <th className="px-4 py-3 w-32">Tier</th>
+                  <th className="px-4 py-3 w-20">Active</th>
                   <th className="px-4 py-3 w-20"></th>
                 </tr>
               </thead>
@@ -318,6 +348,19 @@ export default function CompetitionTiersPage() {
                         </div>
                       </td>
                       <td className="px-4 py-3">
+                        <button
+                          onClick={() => toggleActive(c.id, c.isActive)}
+                          disabled={saving[c.id]}
+                          className={`rounded-full border px-2 py-0.5 text-xs font-bold transition disabled:opacity-50 ${
+                            c.isActive
+                              ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-400 hover:bg-rose-500/15 hover:text-rose-400 hover:border-rose-500/40'
+                              : 'border-rose-500/40 bg-rose-500/15 text-rose-400 hover:bg-emerald-500/15 hover:text-emerald-400 hover:border-emerald-500/40'
+                          }`}
+                        >
+                          {c.isActive ? 'Active' : 'Inactive'}
+                        </button>
+                      </td>
+                      <td className="px-4 py-3 w-20">
                         {isDirty && (
                           <button
                             onClick={() => saveTier(c.id)}
