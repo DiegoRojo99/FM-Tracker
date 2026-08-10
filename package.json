@@ -13,7 +13,10 @@
     "db:copy:prod-to-dev:dry-run": "tsx scripts/data/copy-prod-to-dev.ts --dry-run",
     "db:copy:prod-to-dev": "tsx scripts/data/copy-prod-to-dev.ts --confirm",
     "achievements:seed": "tsx scripts/data/seed-achievements.ts",
-    "challenges:seed": "tsx scripts/data/seed-challenges.ts"
+    "challenges:seed": "tsx scripts/data/seed-challenges.ts",
+    "fix:promotions": "tsx scripts/data/fix-top-flight-promotions.ts",
+    "competitions:infer-tiers": "tsx scripts/data/infer-competition-tiers.ts",
+    "competitions:seed-tiers": "tsx scripts/data/seed-competition-tiers.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",

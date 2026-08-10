@@ -74,19 +74,26 @@ export async function syncSeasonCompetitionData(
   const hasLeaguePosition = input.leaguePosition !== undefined && input.leaguePosition !== null;
 
   if (hasLeagueId && hasLeaguePosition) {
+    const competition = await tx.competitionGroup.findUnique({
+      where: { id: Number(input.leagueId) },
+      select: { tier: true },
+    });
+    // Tier 1 = top flight; promotion is impossible from there.
+    const isTopFlight = competition?.tier === 1;
+
     await tx.leagueResult.upsert({
       where: { seasonId },
       create: {
         seasonId,
         competitionId: Number(input.leagueId),
         position: Number(input.leaguePosition),
-        promoted: input.promoted || false,
+        promoted: isTopFlight ? false : (input.promoted || false),
         relegated: input.relegated || false,
       },
       update: {
         competitionId: Number(input.leagueId),
         position: Number(input.leaguePosition),
-        promoted: input.promoted || false,
+        promoted: isTopFlight ? false : (input.promoted || false),
         relegated: input.relegated || false,
       },
     });

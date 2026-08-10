@@ -250,7 +250,11 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
               type="League"
               country={selectedTeam.countryCode}
               value={selectedLeague?.id ? String(selectedLeague.id) : ""}
-              onChange={(competition: CompetitionGroup) => setSelectedLeague(competition)}
+              onChange={(competition: CompetitionGroup) => {
+                setSelectedLeague(competition);
+                // Auto-clear promoted if user switches to a top-flight league.
+                if (competition.tier === 1) setPromoted(false);
+              }}
             />
             {selectedLeague && (
               <div className="mt-2 p-3 bg-[var(--color-darker)] rounded-lg border border-[var(--color-primary)]">
@@ -282,14 +286,18 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
             
             {/* Checkboxes - responsive layout */}
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
-              <label className="flex items-center space-x-2 text-gray-200">
+              <label className={`flex items-center space-x-2 ${selectedLeague?.tier === 1 ? 'cursor-not-allowed opacity-40' : 'text-gray-200'}`}>
                 <input
                   type="checkbox"
                   checked={promoted}
+                  disabled={selectedLeague?.tier === 1}
                   onChange={(e) => setPromoted(e.target.checked)}
-                  className="rounded border-[var(--color-primary)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+                  className="rounded border-[var(--color-primary)] text-[var(--color-accent)] focus:ring-[var(--color-accent)] disabled:cursor-not-allowed"
                 />
                 <span>Promoted</span>
+                {selectedLeague?.tier === 1 && (
+                  <span className="ml-1 text-xs text-[var(--color-text-muted)]">(top flight)</span>
+                )}
               </label>
               <label className="flex items-center space-x-2 text-gray-200">
                 <input

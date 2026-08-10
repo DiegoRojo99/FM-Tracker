@@ -3,7 +3,7 @@
 import { type ComponentType, useEffect } from 'react'
 import { useAuth } from '../components/AuthProvider'
 import Link from 'next/link'
-import { BarChart3, Compass, ShieldCheck, Sparkles } from 'lucide-react'
+import { BarChart3, Compass, Layers, ShieldCheck, Sparkles } from 'lucide-react'
 
 export default function AdminPage() {
   const { user, userLoading } = useAuth()
@@ -30,6 +30,7 @@ export default function AdminPage() {
     { title: 'Coords Picker', link: '/admin/teams/coords-picker', icon: Compass },
     { title: 'Teams', link: '/admin/teams', icon: ShieldCheck },
     { title: 'Stats', link: '/admin/stats', icon: BarChart3 },
+    { title: 'Competition Tiers', link: '/admin/competitions/tiers', icon: Layers },
   ]
 
   return (
