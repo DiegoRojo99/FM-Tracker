@@ -43,6 +43,7 @@ export default function ChallengesPage() {
   const [userChallenges, setUserChallenges] = useState<CareerChallengeWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedGame, setSelectedGame] = useState<string>('');
+  const [selectedTag, setSelectedTag] = useState<string>('');
 
   // Compute unique games from userChallenges
   const gameOptions = Array.from(new Set(userChallenges.map(uc => uc.gameId).filter(Boolean)));
@@ -96,10 +97,20 @@ export default function ChallengesPage() {
 
   }, [user, userLoading]);
 
+  // Compute unique tags from all challenges, sorted alphabetically
+  const allTags = Array.from(
+    new Set(challenges.flatMap(c => c.tags ?? []))
+  ).sort();
+
   // Filter userChallenges by selected game
   const filteredUserChallenges = selectedGame
     ? userChallenges.filter(uc => uc.gameId === selectedGame)
     : userChallenges;
+
+  // Apply tag filter to the full challenge list before grouping
+  const visibleChallenges = selectedTag
+    ? challenges.filter(c => c.tags?.includes(selectedTag))
+    : challenges;
 
   if (loading) {
     return (
@@ -118,7 +129,7 @@ export default function ChallengesPage() {
     'completed': [],
   };
 
-  challenges.forEach(challenge => {
+  visibleChallenges.forEach(challenge => {
     const userChallenge = getBestUserChallengeForChallenge(challenge, filteredUserChallenges);
     const status = getChallengeStatus(userChallenge);
     if (userChallenge) challengeGroups[status].push(userChallenge);
@@ -134,7 +145,7 @@ export default function ChallengesPage() {
 
   const inProgressCount = challengeGroups['in-progress'].length;
   const completedCount = challengeGroups['completed'].length;
-  const totalCount = challenges.length;
+  const totalCount = visibleChallenges.length;
 
   return (
     <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
@@ -166,6 +177,37 @@ export default function ChallengesPage() {
             </div>
           )}
         </div>
+
+        {allTags.length > 0 && (
+          <div className="mt-4">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Filter by Type</p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setSelectedTag('')}
+                className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                  selectedTag === ''
+                    ? 'border-[var(--color-highlight)] bg-[var(--color-highlight)]/20 text-white'
+                    : 'border-[var(--color-surface-border)] bg-transparent text-[var(--color-text-muted)] hover:border-[var(--color-highlight)]/50 hover:text-white'
+                }`}
+              >
+                All
+              </button>
+              {allTags.map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => setSelectedTag(tag === selectedTag ? '' : tag)}
+                  className={`rounded-full border px-3 py-1 text-xs font-semibold capitalize transition ${
+                    selectedTag === tag
+                      ? 'border-[var(--color-highlight)] bg-[var(--color-highlight)]/20 text-white'
+                      : 'border-[var(--color-surface-border)] bg-transparent text-[var(--color-text-muted)] hover:border-[var(--color-highlight)]/50 hover:text-white'
+                  }`}
+                >
+                  {tag.replace(/-/g, ' ')}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">

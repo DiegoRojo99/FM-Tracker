@@ -38,7 +38,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'League plus cup in the same country.',
     status: 'PUBLISHED',
     sortOrder: 10,
-    tags: ['starter', 'domestic', 'trophy'],
+    tags: ['starter', 'domestic'],
     goals: [
       {
         position: 1,
@@ -75,7 +75,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Show continental versatility.',
     status: 'PUBLISHED',
     sortOrder: 30,
-    tags: ['journeyman', 'countries', 'long-run'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -122,7 +122,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Salzburg, Leipzig, New York, Bragantino.',
     status: 'PUBLISHED',
     sortOrder: 40,
-    tags: ['club-group', 'red-bull', 'multi-club'],
+    tags: ['club-group', 'journeyman'],
     goals: [
       {
         position: 1,
@@ -181,7 +181,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Manchester, Girona, New York City, Melbourne.',
     status: 'PUBLISHED',
     sortOrder: 50,
-    tags: ['club-group', 'city-group', 'multi-club'],
+    tags: ['club-group', 'journeyman'],
     goals: [
       {
         position: 1,
@@ -252,7 +252,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Chelsea and Strasbourg.',
     status: 'PUBLISHED',
     sortOrder: 60,
-    tags: ['club-group', 'blueco', 'multi-club'],
+    tags: ['club-group', 'journeyman'],
     goals: [
       {
         position: 1,
@@ -287,7 +287,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Denmark, Sweden, Norway.',
     status: 'PUBLISHED',
     sortOrder: 70,
-    tags: ['regions', 'scandinavia', 'journeyman'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -334,7 +334,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'USA, Mexico, Canada.',
     status: 'PUBLISHED',
     sortOrder: 80,
-    tags: ['regions', 'north-america', 'journeyman'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -381,7 +381,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Climb every UEFA tier.',
     status: 'PUBLISHED',
     sortOrder: 50,
-    tags: ['veteran', 'europe', 'uefa'],
+    tags: ['veteran', 'europe'],
     goals: [
       {
         position: 1,
@@ -428,7 +428,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'UEFA, CONMEBOL, CONCACAF, CAF, AFC, OFC.',
     status: 'PUBLISHED',
     sortOrder: 90,
-    tags: ['veteran', 'continental', 'global'],
+    tags: ['veteran', 'global'],
     goals: [
       {
         position: 1,
@@ -511,7 +511,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'England, Scotland, Wales, Ireland, Northern Ireland.',
     status: 'PUBLISHED',
     sortOrder: 100,
-    tags: ['regions', 'british-isles', 'journeyman'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -582,7 +582,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Spain and Portugal.',
     status: 'PUBLISHED',
     sortOrder: 110,
-    tags: ['regions', 'iberia', 'journeyman'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -617,7 +617,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Netherlands, Belgium, and a trophy with Vaduz.',
     status: 'PUBLISHED',
     sortOrder: 120,
-    tags: ['regions', 'benelux', 'journeyman'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -664,7 +664,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Croatia, Serbia, Slovenia.',
     status: 'PUBLISHED',
     sortOrder: 130,
-    tags: ['regions', 'balkans', 'journeyman'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -711,7 +711,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Austria, Switzerland, Czech Republic, Poland.',
     status: 'PUBLISHED',
     sortOrder: 140,
-    tags: ['regions', 'central-europe', 'journeyman'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -770,7 +770,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Brazil, Argentina, Uruguay.',
     status: 'PUBLISHED',
     sortOrder: 150,
-    tags: ['continents', 'south-america', 'journeyman'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -817,7 +817,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Egypt and South Africa.',
     status: 'PUBLISHED',
     sortOrder: 160,
-    tags: ['continents', 'africa', 'journeyman'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -852,7 +852,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Bring European glory back to the City Ground.',
     status: 'PUBLISHED',
     sortOrder: 170,
-    tags: ['team-specific', 'legends', 'europe'],
+    tags: ['team-specific', 'europe'],
     goals: [
       {
         position: 1,
@@ -881,7 +881,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Deliver the one major trophy missing in modern Arsenal history.',
     status: 'PUBLISHED',
     sortOrder: 180,
-    tags: ['team-specific', 'legends', 'europe'],
+    tags: ['team-specific', 'europe'],
     goals: [
       {
         position: 1,
@@ -910,7 +910,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Complete Atleti\'s European dream.',
     status: 'PUBLISHED',
     sortOrder: 190,
-    tags: ['team-specific', 'legends', 'europe'],
+    tags: ['team-specific', 'europe'],
     goals: [
       {
         position: 1,
@@ -939,7 +939,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Take Roma to the top of Europe.',
     status: 'PUBLISHED',
     sortOrder: 200,
-    tags: ['team-specific', 'legends', 'europe'],
+    tags: ['team-specific', 'europe'],
     goals: [
       {
         position: 1,
@@ -968,7 +968,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Bring Europe\'s top prize back to Benfica in the modern era.',
     status: 'PUBLISHED',
     sortOrder: 210,
-    tags: ['team-specific', 'giants', 'europe'],
+    tags: ['team-specific', 'europe'],
     goals: [
       {
         position: 1,
@@ -997,7 +997,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Restore Ajax to European supremacy.',
     status: 'PUBLISHED',
     sortOrder: 220,
-    tags: ['team-specific', 'giants', 'europe'],
+    tags: ['team-specific', 'europe'],
     goals: [
       {
         position: 1,
@@ -1026,7 +1026,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Bring a European crown back to Celtic Park.',
     status: 'PUBLISHED',
     sortOrder: 230,
-    tags: ['team-specific', 'giants', 'europe'],
+    tags: ['team-specific', 'europe'],
     goals: [
       {
         position: 1,
@@ -1055,7 +1055,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Deliver a first major piece of silverware for the Cottagers.',
     status: 'PUBLISHED',
     sortOrder: 240,
-    tags: ['team-specific', 'underdogs', 'history'],
+    tags: ['team-specific', 'history'],
     goals: [
       {
         position: 1,
@@ -1078,7 +1078,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Write the first silver chapter in Freiburg history.',
     status: 'PUBLISHED',
     sortOrder: 250,
-    tags: ['team-specific', 'underdogs', 'history'],
+    tags: ['team-specific', 'history'],
     goals: [
       {
         position: 1,
@@ -1101,7 +1101,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Bring silverware to the Amex.',
     status: 'PUBLISHED',
     sortOrder: 260,
-    tags: ['team-specific', 'underdogs', 'history'],
+    tags: ['team-specific', 'history'],
     goals: [
       {
         position: 1,
@@ -1124,7 +1124,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Land Union Berlin\'s first modern-era silverware moment.',
     status: 'PUBLISHED',
     sortOrder: 270,
-    tags: ['team-specific', 'underdogs', 'history'],
+    tags: ['team-specific', 'history'],
     goals: [
       {
         position: 1,
@@ -1147,7 +1147,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Give Watford their breakthrough silverware moment.',
     status: 'PUBLISHED',
     sortOrder: 280,
-    tags: ['team-specific', 'underdogs', 'history'],
+    tags: ['team-specific', 'history'],
     goals: [
       {
         position: 1,
@@ -1170,7 +1170,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Secure long-awaited silverware for NY Red Bulls.',
     status: 'PUBLISHED',
     sortOrder: 290,
-    tags: ['team-specific', 'underdogs', 'history'],
+    tags: ['team-specific', 'history'],
     goals: [
       {
         position: 1,
@@ -1193,7 +1193,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Capture the first silverware chapter for Deportivo Maldonado.',
     status: 'PUBLISHED',
     sortOrder: 300,
-    tags: ['team-specific', 'underdogs', 'history'],
+    tags: ['team-specific', 'history'],
     goals: [
       {
         position: 1,
@@ -1216,7 +1216,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Take Andorra\'s project all the way to the Spanish top-flight crown.',
     status: 'PUBLISHED',
     sortOrder: 310,
-    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    tags: ['team-specific', 'cross-border', 'domestic'],
     goals: [
       {
         position: 1,
@@ -1245,7 +1245,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Lead Ceuta from the North African coast to Spain\'s highest title.',
     status: 'PUBLISHED',
     sortOrder: 320,
-    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    tags: ['team-specific', 'cross-border', 'domestic'],
     goals: [
       {
         position: 1,
@@ -1274,7 +1274,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Bring the English title across the Severn to Cardiff.',
     status: 'PUBLISHED',
     sortOrder: 330,
-    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    tags: ['team-specific', 'cross-border', 'domestic'],
     goals: [
       {
         position: 1,
@@ -1303,7 +1303,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Turn Welsh momentum into an English top-flight crown.',
     status: 'PUBLISHED',
     sortOrder: 340,
-    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    tags: ['team-specific', 'cross-border', 'domestic'],
     goals: [
       {
         position: 1,
@@ -1332,7 +1332,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Complete the Hollywood dream with an English league title.',
     status: 'PUBLISHED',
     sortOrder: 350,
-    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    tags: ['team-specific', 'cross-border', 'domestic'],
     goals: [
       {
         position: 1,
@@ -1361,7 +1361,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Break the ceiling and claim the Swiss title with Vaduz.',
     status: 'PUBLISHED',
     sortOrder: 360,
-    tags: ['team-specific', 'cross-border', 'domestic-league'],
+    tags: ['team-specific', 'cross-border', 'domestic'],
     goals: [
       {
         position: 1,
@@ -1390,7 +1390,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Vienna, Bratislava, Budapest, Belgrade.',
     status: 'PUBLISHED',
     sortOrder: 370,
-    tags: ['geography', 'danube', 'multi-city'],
+    tags: ['journeyman', 'geography'],
     goals: [
       {
         position: 1,
@@ -1434,7 +1434,7 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
     summary: 'Make history with a club from the former GDR.',
     status: 'PUBLISHED',
     sortOrder: 380,
-    tags: ['history', 'germany', 'east-germany', 'domestic-league'],
+    tags: ['history', 'domestic', 'geography'],
     goals: [
       {
         position: 1,
