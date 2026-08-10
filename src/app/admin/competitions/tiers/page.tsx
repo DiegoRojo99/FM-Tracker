@@ -185,7 +185,8 @@ export default function CompetitionTiersPage() {
                 const isOpen = expandedCountries.has(code);
                 const toggle = () => setExpandedCountries(prev => {
                   const next = new Set(prev);
-                  next.has(code) ? next.delete(code) : next.add(code);
+                  if (next.has(code)) next.delete(code);
+                  else next.add(code);
                   return next;
                 });
                 const tieredCount = comps.filter(c => c.tier !== null).length;
