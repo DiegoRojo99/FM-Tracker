@@ -7,7 +7,7 @@ import { User, UserWithStatus } from '@/lib/types/prisma/User'
 import { UserStats } from '@/lib/types/prisma/Stats'
 import { GradientButton } from '@/app/components/GradientButton'
 import FootballLoader from '@/app/components/FootBallLoader'
-import { Calendar, Crown, ShieldCheck, Sparkles, Trophy, Users, Volleyball } from 'lucide-react'
+import { Calendar, Crown, Flag, ShieldCheck, Sparkles, Star, Trophy, TrendingUp, Users } from 'lucide-react'
 
 interface ProfileViewProps {
   userId?: string // If provided, show that user's profile; otherwise show current user
@@ -46,29 +46,21 @@ export default function ProfileView({ userId }: ProfileViewProps) {
       }
 
       // Fetch user stats
-      const statsResponse = await fetch(`/api/users/${targetUserId}/stats`, {
-        headers
-      })
-
+      const statsResponse = await fetch(`/api/users/${targetUserId}/stats`, { headers })
       if (!statsResponse.ok) {
-        if (statsResponse.status === 404) {
-          throw new Error('User not found')
-        }
+        if (statsResponse.status === 404) throw new Error('User not found')
         throw new Error('Failed to fetch user profile')
       }
 
       const statsData = await statsResponse.json()
       const isOwnProfile = currentUser?.uid === targetUserId
-
       let friendshipStatus: UserProfile['friendshipStatus'] = 'none'
 
       // If viewing another user's profile, check friendship status
       if (!isOwnProfile && currentUser) {
         try {
           const searchResponse = await fetch(`/api/friends/search?q=${encodeURIComponent(statsData.user.email)}`, {
-            headers: {
-              'Authorization': `Bearer ${await currentUser.getIdToken()}`
-            }
+            headers: { 'Authorization': `Bearer ${await currentUser.getIdToken()}` }
           })
 
           if (searchResponse.ok) {
@@ -76,7 +68,8 @@ export default function ProfileView({ userId }: ProfileViewProps) {
             const userResult: UserWithStatus | undefined = searchData.users?.find((u: UserWithStatus) => u.uid === targetUserId)
             if (userResult) friendshipStatus = userResult.relationshipStatus
           }
-        } catch (err) {
+        } 
+        catch (err) {
           console.warn('Could not fetch friendship status:', err)
         }
       }
@@ -100,21 +93,20 @@ export default function ProfileView({ userId }: ProfileViewProps) {
 
   useEffect(() => {
     if (!currentUser && !userLoading) {
-      router.push('/login')
-      return
+      router.push('/login');
+      return;
     }
 
-    if (!targetUserId) return
-
-    fetchProfile()
-  }, [currentUser, userLoading, targetUserId, router, fetchProfile])
+    if (!targetUserId) return;
+    fetchProfile();
+  }, [currentUser, userLoading, targetUserId, router, fetchProfile]);
 
   const handleSendFriendRequest = async () => {
-    if (!profile || !currentUser || profile.isOwnProfile) return
+    if (!profile || !currentUser || profile.isOwnProfile) return;
 
     try {
-      setSendingRequest(true)
-      const userToken = await currentUser.getIdToken()
+      setSendingRequest(true);
+      const userToken = await currentUser.getIdToken();
 
       const response = await fetch('/api/friends/request', {
         method: 'POST',
@@ -125,15 +117,15 @@ export default function ProfileView({ userId }: ProfileViewProps) {
         body: JSON.stringify({
           receiverEmail: profile.user.email
         })
-      })
+      });
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to send friend request')
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to send friend request');
       }
 
       // Refresh profile to update friendship status
-      fetchProfile()
+      fetchProfile();
     } 
     catch (error: unknown) {
       if (!(error instanceof Error)) return;
@@ -141,21 +133,21 @@ export default function ProfileView({ userId }: ProfileViewProps) {
       alert(error.message || 'Failed to send friend request');
     } 
     finally {
-      setSendingRequest(false)
+      setSendingRequest(false);
     }
   }
 
   const showFavTeams = () => {
-    if (!profile?.stats) return 'N/A'
-    const numberOfTeams = profile.stats.favoriteTeams.length || 0
-    if (numberOfTeams === 0) return 'N/A'
-    if (numberOfTeams === 1) return profile.stats.favoriteTeams[0].name
-    if (numberOfTeams > 3) return `${numberOfTeams} teams`
-    return profile.stats.favoriteTeams.map(team => team.name).join(', ')
+    if (!profile?.stats) return 'N/A';
+    const numberOfTeams = profile.stats.favoriteTeams.length || 0;
+    if (numberOfTeams === 0) return 'N/A';
+    if (numberOfTeams === 1) return profile.stats.favoriteTeams[0].name;
+    if (numberOfTeams > 3) return `${numberOfTeams} teams`;
+    return profile.stats.favoriteTeams.map(team => team.name).join(', ');
   }
 
   const getJoinDate = () => {
-    if (!profile?.user.createdAt) return 'Unknown'
+    if (!profile?.user.createdAt) return 'Unknown';
     return new Date(profile.user.createdAt).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -164,7 +156,7 @@ export default function ProfileView({ userId }: ProfileViewProps) {
   }
 
   const getFriendshipButton = () => {
-    if (!profile || profile.isOwnProfile || !currentUser) return null
+    if (!profile || profile.isOwnProfile || !currentUser) return null;
 
     switch (profile.friendshipStatus) {
       case 'friend':
@@ -294,71 +286,92 @@ export default function ProfileView({ userId }: ProfileViewProps) {
           <h2 className="mb-6 text-2xl font-black text-white">
             📊 {profile.isOwnProfile ? 'Your' : `${profile.user.displayName}'s`} Career Statistics
           </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-300">Active Saves</h3>
-                  <p className="text-3xl font-bold text-[var(--color-accent)]">{profile.stats.activeSaves}</p>
-                </div>
-                <ShieldCheck className="h-9 w-9 text-[var(--color-accent)]" />
-              </div>
-            </div>
 
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-300">Total Trophies</h3>
-                  <p className="text-3xl font-bold text-[var(--color-highlight)]">{profile.stats.totalTrophies}</p>
+          {/* Primary numbers */}
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              { label: 'Trophies', value: profile.stats.totalTrophies, icon: <Trophy className="h-5 w-5" />, color: 'text-[var(--color-highlight)]', border: 'border-[var(--color-highlight)]/30' },
+              { label: 'Seasons', value: profile.stats.currentSeasons, icon: <Calendar className="h-5 w-5" />, color: 'text-[var(--color-success)]', border: 'border-[var(--color-success)]/30' },
+              { label: 'Promotions', value: profile.stats.totalPromotions, icon: <TrendingUp className="h-5 w-5" />, color: 'text-sky-400', border: 'border-sky-400/30' },
+              { label: 'Active Saves', value: profile.stats.activeSaves, icon: <ShieldCheck className="h-5 w-5" />, color: 'text-[var(--color-accent)]', border: 'border-[var(--color-accent)]/30' },
+            ].map(({ label, value, icon, color, border }) => (
+              <div key={label} className={`rounded-2xl border ${border} bg-[var(--color-darker)]/80 p-4`}>
+                <div className={`mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide ${color}`}>
+                  {icon}
+                  {label}
                 </div>
-                <Trophy className="h-9 w-9 text-[var(--color-highlight)]" />
+                <p className={`text-3xl font-black ${color}`}>{value}</p>
               </div>
-            </div>
+            ))}
+          </div>
 
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-300">Seasons Played</h3>
-                  <p className="text-3xl font-bold text-[var(--color-success)]">{profile.stats.currentSeasons}</p>
+          {/* Achievements */}
+          <div className="mt-4 rounded-2xl border border-amber-400/25 bg-amber-400/6 p-5">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-400/15">
+                  <Star className="h-5 w-5 text-amber-400" />
                 </div>
-                <Calendar className="h-9 w-9 text-[var(--color-success)]" />
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
-              <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-300">Total Matches</h3>
-                  <p className="text-3xl font-bold text-[var(--color-accent)]">{profile.stats.totalMatches}</p>
-                </div>
-                <Volleyball className="h-9 w-9 text-[var(--color-accent)]" />
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-300">Favorite Teams</h3>
-                  <p className="text-lg font-bold text-[var(--color-highlight)]">
-                    {showFavTeams()}
+                  <p className="text-xs font-semibold uppercase tracking-wide text-amber-400">Achievements</p>
+                  <p className="text-lg font-black text-white">
+                    {profile.stats.achievements.unlockedCount}
+                    <span className="ml-1 text-sm font-medium text-[var(--color-text-muted)]">/ {profile.stats.achievements.totalCount} unlocked</span>
                   </p>
                 </div>
-                <Users className="h-9 w-9 text-[var(--color-highlight)]" />
+              </div>
+              <div className="text-right">
+                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Total Points</p>
+                <p className="text-2xl font-black text-amber-400">{profile.stats.achievements.totalPoints.toLocaleString()}</p>
               </div>
             </div>
-
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-300">Longest Save</h3>
-                  <p className="text-lg font-bold text-[var(--color-success)]">
-                    {profile.stats.longestSave?.currentClub?.name || 'N/A'} 
-                    {profile.stats.longestSave?.seasons.length ? ` (${profile.stats.longestSave.seasons.length} seasons)` : ''}
-                  </p>
-                </div>
-                <Crown className="h-9 w-9 text-[var(--color-success)]" />
+            <div className="mt-3">
+              <div className="flex justify-between text-xs text-[var(--color-text-muted)] mb-1">
+                <span>Progress</span>
+                <span>{profile.stats.achievements.progressPercent}%</span>
               </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-black/30">
+                <div
+                  className="h-full rounded-full bg-amber-400 transition-all duration-500"
+                  style={{ width: `${profile.stats.achievements.progressPercent}%` }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Challenges + career row */}
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-4">
+              <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-purple-400">
+                <Flag className="h-4 w-4" />
+                Challenges
+              </div>
+              <p className="text-2xl font-black text-white">{profile.stats.challenges.completedCount}</p>
+              <p className="mt-0.5 text-xs text-[var(--color-text-muted)]">
+                completed · {profile.stats.challenges.inProgressCount} in progress
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-4">
+              <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-[var(--color-success)]">
+                <Crown className="h-4 w-4" />
+                Longest Save
+              </div>
+              <p className="truncate text-base font-bold text-white">
+                {profile.stats.longestSave?.currentClub?.name ?? 'N/A'}
+              </p>
+              <p className="mt-0.5 text-xs text-[var(--color-text-muted)]">
+                {profile.stats.longestSave?.seasons.length ? `${profile.stats.longestSave.seasons.length} seasons` : 'No saves yet'}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-4">
+              <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-[var(--color-highlight)]">
+                <Users className="h-4 w-4" />
+                Favourite Teams
+              </div>
+              <p className="truncate text-base font-bold text-white">{showFavTeams()}</p>
+              <p className="mt-0.5 text-xs text-[var(--color-text-muted)]">most managed</p>
             </div>
           </div>
 
