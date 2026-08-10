@@ -174,198 +174,174 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   
   return (
     <BaseModal open={open} onClose={onClose} title={title}>
-      <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+      <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+
+        {/* Season */}
         <div>
-          <label className="block text-sm mb-2 font-medium text-gray-200">Season (e.g. 2023/24)</label>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Season</label>
           <input
             type="text"
             value={season}
             onChange={(e) => setSeason(e.target.value)}
             placeholder="2023/24"
-            className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
             pattern="^\d{4}/\d{2}$"
             title="Season must be in the format YYYY/YY (e.g., 2023/24)"
             required
           />
         </div>
 
-        {/* Team Selection - from save's career stints */}
+        {/* Team */}
         <div>
-          <label className="block text-sm mb-2 font-medium text-gray-200">Team</label>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Team</label>
           {saveDetails.careerStints && saveDetails.careerStints.length > 0 ? (
             <select
               value={selectedTeam ? selectedTeam.id : ''}
               onChange={(e) => {
                 const teamId = e.target.value;
-                console.log("Selected team ID:", teamId);
                 if (teamId) {
                   const careerStint: FullCareerStint | undefined = saveDetails.careerStints.find((stint: FullCareerStint) => stint.teamId === Number(teamId));
-                  console.log("Found career stint for selected team:", careerStint);
                   if (careerStint) {
-                    const team: Team = careerStint.team;
-                    console.log("Setting selected team to:", team);
-                    setSelectedTeam(team);
-                    setSelectedLeague(null); // Reset league when team changes
+                    setSelectedTeam(careerStint.team);
+                    setSelectedLeague(null);
                   }
-                } 
-                else {
+                } else {
                   setSelectedTeam(null);
                   setSelectedLeague(null);
                 }
               }}
-              className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
             >
-              <option value="">-- Select a team --</option>
+              <option value="">Select a team</option>
               {uniqueTeams.map((team) => (
-                <option key={team.id} value={team.id}>
-                  {team.name}
-                </option>
+                <option key={team.id} value={team.id}>{team.name}</option>
               ))}
             </select>
           ) : (
-            <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-3 border border-[var(--color-primary)]">
-              No teams found in your career history. Add a career stint first.
-            </div>
+            <p className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm text-[var(--color-text-muted)]">
+              No teams found. Add a career stint first.
+            </p>
           )}
           {selectedTeam && (
-            <div className="mt-2 p-3 bg-[var(--color-darker)] rounded-lg border border-[var(--color-primary)] flex items-center space-x-3">
-              <Image 
-                src={selectedTeam.logo} 
-                alt={selectedTeam.name} 
-                width={32} 
-                height={32} 
-                className="h-8 w-8 object-contain" 
-                unoptimized 
-              />
-              <span className="text-white font-semibold">{selectedTeam.name}</span>
+            <div className="mt-2 flex items-center gap-3 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2">
+              <Image src={selectedTeam.logo} alt={selectedTeam.name} width={24} height={24} className="h-6 w-6 object-contain" unoptimized />
+              <span className="text-sm font-semibold text-white">{selectedTeam.name}</span>
             </div>
           )}
         </div>
 
-        {/* League Selection - optional, only show if team is selected */}
+        {/* League */}
         {selectedTeam ? (
           <div>
-            <label className="block text-sm mb-2 font-medium text-gray-200">League (optional)</label>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">League <span className="normal-case font-normal">(optional)</span></label>
             <CompetitionDropdown
               type="DOMESTIC_LEAGUE"
               country={selectedTeam.countryCode}
               value={selectedLeague?.id ? String(selectedLeague.id) : ""}
               onChange={(competition: CompetitionGroup) => {
                 setSelectedLeague(competition);
-                // Auto-clear promoted if user switches to a top-flight league.
                 if (competition.tier === 1) setPromoted(false);
               }}
             />
             {selectedLeague && (
-              <div className="mt-2 p-3 bg-[var(--color-darker)] rounded-lg border border-[var(--color-primary)]">
-                <span className="text-white font-semibold">{selectedLeague.name}</span>
-              </div>
+              <p className="mt-1.5 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm font-semibold text-white">
+                {selectedLeague.name}
+              </p>
             )}
           </div>
         ) : (
-          <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-3 border border-[var(--color-primary)]">
+          <p className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm text-[var(--color-text-muted)]">
             Select a team to choose a league
-          </div>
+          </p>
         )}
 
-        {selectedLeague ? (
-          <div className="space-y-4">
+        {/* League position + checkboxes */}
+        {selectedLeague && (
+          <div className="space-y-4 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
             <div>
-              <label className="block text-sm mb-2 font-medium text-gray-200">League Position</label>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">League Position</label>
               <input
                 type="number"
                 min={1}
                 value={leaguePosition}
-                onChange={(e) =>
-                  setLeaguePosition(e.target.value === "" ? "" : Number(e.target.value))
-                }
-                className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+                onChange={(e) => setLeaguePosition(e.target.value === "" ? "" : Number(e.target.value))}
+                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
                 required
               />
             </div>
-            
-            {/* Checkboxes - responsive layout */}
-            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
-              <label className={`flex items-center space-x-2 ${selectedLeague?.tier === 1 ? 'cursor-not-allowed opacity-40' : 'text-gray-200'}`}>
+            <div className="flex flex-wrap gap-4">
+              <label className={`flex cursor-pointer items-center gap-2 text-sm ${selectedLeague?.tier === 1 ? 'cursor-not-allowed opacity-40' : 'text-white'}`}>
                 <input
                   type="checkbox"
                   checked={promoted}
                   disabled={selectedLeague?.tier === 1}
                   onChange={(e) => setPromoted(e.target.checked)}
-                  className="rounded border-[var(--color-primary)] text-[var(--color-accent)] focus:ring-[var(--color-accent)] disabled:cursor-not-allowed"
+                  className="rounded border-[var(--color-surface-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)] disabled:cursor-not-allowed"
                 />
-                <span>Promoted</span>
-                {selectedLeague?.tier === 1 && (
-                  <span className="ml-1 text-xs text-[var(--color-text-muted)]">(top flight)</span>
-                )}
+                Promoted
+                {selectedLeague?.tier === 1 && <span className="text-xs text-[var(--color-text-muted)]">(top flight)</span>}
               </label>
-              <label className="flex items-center space-x-2 text-gray-200">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-white">
                 <input
                   type="checkbox"
                   checked={relegated}
                   onChange={(e) => setRelegated(e.target.checked)}
-                  className="rounded border-[var(--color-primary)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+                  className="rounded border-[var(--color-surface-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
                 />
-                <span>Relegated</span>
+                Relegated
               </label>
             </div>
           </div>
-        ) : null}
+        )}
 
+        {/* Cup results */}
         <div>
-          <h3 className="font-semibold text-lg mb-3 text-white">Cup Results</h3>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Cup Results</p>
           {!selectedTeam && cupResults.length === 0 && (
-            <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-4 border border-[var(--color-primary)] text-center mb-3">
-              <div className="text-gray-500 mb-1">🏆</div>
+            <p className="mb-3 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm text-[var(--color-text-muted)]">
               Select a team to add cup results
-            </div>
+            </p>
           )}
           <div className="space-y-3">
-          {cupResults.map((cup, idx) => (
-            <div key={idx} className="border-2 border-[var(--color-primary)] rounded-lg p-4 bg-[var(--color-darker)]">
-              <label className="block text-sm mb-2 font-medium text-gray-200">Cup</label>
-              {selectedTeam ? (
-                <CompetitionWithWorldDropdown
-                  type="DOMESTIC_CUP,CONTINENTAL_CLUB"
-                  country={selectedTeam.countryCode}
-                  value={cup.competitionId}
-                  onChange={(value) => handleCupChange(idx, "competition", value)}
-                  placeholder="Select cup competition"
-                />
-              ) : (
-                <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-3 border border-[var(--color-primary)] text-center">
-                  Select a team first to choose cup competitions
-                </div>
-              )}
-              <label className="block text-sm mt-4 mb-2 font-medium text-gray-200">Round Reached</label>
-              <select
-                value={cup.reachedRound}
-                onChange={(e) => handleCupChange(idx, "reachedRound", e.target.value)}
-                className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
-              >
-                {CUP_ROUNDS.map(round => (
-                  <option key={round} value={round}>{round}</option>
-                ))}
-              </select>
-              <button
-                type="button"
-                onClick={() => handleRemoveCup(idx)}
-                className="text-red-400 hover:text-red-300 text-sm mt-3 transition-colors duration-200"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
+            {cupResults.map((cup, idx) => (
+              <div key={idx} className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Competition</label>
+                {selectedTeam ? (
+                  <CompetitionWithWorldDropdown
+                    type="DOMESTIC_CUP,CONTINENTAL_CLUB"
+                    country={selectedTeam.countryCode}
+                    value={cup.competitionId}
+                    onChange={(value) => handleCupChange(idx, "competition", value)}
+                    placeholder="Select cup competition"
+                  />
+                ) : (
+                  <p className="text-sm text-[var(--color-text-muted)]">Select a team first</p>
+                )}
+                <label className="mb-1.5 mt-3 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Round Reached</label>
+                <select
+                  value={cup.reachedRound}
+                  onChange={(e) => handleCupChange(idx, "reachedRound", e.target.value)}
+                  className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+                >
+                  {CUP_ROUNDS.map(round => (
+                    <option key={round} value={round}>{round}</option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveCup(idx)}
+                  className="mt-3 text-xs font-semibold text-rose-400 transition hover:text-rose-300"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
           </div>
           <button
             type="button"
             onClick={handleAddCup}
             disabled={!selectedTeam}
-            className={`text-sm mt-3 transition-colors duration-200 ${
-              selectedTeam 
-                ? 'text-[var(--color-accent)] hover:text-[var(--color-highlight)]' 
-                : 'text-gray-500 cursor-not-allowed'
-            }`}
+            className="mt-3 text-sm font-semibold text-[var(--color-accent)] transition hover:text-[var(--color-highlight)] disabled:cursor-not-allowed disabled:opacity-40"
           >
             + Add Cup Result
           </button>
