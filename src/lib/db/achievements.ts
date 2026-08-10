@@ -194,9 +194,8 @@ export async function evaluateAchievementsForUser(input: EvaluateAchievementsInp
     const computedProgress = computeProgress(definition.key, aggregates, definition.maxProgress);
     const existingRecord = existingByKey.get(definition.key);
 
-    const nextProgress = existingRecord
-      ? Math.max(existingRecord.progress, computedProgress)
-      : computedProgress;
+    // Always use the live count so deleted saves/edited seasons are reflected.
+    const nextProgress = computedProgress;
 
     const shouldUnlock = nextProgress >= definition.maxProgress;
     const unlockedAt = existingRecord?.unlockedAt ?? (shouldUnlock ? (input.eventTimestamp ?? new Date()) : null);
