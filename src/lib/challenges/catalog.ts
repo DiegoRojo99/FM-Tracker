@@ -1383,6 +1383,74 @@ export const CHALLENGE_CATALOG: ChallengeCatalogEntry[] = [
       },
     ],
   },
+  {
+    key: 'geography.danube-capitals',
+    title: 'Danube Crowns',
+    description: 'Win a trophy with a club from each of the four capitals that sit on the Danube.',
+    summary: 'Vienna, Bratislava, Budapest, Belgrade.',
+    status: 'PUBLISHED',
+    sortOrder: 370,
+    tags: ['geography', 'danube', 'multi-city'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win a trophy with a Vienna club',
+        rules: [
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'rapid-wien' } },
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'austria-wien' } },
+        ],
+      },
+      {
+        position: 2,
+        description: 'Win a trophy with a Bratislava club',
+        rules: [
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'slovan-bratislava' } },
+        ],
+      },
+      {
+        position: 3,
+        description: 'Win a trophy with a Budapest club',
+        rules: [
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'ferencvaros' } },
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'ujpest' } },
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'mtk-budapest' } },
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'budapest-honved' } },
+        ],
+      },
+      {
+        position: 4,
+        description: 'Win a trophy with a Belgrade club',
+        rules: [
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'red-star-belgrade' } },
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'partizan-belgrade' } },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'history.east-germany-bundesliga',
+    title: 'Ostkurve Champions',
+    description: 'Win the Bundesliga with an East German club.',
+    summary: 'Make history with a club from the former GDR.',
+    status: 'PUBLISHED',
+    sortOrder: 380,
+    tags: ['history', 'germany', 'east-germany', 'domestic-league'],
+    goals: [
+      {
+        position: 1,
+        description: 'Win the Bundesliga with an East German club',
+        rules: [
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'union-berlin' } },
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'dynamo-dresden' } },
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'hansa-rostock' } },
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'fc-magdeburg' } },
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'energie-cottbus' } },
+          { kind: 'team.in', subjectType: 'team', operator: 'in', config: { teamKey: 'erzgebirge-aue' } },
+          { kind: 'competition.equals', subjectType: 'competition', operator: 'eq', config: { competitionKey: 'germany.bundesliga' } },
+        ],
+      },
+    ],
+  },
 ];
 
 export const CHALLENGE_CATALOG_BY_KEY = new Map(CHALLENGE_CATALOG.map((entry) => [entry.key, entry]));

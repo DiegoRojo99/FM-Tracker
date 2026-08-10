@@ -1,6 +1,7 @@
 import { Prisma } from '../../../prisma/generated/client';
 import { prisma } from './prisma';
 import { CHALLENGE_CATALOG } from '../challenges/catalog';
+import { readTeamKey, TEAM_RESOLVER } from './challengeTeamResolver';
 
 type CompetitionKey =
   | 'uefa.champions-league'
@@ -13,39 +14,8 @@ type CompetitionKey =
   | 'ofc.champions-league'
   | 'spain.laliga'
   | 'england.premier-league'
-  | 'switzerland.super-league';
-
-type TeamKey =
-  | 'redbull.salzburg'
-  | 'redbull.leipzig'
-  | 'redbull.new-york-red-bulls'
-  | 'redbull.bragantino'
-  | 'city.manchester-city'
-  | 'city.girona'
-  | 'city.new-york-city'
-  | 'city.melbourne-city'
-  | 'city.troyes'
-  | 'vaduz'
-  | 'blueco.chelsea'
-  | 'blueco.strasbourg'
-  | 'nottingham-forest'
-  | 'arsenal'
-  | 'atletico-madrid'
-  | 'roma'
-  | 'benfica'
-  | 'ajax'
-  | 'celtic'
-  | 'fulham'
-  | 'freiburg'
-  | 'brighton'
-  | 'union-berlin'
-  | 'watford'
-  | 'cd-maldonado'
-  | 'fc-andorra'
-  | 'ad-ceuta'
-  | 'cardiff-city'
-  | 'swansea-city'
-  | 'wrexham';
+  | 'switzerland.super-league'
+  | 'germany.bundesliga';
 
 type SeedChallengeCatalogResult = {
   definitionsCreated: number;
@@ -79,44 +49,7 @@ function readCompetitionKey(value: unknown): CompetitionKey | null {
   if (normalized === 'spain.laliga') return normalized;
   if (normalized === 'england.premier-league') return normalized;
   if (normalized === 'switzerland.super-league') return normalized;
-  return null;
-}
-
-function readTeamKey(value: unknown): TeamKey | null {
-  if (typeof value !== 'string' || value.trim().length === 0) return null;
-  const normalized = value.trim().toLowerCase();
-
-  if (normalized === 'redbull.salzburg') return normalized;
-  if (normalized === 'redbull.leipzig') return normalized;
-  if (normalized === 'redbull.new-york-red-bulls') return normalized;
-  if (normalized === 'redbull.bragantino') return normalized;
-  if (normalized === 'city.manchester-city') return normalized;
-  if (normalized === 'city.girona') return normalized;
-  if (normalized === 'city.new-york-city') return normalized;
-  if (normalized === 'city.melbourne-city') return normalized;
-  if (normalized === 'city.troyes') return normalized;
-  if (normalized === 'vaduz') return normalized;
-  if (normalized === 'blueco.chelsea') return normalized;
-  if (normalized === 'blueco.strasbourg') return normalized;
-  if (normalized === 'nottingham-forest') return normalized;
-  if (normalized === 'arsenal') return normalized;
-  if (normalized === 'atletico-madrid') return normalized;
-  if (normalized === 'roma') return normalized;
-  if (normalized === 'benfica') return normalized;
-  if (normalized === 'ajax') return normalized;
-  if (normalized === 'celtic') return normalized;
-  if (normalized === 'fulham') return normalized;
-  if (normalized === 'freiburg') return normalized;
-  if (normalized === 'brighton') return normalized;
-  if (normalized === 'union-berlin') return normalized;
-  if (normalized === 'watford') return normalized;
-  if (normalized === 'cd-maldonado') return normalized;
-  if (normalized === 'fc-andorra') return normalized;
-  if (normalized === 'ad-ceuta') return normalized;
-  if (normalized === 'cardiff-city') return normalized;
-  if (normalized === 'swansea-city') return normalized;
-  if (normalized === 'wrexham') return normalized;
-
+  if (normalized === 'germany.bundesliga') return normalized;
   return null;
 }
 
@@ -180,6 +113,11 @@ async function resolveCompetitionIdByKey(
       displayName: 'super league',
       exactNames: ['Swiss Super League', 'Raiffeisen Super League'],
     },
+    'germany.bundesliga': {
+      family: 'bundesliga',
+      displayName: 'bundesliga',
+      exactNames: ['Bundesliga', '1. Bundesliga', 'German Bundesliga'],
+    },
   } as const;
 
   const search = byKeySearch[competitionKey];
@@ -195,7 +133,9 @@ async function resolveCompetitionIdByKey(
               ? { in: ['GB-ENG', 'ENG', 'GBR', 'UK'] }
               : competitionKey === 'switzerland.super-league'
                 ? { in: ['CHE', 'CH', 'SUI'] }
-                : 'EUR',
+                : competitionKey === 'germany.bundesliga'
+                  ? { in: ['DEU', 'DE'] }
+                  : 'EUR',
         OR: [
           {
             displayName: {
@@ -251,7 +191,9 @@ async function resolveCompetitionIdByKey(
             ? { in: ['GB-ENG', 'ENG', 'GBR', 'UK'] }
             : competitionKey === 'switzerland.super-league'
               ? { in: ['CHE', 'CH', 'SUI'] }
-              : 'EUR',
+              : competitionKey === 'germany.bundesliga'
+                ? { in: ['DEU', 'DE'] }
+                : 'EUR',
       OR: [
         {
           displayName: {
@@ -283,7 +225,9 @@ async function resolveCompetitionIdByKey(
             ? { in: ['GB-ENG', 'ENG', 'GBR', 'UK'] }
             : competitionKey === 'switzerland.super-league'
               ? { in: ['CHE', 'CH', 'SUI'] }
-              : 'EUR',
+              : competitionKey === 'germany.bundesliga'
+                ? { in: ['DEU', 'DE'] }
+                : 'EUR',
       OR: [
         {
           displayName: {
@@ -372,40 +316,7 @@ async function resolveRuleConfig(
     const teamKey = readTeamKey(rawConfig.teamKey);
     if (!teamKey) return rawConfig;
 
-    const teamLookup = {
-      'redbull.salzburg': { names: ['Red Bull Salzburg', 'FC Red Bull Salzburg', 'RB Salzburg', 'Salzburg'], countryCodes: ['AUT', 'AT'] },
-      'redbull.leipzig': { names: ['RB Leipzig', 'RasenBallsport Leipzig', 'Leipzig'], countryCodes: ['DEU', 'DE'] },
-      'redbull.new-york-red-bulls': { names: ['New York Red Bulls', 'NY Red Bulls', 'New York RB'], countryCodes: ['USA', 'US'] },
-      'redbull.bragantino': { names: ['Red Bull Bragantino', 'RB Bragantino', 'Bragantino'], countryCodes: ['BRA', 'BR'] },
-      'city.manchester-city': { names: ['Manchester City', 'Man City'], countryCodes: ['ENG', 'GBR', 'UK'] },
-      'city.girona': { names: ['Girona', 'Girona FC'], countryCodes: ['ESP', 'ES'] },
-      'city.new-york-city': { names: ['New York City', 'New York City FC', 'NYCFC'], countryCodes: ['USA', 'US'] },
-      'city.melbourne-city': { names: ['Melbourne City', 'Melbourne City FC'], countryCodes: ['AUS', 'AU'] },
-      'city.troyes': { names: ['Troyes', 'ESTAC Troyes', 'ES Troyes AC'], countryCodes: ['FRA', 'FR'] },
-      'vaduz': { names: ['Vaduz', 'FC Vaduz'], countryCodes: ['LIE', 'LI', 'CHE', 'CH'] },
-      'blueco.chelsea': { names: ['Chelsea', 'Chelsea FC'], countryCodes: ['ENG', 'GBR', 'UK'] },
-      'blueco.strasbourg': { names: ['Strasbourg', 'RC Strasbourg', 'RC Strasbourg Alsace'], countryCodes: ['FRA', 'FR'] },
-      'nottingham-forest': { names: ['Nottingham Forest', 'Nottingham Forest FC'], countryCodes: ['GB-ENG', 'ENG', 'GBR', 'UK'] },
-      'arsenal': { names: ['Arsenal', 'Arsenal FC'], countryCodes: ['GB-ENG', 'ENG', 'GBR', 'UK'] },
-      'atletico-madrid': { names: ['Atletico Madrid', 'Atlético Madrid', 'Club Atletico de Madrid'], countryCodes: ['ES', 'ESP'] },
-      'roma': { names: ['Roma', 'AS Roma', 'A.S. Roma'], countryCodes: ['IT', 'ITA'] },
-      'benfica': { names: ['Benfica', 'SL Benfica', 'Sport Lisboa e Benfica'], countryCodes: ['PT', 'PRT'] },
-      'ajax': { names: ['Ajax', 'AFC Ajax', 'Ajax Amsterdam'], countryCodes: ['NL', 'NLD'] },
-      'celtic': { names: ['Celtic', 'Celtic FC'], countryCodes: ['GB-SCT', 'SCO', 'GBR', 'UK'] },
-      'fulham': { names: ['Fulham', 'Fulham FC'], countryCodes: ['GB-ENG', 'ENG', 'GBR', 'UK'] },
-      'freiburg': { names: ['Freiburg', 'SC Freiburg'], countryCodes: ['DEU', 'DE'] },
-      'brighton': { names: ['Brighton', 'Brighton & Hove Albion', 'Brighton and Hove Albion', 'Brighton & Hove Albion FC'], countryCodes: ['GB-ENG', 'ENG', 'GBR', 'UK'] },
-      'union-berlin': { names: ['Union Berlin', '1. FC Union Berlin', 'FC Union Berlin'], countryCodes: ['DEU', 'DE'] },
-      'watford': { names: ['Watford', 'Watford FC'], countryCodes: ['GB-ENG', 'ENG', 'GBR', 'UK'] },
-      'cd-maldonado': { names: ['CD Maldonado', 'Deportivo Maldonado', 'Club Deportivo Maldonado'], countryCodes: ['URY', 'UY'] },
-      'fc-andorra': { names: ['FC Andorra', 'F.C. Andorra', 'Andorra FC', 'Andorra'], countryCodes: ['AND', 'AD', 'ESP', 'ES'] },
-      'ad-ceuta': { names: ['AD Ceuta FC', 'AD Ceuta', 'Ceuta FC', 'Ceuta'], countryCodes: ['ESP', 'ES'] },
-      'cardiff-city': { names: ['Cardiff City', 'Cardiff City FC', 'Cardiff'], countryCodes: ['GB-WLS', 'WAL', 'GBR', 'UK', 'GB-ENG', 'ENG'] },
-      'swansea-city': { names: ['Swansea City', 'Swansea City AFC', 'Swansea'], countryCodes: ['GB-WLS', 'WAL', 'GBR', 'UK', 'GB-ENG', 'ENG'] },
-      'wrexham': { names: ['Wrexham', 'Wrexham AFC', 'Wrexham A.F.C.'], countryCodes: ['GB-WLS', 'WAL', 'GBR', 'UK', 'GB-ENG', 'ENG'] },
-    } as const;
-
-    const search = teamLookup[teamKey];
+    const search = TEAM_RESOLVER[teamKey];
 
     for (const exactName of search.names) {
       const exactMatch = await tx.team.findFirst({
