@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import FootballLoader from '@/app/components/FootBallLoader';
 import { useAuth } from '@/app/components/AuthProvider';
 import { CompetitionGroup } from '@/lib/types/prisma/Competitions';
 import { Team } from '@/lib/types/prisma/Team';
