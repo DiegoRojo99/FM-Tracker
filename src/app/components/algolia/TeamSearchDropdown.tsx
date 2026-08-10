@@ -16,20 +16,22 @@ export default function SearchDropdown({ onTeamSelect }: SearchDropdownProps) {
 
   return (
     <InstantSearch indexName="teams_index" searchClient={algoliaClient}>
-      <CustomSearchBox
-        query={query}
-        setQuery={setQuery}
-        setShowDropdown={setShowDropdown}
-      />
-      {showDropdown && (
-        <CustomHits
-          onTeamSelect={(team) => {
-            setQuery(team.name);
-            setShowDropdown(false);
-            onTeamSelect(team);
-          }}
+      <div className="relative">
+        <CustomSearchBox
+          query={query}
+          setQuery={setQuery}
+          setShowDropdown={setShowDropdown}
         />
-      )}
+        {showDropdown && (
+          <CustomHits
+            onTeamSelect={(team) => {
+              setQuery(team.name);
+              setShowDropdown(false);
+              onTeamSelect(team);
+            }}
+          />
+        )}
+      </div>
     </InstantSearch>
   );
 }
@@ -58,7 +60,7 @@ function CustomSearchBox({
       value={query}
       onChange={handleChange}
       placeholder="Search for a team..."
-      style={{ width: '100%', padding: '8px' }}
+      className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
     />
   );
 }
@@ -82,33 +84,18 @@ function CustomHits({ onTeamSelect }: { onTeamSelect: (team: Team) => void }) {
   }
 
   return (
-    <ul
-      style={{
-        position: 'absolute',
-        zIndex: 10,
-        width: '100%',
-        background: 'white',
-        border: '1px solid #ccc',
-        margin: 0,
-        padding: 0,
-        listStyle: 'none',
-        maxHeight: 200,
-        overflowY: 'auto',
-      }}
-    >
+    <ul className="absolute z-20 mt-1 w-full overflow-y-auto rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] shadow-xl" style={{ maxHeight: 220 }}>
       {hits.map((hit) => {
         const team = hit as AlgoliaTeam;
         return (
           <li
             key={team.id}
-            style={{ padding: '8px', cursor: 'pointer', borderBottom: '1px solid #eee', color: '#000' }}
-            onMouseDown={() => onTeamSelect(parseTeam(team))} // prevents input blur interruption
+            className="flex cursor-pointer items-center justify-between px-3 py-2 text-sm text-white transition hover:bg-white/8"
+            onMouseDown={() => onTeamSelect(parseTeam(team))}
           >
-            {team.name}
+            <span className="font-medium">{team.name}</span>
             {team.countryCode && (
-              <span style={{ marginLeft: '8px', fontSize: '12px', color: '#666' }}>
-                ({team.countryCode})
-              </span>
+              <span className="text-xs text-[var(--color-text-muted)]">{team.countryCode}</span>
             )}
           </li>
         );
