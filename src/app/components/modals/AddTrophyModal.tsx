@@ -67,43 +67,15 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
     });
   }
 
-  if (!open) return <></>;
-  else if (saving) return <FootballLoader />;
+  if (!open) return <></>;;
 
   return (
     <BaseModal open={open} onClose={onClose} title="Add Trophy" maxWidth="max-w-md">
-      <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-        {/* Competition Selection - filtered by team's country or international */}
-        <div>
-          <label className="block text-sm mb-3 font-medium text-gray-200">Competition</label>
-          {selectedTeam ? (
-            <div>
-              <CompetitionWithWorldDropdown
-                country={selectedTeam.countryCode}
-                value={competition?.id ? String(competition.id) : ""}
-                onChange={(comp: CompetitionGroup) => setCompetition(comp)}
-                placeholder="Select competition"
-              />
-            </div>
-          ) : (
-            <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-4 border border-[var(--color-primary)] text-center">
-              <div className="text-gray-500 mb-1">⚽</div>
-              Select a team to choose a competition
-            </div>
-          )}
-          {competition && (
-            <div className="mt-3 p-3 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-lg border border-[var(--color-highlight)]">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-white rounded-full"></div>
-                <span className="text-white font-semibold">{competition.name}</span>
-              </div>
-            </div>
-          )}
-        </div>
+      <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
 
-        {/* Team Selection - from save's career stints */}
+        {/* Team */}
         <div>
-          <label className="block text-sm mb-3 font-medium text-gray-200">Team</label>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Team</label>
           {saveDetails.careerStints && saveDetails.careerStints.length > 0 ? (
             <select
               value={selectedTeam ? selectedTeam.id : ''}
@@ -112,55 +84,65 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
                 if (teamId) {
                   const careerStint = saveDetails.careerStints?.find((stint: FullCareerStint) => stint.teamId === Number(teamId));
                   if (careerStint) {
-                    // Create a Team object from career stint data
-                    const team: Team = careerStint.team;
-                    setSelectedTeam(team);
-                    setCompetition(null); // Reset competition when team changes
+                    setSelectedTeam(careerStint.team);
+                    setCompetition(null);
                   }
                 } else {
                   setSelectedTeam(null);
                   setCompetition(null);
                 }
               }}
-              className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
             >
-              <option value="" className="bg-[var(--color-darker)] text-white">-- Select a team --</option>
-              {/* Get unique teams from career stints */}
+              <option value="">Select a team</option>
               {Array.from(new Map(saveDetails.careerStints.map(stint => [stint.teamId, stint])).values()).map((stint) => (
-                <option key={stint.teamId} value={stint.teamId} className="bg-[var(--color-darker)] text-white">
-                  {stint.team.name}
-                </option>
+                <option key={stint.teamId} value={stint.teamId}>{stint.team.name}</option>
               ))}
             </select>
           ) : (
-            <div className="text-sm text-gray-400 bg-[var(--color-darker)] rounded-lg p-4 border border-[var(--color-primary)] text-center">
-              <div className="text-gray-500 mb-1">👥</div>
-              No teams found in your career history. Add a career stint first.
-            </div>
+            <p className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm text-[var(--color-text-muted)]">
+              No teams found. Add a career stint first.
+            </p>
           )}
           {selectedTeam && (
-            <div className="mt-3 p-3 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-lg border border-[var(--color-highlight)] flex items-center space-x-3">
-              <Image 
-                src={selectedTeam.logo} 
-                alt={selectedTeam.name} 
-                width={32} 
-                height={32} 
-                className="h-8 w-8 object-contain rounded-full bg-white p-1" 
-                unoptimized 
-              />
-              <span className="text-white font-semibold">{selectedTeam.name}</span>
+            <div className="mt-2 flex items-center gap-3 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2">
+              <Image src={selectedTeam.logo} alt={selectedTeam.name} width={24} height={24} className="h-6 w-6 object-contain" unoptimized />
+              <span className="text-sm font-semibold text-white">{selectedTeam.name}</span>
             </div>
           )}
         </div>
 
+        {/* Competition */}
         <div>
-          <label className="block text-sm mb-2 font-medium text-gray-200">Won Date</label>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Competition</label>
+          {selectedTeam ? (
+            <CompetitionWithWorldDropdown
+              country={selectedTeam.countryCode}
+              value={competition?.id ? String(competition.id) : ""}
+              onChange={(comp: CompetitionGroup) => setCompetition(comp)}
+              placeholder="Select competition"
+            />
+          ) : (
+            <p className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm text-[var(--color-text-muted)]">
+              Select a team to choose a competition
+            </p>
+          )}
+          {competition && (
+            <p className="mt-1.5 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm font-semibold text-white">
+              {competition.name}
+            </p>
+          )}
+        </div>
+
+        {/* Date */}
+        <div>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Date Won</label>
           <input
             type="date"
             name="dateWon"
             value={dateWon}
             onChange={(e) => setDateWon(e.target.value)}
-            className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200"
+            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
             required
           />
         </div>
@@ -177,5 +159,5 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
         </LoadingButton>
       </form>
     </BaseModal>
-  )
+  );
 }
