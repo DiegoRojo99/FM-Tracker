@@ -16,7 +16,9 @@
     "challenges:seed": "tsx scripts/data/seed-challenges.ts",
     "fix:promotions": "tsx scripts/data/fix-top-flight-promotions.ts",
     "competitions:infer-tiers": "tsx scripts/data/infer-competition-tiers.ts",
-    "competitions:seed-tiers": "tsx scripts/data/seed-competition-tiers.ts"
+    "competitions:seed-tiers": "tsx scripts/data/seed-competition-tiers.ts",
+    "competitions:export-tiers": "tsx scripts/data/export-competition-tiers.ts",
+    "competitions:normalise-types": "tsx scripts/data/normalise-competition-types.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",

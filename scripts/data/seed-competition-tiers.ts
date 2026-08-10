@@ -1,6 +1,9 @@
 import { loadNodeEnv } from '../../src/lib/env/loadNodeEnv';
 loadNodeEnv();
 
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 /**
  * Exact (case-insensitive) names of tier-1 competitions per country code.
  * Use exact DB names only — substring matching caused lower-tier false positives.
@@ -97,6 +100,24 @@ async function run() {
 
   if (updated === 0 && resetResult.count === 0) console.log('Nothing to update — all tiers already correct.');
   else console.log(`\nDone. Set tier=1 on ${updated} competition(s).`);
+
+  // Step 3: Apply snapshot from export-competition-tiers.ts (covers manually set tiers beyond tier 1).
+  const snapshotPath = resolve(process.cwd(), 'scripts/data/competition-tiers-snapshot.json');
+  if (existsSync(snapshotPath)) {
+    type SnapshotEntry = { name: string; countryCode: string; tier: number };
+    const snapshot: SnapshotEntry[] = JSON.parse(readFileSync(snapshotPath, 'utf-8'));
+    let snapshotUpdated = 0;
+    for (const entry of snapshot) {
+      const result = await prisma.competitionGroup.updateMany({
+        where: { name: { equals: entry.name, mode: 'insensitive' }, countryCode: entry.countryCode },
+        data: { tier: entry.tier },
+      });
+      snapshotUpdated += result.count;
+    }
+    console.log(`Snapshot applied: ${snapshotUpdated} row(s) updated from competition-tiers-snapshot.json`);
+  } else {
+    console.log('No snapshot file found — skipping. Run npm run competitions:export-tiers on dev first.');
+  }
 
   await prisma.$disconnect();
 }

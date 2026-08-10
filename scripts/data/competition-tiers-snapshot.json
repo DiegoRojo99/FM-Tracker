@@ -1,0 +1,812 @@
+[
+  {
+    "name": "Pro League",
+    "countryCode": "AE",
+    "tier": 1
+  },
+  {
+    "name": "Division 1",
+    "countryCode": "AE",
+    "tier": 2
+  },
+  {
+    "name": "Liga Profesional Argentina",
+    "countryCode": "AR",
+    "tier": 1
+  },
+  {
+    "name": "Primera Nacional",
+    "countryCode": "AR",
+    "tier": 2
+  },
+  {
+    "name": "Bundesliga",
+    "countryCode": "AT",
+    "tier": 1
+  },
+  {
+    "name": "2. Liga",
+    "countryCode": "AT",
+    "tier": 2
+  },
+  {
+    "name": "A-League",
+    "countryCode": "AU",
+    "tier": 1
+  },
+  {
+    "name": "A-League Women",
+    "countryCode": "AU",
+    "tier": 1
+  },
+  {
+    "name": "Victoria NPL",
+    "countryCode": "AU",
+    "tier": 2
+  },
+  {
+    "name": "Jupiler Pro League",
+    "countryCode": "BE",
+    "tier": 1
+  },
+  {
+    "name": "Reserve Pro League",
+    "countryCode": "BE",
+    "tier": 1
+  },
+  {
+    "name": "Challenger Pro League",
+    "countryCode": "BE",
+    "tier": 2
+  },
+  {
+    "name": "First Amateur Division",
+    "countryCode": "BE",
+    "tier": 3
+  },
+  {
+    "name": "First League",
+    "countryCode": "BG",
+    "tier": 1
+  },
+  {
+    "name": "Second League",
+    "countryCode": "BG",
+    "tier": 2
+  },
+  {
+    "name": "Serie A",
+    "countryCode": "BR",
+    "tier": 1
+  },
+  {
+    "name": "Serie B",
+    "countryCode": "BR",
+    "tier": 2
+  },
+  {
+    "name": "Serie C",
+    "countryCode": "BR",
+    "tier": 3
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "BY",
+    "tier": 1
+  },
+  {
+    "name": "1. Division",
+    "countryCode": "BY",
+    "tier": 2
+  },
+  {
+    "name": "2. Division",
+    "countryCode": "BY",
+    "tier": 3
+  },
+  {
+    "name": "Canadian Premier League",
+    "countryCode": "CA",
+    "tier": 1
+  },
+  {
+    "name": "AXA Women’s Super League",
+    "countryCode": "CH",
+    "tier": 1
+  },
+  {
+    "name": "Super League",
+    "countryCode": "CH",
+    "tier": 1
+  },
+  {
+    "name": "Challenge League",
+    "countryCode": "CH",
+    "tier": 2
+  },
+  {
+    "name": "Primera División",
+    "countryCode": "CL",
+    "tier": 1
+  },
+  {
+    "name": "Primera B",
+    "countryCode": "CL",
+    "tier": 2
+  },
+  {
+    "name": "Super League",
+    "countryCode": "CN",
+    "tier": 1
+  },
+  {
+    "name": "League One",
+    "countryCode": "CN",
+    "tier": 2
+  },
+  {
+    "name": "Primera A",
+    "countryCode": "CO",
+    "tier": 1
+  },
+  {
+    "name": "Primera B",
+    "countryCode": "CO",
+    "tier": 2
+  },
+  {
+    "name": "Czech Liga",
+    "countryCode": "CZ",
+    "tier": 1
+  },
+  {
+    "name": "FNL",
+    "countryCode": "CZ",
+    "tier": 2
+  },
+  {
+    "name": "2. Frauen Bundesliga",
+    "countryCode": "DE",
+    "tier": 1
+  },
+  {
+    "name": "Bundesliga",
+    "countryCode": "DE",
+    "tier": 1
+  },
+  {
+    "name": "Frauen Bundesliga",
+    "countryCode": "DE",
+    "tier": 1
+  },
+  {
+    "name": "2. Bundesliga",
+    "countryCode": "DE",
+    "tier": 2
+  },
+  {
+    "name": "3. Liga",
+    "countryCode": "DE",
+    "tier": 3
+  },
+  {
+    "name": "Superliga",
+    "countryCode": "DK",
+    "tier": 1
+  },
+  {
+    "name": "1. Division",
+    "countryCode": "DK",
+    "tier": 2
+  },
+  {
+    "name": "2. Division",
+    "countryCode": "DK",
+    "tier": 3
+  },
+  {
+    "name": "3. Division",
+    "countryCode": "DK",
+    "tier": 4
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "EG",
+    "tier": 1
+  },
+  {
+    "name": "Second League",
+    "countryCode": "EG",
+    "tier": 2
+  },
+  {
+    "name": "La Liga",
+    "countryCode": "ES",
+    "tier": 1
+  },
+  {
+    "name": "Primera División Femenina",
+    "countryCode": "ES",
+    "tier": 1
+  },
+  {
+    "name": "Segunda División",
+    "countryCode": "ES",
+    "tier": 2
+  },
+  {
+    "name": "Primera División RFEF - Group 1",
+    "countryCode": "ES",
+    "tier": 3
+  },
+  {
+    "name": "Primera División RFEF - Group 2",
+    "countryCode": "ES",
+    "tier": 3
+  },
+  {
+    "name": "Primera RFEF",
+    "countryCode": "ES",
+    "tier": 3
+  },
+  {
+    "name": "Segunda División RFEF - Group 1",
+    "countryCode": "ES",
+    "tier": 4
+  },
+  {
+    "name": "Segunda División RFEF - Group 2",
+    "countryCode": "ES",
+    "tier": 4
+  },
+  {
+    "name": "Segunda División RFEF - Group 3",
+    "countryCode": "ES",
+    "tier": 4
+  },
+  {
+    "name": "Segunda División RFEF - Group 4",
+    "countryCode": "ES",
+    "tier": 4
+  },
+  {
+    "name": "Segunda División RFEF - Group 5",
+    "countryCode": "ES",
+    "tier": 4
+  },
+  {
+    "name": "Segunda RFEF",
+    "countryCode": "ES",
+    "tier": 4
+  },
+  {
+    "name": "Veikkausliiga",
+    "countryCode": "FI",
+    "tier": 1
+  },
+  {
+    "name": "Ykkönen",
+    "countryCode": "FI",
+    "tier": 2
+  },
+  {
+    "name": "Ligue 1",
+    "countryCode": "FR",
+    "tier": 1
+  },
+  {
+    "name": "Ligue 2",
+    "countryCode": "FR",
+    "tier": 2
+  },
+  {
+    "name": "National 1",
+    "countryCode": "FR",
+    "tier": 3
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "GB-ENG",
+    "tier": 1
+  },
+  {
+    "name": "Championship",
+    "countryCode": "GB-ENG",
+    "tier": 2
+  },
+  {
+    "name": "League One",
+    "countryCode": "GB-ENG",
+    "tier": 3
+  },
+  {
+    "name": "League Two",
+    "countryCode": "GB-ENG",
+    "tier": 4
+  },
+  {
+    "name": "National League",
+    "countryCode": "GB-ENG",
+    "tier": 5
+  },
+  {
+    "name": "National League - North",
+    "countryCode": "GB-ENG",
+    "tier": 6
+  },
+  {
+    "name": "National League - South",
+    "countryCode": "GB-ENG",
+    "tier": 6
+  },
+  {
+    "name": "Premiership",
+    "countryCode": "GB-NIR",
+    "tier": 1
+  },
+  {
+    "name": "Premiership Women",
+    "countryCode": "GB-NIR",
+    "tier": 1
+  },
+  {
+    "name": "Championship",
+    "countryCode": "GB-NIR",
+    "tier": 2
+  },
+  {
+    "name": "Premiership",
+    "countryCode": "GB-SCT",
+    "tier": 1
+  },
+  {
+    "name": "Championship",
+    "countryCode": "GB-SCT",
+    "tier": 2
+  },
+  {
+    "name": "League One",
+    "countryCode": "GB-SCT",
+    "tier": 3
+  },
+  {
+    "name": "League Two",
+    "countryCode": "GB-SCT",
+    "tier": 4
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "GB-WLS",
+    "tier": 1
+  },
+  {
+    "name": "Premier Division",
+    "countryCode": "GI",
+    "tier": 1
+  },
+  {
+    "name": "Super League 1",
+    "countryCode": "GR",
+    "tier": 1
+  },
+  {
+    "name": "Super League 2",
+    "countryCode": "GR",
+    "tier": 2
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "HK",
+    "tier": 1
+  },
+  {
+    "name": "HNL",
+    "countryCode": "HR",
+    "tier": 1
+  },
+  {
+    "name": "First NL",
+    "countryCode": "HR",
+    "tier": 2
+  },
+  {
+    "name": "Second NL",
+    "countryCode": "HR",
+    "tier": 3
+  },
+  {
+    "name": "NB I",
+    "countryCode": "HU",
+    "tier": 1
+  },
+  {
+    "name": "NB II",
+    "countryCode": "HU",
+    "tier": 2
+  },
+  {
+    "name": "Liga 1",
+    "countryCode": "ID",
+    "tier": 1
+  },
+  {
+    "name": "Liga 2",
+    "countryCode": "ID",
+    "tier": 2
+  },
+  {
+    "name": "Premier Division",
+    "countryCode": "IE",
+    "tier": 1
+  },
+  {
+    "name": "First Division",
+    "countryCode": "IE",
+    "tier": 2
+  },
+  {
+    "name": "Liga Leumit",
+    "countryCode": "IL",
+    "tier": 1
+  },
+  {
+    "name": "Indian Super League",
+    "countryCode": "IN",
+    "tier": 1
+  },
+  {
+    "name": "Úrvalsdeild",
+    "countryCode": "IS",
+    "tier": 1
+  },
+  {
+    "name": "1. Deild",
+    "countryCode": "IS",
+    "tier": 2
+  },
+  {
+    "name": "Serie A",
+    "countryCode": "IT",
+    "tier": 1
+  },
+  {
+    "name": "Serie A Women",
+    "countryCode": "IT",
+    "tier": 1
+  },
+  {
+    "name": "Serie B",
+    "countryCode": "IT",
+    "tier": 2
+  },
+  {
+    "name": "Serie C",
+    "countryCode": "IT",
+    "tier": 3
+  },
+  {
+    "name": "Serie C - Girone A",
+    "countryCode": "IT",
+    "tier": 3
+  },
+  {
+    "name": "Serie C - Girone B",
+    "countryCode": "IT",
+    "tier": 3
+  },
+  {
+    "name": "Serie C - Girone C",
+    "countryCode": "IT",
+    "tier": 3
+  },
+  {
+    "name": "J1 League",
+    "countryCode": "JP",
+    "tier": 1
+  },
+  {
+    "name": "J2 League",
+    "countryCode": "JP",
+    "tier": 2
+  },
+  {
+    "name": "J3 League",
+    "countryCode": "JP",
+    "tier": 3
+  },
+  {
+    "name": "K League 1",
+    "countryCode": "KR",
+    "tier": 1
+  },
+  {
+    "name": "K League 2",
+    "countryCode": "KR",
+    "tier": 2
+  },
+  {
+    "name": "Virsliga",
+    "countryCode": "LV",
+    "tier": 1
+  },
+  {
+    "name": "1. Liga",
+    "countryCode": "LV",
+    "tier": 2
+  },
+  {
+    "name": "Liga MX",
+    "countryCode": "MX",
+    "tier": 1
+  },
+  {
+    "name": "Liga MX Femenil",
+    "countryCode": "MX",
+    "tier": 1
+  },
+  {
+    "name": "Liga de Expansión MX",
+    "countryCode": "MX",
+    "tier": 2
+  },
+  {
+    "name": "Super League",
+    "countryCode": "MY",
+    "tier": 1
+  },
+  {
+    "name": "Eredivisie",
+    "countryCode": "NL",
+    "tier": 1
+  },
+  {
+    "name": "Eredivisie Women",
+    "countryCode": "NL",
+    "tier": 1
+  },
+  {
+    "name": "Eerste Divisie",
+    "countryCode": "NL",
+    "tier": 2
+  },
+  {
+    "name": "Tweede Divisie",
+    "countryCode": "NL",
+    "tier": 3
+  },
+  {
+    "name": "Eliteserien",
+    "countryCode": "NO",
+    "tier": 1
+  },
+  {
+    "name": "Toppserien",
+    "countryCode": "NO",
+    "tier": 1
+  },
+  {
+    "name": "1. Division",
+    "countryCode": "NO",
+    "tier": 2
+  },
+  {
+    "name": "2. Division",
+    "countryCode": "NO",
+    "tier": 3
+  },
+  {
+    "name": "Primera División",
+    "countryCode": "PE",
+    "tier": 1
+  },
+  {
+    "name": "Ekstraklasa",
+    "countryCode": "PL",
+    "tier": 1
+  },
+  {
+    "name": "I Liga",
+    "countryCode": "PL",
+    "tier": 2
+  },
+  {
+    "name": "Primeira Liga",
+    "countryCode": "PT",
+    "tier": 1
+  },
+  {
+    "name": "Segunda Liga",
+    "countryCode": "PT",
+    "tier": 2
+  },
+  {
+    "name": "Liga 3",
+    "countryCode": "PT",
+    "tier": 3
+  },
+  {
+    "name": "Campeonato de Portugal Prio",
+    "countryCode": "PT",
+    "tier": 4
+  },
+  {
+    "name": "Campeonato de Portugal Prio - Group A",
+    "countryCode": "PT",
+    "tier": 4
+  },
+  {
+    "name": "Campeonato de Portugal Prio - Group B",
+    "countryCode": "PT",
+    "tier": 4
+  },
+  {
+    "name": "Campeonato de Portugal Prio - Group C",
+    "countryCode": "PT",
+    "tier": 4
+  },
+  {
+    "name": "Campeonato de Portugal Prio - Group D",
+    "countryCode": "PT",
+    "tier": 4
+  },
+  {
+    "name": "Liga I",
+    "countryCode": "RO",
+    "tier": 1
+  },
+  {
+    "name": "Liga II",
+    "countryCode": "RO",
+    "tier": 2
+  },
+  {
+    "name": "Super Liga",
+    "countryCode": "RS",
+    "tier": 1
+  },
+  {
+    "name": "Prva Liga",
+    "countryCode": "RS",
+    "tier": 2
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "RU",
+    "tier": 1
+  },
+  {
+    "name": "First League",
+    "countryCode": "RU",
+    "tier": 2
+  },
+  {
+    "name": "Allsvenskan",
+    "countryCode": "SE",
+    "tier": 1
+  },
+  {
+    "name": "Superettan",
+    "countryCode": "SE",
+    "tier": 2
+  },
+  {
+    "name": "Ettan",
+    "countryCode": "SE",
+    "tier": 3
+  },
+  {
+    "name": "Ettan - Norra",
+    "countryCode": "SE",
+    "tier": 3
+  },
+  {
+    "name": "Ettan - Södra",
+    "countryCode": "SE",
+    "tier": 3
+  },
+  {
+    "name": "Division 2",
+    "countryCode": "SE",
+    "tier": 4
+  },
+  {
+    "name": "Division 2 - Norra Götaland",
+    "countryCode": "SE",
+    "tier": 4
+  },
+  {
+    "name": "Division 2 - Norra Svealand",
+    "countryCode": "SE",
+    "tier": 4
+  },
+  {
+    "name": "Division 2 - Norrland",
+    "countryCode": "SE",
+    "tier": 4
+  },
+  {
+    "name": "Division 2 - Östra Götaland",
+    "countryCode": "SE",
+    "tier": 4
+  },
+  {
+    "name": "Division 2 - Södra Svealand",
+    "countryCode": "SE",
+    "tier": 4
+  },
+  {
+    "name": "Division 2 - Västra Götaland",
+    "countryCode": "SE",
+    "tier": 4
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "SG",
+    "tier": 1
+  },
+  {
+    "name": "1. SNL",
+    "countryCode": "SI",
+    "tier": 1
+  },
+  {
+    "name": "2. SNL",
+    "countryCode": "SI",
+    "tier": 2
+  },
+  {
+    "name": "Super Liga",
+    "countryCode": "SK",
+    "tier": 1
+  },
+  {
+    "name": "2. liga",
+    "countryCode": "SK",
+    "tier": 2
+  },
+  {
+    "name": "Süper Lig",
+    "countryCode": "TR",
+    "tier": 1
+  },
+  {
+    "name": "1. Lig",
+    "countryCode": "TR",
+    "tier": 2
+  },
+  {
+    "name": "2. Lig",
+    "countryCode": "TR",
+    "tier": 3
+  },
+  {
+    "name": "Major League Soccer",
+    "countryCode": "US",
+    "tier": 1
+  },
+  {
+    "name": "MLS Next Pro",
+    "countryCode": "US",
+    "tier": 1
+  },
+  {
+    "name": "Primera División - Apertura",
+    "countryCode": "UY",
+    "tier": 1
+  },
+  {
+    "name": "Primera División - Clausura",
+    "countryCode": "UY",
+    "tier": 1
+  },
+  {
+    "name": "Segunda División",
+    "countryCode": "UY",
+    "tier": 2
+  },
+  {
+    "name": "Premier Soccer League",
+    "countryCode": "ZA",
+    "tier": 1
+  }
+]

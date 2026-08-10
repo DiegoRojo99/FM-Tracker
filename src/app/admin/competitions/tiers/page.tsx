@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import { useRouter } from 'next/navigation';
-import { Layers, Search } from 'lucide-react';
+import { ChevronDown, ChevronRight, Layers, Search } from 'lucide-react';
 
 type Competition = {
   id: number;
@@ -34,8 +34,13 @@ export default function CompetitionTiersPage() {
   const [search, setSearch] = useState('');
   const [country, setCountry] = useState('');
   const [activeOnly, setActiveOnly] = useState(true);
+  const [groupByCountry, setGroupByCountry] = useState(false);
+  const [expandedCountries, setExpandedCountries] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState<Record<number, boolean>>({});
   const [editTier, setEditTier] = useState<Record<number, string>>({});
+  const [editType, setEditType] = useState<Record<number, string>>({});
+
+  const COMPETITION_TYPES = ['DOMESTIC_LEAGUE', 'DOMESTIC_CUP', 'International', 'Other'];
 
   useEffect(() => {
     const adminUID = process.env.NEXT_PUBLIC_ADMIN_UID;
@@ -57,8 +62,8 @@ export default function CompetitionTiersPage() {
       });
       const data = await res.json();
       setCompetitions(data);
-      // Seed edit state from fetched values
       setEditTier(Object.fromEntries(data.map((c: Competition) => [c.id, c.tier?.toString() ?? ''])));
+      setEditType(Object.fromEntries(data.map((c: Competition) => [c.id, c.type ?? ''])));
     } finally {
       setLoading(false);
     }
@@ -73,7 +78,6 @@ export default function CompetitionTiersPage() {
     const raw = editTier[id];
     const tier = raw === '' ? null : parseInt(raw, 10);
     if (raw !== '' && (isNaN(tier!) || tier! < 1)) return;
-
     setSaving(prev => ({ ...prev, [id]: true }));
     try {
       const token = await user.getIdToken();
@@ -83,6 +87,24 @@ export default function CompetitionTiersPage() {
         body: JSON.stringify({ id, tier }),
       });
       setCompetitions(prev => prev.map(c => c.id === id ? { ...c, tier: tier ?? null } : c));
+    } finally {
+      setSaving(prev => ({ ...prev, [id]: false }));
+    }
+  };
+
+  const saveType = async (id: number) => {
+    if (!user) return;
+    const type = editType[id];
+    if (!type) return;
+    setSaving(prev => ({ ...prev, [id]: true }));
+    try {
+      const token = await user.getIdToken();
+      await fetch('/api/admin/competitions/tiers', {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, type }),
+      });
+      setCompetitions(prev => prev.map(c => c.id === id ? { ...c, type } : c));
     } finally {
       setSaving(prev => ({ ...prev, [id]: false }));
     }
@@ -128,6 +150,21 @@ export default function CompetitionTiersPage() {
               />
               Active only
             </label>
+            <label className="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white select-none">
+              <input
+                type="checkbox"
+                checked={groupByCountry}
+                onChange={e => {
+                  setGroupByCountry(e.target.checked);
+                  if (e.target.checked) {
+                    // Expand all countries by default when switching to grouped view
+                    setExpandedCountries(new Set(competitions.map(c => c.countryCode)));
+                  }
+                }}
+                className="rounded"
+              />
+              Group by country
+            </label>
           </div>
         </div>
 
@@ -136,6 +173,92 @@ export default function CompetitionTiersPage() {
             <p className="p-8 text-center text-sm text-[var(--color-text-muted)]">Loading…</p>
           ) : competitions.length === 0 ? (
             <p className="p-8 text-center text-sm text-[var(--color-text-muted)]">No competitions found.</p>
+          ) : groupByCountry ? (
+            // Grouped accordion view
+            <div className="divide-y divide-[var(--color-surface-border)]">
+              {Object.entries(
+                competitions.reduce<Record<string, Competition[]>>((acc, c) => {
+                  (acc[c.countryCode] ??= []).push(c);
+                  return acc;
+                }, {})
+              ).sort(([a], [b]) => a.localeCompare(b)).map(([code, comps]) => {
+                const isOpen = expandedCountries.has(code);
+                const toggle = () => setExpandedCountries(prev => {
+                  const next = new Set(prev);
+                  next.has(code) ? next.delete(code) : next.add(code);
+                  return next;
+                });
+                const tieredCount = comps.filter(c => c.tier !== null).length;
+                return (
+                  <div key={code}>
+                    <button
+                      onClick={toggle}
+                      className="flex w-full items-center justify-between px-5 py-3 text-left hover:bg-white/2"
+                    >
+                      <div className="flex items-center gap-3">
+                        {isOpen ? <ChevronDown className="h-4 w-4 text-[var(--color-text-muted)]" /> : <ChevronRight className="h-4 w-4 text-[var(--color-text-muted)]" />}
+                        <span className="font-mono text-sm font-bold text-white">{code}</span>
+                        <span className="text-xs text-[var(--color-text-muted)]">{comps.length} competition{comps.length !== 1 ? 's' : ''}</span>
+                      </div>
+                      <span className={`text-xs font-semibold ${tieredCount === comps.length ? 'text-emerald-400' : 'text-amber-400'}`}>
+                        {tieredCount}/{comps.length} tiered
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <table className="w-full text-sm border-t border-[var(--color-surface-border)]/50">
+                        <tbody>
+                          {comps.sort((a, b) => (a.tier ?? 99) - (b.tier ?? 99) || a.name.localeCompare(b.name)).map(c => {
+                            const currentTierStr = editTier[c.id] ?? '';
+                            const isDirty = currentTierStr !== (c.tier?.toString() ?? '');
+                            return (
+                              <tr key={c.id} className="border-b border-[var(--color-surface-border)]/30 hover:bg-white/2">
+                                <td className="px-8 py-2 font-semibold text-white">{c.displayName || c.name}</td>
+                                <td className="px-4 py-2">
+                                  <div className="flex items-center gap-1">
+                                    <select
+                                      value={editType[c.id] ?? c.type}
+                                      onChange={e => setEditType(prev => ({ ...prev, [c.id]: e.target.value }))}
+                                      className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-xs text-white focus:border-[var(--color-accent)] focus:outline-none"
+                                    >
+                                      {COMPETITION_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                                    </select>
+                                    {editType[c.id] !== c.type && (
+                                      <button onClick={() => saveType(c.id)} disabled={saving[c.id]}
+                                        className="rounded-lg border border-sky-500/40 bg-sky-500/15 px-2 py-1 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 disabled:opacity-50">
+                                        {saving[c.id] ? '…' : 'Save'}
+                                      </button>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="px-4 py-2 w-36">
+                                  <div className="flex items-center gap-2">
+                                    <span className={`rounded-full border px-2 py-0.5 text-xs font-bold ${tierStyle(c.tier)}`}>{c.tier ?? '—'}</span>
+                                    <input
+                                      type="number" min={1}
+                                      value={currentTierStr}
+                                      onChange={e => setEditTier(prev => ({ ...prev, [c.id]: e.target.value }))}
+                                      onKeyDown={e => e.key === 'Enter' && saveTier(c.id)}
+                                      placeholder="—"
+                                      className="w-14 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-center text-xs text-white focus:border-[var(--color-accent)] focus:outline-none"
+                                    />
+                                    {isDirty && (
+                                      <button onClick={() => saveTier(c.id)} disabled={saving[c.id]}
+                                        className="rounded-lg border border-[var(--color-highlight)]/40 bg-[var(--color-highlight)]/15 px-2 py-1 text-xs font-semibold text-white transition hover:bg-[var(--color-highlight)]/25 disabled:opacity-50">
+                                        {saving[c.id] ? '…' : 'Save'}
+                                      </button>
+                                    )}
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           ) : (
             <table className="w-full text-sm">
               <thead>
@@ -143,6 +266,7 @@ export default function CompetitionTiersPage() {
                   <th className="px-4 py-3">Competition</th>
                   <th className="px-4 py-3">Country</th>
                   <th className="px-4 py-3">Type</th>
+                  <th className="px-4 py-3 w-48">Edit Type</th>
                   <th className="px-4 py-3 w-32">Tier</th>
                   <th className="px-4 py-3 w-20"></th>
                 </tr>
@@ -159,6 +283,23 @@ export default function CompetitionTiersPage() {
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-[var(--color-text-muted)]">{c.countryCode}</td>
                       <td className="px-4 py-3 text-xs text-[var(--color-text-muted)]">{c.type}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <select
+                            value={editType[c.id] ?? c.type}
+                            onChange={e => setEditType(prev => ({ ...prev, [c.id]: e.target.value }))}
+                            className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-xs text-white focus:border-[var(--color-accent)] focus:outline-none"
+                          >
+                            {COMPETITION_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                          </select>
+                          {editType[c.id] !== c.type && (
+                            <button onClick={() => saveType(c.id)} disabled={saving[c.id]}
+                              className="rounded-lg border border-sky-500/40 bg-sky-500/15 px-2 py-1 text-xs font-semibold text-sky-300 transition hover:bg-sky-500/25 disabled:opacity-50">
+                              {saving[c.id] ? '…' : 'Save'}
+                            </button>
+                          )}
+                        </div>
+                      </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           <span className={`rounded-full border px-2 py-0.5 text-xs font-bold ${tierStyle(c.tier)}`}>

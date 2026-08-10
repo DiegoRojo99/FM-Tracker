@@ -167,7 +167,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
             <label className="block text-sm mb-2 font-medium text-gray-200">League</label>
             <CompetitionDropdown
               onChange={(competition: CompetitionGroup) => setForm((prev) => ({ ...prev, leagueId: String(competition.id) }))}
-              type='League'
+              type="DOMESTIC_LEAGUE"
               country={countryCode}
               value={form.leagueId}
             />
