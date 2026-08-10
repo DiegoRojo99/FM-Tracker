@@ -49,7 +49,7 @@ const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({
         onChange?.(selectedComp);
       }}
       disabled={loading}
-      className="w-full border-2 border-[var(--color-primary)] rounded-lg p-3 bg-[var(--color-darker)] text-white focus:border-[var(--color-accent)] focus:outline-none transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
     >
       <option value="" className="bg-[var(--color-darker)] text-white">{loading ? 'Loading...' : placeholder}</option>
       {competitions.map(comp => (
