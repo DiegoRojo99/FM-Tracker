@@ -45,21 +45,10 @@ Output file:
 3. Check group settings in Admin UI:
    /admin/competitions/tiers
 
-## Tiers discussion
+## Tiers
 
-Current status:
-- Unified export/import already includes tier fields for both CompetitionGroup and ApiCompetition.
-- Existing tier scripts are still useful only when you want to re-derive tiers from promotion chains or apply a curated tier snapshot.
+Tier values are fully handled in the unified flow:
+- CompetitionGroup.tier is exported and applied.
+- ApiCompetition.tier is exported and applied.
 
-When to keep tier scripts:
-- You still want an automated recompute path from PromotionRelegation.
-- You regularly curate tier snapshots manually per country.
-
-When to retire tier scripts:
-- Tier edits are done in admin UI and then moved via unified export/apply.
-- You do not need derivation from relations anymore.
-
-Practical recommendation:
-- Keep tier scripts for now as fallback tools.
-- Use unified export/apply as the normal process.
-- If tier scripts are unused for 2-3 release cycles, remove them.
+No separate tier export/seed/infer scripts are required.
