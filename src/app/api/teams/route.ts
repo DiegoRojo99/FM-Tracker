@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
 
   if (leagueId) {
     if (isNaN(Number(leagueId))) return NextResponse.json([], { status: 400 });
-    const cacheKey = `teams:league:${leagueId}:game:${gameId ?? 'any'}`;
+    const cacheKey = `teams:v2:league:${leagueId}:game:${gameId ?? 'any'}`;
     const { data: teams, cacheStatus } = await readThroughCache(
       cacheKey,
       60 * 10,

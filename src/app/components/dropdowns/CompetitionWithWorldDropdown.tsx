@@ -4,6 +4,7 @@ import { CompetitionGroup } from '@/lib/types/prisma/Competitions';
 interface CompetitionWithWorldDropdownProps {
   country: string;
   type?: string;
+  isFemale?: boolean | null;
   value?: string;
   onChange?: (competition: CompetitionGroup) => void;
   placeholder?: string;
@@ -12,6 +13,7 @@ interface CompetitionWithWorldDropdownProps {
 const CompetitionWithWorldDropdown: React.FC<CompetitionWithWorldDropdownProps> = ({
   country,
   type,
+  isFemale,
   value,
   onChange,
   placeholder = 'Select competition',
@@ -19,6 +21,8 @@ const CompetitionWithWorldDropdown: React.FC<CompetitionWithWorldDropdownProps> 
   const [nationalCompetitions, setNationalCompetitions] = useState<CompetitionGroup[]>([]);
   const [worldCompetitions, setWorldCompetitions] = useState<CompetitionGroup[]>([]);
   const [loading, setLoading] = useState(false);
+  const isWomenTeam = isFemale === true;
+  const genderFilterValue = isWomenTeam ? 'true' : 'false';
 
   useEffect(() => {
     const fetchCompetitions = async () => {
@@ -28,6 +32,7 @@ const CompetitionWithWorldDropdown: React.FC<CompetitionWithWorldDropdownProps> 
         const nationalParams = new URLSearchParams();
         nationalParams.append('country', country);
         if (type) nationalParams.append('type', type);
+        nationalParams.append('isFemale', genderFilterValue);
 
         const nationalRes = await fetch(`/api/competitions?${nationalParams.toString()}`);
         const nationalData = await nationalRes.json();
@@ -36,6 +41,7 @@ const CompetitionWithWorldDropdown: React.FC<CompetitionWithWorldDropdownProps> 
         const worldParams = new URLSearchParams();
         worldParams.append('country', 'WOR');
         if (type) worldParams.append('type', type);
+        worldParams.append('isFemale', genderFilterValue);
 
         const worldRes = await fetch(`/api/competitions?${worldParams.toString()}`);
         const worldData = await worldRes.json();
@@ -52,7 +58,9 @@ const CompetitionWithWorldDropdown: React.FC<CompetitionWithWorldDropdownProps> 
     };
 
     fetchCompetitions();
-  }, [country, type]);
+  }, [country, type, genderFilterValue]);
+
+  const genderSuffix = isWomenTeam ? ' (Women)' : '';
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedId = Number(e.target.value);
@@ -81,7 +89,7 @@ const CompetitionWithWorldDropdown: React.FC<CompetitionWithWorldDropdownProps> 
       
       {/* National Competitions */}
       {nationalCompetitions.length > 0 && (
-        <optgroup label="National Competitions" className="bg-[var(--color-darker)] text-white font-semibold">
+        <optgroup label={`National Competitions${genderSuffix}`} className="bg-[var(--color-darker)] text-white font-semibold">
           {nationalCompetitions.map(comp => (
             <option key={comp.id} value={comp.id} className="bg-[var(--color-darker)] text-white pl-4">
               {comp.name}
@@ -92,7 +100,7 @@ const CompetitionWithWorldDropdown: React.FC<CompetitionWithWorldDropdownProps> 
       
       {/* International Competitions */}
       {worldCompetitions.length > 0 && (
-        <optgroup label="International Competitions" className="bg-[var(--color-darker)] text-white font-semibold">
+        <optgroup label={`International Competitions${genderSuffix}`} className="bg-[var(--color-darker)] text-white font-semibold">
           {worldCompetitions.map(comp => (
             <option key={comp.id} value={comp.id} className="bg-[var(--color-darker)] text-white pl-4">
               {comp.name}

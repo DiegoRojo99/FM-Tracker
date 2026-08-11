@@ -4,6 +4,7 @@ import { CompetitionGroup } from '@/lib/types/prisma/Competitions';
 interface CompetitionDropdownProps {
   country?: string;
   type?: string;
+  isFemale?: boolean | null;
   value?: string;
   onChange?: (competition: CompetitionGroup) => void;
   placeholder?: string;
@@ -12,6 +13,7 @@ interface CompetitionDropdownProps {
 const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({
   country,
   type,
+  isFemale,
   value,
   onChange,
   placeholder = 'Select competition',
@@ -26,6 +28,7 @@ const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({
         const params = new URLSearchParams();
         if (country) params.append('country', country);
         if (type) params.append('type', type);
+        if (isFemale !== null && isFemale !== undefined) params.append('isFemale', String(isFemale));
 
         const res = await fetch(`/api/competitions?${params.toString()}`);
         if (!res.ok) throw new Error('Failed to fetch competitions');
@@ -38,7 +41,7 @@ const CompetitionDropdown: React.FC<CompetitionDropdownProps> = ({
       }
     };
     fetchCompetitions();
-  }, [country, type]);
+  }, [country, type, isFemale]);
 
   return (
     <select
