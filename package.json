@@ -19,6 +19,9 @@
     "competitions:seed-tiers": "tsx scripts/data/seed-competition-tiers.ts",
     "competitions:export-tiers": "tsx scripts/data/export-competition-tiers.ts",
     "women-leagues:baseline": "tsx scripts/data/export-women-leagues-baseline.ts",
+    "women-leagues:seed-active": "tsx scripts/data/seed-active-competitions-and-teams.ts",
+    "women-leagues:seed-active:execute": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute",
+    "women-leagues:seed-active:execute:fm26-fm27": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --seasons=2025,2026",
     "competitions:normalise-types": "tsx scripts/data/normalise-competition-types.ts"
   },
   "dependencies": {

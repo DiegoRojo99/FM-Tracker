@@ -27,22 +27,22 @@ Build a reliable women leagues and teams data pipeline for FM26 and FM27 without
 - [x] Regenerate Prisma client.
 
 ## Phase 2 - Seed Pipeline Refactor (No New Active Leagues)
-- [ ] Update league/competition seed flow:
-  - [ ] Read only active `CompetitionGroup` rows.
-  - [ ] Do not create or activate extra competition groups.
-  - [ ] Refresh mapped `ApiCompetition` metadata only.
-- [ ] Add two-season run support:
-  - [ ] FM26 base season import (2025/2026 window)
-  - [ ] FM27 base season import (2026/2027 window)
-- [ ] Ensure idempotency:
-  - [ ] Upsert `ApiCompetition`
-  - [ ] Upsert `Team`
-  - [ ] Insert `TeamSeason` with conflict handling
-- [ ] Add run summary output:
-  - [ ] Competitions processed
-  - [ ] Teams created/updated
-  - [ ] TeamSeason rows created
-  - [ ] Unknown gender rows remaining
+- [x] Update league/competition seed flow:
+  - [x] Read only active `CompetitionGroup` rows.
+  - [x] Do not create or activate extra competition groups.
+  - [x] Refresh mapped `ApiCompetition` metadata only.
+- [x] Add two-season run support:
+  - [x] FM26 base season import (2025/2026 window)
+  - [x] FM27 base season import (2026/2027 window)
+- [x] Ensure idempotency:
+  - [x] Upsert `ApiCompetition`
+  - [x] Upsert `Team`
+  - [x] Insert `TeamSeason` with conflict handling
+- [x] Add run summary output:
+  - [x] Competitions processed
+  - [x] Teams created/updated
+  - [x] TeamSeason rows created
+  - [x] Unknown gender rows remaining
 
 ## Phase 3 - Gender Attribution Rules
 - [ ] Define deterministic attribution order:
