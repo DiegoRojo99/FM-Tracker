@@ -370,6 +370,7 @@ model ApiCompetition {
   type        String
   logoUrl     String?
   tier        Int?
+  isFemale    Boolean?
   isActive    Boolean
   createdAt   DateTime                         @default(now())
   updatedAt   DateTime                         @updatedAt
@@ -381,6 +382,7 @@ model ApiCompetition {
   @@index([countryCode])
   @@index([type])
   @@index([tier])
+  @@index([isFemale])
   @@index([isActive])
 }
 
@@ -391,6 +393,7 @@ model CompetitionGroup {
   countryCode     String
   type            String
   tier            Int?
+  isFemale        Boolean?
   logoUrl         String?
   isActive        Boolean
   createdAt       DateTime                         @default(now())
@@ -408,6 +411,7 @@ model CompetitionGroup {
   @@index([countryCode])
   @@index([type])
   @@index([tier])
+  @@index([isFemale])
   @@index([isActive])
   @@index([name])
 }

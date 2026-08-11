@@ -16,15 +16,15 @@ Build a reliable women leagues and teams data pipeline for FM26 and FM27 without
 - [x] Freeze a snapshot of active league IDs for this project cycle.
 
 ## Phase 1 - Schema Upgrade
-- [ ] Update Prisma schema:
-  - [ ] Add nullable `isFemale` to `ApiCompetition`.
-  - [ ] Add nullable `isFemale` to `CompetitionGroup`.
-- [ ] Add indexes for filtering:
-  - [ ] `CompetitionGroup.isFemale`
-  - [ ] `ApiCompetition.isFemale`
-- [ ] Generate and review migration SQL.
-- [ ] Validate migration on development database.
-- [ ] Regenerate Prisma client.
+- [x] Update Prisma schema:
+  - [x] Add nullable `isFemale` to `ApiCompetition`.
+  - [x] Add nullable `isFemale` to `CompetitionGroup`.
+- [x] Add indexes for filtering:
+  - [x] `CompetitionGroup.isFemale`
+  - [x] `ApiCompetition.isFemale`
+- [x] Generate and review migration SQL.
+- [x] Validate migration on development database.
+- [x] Regenerate Prisma client.
 
 ## Phase 2 - Seed Pipeline Refactor (No New Active Leagues)
 - [ ] Update league/competition seed flow:
