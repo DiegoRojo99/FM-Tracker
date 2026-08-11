@@ -1,0 +1,2232 @@
+[
+  {
+    "name": "Division 1",
+    "countryCode": "AE",
+    "isFemale": null
+  },
+  {
+    "name": "League Cup",
+    "countryCode": "AE",
+    "isFemale": null
+  },
+  {
+    "name": "Presidents Cup",
+    "countryCode": "AE",
+    "isFemale": null
+  },
+  {
+    "name": "Pro League",
+    "countryCode": "AE",
+    "isFemale": null
+  },
+  {
+    "name": "Copa Argentina",
+    "countryCode": "AR",
+    "isFemale": null
+  },
+  {
+    "name": "Copa de la Liga Profesional",
+    "countryCode": "AR",
+    "isFemale": null
+  },
+  {
+    "name": "Liga Profesional Argentina",
+    "countryCode": "AR",
+    "isFemale": false
+  },
+  {
+    "name": "Primera B Metropolitana",
+    "countryCode": "AR",
+    "isFemale": null
+  },
+  {
+    "name": "Primera C",
+    "countryCode": "AR",
+    "isFemale": null
+  },
+  {
+    "name": "Primera D",
+    "countryCode": "AR",
+    "isFemale": null
+  },
+  {
+    "name": "Primera Nacional",
+    "countryCode": "AR",
+    "isFemale": false
+  },
+  {
+    "name": "Super Copa",
+    "countryCode": "AR",
+    "isFemale": null
+  },
+  {
+    "name": "Super Copa International",
+    "countryCode": "AR",
+    "isFemale": null
+  },
+  {
+    "name": "Torneo Federal A",
+    "countryCode": "AR",
+    "isFemale": null
+  },
+  {
+    "name": "Torneo Promocional Amateur",
+    "countryCode": "AR",
+    "isFemale": null
+  },
+  {
+    "name": "Trofeo de Campeones de la Superliga",
+    "countryCode": "AR",
+    "isFemale": null
+  },
+  {
+    "name": "2. Liga",
+    "countryCode": "AT",
+    "isFemale": false
+  },
+  {
+    "name": "Bundesliga",
+    "countryCode": "AT",
+    "isFemale": false
+  },
+  {
+    "name": "Cup",
+    "countryCode": "AT",
+    "isFemale": null
+  },
+  {
+    "name": "Frauenliga",
+    "countryCode": "AT",
+    "isFemale": null
+  },
+  {
+    "name": "A-League",
+    "countryCode": "AU",
+    "isFemale": false
+  },
+  {
+    "name": "A-League Women",
+    "countryCode": "AU",
+    "isFemale": null
+  },
+  {
+    "name": "Australia Cup",
+    "countryCode": "AU",
+    "isFemale": null
+  },
+  {
+    "name": "Australian Championship",
+    "countryCode": "AU",
+    "isFemale": null
+  },
+  {
+    "name": "Challenger Pro League",
+    "countryCode": "BE",
+    "isFemale": false
+  },
+  {
+    "name": "Cup",
+    "countryCode": "BE",
+    "isFemale": null
+  },
+  {
+    "name": "First Amateur Division",
+    "countryCode": "BE",
+    "isFemale": false
+  },
+  {
+    "name": "Jupiler Pro League",
+    "countryCode": "BE",
+    "isFemale": false
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "BE",
+    "isFemale": null
+  },
+  {
+    "name": "Super League Women",
+    "countryCode": "BE",
+    "isFemale": null
+  },
+  {
+    "name": "Cup",
+    "countryCode": "BG",
+    "isFemale": null
+  },
+  {
+    "name": "First League",
+    "countryCode": "BG",
+    "isFemale": false
+  },
+  {
+    "name": "Second League",
+    "countryCode": "BG",
+    "isFemale": false
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "BG",
+    "isFemale": null
+  },
+  {
+    "name": "Acreano",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Alagoano",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Amazonense",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Brasileiro Women",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Brasiliense",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Capixaba",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Copa Do Brasil",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Copa do Nordeste",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Copa Fares Lopes",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Copa Gaúcha",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Copa Grão Pará",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Copa Paulista",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Copa Verde",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Maranhense",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Matogrossense",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Paraense",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Paraibano",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Piauiense",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Potiguar",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Rondoniense",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Roraimense",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Sergipano",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Serie A",
+    "countryCode": "BR",
+    "isFemale": false
+  },
+  {
+    "name": "Serie B",
+    "countryCode": "BR",
+    "isFemale": false
+  },
+  {
+    "name": "Serie C",
+    "countryCode": "BR",
+    "isFemale": false
+  },
+  {
+    "name": "Serie D",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Sul-Matogrossense",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Supercopa do Brasil",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "Tocantinense",
+    "countryCode": "BR",
+    "isFemale": null
+  },
+  {
+    "name": "1. Division",
+    "countryCode": "BY",
+    "isFemale": false
+  },
+  {
+    "name": "2. Division",
+    "countryCode": "BY",
+    "isFemale": null
+  },
+  {
+    "name": "Coppa",
+    "countryCode": "BY",
+    "isFemale": null
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "BY",
+    "isFemale": false
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "BY",
+    "isFemale": null
+  },
+  {
+    "name": "Canadian Championship",
+    "countryCode": "CA",
+    "isFemale": null
+  },
+  {
+    "name": "Canadian Premier League",
+    "countryCode": "CA",
+    "isFemale": false
+  },
+  {
+    "name": "Northern Super League",
+    "countryCode": "CA",
+    "isFemale": null
+  },
+  {
+    "name": "AXA Women’s Super League",
+    "countryCode": "CH",
+    "isFemale": null
+  },
+  {
+    "name": "Challenge League",
+    "countryCode": "CH",
+    "isFemale": false
+  },
+  {
+    "name": "Erste Liga Cup",
+    "countryCode": "CH",
+    "isFemale": null
+  },
+  {
+    "name": "Schweizer Cup",
+    "countryCode": "CH",
+    "isFemale": null
+  },
+  {
+    "name": "Super League",
+    "countryCode": "CH",
+    "isFemale": false
+  },
+  {
+    "name": "Copa Chile",
+    "countryCode": "CL",
+    "isFemale": null
+  },
+  {
+    "name": "Primera B",
+    "countryCode": "CL",
+    "isFemale": false
+  },
+  {
+    "name": "Primera División",
+    "countryCode": "CL",
+    "isFemale": false
+  },
+  {
+    "name": "Segunda División",
+    "countryCode": "CL",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "CL",
+    "isFemale": null
+  },
+  {
+    "name": "FA Cup",
+    "countryCode": "CN",
+    "isFemale": null
+  },
+  {
+    "name": "League One",
+    "countryCode": "CN",
+    "isFemale": false
+  },
+  {
+    "name": "League Two",
+    "countryCode": "CN",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "CN",
+    "isFemale": null
+  },
+  {
+    "name": "Super League",
+    "countryCode": "CN",
+    "isFemale": false
+  },
+  {
+    "name": "Copa Colombia",
+    "countryCode": "CO",
+    "isFemale": null
+  },
+  {
+    "name": "Liga Femenina",
+    "countryCode": "CO",
+    "isFemale": null
+  },
+  {
+    "name": "Primera A",
+    "countryCode": "CO",
+    "isFemale": false
+  },
+  {
+    "name": "Primera B",
+    "countryCode": "CO",
+    "isFemale": false
+  },
+  {
+    "name": "Superliga",
+    "countryCode": "CO",
+    "isFemale": null
+  },
+  {
+    "name": "1. Liga Women",
+    "countryCode": "CZ",
+    "isFemale": null
+  },
+  {
+    "name": "Cup",
+    "countryCode": "CZ",
+    "isFemale": null
+  },
+  {
+    "name": "Czech Liga",
+    "countryCode": "CZ",
+    "isFemale": false
+  },
+  {
+    "name": "FNL",
+    "countryCode": "CZ",
+    "isFemale": false
+  },
+  {
+    "name": "2. Bundesliga",
+    "countryCode": "DE",
+    "isFemale": false
+  },
+  {
+    "name": "2. Frauen Bundesliga",
+    "countryCode": "DE",
+    "isFemale": null
+  },
+  {
+    "name": "3. Liga",
+    "countryCode": "DE",
+    "isFemale": false
+  },
+  {
+    "name": "Bundesliga",
+    "countryCode": "DE",
+    "isFemale": false
+  },
+  {
+    "name": "DFB Pokal",
+    "countryCode": "DE",
+    "isFemale": null
+  },
+  {
+    "name": "DFB Pokal - Women",
+    "countryCode": "DE",
+    "isFemale": null
+  },
+  {
+    "name": "Frauen Bundesliga",
+    "countryCode": "DE",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "DE",
+    "isFemale": null
+  },
+  {
+    "name": "Supercup der Frauen",
+    "countryCode": "DE",
+    "isFemale": null
+  },
+  {
+    "name": "1. Division",
+    "countryCode": "DK",
+    "isFemale": false
+  },
+  {
+    "name": "2. Division",
+    "countryCode": "DK",
+    "isFemale": false
+  },
+  {
+    "name": "3. Division",
+    "countryCode": "DK",
+    "isFemale": false
+  },
+  {
+    "name": "DBU Pokalen",
+    "countryCode": "DK",
+    "isFemale": null
+  },
+  {
+    "name": "Kvindeliga",
+    "countryCode": "DK",
+    "isFemale": null
+  },
+  {
+    "name": "Superliga",
+    "countryCode": "DK",
+    "isFemale": false
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "EG",
+    "isFemale": null
+  },
+  {
+    "name": "Second League",
+    "countryCode": "EG",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "EG",
+    "isFemale": null
+  },
+  {
+    "name": "Copa del Rey",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Copa Federacion",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "La Liga",
+    "countryCode": "ES",
+    "isFemale": false
+  },
+  {
+    "name": "Primera División Femenina",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Primera División RFEF - Group 1",
+    "countryCode": "ES",
+    "isFemale": false
+  },
+  {
+    "name": "Primera División RFEF - Group 2",
+    "countryCode": "ES",
+    "isFemale": false
+  },
+  {
+    "name": "Segunda División",
+    "countryCode": "ES",
+    "isFemale": false
+  },
+  {
+    "name": "Segunda División RFEF - Group 1",
+    "countryCode": "ES",
+    "isFemale": false
+  },
+  {
+    "name": "Segunda División RFEF - Group 2",
+    "countryCode": "ES",
+    "isFemale": false
+  },
+  {
+    "name": "Segunda División RFEF - Group 3",
+    "countryCode": "ES",
+    "isFemale": false
+  },
+  {
+    "name": "Segunda División RFEF - Group 4",
+    "countryCode": "ES",
+    "isFemale": false
+  },
+  {
+    "name": "Segunda División RFEF - Group 5",
+    "countryCode": "ES",
+    "isFemale": false
+  },
+  {
+    "name": "Supercopa Femenina",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 1",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 10",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 11",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 12",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 13",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 14",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 15",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 16",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 17",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 18",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 2",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 3",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 4",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 5",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 6",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 7",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 8",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Tercera División RFEF - Group 9",
+    "countryCode": "ES",
+    "isFemale": null
+  },
+  {
+    "name": "Kakkonen - Lohko A",
+    "countryCode": "FI",
+    "isFemale": null
+  },
+  {
+    "name": "Kakkonen - Lohko B",
+    "countryCode": "FI",
+    "isFemale": null
+  },
+  {
+    "name": "Kakkonen - Lohko C",
+    "countryCode": "FI",
+    "isFemale": null
+  },
+  {
+    "name": "Kansallinen Liiga",
+    "countryCode": "FI",
+    "isFemale": null
+  },
+  {
+    "name": "League Cup",
+    "countryCode": "FI",
+    "isFemale": null
+  },
+  {
+    "name": "Suomen Cup",
+    "countryCode": "FI",
+    "isFemale": null
+  },
+  {
+    "name": "Veikkausliiga",
+    "countryCode": "FI",
+    "isFemale": false
+  },
+  {
+    "name": "Ykkönen",
+    "countryCode": "FI",
+    "isFemale": false
+  },
+  {
+    "name": "Ykköscup",
+    "countryCode": "FI",
+    "isFemale": null
+  },
+  {
+    "name": "Ykkösliiga",
+    "countryCode": "FI",
+    "isFemale": null
+  },
+  {
+    "name": "Coupe de France",
+    "countryCode": "FR",
+    "isFemale": null
+  },
+  {
+    "name": "Feminine Division 1",
+    "countryCode": "FR",
+    "isFemale": null
+  },
+  {
+    "name": "Ligue 1",
+    "countryCode": "FR",
+    "isFemale": false
+  },
+  {
+    "name": "Ligue 2",
+    "countryCode": "FR",
+    "isFemale": false
+  },
+  {
+    "name": "Ligue 3",
+    "countryCode": "FR",
+    "isFemale": false
+  },
+  {
+    "name": "Trophée des Champions",
+    "countryCode": "FR",
+    "isFemale": null
+  },
+  {
+    "name": "Championship",
+    "countryCode": "GB-ENG",
+    "isFemale": false
+  },
+  {
+    "name": "Community Shield",
+    "countryCode": "GB-ENG",
+    "isFemale": null
+  },
+  {
+    "name": "EFL Trophy",
+    "countryCode": "GB-ENG",
+    "isFemale": null
+  },
+  {
+    "name": "FA Cup",
+    "countryCode": "GB-ENG",
+    "isFemale": null
+  },
+  {
+    "name": "FA Trophy",
+    "countryCode": "GB-ENG",
+    "isFemale": null
+  },
+  {
+    "name": "FA Women's Cup",
+    "countryCode": "GB-ENG",
+    "isFemale": null
+  },
+  {
+    "name": "FA WSL",
+    "countryCode": "GB-ENG",
+    "isFemale": null
+  },
+  {
+    "name": "League Cup",
+    "countryCode": "GB-ENG",
+    "isFemale": null
+  },
+  {
+    "name": "League One",
+    "countryCode": "GB-ENG",
+    "isFemale": false
+  },
+  {
+    "name": "League Two",
+    "countryCode": "GB-ENG",
+    "isFemale": false
+  },
+  {
+    "name": "National League",
+    "countryCode": "GB-ENG",
+    "isFemale": false
+  },
+  {
+    "name": "National League Cup",
+    "countryCode": "GB-ENG",
+    "isFemale": null
+  },
+  {
+    "name": "National League - North",
+    "countryCode": "GB-ENG",
+    "isFemale": false
+  },
+  {
+    "name": "National League - South",
+    "countryCode": "GB-ENG",
+    "isFemale": false
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "GB-ENG",
+    "isFemale": false
+  },
+  {
+    "name": "Women's Championship",
+    "countryCode": "GB-ENG",
+    "isFemale": null
+  },
+  {
+    "name": "WSL Cup",
+    "countryCode": "GB-ENG",
+    "isFemale": null
+  },
+  {
+    "name": "Championship",
+    "countryCode": "GB-NIR",
+    "isFemale": false
+  },
+  {
+    "name": "Charity Shield",
+    "countryCode": "GB-NIR",
+    "isFemale": null
+  },
+  {
+    "name": "Irish Cup",
+    "countryCode": "GB-NIR",
+    "isFemale": null
+  },
+  {
+    "name": "League Cup",
+    "countryCode": "GB-NIR",
+    "isFemale": null
+  },
+  {
+    "name": "Premier Intermediate League",
+    "countryCode": "GB-NIR",
+    "isFemale": false
+  },
+  {
+    "name": "Premiership",
+    "countryCode": "GB-NIR",
+    "isFemale": false
+  },
+  {
+    "name": "Premiership Women",
+    "countryCode": "GB-NIR",
+    "isFemale": null
+  },
+  {
+    "name": "Challenge Cup",
+    "countryCode": "GB-SCT",
+    "isFemale": null
+  },
+  {
+    "name": "Championship",
+    "countryCode": "GB-SCT",
+    "isFemale": false
+  },
+  {
+    "name": "FA Cup",
+    "countryCode": "GB-SCT",
+    "isFemale": null
+  },
+  {
+    "name": "League Cup",
+    "countryCode": "GB-SCT",
+    "isFemale": null
+  },
+  {
+    "name": "League One",
+    "countryCode": "GB-SCT",
+    "isFemale": false
+  },
+  {
+    "name": "League Two",
+    "countryCode": "GB-SCT",
+    "isFemale": false
+  },
+  {
+    "name": "Premiership",
+    "countryCode": "GB-SCT",
+    "isFemale": false
+  },
+  {
+    "name": "SWF Scottish Cup",
+    "countryCode": "GB-SCT",
+    "isFemale": null
+  },
+  {
+    "name": "SWPL Cup",
+    "countryCode": "GB-SCT",
+    "isFemale": null
+  },
+  {
+    "name": "FAW Championship",
+    "countryCode": "GB-WLS",
+    "isFemale": null
+  },
+  {
+    "name": "League Cup",
+    "countryCode": "GB-WLS",
+    "isFemale": null
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "GB-WLS",
+    "isFemale": false
+  },
+  {
+    "name": "Welsh Cup",
+    "countryCode": "GB-WLS",
+    "isFemale": null
+  },
+  {
+    "name": "Premier Division",
+    "countryCode": "GI",
+    "isFemale": false
+  },
+  {
+    "name": "Rock Cup",
+    "countryCode": "GI",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "GI",
+    "isFemale": null
+  },
+  {
+    "name": "Cup",
+    "countryCode": "GR",
+    "isFemale": null
+  },
+  {
+    "name": "Super League 1",
+    "countryCode": "GR",
+    "isFemale": false
+  },
+  {
+    "name": "Super League 2",
+    "countryCode": "GR",
+    "isFemale": false
+  },
+  {
+    "name": "FA Cup",
+    "countryCode": "HK",
+    "isFemale": null
+  },
+  {
+    "name": "League Cup",
+    "countryCode": "HK",
+    "isFemale": null
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "HK",
+    "isFemale": false
+  },
+  {
+    "name": "Senior Shield",
+    "countryCode": "HK",
+    "isFemale": null
+  },
+  {
+    "name": "Cup",
+    "countryCode": "HR",
+    "isFemale": null
+  },
+  {
+    "name": "First NL",
+    "countryCode": "HR",
+    "isFemale": false
+  },
+  {
+    "name": "HNL",
+    "countryCode": "HR",
+    "isFemale": false
+  },
+  {
+    "name": "Second NL",
+    "countryCode": "HR",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "HR",
+    "isFemale": null
+  },
+  {
+    "name": "Magyar Kupa",
+    "countryCode": "HU",
+    "isFemale": null
+  },
+  {
+    "name": "NB I",
+    "countryCode": "HU",
+    "isFemale": false
+  },
+  {
+    "name": "NB II",
+    "countryCode": "HU",
+    "isFemale": false
+  },
+  {
+    "name": "Liga 1",
+    "countryCode": "ID",
+    "isFemale": false
+  },
+  {
+    "name": "Liga 2",
+    "countryCode": "ID",
+    "isFemale": false
+  },
+  {
+    "name": "Piala Presiden",
+    "countryCode": "ID",
+    "isFemale": null
+  },
+  {
+    "name": "FAI Cup",
+    "countryCode": "IE",
+    "isFemale": null
+  },
+  {
+    "name": "FAI President's Cup",
+    "countryCode": "IE",
+    "isFemale": null
+  },
+  {
+    "name": "First Division",
+    "countryCode": "IE",
+    "isFemale": false
+  },
+  {
+    "name": "Premier Division",
+    "countryCode": "IE",
+    "isFemale": false
+  },
+  {
+    "name": "Women's President's Cup",
+    "countryCode": "IE",
+    "isFemale": null
+  },
+  {
+    "name": "Liga Alef",
+    "countryCode": "IL",
+    "isFemale": null
+  },
+  {
+    "name": "Liga Leumit",
+    "countryCode": "IL",
+    "isFemale": false
+  },
+  {
+    "name": "Ligat Ha'al",
+    "countryCode": "IL",
+    "isFemale": null
+  },
+  {
+    "name": "State Cup",
+    "countryCode": "IL",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "IL",
+    "isFemale": null
+  },
+  {
+    "name": "Toto Cup Ligat Al",
+    "countryCode": "IL",
+    "isFemale": null
+  },
+  {
+    "name": "AIFF Super Cup",
+    "countryCode": "IN",
+    "isFemale": null
+  },
+  {
+    "name": "IFA Shield",
+    "countryCode": "IN",
+    "isFemale": null
+  },
+  {
+    "name": "I-League",
+    "countryCode": "IN",
+    "isFemale": null
+  },
+  {
+    "name": "Indian Super League",
+    "countryCode": "IN",
+    "isFemale": false
+  },
+  {
+    "name": "1. Deild",
+    "countryCode": "IS",
+    "isFemale": false
+  },
+  {
+    "name": "2. Deild",
+    "countryCode": "IS",
+    "isFemale": null
+  },
+  {
+    "name": "Cup",
+    "countryCode": "IS",
+    "isFemale": null
+  },
+  {
+    "name": "League Cup",
+    "countryCode": "IS",
+    "isFemale": null
+  },
+  {
+    "name": "Reykjavik Cup",
+    "countryCode": "IS",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "IS",
+    "isFemale": null
+  },
+  {
+    "name": "Úrvalsdeild",
+    "countryCode": "IS",
+    "isFemale": false
+  },
+  {
+    "name": "Úrvalsdeild Women",
+    "countryCode": "IS",
+    "isFemale": null
+  },
+  {
+    "name": "Coppa Italia",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Coppa Italia Primavera",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Coppa Italia Serie C",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Coppa Italia Serie D",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Coppa Italia Women",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie A",
+    "countryCode": "IT",
+    "isFemale": false
+  },
+  {
+    "name": "Serie A Cup Women",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie A Women",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie B",
+    "countryCode": "IT",
+    "isFemale": false
+  },
+  {
+    "name": "Serie C - Girone A",
+    "countryCode": "IT",
+    "isFemale": false
+  },
+  {
+    "name": "Serie C - Girone B",
+    "countryCode": "IT",
+    "isFemale": false
+  },
+  {
+    "name": "Serie C - Girone C",
+    "countryCode": "IT",
+    "isFemale": false
+  },
+  {
+    "name": "Serie D - Girone A",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie D - Girone B",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie D - Girone C",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie D - Girone D",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie D - Girone E",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie D - Girone F",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie D - Girone G",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie D - Girone H",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Serie D - Girone I",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup Primavera",
+    "countryCode": "IT",
+    "isFemale": null
+  },
+  {
+    "name": "Emperor Cup",
+    "countryCode": "JP",
+    "isFemale": null
+  },
+  {
+    "name": "J1 League",
+    "countryCode": "JP",
+    "isFemale": false
+  },
+  {
+    "name": "J2 League",
+    "countryCode": "JP",
+    "isFemale": false
+  },
+  {
+    "name": "J3 League",
+    "countryCode": "JP",
+    "isFemale": false
+  },
+  {
+    "name": "Japan Football League",
+    "countryCode": "JP",
+    "isFemale": null
+  },
+  {
+    "name": "J-League Cup",
+    "countryCode": "JP",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "JP",
+    "isFemale": null
+  },
+  {
+    "name": "WE League",
+    "countryCode": "JP",
+    "isFemale": null
+  },
+  {
+    "name": "FA Cup",
+    "countryCode": "KR",
+    "isFemale": null
+  },
+  {
+    "name": "K3 League",
+    "countryCode": "KR",
+    "isFemale": null
+  },
+  {
+    "name": "K League 1",
+    "countryCode": "KR",
+    "isFemale": false
+  },
+  {
+    "name": "K League 2",
+    "countryCode": "KR",
+    "isFemale": false
+  },
+  {
+    "name": "WK-League",
+    "countryCode": "KR",
+    "isFemale": null
+  },
+  {
+    "name": "1. Liga",
+    "countryCode": "LV",
+    "isFemale": null
+  },
+  {
+    "name": "Cup",
+    "countryCode": "LV",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "LV",
+    "isFemale": null
+  },
+  {
+    "name": "Virsliga",
+    "countryCode": "LV",
+    "isFemale": false
+  },
+  {
+    "name": "Campeón de Campeones",
+    "countryCode": "MX",
+    "isFemale": null
+  },
+  {
+    "name": "Liga de Expansión MX",
+    "countryCode": "MX",
+    "isFemale": false
+  },
+  {
+    "name": "Liga MX",
+    "countryCode": "MX",
+    "isFemale": false
+  },
+  {
+    "name": "Liga MX Femenil",
+    "countryCode": "MX",
+    "isFemale": null
+  },
+  {
+    "name": "FA Cup",
+    "countryCode": "MY",
+    "isFemale": null
+  },
+  {
+    "name": "Malaysia Cup",
+    "countryCode": "MY",
+    "isFemale": null
+  },
+  {
+    "name": "Super League",
+    "countryCode": "MY",
+    "isFemale": false
+  },
+  {
+    "name": "Eerste Divisie",
+    "countryCode": "NL",
+    "isFemale": null
+  },
+  {
+    "name": "Eredivisie",
+    "countryCode": "NL",
+    "isFemale": false
+  },
+  {
+    "name": "Eredivisie Women",
+    "countryCode": "NL",
+    "isFemale": null
+  },
+  {
+    "name": "KNVB Beker",
+    "countryCode": "NL",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "NL",
+    "isFemale": null
+  },
+  {
+    "name": "Tweede Divisie",
+    "countryCode": "NL",
+    "isFemale": null
+  },
+  {
+    "name": "1. Division",
+    "countryCode": "NO",
+    "isFemale": false
+  },
+  {
+    "name": "1. Division Women",
+    "countryCode": "NO",
+    "isFemale": null
+  },
+  {
+    "name": "2. Division - Group 1",
+    "countryCode": "NO",
+    "isFemale": false
+  },
+  {
+    "name": "2. Division - Group 2",
+    "countryCode": "NO",
+    "isFemale": false
+  },
+  {
+    "name": "Eliteserien",
+    "countryCode": "NO",
+    "isFemale": false
+  },
+  {
+    "name": "NM Cupen",
+    "countryCode": "NO",
+    "isFemale": null
+  },
+  {
+    "name": "Toppserien",
+    "countryCode": "NO",
+    "isFemale": null
+  },
+  {
+    "name": "Copa Perú",
+    "countryCode": "PE",
+    "isFemale": null
+  },
+  {
+    "name": "Primera División",
+    "countryCode": "PE",
+    "isFemale": false
+  },
+  {
+    "name": "Segunda División",
+    "countryCode": "PE",
+    "isFemale": null
+  },
+  {
+    "name": "Cup",
+    "countryCode": "PL",
+    "isFemale": null
+  },
+  {
+    "name": "Ekstraklasa",
+    "countryCode": "PL",
+    "isFemale": false
+  },
+  {
+    "name": "Ekstraliga Women",
+    "countryCode": "PL",
+    "isFemale": null
+  },
+  {
+    "name": "I Liga",
+    "countryCode": "PL",
+    "isFemale": false
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "PL",
+    "isFemale": null
+  },
+  {
+    "name": "1a Divisão - Women",
+    "countryCode": "PT",
+    "isFemale": null
+  },
+  {
+    "name": "Campeonato de Portugal Prio - Group A",
+    "countryCode": "PT",
+    "isFemale": false
+  },
+  {
+    "name": "Campeonato de Portugal Prio - Group B",
+    "countryCode": "PT",
+    "isFemale": false
+  },
+  {
+    "name": "Campeonato de Portugal Prio - Group C",
+    "countryCode": "PT",
+    "isFemale": false
+  },
+  {
+    "name": "Campeonato de Portugal Prio - Group D",
+    "countryCode": "PT",
+    "isFemale": false
+  },
+  {
+    "name": "Liga 3",
+    "countryCode": "PT",
+    "isFemale": false
+  },
+  {
+    "name": "Primeira Liga",
+    "countryCode": "PT",
+    "isFemale": false
+  },
+  {
+    "name": "Segunda Liga",
+    "countryCode": "PT",
+    "isFemale": false
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "PT",
+    "isFemale": null
+  },
+  {
+    "name": "Taça da Liga",
+    "countryCode": "PT",
+    "isFemale": null
+  },
+  {
+    "name": "Taça de Portugal",
+    "countryCode": "PT",
+    "isFemale": null
+  },
+  {
+    "name": "Cupa României",
+    "countryCode": "RO",
+    "isFemale": null
+  },
+  {
+    "name": "Liga 1 Feminin",
+    "countryCode": "RO",
+    "isFemale": null
+  },
+  {
+    "name": "Liga I",
+    "countryCode": "RO",
+    "isFemale": false
+  },
+  {
+    "name": "Liga II",
+    "countryCode": "RO",
+    "isFemale": false
+  },
+  {
+    "name": "Supercupa",
+    "countryCode": "RO",
+    "isFemale": null
+  },
+  {
+    "name": "Cup",
+    "countryCode": "RS",
+    "isFemale": null
+  },
+  {
+    "name": "Prva Liga",
+    "countryCode": "RS",
+    "isFemale": false
+  },
+  {
+    "name": "Super Liga",
+    "countryCode": "RS",
+    "isFemale": false
+  },
+  {
+    "name": "Cup",
+    "countryCode": "RU",
+    "isFemale": null
+  },
+  {
+    "name": "First League",
+    "countryCode": "RU",
+    "isFemale": false
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "RU",
+    "isFemale": false
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "RU",
+    "isFemale": null
+  },
+  {
+    "name": "Supreme Division Women",
+    "countryCode": "RU",
+    "isFemale": null
+  },
+  {
+    "name": "Allsvenskan",
+    "countryCode": "SE",
+    "isFemale": false
+  },
+  {
+    "name": "Damallsvenskan",
+    "countryCode": "SE",
+    "isFemale": null
+  },
+  {
+    "name": "Division 2 - Norra Götaland",
+    "countryCode": "SE",
+    "isFemale": false
+  },
+  {
+    "name": "Division 2 - Norra Svealand",
+    "countryCode": "SE",
+    "isFemale": false
+  },
+  {
+    "name": "Division 2 - Norrland",
+    "countryCode": "SE",
+    "isFemale": false
+  },
+  {
+    "name": "Division 2 - Södra Götaland",
+    "countryCode": "SE",
+    "isFemale": false
+  },
+  {
+    "name": "Division 2 - Södra Svealand",
+    "countryCode": "SE",
+    "isFemale": false
+  },
+  {
+    "name": "Division 2 - Västra Götaland",
+    "countryCode": "SE",
+    "isFemale": false
+  },
+  {
+    "name": "Elitettan",
+    "countryCode": "SE",
+    "isFemale": null
+  },
+  {
+    "name": "Ettan - Norra",
+    "countryCode": "SE",
+    "isFemale": false
+  },
+  {
+    "name": "Ettan - Södra",
+    "countryCode": "SE",
+    "isFemale": false
+  },
+  {
+    "name": "Superettan",
+    "countryCode": "SE",
+    "isFemale": false
+  },
+  {
+    "name": "Svenska Cupen",
+    "countryCode": "SE",
+    "isFemale": null
+  },
+  {
+    "name": "Svenska Cupen - Women",
+    "countryCode": "SE",
+    "isFemale": null
+  },
+  {
+    "name": "Cup",
+    "countryCode": "SG",
+    "isFemale": null
+  },
+  {
+    "name": "Premier League",
+    "countryCode": "SG",
+    "isFemale": false
+  },
+  {
+    "name": "1. SNL",
+    "countryCode": "SI",
+    "isFemale": false
+  },
+  {
+    "name": "2. SNL",
+    "countryCode": "SI",
+    "isFemale": false
+  },
+  {
+    "name": "Cup",
+    "countryCode": "SI",
+    "isFemale": null
+  },
+  {
+    "name": "2. liga",
+    "countryCode": "SK",
+    "isFemale": false
+  },
+  {
+    "name": "Cup",
+    "countryCode": "SK",
+    "isFemale": null
+  },
+  {
+    "name": "I Liga - Women",
+    "countryCode": "SK",
+    "isFemale": null
+  },
+  {
+    "name": "Super Liga",
+    "countryCode": "SK",
+    "isFemale": false
+  },
+  {
+    "name": "1. Lig",
+    "countryCode": "TR",
+    "isFemale": false
+  },
+  {
+    "name": "2. Lig",
+    "countryCode": "TR",
+    "isFemale": false
+  },
+  {
+    "name": "Cup",
+    "countryCode": "TR",
+    "isFemale": null
+  },
+  {
+    "name": "Super Cup",
+    "countryCode": "TR",
+    "isFemale": null
+  },
+  {
+    "name": "Süper Lig",
+    "countryCode": "TR",
+    "isFemale": false
+  },
+  {
+    "name": "Major League Soccer",
+    "countryCode": "US",
+    "isFemale": false
+  },
+  {
+    "name": "NWSL Women",
+    "countryCode": "US",
+    "isFemale": null
+  },
+  {
+    "name": "USL Championship",
+    "countryCode": "US",
+    "isFemale": null
+  },
+  {
+    "name": "USL League One",
+    "countryCode": "US",
+    "isFemale": null
+  },
+  {
+    "name": "USL League One Cup",
+    "countryCode": "US",
+    "isFemale": null
+  },
+  {
+    "name": "USL League Two",
+    "countryCode": "US",
+    "isFemale": null
+  },
+  {
+    "name": "USL Super League",
+    "countryCode": "US",
+    "isFemale": null
+  },
+  {
+    "name": "USL W League",
+    "countryCode": "US",
+    "isFemale": null
+  },
+  {
+    "name": "US Open Cup",
+    "countryCode": "US",
+    "isFemale": null
+  },
+  {
+    "name": "Copa Uruguay",
+    "countryCode": "UY",
+    "isFemale": null
+  },
+  {
+    "name": "Primera División",
+    "countryCode": "UY",
+    "isFemale": false
+  },
+  {
+    "name": "Primera División - Clausura",
+    "countryCode": "UY",
+    "isFemale": null
+  },
+  {
+    "name": "Segunda División",
+    "countryCode": "UY",
+    "isFemale": false
+  },
+  {
+    "name": "Super Copa",
+    "countryCode": "UY",
+    "isFemale": null
+  },
+  {
+    "name": "AFC Challenge League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "AFC Champions League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "AFC Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "AFC U17 Asian Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "AFC U20 Asian Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "AFC U20 Asian Cup - Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "AFC Women's Champions League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Africa Cup of Nations",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Africa Cup of Nations U20",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Arab Club Champions Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Arab Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "ASEAN Championship U23",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Asean Championship Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "ASEAN Club Championship",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Asian Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CAF Champions League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CAF Confederation Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CAF Cup of Nations - U17",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CAF Super Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CAF U23 Cup of Nations",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Campeones Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONCACAF Caribbean Club Championship",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONCACAF Caribbean Club Shield",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Concacaf Central American Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONCACAF Champions League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONCACAF Gold Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONCACAF Nations League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONCACAF U17",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONCACAF U20",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONCACAF W Champions Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONCACAF Women U20",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONMEBOL Libertadores",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONMEBOL Libertadores Femenina",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONMEBOL Libertadores U20",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONMEBOL Nations League Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONMEBOL Recopa",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "CONMEBOL Sudamericana",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Copa America Femenina",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "COSAFA Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "FIFA Club World Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "FIFA Intercontinental Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Gulf Cup of Nations",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Leagues Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "OFC Champions League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "SheBelieves Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "Sudamericano U20",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA Championship - Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA Champions League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA Champions League Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA - CONMEBOL - Club Challenge",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA Europa Conference League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA Europa Cup - Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA Europa League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA Nations League - Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA Super Cup",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA U17 Championship",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA U17 Championship - Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA U19 Championship",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA U19 Championship - Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA U21 Championship",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "UEFA Youth League",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "World Cup - U17",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "World Cup - U17 - Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "World Cup - U20",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "World Cup - Women",
+    "countryCode": "WOR",
+    "isFemale": null
+  },
+  {
+    "name": "1st Division",
+    "countryCode": "ZA",
+    "isFemale": null
+  },
+  {
+    "name": "8 Cup",
+    "countryCode": "ZA",
+    "isFemale": null
+  },
+  {
+    "name": "Cup",
+    "countryCode": "ZA",
+    "isFemale": null
+  },
+  {
+    "name": "League Cup",
+    "countryCode": "ZA",
+    "isFemale": null
+  },
+  {
+    "name": "Premier Soccer League",
+    "countryCode": "ZA",
+    "isFemale": false
+  }
+]

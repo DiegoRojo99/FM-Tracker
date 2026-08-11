@@ -3,7 +3,7 @@
 import { type ComponentType, useEffect } from 'react'
 import { useAuth } from '../components/AuthProvider'
 import Link from 'next/link'
-import { BarChart3, Compass, Layers, ShieldCheck, Sparkles, TrendingUp } from 'lucide-react'
+import { BarChart3, Compass, Database, Layers, ShieldCheck, Sparkles, TrendingUp } from 'lucide-react'
 
 export default function AdminPage() {
   const { user, userLoading } = useAuth()
@@ -31,6 +31,7 @@ export default function AdminPage() {
     { title: 'Teams', link: '/admin/teams', icon: ShieldCheck },
     { title: 'Stats', link: '/admin/stats', icon: BarChart3 },
     { title: 'Competition Tiers', link: '/admin/competitions/tiers', icon: Layers },
+    { title: 'API Competitions', link: '/admin/competitions/api', icon: Database },
     { title: 'Promotions', link: '/admin/promotions', icon: TrendingUp },
   ]
 
