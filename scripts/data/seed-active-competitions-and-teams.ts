@@ -8,6 +8,8 @@ type ScriptOptions = {
   dryRun: boolean;
   seasons: number[];
   limit?: number;
+  refreshExisting: boolean;
+  refreshMetadata: boolean;
 };
 
 type Summary = {
@@ -18,7 +20,10 @@ type Summary = {
   seasonsRequested: number[];
   seasonsProcessed: number;
   seasonsSkippedUnavailable: number;
+  seasonsSkippedAlreadySeeded: number;
   seasonApiErrors: number;
+  leagueMetadataCalls: number;
+  competitionsSkippedAlreadySeeded: number;
   teamsFetched: number;
   teamsCreated: number;
   teamsUpdated: number;
@@ -34,6 +39,14 @@ function parseArgs(): ScriptOptions {
   const executeFromEnv = process.env.SEED_EXECUTE === '1' || process.env.npm_config_execute === 'true' || process.env.npm_config_execute === '1';
   const execute = executeFromArgs || executeFromEnv;
   const dryRun = !execute;
+  const refreshExisting = /(^|\s)--refresh-existing(\s|$)/.test(argText)
+    || process.env.SEED_REFRESH_EXISTING === '1'
+    || process.env.npm_config_refresh_existing === 'true'
+    || process.env.npm_config_refresh_existing === '1';
+  const refreshMetadata = /(^|\s)--refresh-metadata(\s|$)/.test(argText)
+    || process.env.SEED_REFRESH_METADATA === '1'
+    || process.env.npm_config_refresh_metadata === 'true'
+    || process.env.npm_config_refresh_metadata === '1';
 
   const seasonsMatch = argText.match(/--seasons=([^\s]+)/);
   const seasonsSource = seasonsMatch?.[1] ?? process.env.SEED_SEASONS ?? process.env.npm_config_seasons;
@@ -49,7 +62,7 @@ function parseArgs(): ScriptOptions {
   const limitValue = limitRaw ? Number(limitRaw) : undefined;
   const limit = Number.isInteger(limitValue) && (limitValue as number) > 0 ? (limitValue as number) : undefined;
 
-  return { dryRun, seasons, limit };
+  return { dryRun, seasons, limit, refreshExisting, refreshMetadata };
 }
 
 function normalizeCountryKey(input: string | null | undefined): string {
@@ -82,7 +95,10 @@ async function run() {
     seasonsRequested: options.seasons,
     seasonsProcessed: 0,
     seasonsSkippedUnavailable: 0,
+    seasonsSkippedAlreadySeeded: 0,
     seasonApiErrors: 0,
+    leagueMetadataCalls: 0,
+    competitionsSkippedAlreadySeeded: 0,
     teamsFetched: 0,
     teamsCreated: 0,
     teamsUpdated: 0,
@@ -159,10 +175,29 @@ async function run() {
     ? mappedCompetitions.slice(0, options.limit)
     : mappedCompetitions;
 
+  const seasonLabels = options.seasons.map((year) => `${year}/${year + 1}`);
+  const competitionIds = competitionsToProcess.map((competition) => competition.id);
+  const existingSeasonPairs = await prisma.teamSeason.findMany({
+    where: {
+      apiCompetitionId: { in: competitionIds },
+      season: { in: seasonLabels },
+    },
+    select: {
+      apiCompetitionId: true,
+      season: true,
+    },
+  });
+
+  const seededPairSet = new Set(
+    existingSeasonPairs.map((row) => `${row.apiCompetitionId}::${row.season}`)
+  );
+
   console.log(`Active groups: ${summary.activeCompetitionGroups}`);
   console.log(`Mapped API competitions: ${summary.mappedApiCompetitions}`);
   console.log(`Mode: ${options.dryRun ? 'dry-run' : 'execute'}`);
   console.log(`Requested seasons: ${options.seasons.join(', ')}`);
+  console.log(`Refresh existing season data: ${options.refreshExisting ? 'yes' : 'no'}`);
+  console.log(`Refresh league metadata: ${options.refreshMetadata ? 'yes' : 'no'}`);
   if (options.limit) console.log(`Limit: ${options.limit}`);
   if (options.dryRun) {
     console.log('Dry run mode enabled. Use --execute to perform API fetch + database writes.');
@@ -173,39 +208,59 @@ async function run() {
 
     if (options.dryRun) continue;
 
+    const seasonsToFetch = options.seasons.filter((year) => {
+      if (options.refreshExisting) return true;
+      const seasonLabel = `${year}/${year + 1}`;
+      const alreadySeeded = seededPairSet.has(`${competition.id}::${seasonLabel}`);
+      if (alreadySeeded) {
+        summary.seasonsSkippedAlreadySeeded += 1;
+        return false;
+      }
+      return true;
+    });
+
+    if (seasonsToFetch.length === 0) {
+      summary.competitionsSkippedAlreadySeeded += 1;
+      if (!options.refreshMetadata) continue;
+    }
+
     let availableYears: Set<number> | null = null;
     let inferredIsFemale = competition.isFemale === true;
 
-    try {
-      const leagueMetaResponse = await fetchFromApi(`/leagues?id=${competition.id}`) as ApiLeague[];
-      const leagueMeta = leagueMetaResponse[0];
+    const shouldFetchLeagueMeta = options.refreshMetadata || seasonsToFetch.length > 0;
+    if (shouldFetchLeagueMeta) {
+      summary.leagueMetadataCalls += 1;
+      try {
+        const leagueMetaResponse = await fetchFromApi(`/leagues?id=${competition.id}`) as ApiLeague[];
+        const leagueMeta = leagueMetaResponse[0];
 
-      if (!leagueMeta) {
+        if (!leagueMeta) {
+          summary.missingLeagueMetadata += 1;
+        } else {
+          availableYears = new Set(
+            leagueMeta.seasons
+              .map((season: ApiLeagueSeason) => Number(season.year))
+              .filter((year) => Number.isInteger(year))
+          );
+
+          inferredIsFemale = isWomenCompetitionName(leagueMeta.league.name) || competition.isFemale === true;
+
+          await prisma.apiCompetition.update({
+            where: { id: competition.id },
+            data: {
+              name: leagueMeta.league.name,
+              logoUrl: leagueMeta.league.logo,
+              countryCode: leagueMeta.country.code ?? competition.countryCode,
+              isFemale: inferredIsFemale,
+            },
+          });
+        }
+      } catch {
         summary.missingLeagueMetadata += 1;
-      } else {
-        availableYears = new Set(
-          leagueMeta.seasons
-            .map((season: ApiLeagueSeason) => Number(season.year))
-            .filter((year) => Number.isInteger(year))
-        );
-
-        inferredIsFemale = isWomenCompetitionName(leagueMeta.league.name) || competition.isFemale === true;
-
-        await prisma.apiCompetition.update({
-          where: { id: competition.id },
-          data: {
-            name: leagueMeta.league.name,
-            logoUrl: leagueMeta.league.logo,
-            countryCode: leagueMeta.country.code ?? competition.countryCode,
-            isFemale: inferredIsFemale,
-          },
-        });
       }
-    } catch {
-      summary.missingLeagueMetadata += 1;
     }
 
-    for (const year of options.seasons) {
+    for (const year of seasonsToFetch) {
       if (availableYears && !availableYears.has(year)) {
         summary.seasonsSkippedUnavailable += 1;
         continue;
@@ -286,6 +341,7 @@ async function run() {
         skipDuplicates: true,
       });
       summary.teamSeasonsInserted += createManyResult.count;
+      seededPairSet.add(`${competition.id}::${seasonLabel}`);
     }
 
     if (summary.processedApiCompetitions % 20 === 0) {
@@ -303,7 +359,10 @@ async function run() {
   console.log(`- Seasons requested: ${summary.seasonsRequested.join(', ')}`);
   console.log(`- Seasons processed: ${summary.seasonsProcessed}`);
   console.log(`- Seasons skipped (unavailable): ${summary.seasonsSkippedUnavailable}`);
+  console.log(`- Seasons skipped (already seeded): ${summary.seasonsSkippedAlreadySeeded}`);
   console.log(`- Season API errors: ${summary.seasonApiErrors}`);
+  console.log(`- League metadata API calls: ${summary.leagueMetadataCalls}`);
+  console.log(`- Competitions fully skipped (already seeded): ${summary.competitionsSkippedAlreadySeeded}`);
   console.log(`- Teams fetched: ${summary.teamsFetched}`);
   console.log(`- Teams created: ${summary.teamsCreated}`);
   console.log(`- Teams updated: ${summary.teamsUpdated}`);
