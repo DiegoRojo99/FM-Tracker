@@ -28,12 +28,17 @@ Scope covered by unified snapshot:
 Output file:
 - scripts/data/competitions-unified-snapshot.json
 
-## 2) Prod: apply exactly what was exported
+## 2) Prod: run Prisma changes, then apply data snapshot
 
-1. Copy scripts/data/competitions-unified-snapshot.json to prod workspace.
-2. Preview changes.
+1. Deploy code that contains your Prisma migrations and scripts.
+2. Run Prisma migrations on prod DB.
+   npx prisma migrate deploy
+3. Regenerate Prisma client on prod runtime/build environment.
+   npx prisma generate
+4. Copy scripts/data/competitions-unified-snapshot.json to prod workspace.
+5. Preview data changes.
    npm run competitions:apply-unified:dry-run
-3. Apply changes.
+6. Apply data changes.
    npm run competitions:apply-unified
 
 ## 3) Recommended verification after prod apply
@@ -44,6 +49,9 @@ Output file:
    /admin/competitions/api
 3. Check group settings in Admin UI:
    /admin/competitions/tiers
+
+Note:
+- If there are no new migration files, `npx prisma migrate deploy` will complete without applying changes.
 
 ## Tiers
 
