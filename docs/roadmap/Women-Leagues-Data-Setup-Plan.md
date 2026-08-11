@@ -45,16 +45,16 @@ Build a reliable women leagues and teams data pipeline for FM26 and FM27 without
   - [x] Unknown gender rows remaining
 
 ## Phase 3 - Gender Attribution Rules
-- [ ] Define deterministic attribution order:
-  - [ ] Source flag from API if available
-  - [ ] Controlled name pattern fallback for competition
-  - [ ] Participation-based inference from `TeamSeason`
-- [ ] Implement `ApiCompetition.isFemale` assignment.
-- [ ] Implement `CompetitionGroup.isFemale` rollup from mapped competitions:
-  - [ ] `true` if all mapped are female
-  - [ ] `false` if all mapped are non-female
-  - [ ] `null` if mixed/unknown
-- [ ] Implement `Team.isFemale` assignment/backfill logic.
+- [x] Define deterministic attribution order:
+  - [x] Source flag from API if available
+  - [x] Controlled name pattern fallback for competition
+  - [x] Participation-based inference from `TeamSeason`
+- [x] Implement `ApiCompetition.isFemale` assignment.
+- [x] Implement `CompetitionGroup.isFemale` rollup from mapped competitions:
+  - [x] `true` if all mapped are female
+  - [x] `false` if all mapped are non-female
+  - [x] `null` if mixed/unknown
+- [x] Implement `Team.isFemale` assignment/backfill logic.
 
 ## Phase 4 - Backfill Existing Data
 - [ ] Backfill `ApiCompetition.isFemale` where null.

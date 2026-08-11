@@ -22,6 +22,10 @@
     "women-leagues:seed-active": "tsx scripts/data/seed-active-competitions-and-teams.ts",
     "women-leagues:seed-active:execute": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute",
     "women-leagues:seed-active:execute:fm26-fm27": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --seasons=2025,2026",
+    "women-leagues:seed-target": "tsx scripts/data/seed-active-competitions-and-teams.ts",
+    "women-leagues:seed-target:execute": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute",
+    "women-leagues:backfill-gender": "tsx scripts/data/backfill-gender-attribution.ts",
+    "women-leagues:backfill-gender:execute": "tsx scripts/data/backfill-gender-attribution.ts --execute",
     "competitions:normalise-types": "tsx scripts/data/normalise-competition-types.ts"
   },
   "dependencies": {

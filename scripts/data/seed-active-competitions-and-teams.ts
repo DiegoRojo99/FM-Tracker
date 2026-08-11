@@ -10,6 +10,7 @@ type ScriptOptions = {
   limit?: number;
   refreshExisting: boolean;
   refreshMetadata: boolean;
+  competitionIds?: number[];
 };
 
 type Summary = {
@@ -35,6 +36,56 @@ type Summary = {
 function parseArgs(): ScriptOptions {
   const args = process.argv.slice(2);
   const argText = args.join(' ');
+
+  const collectOptionValues = (names: string[]): string[] => {
+    const values: string[] = [];
+
+    for (let i = 0; i < args.length; i += 1) {
+      const arg = args[i];
+
+      let matchedInline = false;
+      for (const name of names) {
+        const inlinePrefix = `--${name}=`;
+        if (arg.startsWith(inlinePrefix)) {
+          values.push(arg.slice(inlinePrefix.length));
+          matchedInline = true;
+          break;
+        }
+      }
+
+      if (matchedInline) {
+        let j = i + 1;
+        while (j < args.length && !args[j].startsWith('--')) {
+          values.push(args[j]);
+          j += 1;
+        }
+        i = j - 1;
+        continue;
+      }
+
+      const matchedFlag = names.some((name) => arg === `--${name}`);
+      if (!matchedFlag) continue;
+
+      let j = i + 1;
+      while (j < args.length && !args[j].startsWith('--')) {
+        values.push(args[j]);
+        j += 1;
+      }
+      i = j - 1;
+    }
+
+    return values;
+  };
+
+  const parseNumberList = (rawValues: string[] | undefined, minValue: number): number[] => {
+    if (!rawValues || rawValues.length === 0) return [];
+
+    return rawValues
+      .flatMap((value) => value.split(','))
+      .map((part) => Number(part.trim()))
+      .filter((n) => Number.isInteger(n) && n >= minValue);
+  };
+
   const executeFromArgs = /(^|\s)--execute(\s|$)/.test(argText);
   const executeFromEnv = process.env.SEED_EXECUTE === '1' || process.env.npm_config_execute === 'true' || process.env.npm_config_execute === '1';
   const execute = executeFromArgs || executeFromEnv;
@@ -48,21 +99,30 @@ function parseArgs(): ScriptOptions {
     || process.env.npm_config_refresh_metadata === 'true'
     || process.env.npm_config_refresh_metadata === '1';
 
-  const seasonsMatch = argText.match(/--seasons=([^\s]+)/);
-  const seasonsSource = seasonsMatch?.[1] ?? process.env.SEED_SEASONS ?? process.env.npm_config_seasons;
-  const seasons = seasonsSource
-    ? seasonsSource
-        .split(',')
-        .map((part) => Number(part.trim()))
-        .filter((n) => Number.isInteger(n) && n > 2000)
-    : [2025, 2026];
+  const seasonsRawFromArgs = collectOptionValues(['seasons']);
+  const seasonsRawFromEnv = [process.env.SEED_SEASONS ?? process.env.npm_config_seasons].filter((value): value is string => Boolean(value));
+  const parsedSeasons = parseNumberList(
+    seasonsRawFromArgs.length > 0 ? seasonsRawFromArgs : seasonsRawFromEnv,
+    2001
+  );
+  const seasons = parsedSeasons.length > 0 ? parsedSeasons : [2025, 2026];
 
   const limitMatch = argText.match(/--limit=(\d+)/);
   const limitRaw = limitMatch?.[1] ?? process.env.SEED_LIMIT ?? process.env.npm_config_limit;
   const limitValue = limitRaw ? Number(limitRaw) : undefined;
   const limit = Number.isInteger(limitValue) && (limitValue as number) > 0 ? (limitValue as number) : undefined;
 
-  return { dryRun, seasons, limit, refreshExisting, refreshMetadata };
+  const competitionIdsRawFromArgs = collectOptionValues(['competition-ids', 'competition-id']);
+  const competitionIdsRawFromEnv = [process.env.SEED_COMPETITION_IDS ?? process.env.npm_config_competition_ids].filter((value): value is string => Boolean(value));
+  const competitionIds = parseNumberList(
+    competitionIdsRawFromArgs.length > 0 ? competitionIdsRawFromArgs : competitionIdsRawFromEnv,
+    1
+  );
+  const normalizedCompetitionIds = competitionIds && competitionIds.length > 0
+    ? competitionIds
+    : undefined;
+
+  return { dryRun, seasons, limit, refreshExisting, refreshMetadata, competitionIds: normalizedCompetitionIds };
 }
 
 function normalizeCountryKey(input: string | null | undefined): string {
@@ -171,9 +231,19 @@ async function run() {
   const mappedCompetitions = Array.from(competitionMap.values());
   summary.mappedApiCompetitions = mappedCompetitions.length;
 
-  const competitionsToProcess = options.limit
-    ? mappedCompetitions.slice(0, options.limit)
+  const scopedCompetitions = options.competitionIds && options.competitionIds.length > 0
+    ? mappedCompetitions.filter((competition) => options.competitionIds?.includes(competition.id))
     : mappedCompetitions;
+
+  if (options.competitionIds && options.competitionIds.length > 0 && scopedCompetitions.length === 0) {
+    throw new Error(
+      `No mapped active competitions matched --competition-ids=${options.competitionIds.join(',')}`
+    );
+  }
+
+  const competitionsToProcess = options.limit
+    ? scopedCompetitions.slice(0, options.limit)
+    : scopedCompetitions;
 
   const seasonLabels = options.seasons.map((year) => `${year}/${year + 1}`);
   const competitionIds = competitionsToProcess.map((competition) => competition.id);
@@ -198,6 +268,10 @@ async function run() {
   console.log(`Requested seasons: ${options.seasons.join(', ')}`);
   console.log(`Refresh existing season data: ${options.refreshExisting ? 'yes' : 'no'}`);
   console.log(`Refresh league metadata: ${options.refreshMetadata ? 'yes' : 'no'}`);
+  if (options.competitionIds && options.competitionIds.length > 0) {
+    console.log(`Target competition IDs: ${options.competitionIds.join(', ')}`);
+    console.log(`Matched target competitions: ${scopedCompetitions.length}`);
+  }
   if (options.limit) console.log(`Limit: ${options.limit}`);
   if (options.dryRun) {
     console.log('Dry run mode enabled. Use --execute to perform API fetch + database writes.');
