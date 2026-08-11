@@ -63,7 +63,7 @@ function normalizeCountryKey(input: string | null | undefined): string {
 
 function isWomenCompetitionName(name: string | null | undefined): boolean {
   if (!name) return false;
-  return /women|femenino|feminine|féminin|feminina|ladies|femminile/i.test(name);
+  return /women|womens|wsl|femenino|femenina|femenil|feminine|féminin|femminile|ladies|frauen|damen|damallsvenskan|f\.?league\s*women/i.test(name);
 }
 
 async function run() {
