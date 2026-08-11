@@ -89,27 +89,5 @@ export async function fetchTeamsByLeague(leagueId: number, gameId?: string | nul
     if (anySeasonTeams.length > 0) return anySeasonTeams;
   }
 
-  // Last-resort fallback when competition-to-team mappings are incomplete.
-  const competitionGroup = await prisma.competitionGroup.findUnique({
-    where: { id: leagueId },
-    select: { countryCode: true, name: true, displayName: true },
-  });
-
-  if (!competitionGroup) return [];
-
-  const isWomenLeague =
-    isWomenCompetitionName(competitionGroup.name) ||
-    isWomenCompetitionName(competitionGroup.displayName);
-
-  return prisma.team.findMany({
-    where: {
-      countryCode: competitionGroup.countryCode,
-      national: false,
-      ...(isWomenLeague
-        ? { isFemale: true }
-        : { isFemale: { not: true } }),
-    },
-    orderBy: { name: 'asc' },
-    take: 200,
-  });
+  return [];
 }

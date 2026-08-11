@@ -10,7 +10,7 @@ type ScriptOptions = {
   limit?: number;
   refreshExisting: boolean;
   refreshMetadata: boolean;
-  competitionIds?: number[];
+  onlyFemaleGroups: boolean;
 };
 
 type Summary = {
@@ -98,6 +98,10 @@ function parseArgs(): ScriptOptions {
     || process.env.SEED_REFRESH_METADATA === '1'
     || process.env.npm_config_refresh_metadata === 'true'
     || process.env.npm_config_refresh_metadata === '1';
+  const onlyFemaleGroups = /(^|\s)--only-female-groups(\s|$)/.test(argText)
+    || process.env.SEED_ONLY_FEMALE_GROUPS === '1'
+    || process.env.npm_config_only_female_groups === 'true'
+    || process.env.npm_config_only_female_groups === '1';
 
   const seasonsRawFromArgs = collectOptionValues(['seasons']);
   const seasonsRawFromEnv = [process.env.SEED_SEASONS ?? process.env.npm_config_seasons].filter((value): value is string => Boolean(value));
@@ -112,17 +116,14 @@ function parseArgs(): ScriptOptions {
   const limitValue = limitRaw ? Number(limitRaw) : undefined;
   const limit = Number.isInteger(limitValue) && (limitValue as number) > 0 ? (limitValue as number) : undefined;
 
-  const competitionIdsRawFromArgs = collectOptionValues(['competition-ids', 'competition-id']);
-  const competitionIdsRawFromEnv = [process.env.SEED_COMPETITION_IDS ?? process.env.npm_config_competition_ids].filter((value): value is string => Boolean(value));
-  const competitionIds = parseNumberList(
-    competitionIdsRawFromArgs.length > 0 ? competitionIdsRawFromArgs : competitionIdsRawFromEnv,
-    1
-  );
-  const normalizedCompetitionIds = competitionIds && competitionIds.length > 0
-    ? competitionIds
-    : undefined;
-
-  return { dryRun, seasons, limit, refreshExisting, refreshMetadata, competitionIds: normalizedCompetitionIds };
+  return {
+    dryRun,
+    seasons,
+    limit,
+    refreshExisting,
+    refreshMetadata,
+    onlyFemaleGroups,
+  };
 }
 
 function normalizeCountryKey(input: string | null | undefined): string {
@@ -169,11 +170,16 @@ async function run() {
 
   const [activeGroups, countries] = await Promise.all([
     prisma.competitionGroup.findMany({
-      where: { isActive: true },
+      where: {
+        isActive: true,
+        type: 'DOMESTIC_LEAGUE',
+      },
       select: {
         id: true,
         name: true,
         countryCode: true,
+        type: true,
+        isFemale: true,
         apiCompetitions: {
           select: {
             apiCompetitionId: true,
@@ -210,6 +216,7 @@ async function run() {
     countryCode: string;
     type: string;
     isFemale: boolean | null;
+    sourceFemaleFromGroups: boolean;
     logoUrl: string | null;
   }>();
 
@@ -217,12 +224,15 @@ async function run() {
     for (const mapping of group.apiCompetitions) {
       const apiCompetition = mapping.apiCompetition;
       if (!apiCompetition) continue;
+      const sourceFemaleFromGroups = group.isFemale === true;
+      const existing = competitionMap.get(apiCompetition.id);
       competitionMap.set(apiCompetition.id, {
         id: apiCompetition.id,
         name: apiCompetition.name,
         countryCode: apiCompetition.countryCode,
         type: apiCompetition.type,
         isFemale: apiCompetition.isFemale,
+        sourceFemaleFromGroups: sourceFemaleFromGroups || existing?.sourceFemaleFromGroups === true,
         logoUrl: apiCompetition.logoUrl,
       });
     }
@@ -231,15 +241,9 @@ async function run() {
   const mappedCompetitions = Array.from(competitionMap.values());
   summary.mappedApiCompetitions = mappedCompetitions.length;
 
-  const scopedCompetitions = options.competitionIds && options.competitionIds.length > 0
-    ? mappedCompetitions.filter((competition) => options.competitionIds?.includes(competition.id))
+  const scopedCompetitions = options.onlyFemaleGroups
+    ? mappedCompetitions.filter((competition) => competition.sourceFemaleFromGroups)
     : mappedCompetitions;
-
-  if (options.competitionIds && options.competitionIds.length > 0 && scopedCompetitions.length === 0) {
-    throw new Error(
-      `No mapped active competitions matched --competition-ids=${options.competitionIds.join(',')}`
-    );
-  }
 
   const competitionsToProcess = options.limit
     ? scopedCompetitions.slice(0, options.limit)
@@ -268,10 +272,7 @@ async function run() {
   console.log(`Requested seasons: ${options.seasons.join(', ')}`);
   console.log(`Refresh existing season data: ${options.refreshExisting ? 'yes' : 'no'}`);
   console.log(`Refresh league metadata: ${options.refreshMetadata ? 'yes' : 'no'}`);
-  if (options.competitionIds && options.competitionIds.length > 0) {
-    console.log(`Target competition IDs: ${options.competitionIds.join(', ')}`);
-    console.log(`Matched target competitions: ${scopedCompetitions.length}`);
-  }
+  if (options.onlyFemaleGroups) console.log('Filter: only competitions mapped from active groups with isFemale=true');
   if (options.limit) console.log(`Limit: ${options.limit}`);
   if (options.dryRun) {
     console.log('Dry run mode enabled. Use --execute to perform API fetch + database writes.');
