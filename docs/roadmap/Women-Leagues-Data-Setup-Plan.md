@@ -5,15 +5,15 @@ Build a reliable women leagues and teams data pipeline for FM26 and FM27 without
 
 ## Phase 0 - Scope Lock and Baseline
 - [ ] Confirm final scope: only currently active FM leagues are in-scope.
-- [ ] Export baseline counts from DB:
-  - [ ] Total teams
-  - [ ] Teams with `isFemale = true`
-  - [ ] Teams with `isFemale = false`
-  - [ ] Teams with `isFemale IS NULL`
-- [ ] Export baseline counts for competitions:
-  - [ ] Active `CompetitionGroup` count
-  - [ ] Existing `CompetitionGroupApiCompetition` links
-- [ ] Freeze a snapshot of active league IDs for this project cycle.
+- [x] Export baseline counts from DB:
+  - [x] Total teams
+  - [x] Teams with `isFemale = true`
+  - [x] Teams with `isFemale = false`
+  - [x] Teams with `isFemale IS NULL`
+- [x] Export baseline counts for competitions:
+  - [x] Active `CompetitionGroup` count
+  - [x] Existing `CompetitionGroupApiCompetition` links
+- [x] Freeze a snapshot of active league IDs for this project cycle.
 
 ## Phase 1 - Schema Upgrade
 - [ ] Update Prisma schema:

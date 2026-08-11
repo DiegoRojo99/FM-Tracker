@@ -1,0 +1,1777 @@
+{
+  "generatedAt": "2026-08-11T10:35:17.603Z",
+  "count": 253,
+  "leagues": [
+    {
+      "id": 197,
+      "name": "League Cup",
+      "countryCode": "AE",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 196,
+      "name": "Pro League",
+      "countryCode": "AE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 88,
+      "name": "Liga Profesional Argentina",
+      "countryCode": "AR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 89,
+      "name": "Primera Nacional",
+      "countryCode": "AR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 503,
+      "name": "Copa de la Liga Profesional",
+      "countryCode": "AR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": null
+    },
+    {
+      "id": 148,
+      "name": "Cup",
+      "countryCode": "AT",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 146,
+      "name": "Bundesliga",
+      "countryCode": "AT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 147,
+      "name": "2. Liga",
+      "countryCode": "AT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 443,
+      "name": "Australia Cup",
+      "countryCode": "AU",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 126,
+      "name": "A-League",
+      "countryCode": "AU",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 127,
+      "name": "A-League Women",
+      "countryCode": "AU",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 104,
+      "name": "Jupiler Pro League",
+      "countryCode": "BE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 105,
+      "name": "Challenger Pro League",
+      "countryCode": "BE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 273,
+      "name": "First Amateur Division",
+      "countryCode": "BE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 290,
+      "name": "Super Cup",
+      "countryCode": "BE",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 118,
+      "name": "Cup",
+      "countryCode": "BG",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 116,
+      "name": "First League",
+      "countryCode": "BG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 117,
+      "name": "Second League",
+      "countryCode": "BG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 46,
+      "name": "Copa Do Brasil",
+      "countryCode": "BR",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 44,
+      "name": "Serie A",
+      "countryCode": "BR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 45,
+      "name": "Serie B",
+      "countryCode": "BR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 48,
+      "name": "Serie C",
+      "countryCode": "BR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 272,
+      "name": "Coppa",
+      "countryCode": "BY",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 81,
+      "name": "Premier League",
+      "countryCode": "BY",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 82,
+      "name": "1. Division",
+      "countryCode": "BY",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 268,
+      "name": "Canadian Premier League",
+      "countryCode": "CA",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 142,
+      "name": "Schweizer Cup",
+      "countryCode": "CH",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 140,
+      "name": "Super League",
+      "countryCode": "CH",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 141,
+      "name": "Challenge League",
+      "countryCode": "CH",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 173,
+      "name": "Copa Chile",
+      "countryCode": "CL",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 171,
+      "name": "Primera División",
+      "countryCode": "CL",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 172,
+      "name": "Primera B",
+      "countryCode": "CL",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 115,
+      "name": "FA Cup",
+      "countryCode": "CN",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 113,
+      "name": "Super League",
+      "countryCode": "CN",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 114,
+      "name": "League One",
+      "countryCode": "CN",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 155,
+      "name": "Copa Colombia",
+      "countryCode": "CO",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 153,
+      "name": "Primera A",
+      "countryCode": "CO",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 154,
+      "name": "Primera B",
+      "countryCode": "CO",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 205,
+      "name": "Cup",
+      "countryCode": "CZ",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 203,
+      "name": "Czech Liga",
+      "countryCode": "CZ",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 204,
+      "name": "FNL",
+      "countryCode": "CZ",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 54,
+      "name": "DFB Pokal",
+      "countryCode": "DE",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 479,
+      "name": "DFB Pokal - Women",
+      "countryCode": "DE",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 51,
+      "name": "Bundesliga",
+      "countryCode": "DE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 55,
+      "name": "Frauen Bundesliga",
+      "countryCode": "DE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 52,
+      "name": "2. Bundesliga",
+      "countryCode": "DE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 53,
+      "name": "3. Liga",
+      "countryCode": "DE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 298,
+      "name": "Super Cup",
+      "countryCode": "DE",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 86,
+      "name": "DBU Pokalen",
+      "countryCode": "DK",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 359,
+      "name": "Kvindeliga",
+      "countryCode": "DK",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 84,
+      "name": "Superliga",
+      "countryCode": "DK",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 85,
+      "name": "1. Division",
+      "countryCode": "DK",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 87,
+      "name": "2. Division",
+      "countryCode": "DK",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 439,
+      "name": "3. Division",
+      "countryCode": "DK",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 149,
+      "name": "Premier League",
+      "countryCode": "EG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 305,
+      "name": "Super Cup",
+      "countryCode": "EG",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 103,
+      "name": "Copa del Rey",
+      "countryCode": "ES",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 398,
+      "name": "Copa Federacion",
+      "countryCode": "ES",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 100,
+      "name": "La Liga",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 101,
+      "name": "Segunda División",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 232,
+      "name": "Primera División RFEF - Group 1",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 233,
+      "name": "Primera División RFEF - Group 2",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 561,
+      "name": "Primera RFEF",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 444,
+      "name": "Segunda División RFEF - Group 1",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 445,
+      "name": "Segunda División RFEF - Group 2",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 446,
+      "name": "Segunda División RFEF - Group 3",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 447,
+      "name": "Segunda División RFEF - Group 4",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 448,
+      "name": "Segunda División RFEF - Group 5",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 566,
+      "name": "Segunda RFEF",
+      "countryCode": "ES",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 321,
+      "name": "Super Cup",
+      "countryCode": "ES",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 158,
+      "name": "Suomen Cup",
+      "countryCode": "FI",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 156,
+      "name": "Veikkausliiga",
+      "countryCode": "FI",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 157,
+      "name": "Ykkönen",
+      "countryCode": "FI",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 39,
+      "name": "Coupe de France",
+      "countryCode": "FR",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 35,
+      "name": "Ligue 1",
+      "countryCode": "FR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 36,
+      "name": "Ligue 2",
+      "countryCode": "FR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 37,
+      "name": "National 1",
+      "countryCode": "FR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 295,
+      "name": "Trophée des Champions",
+      "countryCode": "FR",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 30,
+      "name": "EFL Trophy",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 29,
+      "name": "FA Cup",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 31,
+      "name": "FA Trophy",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 32,
+      "name": "League Cup",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 28,
+      "name": "FA WSL",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 23,
+      "name": "Premier League",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 24,
+      "name": "Championship",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 382,
+      "name": "Women's Championship",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 25,
+      "name": "League One",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 26,
+      "name": "League Two",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 27,
+      "name": "National League",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 5
+    },
+    {
+      "id": 33,
+      "name": "National League - North",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 6
+    },
+    {
+      "id": 34,
+      "name": "National League - South",
+      "countryCode": "GB-ENG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 6
+    },
+    {
+      "id": 297,
+      "name": "Community Shield",
+      "countryCode": "GB-ENG",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 222,
+      "name": "Premiership",
+      "countryCode": "GB-NIR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 221,
+      "name": "Championship",
+      "countryCode": "GB-NIR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 324,
+      "name": "Premier Intermediate League",
+      "countryCode": "GB-NIR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 121,
+      "name": "FA Cup",
+      "countryCode": "GB-SCT",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 125,
+      "name": "League Cup",
+      "countryCode": "GB-SCT",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 119,
+      "name": "Premiership",
+      "countryCode": "GB-SCT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 120,
+      "name": "Championship",
+      "countryCode": "GB-SCT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 123,
+      "name": "League One",
+      "countryCode": "GB-SCT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 124,
+      "name": "League Two",
+      "countryCode": "GB-SCT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 77,
+      "name": "Welsh Cup",
+      "countryCode": "GB-WLS",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 75,
+      "name": "Premier League",
+      "countryCode": "GB-WLS",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 76,
+      "name": "FAW Championship",
+      "countryCode": "GB-WLS",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 427,
+      "name": "Rock Cup",
+      "countryCode": "GI",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 406,
+      "name": "Premier Division",
+      "countryCode": "GI",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 509,
+      "name": "Super Cup",
+      "countryCode": "GI",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 135,
+      "name": "Cup",
+      "countryCode": "GR",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 134,
+      "name": "Super League 1",
+      "countryCode": "GR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 278,
+      "name": "Super League 2",
+      "countryCode": "GR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 309,
+      "name": "FA Cup",
+      "countryCode": "HK",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 215,
+      "name": "Premier League",
+      "countryCode": "HK",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 145,
+      "name": "Cup",
+      "countryCode": "HR",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 143,
+      "name": "HNL",
+      "countryCode": "HR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 144,
+      "name": "First NL",
+      "countryCode": "HR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 498,
+      "name": "Super Cup",
+      "countryCode": "HR",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 179,
+      "name": "Magyar Kupa",
+      "countryCode": "HU",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 177,
+      "name": "NB I",
+      "countryCode": "HU",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 178,
+      "name": "NB II",
+      "countryCode": "HU",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 470,
+      "name": "Piala Presiden",
+      "countryCode": "ID",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 180,
+      "name": "Liga 1",
+      "countryCode": "ID",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 181,
+      "name": "Liga 2",
+      "countryCode": "ID",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 208,
+      "name": "FAI Cup",
+      "countryCode": "IE",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 206,
+      "name": "Premier Division",
+      "countryCode": "IE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 207,
+      "name": "First Division",
+      "countryCode": "IE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 219,
+      "name": "State Cup",
+      "countryCode": "IL",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 218,
+      "name": "Ligat Ha'al",
+      "countryCode": "IL",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 217,
+      "name": "Liga Leumit",
+      "countryCode": "IL",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 199,
+      "name": "Indian Super League",
+      "countryCode": "IN",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 111,
+      "name": "Cup",
+      "countryCode": "IS",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 108,
+      "name": "Úrvalsdeild",
+      "countryCode": "IS",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 109,
+      "name": "1. Deild",
+      "countryCode": "IS",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 97,
+      "name": "Coppa Italia",
+      "countryCode": "IT",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 545,
+      "name": "Coppa Italia Women",
+      "countryCode": "IT",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 95,
+      "name": "Serie A",
+      "countryCode": "IT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 99,
+      "name": "Serie A Women",
+      "countryCode": "IT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 96,
+      "name": "Serie B",
+      "countryCode": "IT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 560,
+      "name": "Serie C",
+      "countryCode": "IT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 98,
+      "name": "Serie C - Girone A",
+      "countryCode": "IT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 476,
+      "name": "Serie C - Girone B",
+      "countryCode": "IT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 477,
+      "name": "Serie C - Girone C",
+      "countryCode": "IT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 312,
+      "name": "Super Cup",
+      "countryCode": "IT",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 68,
+      "name": "Emperor Cup",
+      "countryCode": "JP",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 64,
+      "name": "J1 League",
+      "countryCode": "JP",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 433,
+      "name": "WE League",
+      "countryCode": "JP",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 65,
+      "name": "J2 League",
+      "countryCode": "JP",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 66,
+      "name": "J3 League",
+      "countryCode": "JP",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 194,
+      "name": "FA Cup",
+      "countryCode": "KR",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 192,
+      "name": "K League 1",
+      "countryCode": "KR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 372,
+      "name": "WK-League",
+      "countryCode": "KR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 193,
+      "name": "K League 2",
+      "countryCode": "KR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 370,
+      "name": "Cup",
+      "countryCode": "LV",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 210,
+      "name": "Virsliga",
+      "countryCode": "LV",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 435,
+      "name": "Campeón de Campeones",
+      "countryCode": "MX",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 169,
+      "name": "Liga MX",
+      "countryCode": "MX",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 170,
+      "name": "Liga de Expansión MX",
+      "countryCode": "MX",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 281,
+      "name": "Malaysia Cup",
+      "countryCode": "MY",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 182,
+      "name": "Super League",
+      "countryCode": "MY",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 58,
+      "name": "KNVB Beker",
+      "countryCode": "NL",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 56,
+      "name": "Eredivisie",
+      "countryCode": "NL",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 57,
+      "name": "Eerste Divisie",
+      "countryCode": "NL",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 308,
+      "name": "Super Cup",
+      "countryCode": "NL",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 71,
+      "name": "NM Cupen",
+      "countryCode": "NO",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 69,
+      "name": "Eliteserien",
+      "countryCode": "NO",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 392,
+      "name": "Toppserien",
+      "countryCode": "NO",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 70,
+      "name": "1. Division",
+      "countryCode": "NO",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 563,
+      "name": "2. Division",
+      "countryCode": "NO",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 266,
+      "name": "2. Division - Group 1",
+      "countryCode": "NO",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": null
+    },
+    {
+      "id": 267,
+      "name": "2. Division - Group 2",
+      "countryCode": "NO",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": null
+    },
+    {
+      "id": 283,
+      "name": "Copa Perú",
+      "countryCode": "PE",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 183,
+      "name": "Primera División",
+      "countryCode": "PE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 74,
+      "name": "Cup",
+      "countryCode": "PL",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 72,
+      "name": "Ekstraklasa",
+      "countryCode": "PL",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 73,
+      "name": "I Liga",
+      "countryCode": "PL",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 63,
+      "name": "Taça da Liga",
+      "countryCode": "PT",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 62,
+      "name": "Taça de Portugal",
+      "countryCode": "PT",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 60,
+      "name": "Primeira Liga",
+      "countryCode": "PT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 61,
+      "name": "Segunda Liga",
+      "countryCode": "PT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 440,
+      "name": "Liga 3",
+      "countryCode": "PT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 562,
+      "name": "Campeonato de Portugal Prio",
+      "countryCode": "PT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 252,
+      "name": "Campeonato de Portugal Prio - Group A",
+      "countryCode": "PT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 253,
+      "name": "Campeonato de Portugal Prio - Group B",
+      "countryCode": "PT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 254,
+      "name": "Campeonato de Portugal Prio - Group C",
+      "countryCode": "PT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 255,
+      "name": "Campeonato de Portugal Prio - Group D",
+      "countryCode": "PT",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 315,
+      "name": "Super Cup",
+      "countryCode": "PT",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 187,
+      "name": "Cupa României",
+      "countryCode": "RO",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 185,
+      "name": "Liga I",
+      "countryCode": "RO",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 186,
+      "name": "Liga II",
+      "countryCode": "RO",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 395,
+      "name": "Cup",
+      "countryCode": "RS",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 188,
+      "name": "Super Liga",
+      "countryCode": "RS",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 189,
+      "name": "Prva Liga",
+      "countryCode": "RS",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 152,
+      "name": "Cup",
+      "countryCode": "RU",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 150,
+      "name": "Premier League",
+      "countryCode": "RU",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 151,
+      "name": "First League",
+      "countryCode": "RU",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 373,
+      "name": "Super Cup",
+      "countryCode": "RU",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 80,
+      "name": "Svenska Cupen",
+      "countryCode": "SE",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 400,
+      "name": "Svenska Cupen - Women",
+      "countryCode": "SE",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 78,
+      "name": "Allsvenskan",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 314,
+      "name": "Damallsvenskan",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 399,
+      "name": "Elitettan",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 79,
+      "name": "Superettan",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 564,
+      "name": "Ettan",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 326,
+      "name": "Ettan - Norra",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 327,
+      "name": "Ettan - Södra",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 565,
+      "name": "Division 2",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 335,
+      "name": "Division 2 - Norra Götaland",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 336,
+      "name": "Division 2 - Norra Svealand",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 337,
+      "name": "Division 2 - Norrland",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 340,
+      "name": "Division 2 - Östra Götaland",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 338,
+      "name": "Division 2 - Södra Svealand",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 339,
+      "name": "Division 2 - Västra Götaland",
+      "countryCode": "SE",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 4
+    },
+    {
+      "id": 483,
+      "name": "Cup",
+      "countryCode": "SG",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 211,
+      "name": "Premier League",
+      "countryCode": "SG",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 214,
+      "name": "Cup",
+      "countryCode": "SI",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 212,
+      "name": "1. SNL",
+      "countryCode": "SI",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 213,
+      "name": "2. SNL",
+      "countryCode": "SI",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 379,
+      "name": "Cup",
+      "countryCode": "SK",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 202,
+      "name": "Super Liga",
+      "countryCode": "SK",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 284,
+      "name": "2. liga",
+      "countryCode": "SK",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 139,
+      "name": "Cup",
+      "countryCode": "TR",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 136,
+      "name": "Süper Lig",
+      "countryCode": "TR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 137,
+      "name": "1. Lig",
+      "countryCode": "TR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 138,
+      "name": "2. Lig",
+      "countryCode": "TR",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 3
+    },
+    {
+      "id": 316,
+      "name": "Super Cup",
+      "countryCode": "TR",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 162,
+      "name": "Major League Soccer",
+      "countryCode": "US",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 163,
+      "name": "NWSL Women",
+      "countryCode": "US",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 473,
+      "name": "Copa Uruguay",
+      "countryCode": "UY",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 174,
+      "name": "Primera División - Apertura",
+      "countryCode": "UY",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 176,
+      "name": "Primera División - Clausura",
+      "countryCode": "UY",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 175,
+      "name": "Segunda División",
+      "countryCode": "UY",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    },
+    {
+      "id": 12,
+      "name": "AFC Champions League",
+      "countryCode": "WOR",
+      "type": "CONTINENTAL_CLUB",
+      "tier": null
+    },
+    {
+      "id": 7,
+      "name": "CAF Champions League",
+      "countryCode": "WOR",
+      "type": "CONTINENTAL_CLUB",
+      "tier": null
+    },
+    {
+      "id": 11,
+      "name": "CONCACAF Champions League",
+      "countryCode": "WOR",
+      "type": "CONTINENTAL_CLUB",
+      "tier": null
+    },
+    {
+      "id": 8,
+      "name": "CONMEBOL Libertadores",
+      "countryCode": "WOR",
+      "type": "CONTINENTAL_CLUB",
+      "tier": null
+    },
+    {
+      "id": 6,
+      "name": "CONMEBOL Sudamericana",
+      "countryCode": "WOR",
+      "type": "CONTINENTAL_CLUB",
+      "tier": null
+    },
+    {
+      "id": 18,
+      "name": "OFC Champions League",
+      "countryCode": "WOR",
+      "type": "CONTINENTAL_CLUB",
+      "tier": null
+    },
+    {
+      "id": 1,
+      "name": "UEFA Champions League",
+      "countryCode": "WOR",
+      "type": "CONTINENTAL_CLUB",
+      "tier": null
+    },
+    {
+      "id": 294,
+      "name": "UEFA Champions League Women",
+      "countryCode": "WOR",
+      "type": "CONTINENTAL_CLUB",
+      "tier": null
+    },
+    {
+      "id": 431,
+      "name": "UEFA Europa Conference League",
+      "countryCode": "WOR",
+      "type": "CONTINENTAL_CLUB",
+      "tier": null
+    },
+    {
+      "id": 2,
+      "name": "UEFA Europa League",
+      "countryCode": "WOR",
+      "type": "CONTINENTAL_CLUB",
+      "tier": null
+    },
+    {
+      "id": 13,
+      "name": "AFC Cup",
+      "countryCode": "WOR",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 404,
+      "name": "UEFA Championship - Women",
+      "countryCode": "WOR",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 554,
+      "name": "UEFA Europa Cup - Women",
+      "countryCode": "WOR",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 3,
+      "name": "Africa Cup of Nations",
+      "countryCode": "WOR",
+      "type": "INTERNATIONAL_NT",
+      "tier": null
+    },
+    {
+      "id": 4,
+      "name": "Asian Cup",
+      "countryCode": "WOR",
+      "type": "INTERNATIONAL_NT",
+      "tier": null
+    },
+    {
+      "id": 15,
+      "name": "CONCACAF Gold Cup",
+      "countryCode": "WOR",
+      "type": "INTERNATIONAL_NT",
+      "tier": null
+    },
+    {
+      "id": 302,
+      "name": "CONCACAF Nations League",
+      "countryCode": "WOR",
+      "type": "INTERNATIONAL_NT",
+      "tier": null
+    },
+    {
+      "id": 10,
+      "name": "FIFA Club World Cup",
+      "countryCode": "WOR",
+      "type": "INTERNATIONAL_NT",
+      "tier": null
+    },
+    {
+      "id": 508,
+      "name": "UEFA Nations League - Women",
+      "countryCode": "WOR",
+      "type": "INTERNATIONAL_NT",
+      "tier": null
+    },
+    {
+      "id": 299,
+      "name": "UEFA Super Cup",
+      "countryCode": "WOR",
+      "type": "SUPER_CUP",
+      "tier": null
+    },
+    {
+      "id": 285,
+      "name": "Cup",
+      "countryCode": "ZA",
+      "type": "DOMESTIC_CUP",
+      "tier": null
+    },
+    {
+      "id": 190,
+      "name": "Premier Soccer League",
+      "countryCode": "ZA",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 1
+    },
+    {
+      "id": 191,
+      "name": "1st Division",
+      "countryCode": "ZA",
+      "type": "DOMESTIC_LEAGUE",
+      "tier": 2
+    }
+  ]
+}
