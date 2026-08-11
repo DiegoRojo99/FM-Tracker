@@ -22,6 +22,8 @@ type Summary = {
   teamsFetched: number;
   teamsCreated: number;
   teamsUpdated: number;
+  teamsMarkedFemale: number;
+  teamsMarkedMale: number;
   teamSeasonsInserted: number;
 };
 
@@ -84,6 +86,8 @@ async function run() {
     teamsFetched: 0,
     teamsCreated: 0,
     teamsUpdated: 0,
+    teamsMarkedFemale: 0,
+    teamsMarkedMale: 0,
     teamSeasonsInserted: 0,
   };
 
@@ -193,7 +197,7 @@ async function run() {
             name: leagueMeta.league.name,
             logoUrl: leagueMeta.league.logo,
             countryCode: leagueMeta.country.code ?? competition.countryCode,
-            isFemale: inferredIsFemale ? true : competition.isFemale,
+            isFemale: inferredIsFemale,
           },
         });
       }
@@ -234,7 +238,13 @@ async function run() {
           countryCodeByKey.get(normalizeCountryKey(teamEntry.team.country)) ??
           competition.countryCode;
 
-        const createIsFemale = inferredIsFemale ? true : null;
+        const createIsFemale = inferredIsFemale ? true : false;
+
+        const updateGenderData = inferredIsFemale
+          ? { isFemale: true }
+          : existing?.isFemale === null
+            ? { isFemale: false }
+            : {};
 
         await prisma.team.upsert({
           where: { id: teamEntry.team.id },
@@ -255,12 +265,15 @@ async function run() {
             countryCode: resolvedCountryCode,
             lat: teamEntry.venue?.lat ?? null,
             lng: teamEntry.venue?.lng ?? null,
-            ...(inferredIsFemale ? { isFemale: true } : {}),
+            ...updateGenderData,
           },
         });
 
         if (existing) summary.teamsUpdated += 1;
         else summary.teamsCreated += 1;
+
+        if (createIsFemale) summary.teamsMarkedFemale += 1;
+        else if (!existing || existing.isFemale === null) summary.teamsMarkedMale += 1;
       }
 
       const seasonLabel = `${year}/${year + 1}`;
@@ -294,6 +307,8 @@ async function run() {
   console.log(`- Teams fetched: ${summary.teamsFetched}`);
   console.log(`- Teams created: ${summary.teamsCreated}`);
   console.log(`- Teams updated: ${summary.teamsUpdated}`);
+  console.log(`- Team gender marks (female): ${summary.teamsMarkedFemale}`);
+  console.log(`- Team gender marks (male/default): ${summary.teamsMarkedMale}`);
   console.log(`- TeamSeason rows inserted: ${summary.teamSeasonsInserted}`);
   console.log(`- Unknown team gender remaining: ${unknownGenderRemaining}`);
 
