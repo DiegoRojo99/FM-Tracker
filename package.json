@@ -18,6 +18,8 @@
     "competitions:infer-tiers": "tsx scripts/data/infer-competition-tiers.ts",
     "competitions:seed-tiers": "tsx scripts/data/seed-competition-tiers.ts",
     "competitions:export-tiers": "tsx scripts/data/export-competition-tiers.ts",
+    "competitions:export-settings": "tsx scripts/data/export-competition-settings.ts",
+    "competitions:apply-settings": "tsx scripts/data/apply-competition-settings.ts",
     "competitions:normalise-types": "tsx scripts/data/normalise-competition-types.ts"
   },
   "dependencies": {
