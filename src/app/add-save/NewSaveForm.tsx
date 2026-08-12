@@ -140,6 +140,20 @@ export default function NewSaveForm() {
     ? 'Start with a broad challenge path focused on your first appointment and survival milestones.'
     : 'Start with a challenge path focused on squad building and first-season stability goals.';
 
+  const sortedLeagues = [...leagues].sort((a, b) => {
+    const genderRankA = a.isFemale === true ? 1 : 0;
+    const genderRankB = b.isFemale === true ? 1 : 0;
+    if (genderRankA !== genderRankB) return genderRankA - genderRankB;
+
+    const tierA = a.tier ?? Number.MAX_SAFE_INTEGER;
+    const tierB = b.tier ?? Number.MAX_SAFE_INTEGER;
+    if (tierA !== tierB) return tierA - tierB;
+
+    return a.name.localeCompare(b.name);
+  });
+
+  const selectedLeagueDetails = leagues.find((league) => String(league.id) === selectedLeague) ?? null;
+
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-6 rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/86 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
@@ -267,8 +281,11 @@ export default function NewSaveForm() {
                       className={inputClass}
                     >
                       <option value="">-- Select a league --</option>
-                      {leagues.map((l) => (
-                        <option key={l.id} value={l.id}>{l.name}</option>
+                      {sortedLeagues.map((l) => (
+                        <option key={l.id} value={l.id}>
+                          {l.name}
+                          {l.isFemale === true ? ' (Women)' : ''}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -303,7 +320,7 @@ export default function NewSaveForm() {
                 {!isNoTeam && (
                   <>
                     <li>Country: <span className="font-semibold text-white">{selectedCountry || 'Not selected'}</span></li>
-                    <li>League: <span className="font-semibold text-white">{selectedLeague || 'Not selected'}</span></li>
+                    <li>League: <span className="font-semibold text-white">{selectedLeagueDetails?.name ?? 'Not selected'}</span></li>
                     <li>Team: <span className="font-semibold text-white">{selectedTeam || 'Not selected'}</span></li>
                   </>
                 )}
