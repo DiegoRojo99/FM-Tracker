@@ -72,10 +72,16 @@ Build a reliable women leagues and teams data pipeline for FM26 and FM27 without
   - [x] Teams unchanged: 3965
   - [x] Derived female/male/null: 126/2743/1110
   - [x] Conflicting signals: 0
-- [ ] Produce final unresolved audit lists after final seed run:
-  - [x] Teams still null (current: 1110)
+- [x] Produce final unresolved audit lists after final seed run:
+  - [x] Teams still null (current: 1060)
   - [x] Competition groups still null (current: 0)
   - [x] API competitions still null (current: 0)
+  - [x] Latest execute run snapshot captured:
+    - [x] Processed API competitions: 150
+    - [x] Seasons processed/skipped unavailable/skipped seeded: 9/7/284
+    - [x] Teams fetched/created/updated: 156/10/146
+    - [x] TeamSeason rows inserted: 156
+    - [x] Algolia competitions/teams upserted: 150/3989
 
 ## Phase 5 - Application Logic Cleanup
 - [x] Replace runtime heuristic filtering with explicit `CompetitionGroup.isFemale` filtering.

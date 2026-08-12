@@ -20,8 +20,12 @@
     "competitions:apply-unified": "tsx scripts/data/apply-competitions-unified.ts --preserve-api-isfemale-non-null",
     "teams:sync-gender:dry-run": "tsx scripts/data/sync-team-gender-from-competitions.ts",
     "teams:sync-gender": "tsx scripts/data/sync-team-gender-from-competitions.ts --execute",
+    "teams:seed-active": "tsx scripts/data/seed-active-competitions-and-teams.ts",
+    "teams:seed-active:execute": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute",
+    "teams:seed-active:execute:algolia": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --sync-algolia",
     "women-leagues:seed-active:female-groups": "tsx scripts/data/seed-active-competitions-and-teams.ts --only-female-groups",
-    "women-leagues:seed-active:female-groups:execute": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --only-female-groups"
+    "women-leagues:seed-active:female-groups:execute": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --only-female-groups",
+    "women-leagues:seed-active:female-groups:execute:algolia": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --only-female-groups --sync-algolia"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",

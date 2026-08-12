@@ -11,6 +11,7 @@ type ScriptOptions = {
   refreshExisting: boolean;
   refreshMetadata: boolean;
   onlyFemaleGroups: boolean;
+  syncAlgolia: boolean;
 };
 
 type Summary = {
@@ -31,6 +32,42 @@ type Summary = {
   teamsMarkedFemale: number;
   teamsMarkedMale: number;
   teamSeasonsInserted: number;
+  algoliaCompetitionsUpserted: number;
+  algoliaTeamsUpserted: number;
+};
+
+type AlgoliaCompetitionRecord = {
+  objectID: string;
+  id: number;
+  name: string;
+  type: string;
+  logo: string;
+  countryCode: string;
+  countryName: string;
+  seasons: number[];
+  inFootballManager: boolean;
+  isFemale: boolean | null;
+};
+
+type AlgoliaTeamRecord = {
+  objectID: string;
+  id: number;
+  name: string;
+  logo: string;
+  countryCode: string;
+  leagueId: number;
+  season: number;
+  national: boolean;
+  coordinates: {
+    lat: number | null;
+    lng: number | null;
+  };
+  path: string;
+  isFemale: boolean | null;
+  lastmodified: {
+    _operation: 'IncrementSet';
+    value: number;
+  };
 };
 
 function parseArgs(): ScriptOptions {
@@ -102,6 +139,10 @@ function parseArgs(): ScriptOptions {
     || process.env.SEED_ONLY_FEMALE_GROUPS === '1'
     || process.env.npm_config_only_female_groups === 'true'
     || process.env.npm_config_only_female_groups === '1';
+  const syncAlgolia = /(^|\s)--sync-algolia(\s|$)/.test(argText)
+    || process.env.SEED_SYNC_ALGOLIA === '1'
+    || process.env.npm_config_sync_algolia === 'true'
+    || process.env.npm_config_sync_algolia === '1';
 
   const seasonsRawFromArgs = collectOptionValues(['seasons']);
   const seasonsRawFromEnv = [process.env.SEED_SEASONS ?? process.env.npm_config_seasons].filter((value): value is string => Boolean(value));
@@ -123,7 +164,17 @@ function parseArgs(): ScriptOptions {
     refreshExisting,
     refreshMetadata,
     onlyFemaleGroups,
+    syncAlgolia,
   };
+}
+
+function chunkArray<T>(items: T[], size: number): T[][] {
+  if (size <= 0) return [items];
+  const chunks: T[][] = [];
+  for (let i = 0; i < items.length; i += size) {
+    chunks.push(items.slice(i, i + size));
+  }
+  return chunks;
 }
 
 function normalizeCountryKey(input: string | null | undefined): string {
@@ -147,6 +198,14 @@ async function run() {
   if (!options.dryRun && !process.env.API_FOOTBALL_KEY) {
     throw new Error('API_FOOTBALL_KEY is required when running with --execute.');
   }
+  if (
+    options.syncAlgolia
+    && (!process.env.NEXT_PUBLIC_ALGOLIA_APP_ID
+      || !process.env.NEXT_PUBLIC_ALGOLIA_WRITE_API_KEY
+      || !process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY)
+  ) {
+    throw new Error('Algolia write credentials are required when using --sync-algolia.');
+  }
 
   const summary: Summary = {
     activeCompetitionGroups: 0,
@@ -166,6 +225,8 @@ async function run() {
     teamsMarkedFemale: 0,
     teamsMarkedMale: 0,
     teamSeasonsInserted: 0,
+    algoliaCompetitionsUpserted: 0,
+    algoliaTeamsUpserted: 0,
   };
 
   const [activeGroups, countries] = await Promise.all([
@@ -273,6 +334,7 @@ async function run() {
   console.log(`Refresh existing season data: ${options.refreshExisting ? 'yes' : 'no'}`);
   console.log(`Refresh league metadata: ${options.refreshMetadata ? 'yes' : 'no'}`);
   if (options.onlyFemaleGroups) console.log('Filter: only competitions mapped from active groups with isFemale=true');
+  if (options.syncAlgolia) console.log('Algolia sync: enabled');
   if (options.limit) console.log(`Limit: ${options.limit}`);
   if (options.dryRun) {
     console.log('Dry run mode enabled. Use --execute to perform API fetch + database writes.');
@@ -424,6 +486,96 @@ async function run() {
     }
   }
 
+  if (options.syncAlgolia) {
+    if (options.dryRun) {
+      console.log('Skipping Algolia sync in dry-run mode. Re-run with --execute --sync-algolia.');
+    } else {
+      console.log('\nSyncing Algolia indexes from database...');
+      const { algoliaWriteClient } = await import('../../src/lib/algolia/algolia');
+      const competitionIndex = algoliaWriteClient.initIndex('competitions_index');
+      const teamsIndex = algoliaWriteClient.initIndex('teams_index');
+
+      const countryNameByCode = new Map(countries.map((country) => [country.code, country.name]));
+
+      const competitionRecords: AlgoliaCompetitionRecord[] = competitionsToProcess.map((competition) => ({
+        objectID: String(competition.id),
+        id: competition.id,
+        name: competition.name,
+        type: competition.type,
+        logo: competition.logoUrl ?? '',
+        countryCode: competition.countryCode,
+        countryName: countryNameByCode.get(competition.countryCode) ?? competition.countryCode,
+        seasons: options.seasons,
+        inFootballManager: true,
+        isFemale: competition.isFemale,
+      }));
+
+      const competitionChunks = chunkArray(competitionRecords, 1000);
+      for (const chunk of competitionChunks) {
+        if (chunk.length === 0) continue;
+        await competitionIndex.saveObjects(chunk);
+        summary.algoliaCompetitionsUpserted += chunk.length;
+      }
+
+      // Global team search is used in stints, so index all teams currently in DB.
+      const allTeams = await prisma.team.findMany({
+        select: {
+          id: true,
+          name: true,
+          logo: true,
+          countryCode: true,
+          national: true,
+          lat: true,
+          lng: true,
+          isFemale: true,
+          teamSeasons: {
+            orderBy: { season: 'desc' },
+            select: {
+              apiCompetitionId: true,
+              season: true,
+            },
+            take: 1,
+          },
+        },
+      });
+
+      const now = Date.now();
+      const teamRecords: AlgoliaTeamRecord[] = allTeams.map((team) => {
+        const latestSeason = team.teamSeasons[0];
+        const year = latestSeason?.season ? Number(latestSeason.season.split('/')[0]) : options.seasons[0];
+        const resolvedYear = Number.isInteger(year) ? year : options.seasons[0];
+
+        return {
+          objectID: String(team.id),
+          id: team.id,
+          name: team.name,
+          logo: team.logo,
+          countryCode: team.countryCode,
+          leagueId: latestSeason?.apiCompetitionId ?? 0,
+          season: resolvedYear,
+          national: team.national,
+          coordinates: {
+            lat: team.lat,
+            lng: team.lng,
+          },
+          path: `teams/${team.id}`,
+          isFemale: team.isFemale,
+          lastmodified: {
+            _operation: 'IncrementSet',
+            value: now,
+          },
+        };
+      });
+
+      const teamChunks = chunkArray(teamRecords, 1000);
+      for (const chunk of teamChunks) {
+        if (chunk.length === 0) continue;
+        await teamsIndex.saveObjects(chunk);
+        summary.algoliaTeamsUpserted += chunk.length;
+      }
+    }
+  }
+
   const unknownGenderRemaining = await prisma.team.count({ where: { isFemale: null } });
 
   console.log('\nSeed summary:');
@@ -444,6 +596,8 @@ async function run() {
   console.log(`- Team gender marks (female): ${summary.teamsMarkedFemale}`);
   console.log(`- Team gender marks (male/default): ${summary.teamsMarkedMale}`);
   console.log(`- TeamSeason rows inserted: ${summary.teamSeasonsInserted}`);
+  console.log(`- Algolia competitions upserted: ${summary.algoliaCompetitionsUpserted}`);
+  console.log(`- Algolia teams upserted: ${summary.algoliaTeamsUpserted}`);
   console.log(`- Unknown team gender remaining: ${unknownGenderRemaining}`);
 
   await prisma.$disconnect();
