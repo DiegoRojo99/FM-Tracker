@@ -149,7 +149,7 @@ export async function PATCH(req: NextRequest) {
 
       if (isActive !== undefined) data.isActive = isActive;
       if (tier !== undefined) data.tier = tier;
-      if (normalizedType !== undefined) data.type = normalizedType;
+      if (normalizedType != null) data.type = normalizedType;
       if (isFemale !== undefined) data.isFemale = isFemale;
 
       const updated = await prisma.apiCompetition.update({

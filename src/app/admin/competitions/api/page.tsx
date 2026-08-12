@@ -132,8 +132,9 @@ export default function ApiCompetitionsAdminPage() {
     if (!row) return { ok: false, message: `Row id=${id} not found.` };
 
     const tierRaw = editTier[id] ?? '';
-    const parsedTier = tierRaw === '' ? null : Number(tierRaw);
-    if (tierRaw !== '' && (!Number.isInteger(parsedTier) || parsedTier < 1)) {
+    const emptyTier = tierRaw === '';
+    const parsedTier = emptyTier ? null : Number(tierRaw);
+    if (!emptyTier && parsedTier !== null && (!Number.isInteger(parsedTier) || parsedTier < 1)) {
       return { ok: false, message: `Invalid tier for row ${id}. Tier must be empty or a positive integer.` };
     }
 

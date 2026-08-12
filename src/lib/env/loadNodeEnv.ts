@@ -2,13 +2,12 @@ import { config } from 'dotenv';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __fmTrackerNodeEnvLoaded: boolean | undefined;
-}
+const globalWithEnvFlag = globalThis as typeof globalThis & {
+  __fmTrackerNodeEnvLoaded?: boolean;
+};
 
 export function loadNodeEnv(cwd = process.cwd()): void {
-  if (globalThis.__fmTrackerNodeEnvLoaded) return;
+  if (globalWithEnvFlag.__fmTrackerNodeEnvLoaded) return;
 
   const baseEnvPath = resolve(cwd, '.env');
   if (existsSync(baseEnvPath)) config({ path: baseEnvPath });
@@ -21,5 +20,5 @@ export function loadNodeEnv(cwd = process.cwd()): void {
   const envPath = resolve(cwd, envFile);
   if (existsSync(envPath)) config({ path: envPath, override: true });
 
-  globalThis.__fmTrackerNodeEnvLoaded = true;
+  globalWithEnvFlag.__fmTrackerNodeEnvLoaded = true;
 }
