@@ -161,6 +161,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
               onChange={(competition: CompetitionGroup) => setForm((prev) => ({ ...prev, leagueId: String(competition.id) }))}
               type="DOMESTIC_LEAGUE"
               country={countryCode}
+              isFemale={selectedTeam?.isFemale === true ? true : false}
               value={form.leagueId}
             />
             <input hidden name="leagueId" value={form.leagueId} onChange={handleChange} />

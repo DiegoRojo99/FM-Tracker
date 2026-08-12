@@ -29,5 +29,5 @@ export type AlgoliaTeam = {
     _operation: string; // e.g., "IncrementSet"
     value: number; // e.g., 1750009571588
   };
-  isFemale?: boolean; // Indicates if the team is a women's team (optional)
+  isFemale?: boolean | null; // Indicates if the team is a women's team (optional)
 };

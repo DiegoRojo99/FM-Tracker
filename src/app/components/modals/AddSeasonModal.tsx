@@ -204,10 +204,12 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                   if (careerStint) {
                     setSelectedTeam(careerStint.team);
                     setSelectedLeague(null);
+                    setCupResults([]);
                   }
                 } else {
                   setSelectedTeam(null);
                   setSelectedLeague(null);
+                  setCupResults([]);
                 }
               }}
               className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
@@ -237,6 +239,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
             <CompetitionDropdown
               type="DOMESTIC_LEAGUE"
               country={selectedTeam.countryCode}
+              isFemale={selectedTeam.isFemale === true ? true : false}
               value={selectedLeague?.id ? String(selectedLeague.id) : ""}
               onChange={(competition: CompetitionGroup) => {
                 setSelectedLeague(competition);
@@ -310,6 +313,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                   <CompetitionWithWorldDropdown
                     type="DOMESTIC_CUP,CONTINENTAL_CLUB"
                     country={selectedTeam.countryCode}
+                    isFemale={selectedTeam.isFemale === true ? true : false}
                     value={cup.competitionId}
                     onChange={(value) => handleCupChange(idx, "competition", value)}
                     placeholder="Select cup competition"
