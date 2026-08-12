@@ -106,6 +106,36 @@ async function runSeasonCompetitionSyncWithRecovery(
   return [];
 }
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function runSideEffectsWithBudget(
+  sideEffects: Array<Promise<unknown>>,
+  context: 'create' | 'update',
+  saveId: string,
+  maxWaitMs = 1200
+): Promise<void> {
+  if (sideEffects.length === 0) return;
+
+  const settledPromise = Promise.allSettled(sideEffects).then((results) => {
+    results.forEach((result, index) => {
+      if (result.status === 'rejected') {
+        console.error(`Season ${context} side effect ${index} failed for save ${saveId}:`, result.reason);
+      }
+    });
+  });
+
+  const timedOut = await Promise.race([
+    settledPromise.then(() => false),
+    delay(maxWaitMs).then(() => true),
+  ]);
+
+  if (timedOut) {
+    console.warn(`Season ${context} side effects exceeded ${maxWaitMs}ms for save ${saveId}. Returning response while side effects continue.`);
+  }
+}
+
 async function syncSeasonDataAndRunSideEffects(params: {
   uid: string;
   saveId: string;
@@ -159,12 +189,7 @@ async function syncSeasonDataAndRunSideEffects(params: {
     })
   );
 
-  const sideEffectResults = await Promise.allSettled(sideEffects);
-  sideEffectResults.forEach((result, index) => {
-    if (result.status === 'rejected') {
-      console.error(`Season side effect ${index} failed for save ${saveId}:`, result.reason);
-    }
-  });
+  await runSideEffectsWithBudget(sideEffects, 'create', saveId);
 }
 
 export async function POST(req: NextRequest) {
@@ -552,12 +577,7 @@ export async function PUT(req: NextRequest) {
         );
       }
 
-      const sideEffectResults = await Promise.allSettled(sideEffects);
-      sideEffectResults.forEach((result, index) => {
-        if (result.status === 'rejected') {
-          console.error(`Season update side effect ${index} failed for save ${saveId}:`, result.reason);
-        }
-      });
+      await runSideEffectsWithBudget(sideEffects, 'update', saveId);
 
       return NextResponse.json(updatedSeason, { status: 200 });
     }
