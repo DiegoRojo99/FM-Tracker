@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CUP_ROUNDS, CupRound, SeasonInput, CupResultInput, SeasonSummary } from "@/lib/types/prisma/Season";
 import CompetitionDropdown from "../dropdowns/CompetitionDropdown";
 import CompetitionWithWorldDropdown from "../dropdowns/CompetitionWithWorldDropdown";
@@ -50,6 +50,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   const [relegated, setRelegated] = useState(false);
   const [cupResults, setCupResults] = useState<CupResultInput[]>([]);
   const [saving, setSaving] = useState(false);
+  const submitLockRef = useRef(false);
   const uniqueTeams = getUniqueTeams();
   
   // New state for team and league selection
@@ -114,6 +115,8 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
   };
 
   const handleSave = async () => {
+    if (saving || submitLockRef.current) return;
+
     if (!selectedTeam) {
       alert("Please select a team.");
       return;
@@ -133,6 +136,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
       return;
     }
 
+    submitLockRef.current = true;
     setSaving(true);
     try {
       const seasonResult: SeasonInput = {
@@ -154,6 +158,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
       console.error('Error saving season:', error);
       alert('Failed to save season. Please try again.');
     } finally {
+      submitLockRef.current = false;
       setSaving(false);
     }
   };
@@ -204,10 +209,12 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                   if (careerStint) {
                     setSelectedTeam(careerStint.team);
                     setSelectedLeague(null);
+                    setCupResults([]);
                   }
                 } else {
                   setSelectedTeam(null);
                   setSelectedLeague(null);
+                  setCupResults([]);
                 }
               }}
               className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
@@ -237,6 +244,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
             <CompetitionDropdown
               type="DOMESTIC_LEAGUE"
               country={selectedTeam.countryCode}
+              isFemale={selectedTeam.isFemale === true ? true : false}
               value={selectedLeague?.id ? String(selectedLeague.id) : ""}
               onChange={(competition: CompetitionGroup) => {
                 setSelectedLeague(competition);
@@ -310,6 +318,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                   <CompetitionWithWorldDropdown
                     type="DOMESTIC_CUP,CONTINENTAL_CLUB"
                     country={selectedTeam.countryCode}
+                    isFemale={selectedTeam.isFemale === true ? true : false}
                     value={cup.competitionId}
                     onChange={(value) => handleCupChange(idx, "competition", value)}
                     placeholder="Select cup competition"

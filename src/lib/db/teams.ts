@@ -55,16 +55,34 @@ async function getApiCompetitionIdsFromLeagueId(leagueId: number): Promise<numbe
 export async function fetchTeamsByLeague(leagueId: number, gameId?: string | null): Promise<Team[]> {
   const season = gameId ? getSeasonFromGameId(gameId) : null
   const apiCompetitionIds = await getApiCompetitionIdsFromLeagueId(leagueId)
-  if (apiCompetitionIds.length === 0) return []
 
-  return prisma.team.findMany({
-    where: {
-      teamSeasons: {
-        some: {
-          apiCompetitionId: { in: apiCompetitionIds },
-          ...(season ? { season } : {}),
+  if (apiCompetitionIds.length > 0) {
+    const seasonFilteredTeams = await prisma.team.findMany({
+      where: {
+        teamSeasons: {
+          some: {
+            apiCompetitionId: { in: apiCompetitionIds },
+            ...(season ? { season } : {}),
+          },
         },
       },
-    },
-  })
+    })
+
+    if (seasonFilteredTeams.length > 0) return seasonFilteredTeams;
+
+    // Fallback to any season for this league when data for the selected game season is missing.
+    const anySeasonTeams = await prisma.team.findMany({
+      where: {
+        teamSeasons: {
+          some: {
+            apiCompetitionId: { in: apiCompetitionIds },
+          },
+        },
+      },
+    })
+
+    if (anySeasonTeams.length > 0) return anySeasonTeams;
+  }
+
+  return [];
 }

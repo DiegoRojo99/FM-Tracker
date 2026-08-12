@@ -1,6 +1,6 @@
 {
   "name": "fm-tracker",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -15,10 +15,17 @@
     "achievements:seed": "tsx scripts/data/seed-achievements.ts",
     "challenges:seed": "tsx scripts/data/seed-challenges.ts",
     "fix:promotions": "tsx scripts/data/fix-top-flight-promotions.ts",
-    "competitions:infer-tiers": "tsx scripts/data/infer-competition-tiers.ts",
-    "competitions:seed-tiers": "tsx scripts/data/seed-competition-tiers.ts",
-    "competitions:export-tiers": "tsx scripts/data/export-competition-tiers.ts",
-    "competitions:normalise-types": "tsx scripts/data/normalise-competition-types.ts"
+    "competitions:export-unified": "tsx scripts/data/export-competitions-unified.ts",
+    "competitions:apply-unified:dry-run": "tsx scripts/data/apply-competitions-unified.ts --dry-run --preserve-api-isfemale-non-null",
+    "competitions:apply-unified": "tsx scripts/data/apply-competitions-unified.ts --preserve-api-isfemale-non-null",
+    "teams:sync-gender:dry-run": "tsx scripts/data/sync-team-gender-from-competitions.ts",
+    "teams:sync-gender": "tsx scripts/data/sync-team-gender-from-competitions.ts --execute",
+    "teams:seed-active": "tsx scripts/data/seed-active-competitions-and-teams.ts",
+    "teams:seed-active:execute": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute",
+    "teams:seed-active:execute:algolia": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --sync-algolia",
+    "women-leagues:seed-active:female-groups": "tsx scripts/data/seed-active-competitions-and-teams.ts --only-female-groups",
+    "women-leagues:seed-active:female-groups:execute": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --only-female-groups",
+    "women-leagues:seed-active:female-groups:execute:algolia": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --only-female-groups --sync-algolia"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",

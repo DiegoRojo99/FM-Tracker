@@ -20,6 +20,10 @@ type Props = {
   onSuccess: (trophy: Trophy) => void;
 };
 
+function getTeamCategorySuffix(isFemale: boolean | null | undefined): string {
+  return isFemale === true ? ' (Women)' : '';
+}
+
 export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onSuccess }: Props) {
   const { user } = useAuth();
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
@@ -95,7 +99,9 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
             >
               <option value="">Select a team</option>
               {Array.from(new Map(saveDetails.careerStints.map(stint => [stint.teamId, stint])).values()).map((stint) => (
-                <option key={stint.teamId} value={stint.teamId}>{stint.team.name}</option>
+                <option key={stint.teamId} value={stint.teamId}>
+                  {stint.team.name}{getTeamCategorySuffix(stint.team.isFemale)}
+                </option>
               ))}
             </select>
           ) : (
@@ -117,6 +123,7 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
           {selectedTeam ? (
             <CompetitionWithWorldDropdown
               country={selectedTeam.countryCode}
+              isFemale={selectedTeam.isFemale}
               value={competition?.id ? String(competition.id) : ""}
               onChange={(comp: CompetitionGroup) => setCompetition(comp)}
               placeholder="Select competition"

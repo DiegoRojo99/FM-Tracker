@@ -13,6 +13,7 @@ type Competition = {
   type: string;
   tier: number | null;
   isActive: boolean;
+  isFemale: boolean | null;
 };
 
 const TIER_COLORS: Record<number, string> = {
@@ -39,6 +40,7 @@ export default function CompetitionTiersPage() {
   const [saving, setSaving] = useState<Record<number, boolean>>({});
   const [editTier, setEditTier] = useState<Record<number, string>>({});
   const [editType, setEditType] = useState<Record<number, string>>({});
+  const [error, setError] = useState<string | null>(null);
 
   const COMPETITION_TYPES = ['DOMESTIC_LEAGUE', 'DOMESTIC_CUP', 'CONTINENTAL_CLUB', 'INTERNATIONAL_NT', 'SUPER_CUP', 'Other'];
 
@@ -51,6 +53,7 @@ export default function CompetitionTiersPage() {
   const fetchCompetitions = useCallback(async () => {
     if (!user) return;
     setLoading(true);
+    setError(null);
     try {
       const token = await user.getIdToken();
       const params = new URLSearchParams();
@@ -60,10 +63,23 @@ export default function CompetitionTiersPage() {
       const res = await fetch(`/api/admin/competitions/tiers?${params}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
+      if (!res.ok) {
+        const message = await res.text();
+        throw new Error(message || `Failed to load competitions (${res.status})`);
+      }
+
+      const contentType = res.headers.get('content-type') ?? '';
+      if (!contentType.includes('application/json')) {
+        throw new Error('Admin competitions API returned a non-JSON response');
+      }
+
+      const text = await res.text();
+      const data = text ? JSON.parse(text) : [];
       setCompetitions(data);
       setEditTier(Object.fromEntries(data.map((c: Competition) => [c.id, c.tier?.toString() ?? ''])));
       setEditType(Object.fromEntries(data.map((c: Competition) => [c.id, c.type ?? ''])));
+    } catch (fetchError) {
+      setError(fetchError instanceof Error ? fetchError.message : 'Failed to load competitions');
     } finally {
       setLoading(false);
     }
@@ -81,11 +97,12 @@ export default function CompetitionTiersPage() {
     setSaving(prev => ({ ...prev, [id]: true }));
     try {
       const token = await user.getIdToken();
-      await fetch('/api/admin/competitions/tiers', {
+      const res = await fetch('/api/admin/competitions/tiers', {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, tier }),
       });
+      if (!res.ok) throw new Error(await res.text());
       setCompetitions(prev => prev.map(c => c.id === id ? { ...c, tier: tier ?? null } : c));
     } finally {
       setSaving(prev => ({ ...prev, [id]: false }));
@@ -99,11 +116,12 @@ export default function CompetitionTiersPage() {
     setSaving(prev => ({ ...prev, [id]: true }));
     try {
       const token = await user.getIdToken();
-      await fetch('/api/admin/competitions/tiers', {
+      const res = await fetch('/api/admin/competitions/tiers', {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, type }),
       });
+      if (!res.ok) throw new Error(await res.text());
       setCompetitions(prev => prev.map(c => c.id === id ? { ...c, type } : c));
     } finally {
       setSaving(prev => ({ ...prev, [id]: false }));
@@ -115,12 +133,31 @@ export default function CompetitionTiersPage() {
     setSaving(prev => ({ ...prev, [id]: true }));
     try {
       const token = await user.getIdToken();
-      await fetch('/api/admin/competitions/tiers', {
+      const res = await fetch('/api/admin/competitions/tiers', {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, isActive: !current }),
       });
+      if (!res.ok) throw new Error(await res.text());
       setCompetitions(prev => prev.map(c => c.id === id ? { ...c, isActive: !current } : c));
+    } finally {
+      setSaving(prev => ({ ...prev, [id]: false }));
+    }
+  };
+
+  const toggleIsFemale = async (id: number, current: boolean | null) => {
+    if (!user) return;
+    const nextValue = current !== true;
+    setSaving(prev => ({ ...prev, [id]: true }));
+    try {
+      const token = await user.getIdToken();
+      const res = await fetch('/api/admin/competitions/tiers', {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, isFemale: nextValue }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      setCompetitions(prev => prev.map(c => c.id === id ? { ...c, isFemale: nextValue } : c));
     } finally {
       setSaving(prev => ({ ...prev, [id]: false }));
     }
@@ -140,6 +177,11 @@ export default function CompetitionTiersPage() {
             </div>
             <Layers className="h-8 w-8 text-[var(--color-highlight)]" />
           </div>
+          {error && (
+            <p className="mt-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+              {error}
+            </p>
+          )}
 
           <div className="mt-5 flex flex-col gap-3 sm:flex-row">
             <div className="relative flex-1">
@@ -279,6 +321,19 @@ export default function CompetitionTiersPage() {
                                     {c.isActive ? 'Active' : 'Inactive'}
                                   </button>
                                 </td>
+                                <td className="px-4 py-2">
+                                  <button
+                                    onClick={() => toggleIsFemale(c.id, c.isFemale)}
+                                    disabled={saving[c.id]}
+                                    className={`rounded-full border px-2 py-0.5 text-xs font-bold transition disabled:opacity-50 ${
+                                      c.isFemale === true
+                                        ? 'border-fuchsia-500/40 bg-fuchsia-500/15 text-fuchsia-300 hover:bg-slate-500/15 hover:text-slate-200 hover:border-slate-500/40'
+                                        : 'border-slate-500/40 bg-slate-500/15 text-slate-200 hover:bg-fuchsia-500/15 hover:text-fuchsia-300 hover:border-fuchsia-500/40'
+                                    }`}
+                                  >
+                                    {c.isFemale === true ? 'Women' : 'Men'}
+                                  </button>
+                                </td>
                               </tr>
                             );
                           })}
@@ -299,6 +354,7 @@ export default function CompetitionTiersPage() {
                   <th className="px-4 py-3 w-48">Edit Type</th>
                   <th className="px-4 py-3 w-32">Tier</th>
                   <th className="px-4 py-3 w-20">Active</th>
+                  <th className="px-4 py-3 w-20">Gender</th>
                   <th className="px-4 py-3 w-20"></th>
                 </tr>
               </thead>
@@ -358,6 +414,19 @@ export default function CompetitionTiersPage() {
                           }`}
                         >
                           {c.isActive ? 'Active' : 'Inactive'}
+                        </button>
+                      </td>
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => toggleIsFemale(c.id, c.isFemale)}
+                          disabled={saving[c.id]}
+                          className={`rounded-full border px-2 py-0.5 text-xs font-bold transition disabled:opacity-50 ${
+                            c.isFemale === true
+                              ? 'border-fuchsia-500/40 bg-fuchsia-500/15 text-fuchsia-300 hover:bg-slate-500/15 hover:text-slate-200 hover:border-slate-500/40'
+                              : 'border-slate-500/40 bg-slate-500/15 text-slate-200 hover:bg-fuchsia-500/15 hover:text-fuchsia-300 hover:border-fuchsia-500/40'
+                          }`}
+                        >
+                          {c.isFemale === true ? 'Women' : 'Men'}
                         </button>
                       </td>
                       <td className="px-4 py-3 w-20">

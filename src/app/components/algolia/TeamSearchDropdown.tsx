@@ -77,7 +77,7 @@ function CustomHits({ onTeamSelect }: { onTeamSelect: (team: Team) => void }) {
       logo: hit.logo,
       countryCode: hit.countryCode,
       national: hit.national,
-      isFemale: null,
+      isFemale: typeof hit.isFemale === 'boolean' ? hit.isFemale : null,
       lat: (typeof lat === 'number' ? lat : null),
       lng: (typeof lng === 'number' ? lng : null),
     };

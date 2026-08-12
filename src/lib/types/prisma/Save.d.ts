@@ -11,6 +11,7 @@ export type SaveInput = {
   leagueId: number | null;
   startingTeamId: number | null;
   gameId: string;
+  requestId?: string;
 }
 
 export type PreviewSave = Save & {

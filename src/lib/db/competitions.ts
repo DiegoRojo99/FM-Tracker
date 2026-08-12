@@ -31,6 +31,7 @@ interface GetActiveCompetitionsOptions {
   countries?: string[]
   type?: string | null
   types?: string[]
+  isFemale?: boolean | null
 }
 
 export async function getActiveCompetitions(options: GetActiveCompetitionsOptions = {}): Promise<CompetitionGroup[]> {
@@ -44,11 +45,19 @@ export async function getActiveCompetitions(options: GetActiveCompetitionsOption
       ? { type: normalizeCompetitionType(options.type) ?? undefined }
       : {};
 
+  // Explicit gender filtering: women only when true, non-women when false.
+  const genderFilter = options.isFemale === null || options.isFemale === undefined
+    ? {}
+    : options.isFemale
+      ? { isFemale: true }
+      : { OR: [{ isFemale: false }, { isFemale: null }] };
+
   return prisma.competitionGroup.findMany({
     where: {
       isActive: true,
       countryCode: { in: countriesToQuery },
       ...typeFilter,
+      ...genderFilter,
     },
   });
 }

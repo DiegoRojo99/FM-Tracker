@@ -8,6 +8,14 @@ interface TrophyCountryProps {
   trophies: TrophyGroup[];
 }
 
+function genderSortRank(isFemale: boolean | null | undefined): number {
+  return isFemale === true ? 0 : 1;
+}
+
+function tierSortRank(tier: number | null | undefined): number {
+  return typeof tier === 'number' ? tier : 999;
+}
+
 const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -18,7 +26,15 @@ const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
     return false;
   };
   
-  const comps = country.competitions || [];
+  const comps = (country.competitions || []).slice().sort((a, b) => {
+    const genderCompare = genderSortRank(a.isFemale) - genderSortRank(b.isFemale);
+    if (genderCompare !== 0) return genderCompare;
+
+    const tierCompare = tierSortRank(a.tier) - tierSortRank(b.tier);
+    if (tierCompare !== 0) return tierCompare;
+
+    return a.name.localeCompare(b.name);
+  });
   const total = comps.length;
   const won = comps.filter((c) => hasWon(c.id)).length;
   const completionPercentage = total > 0 ? Math.round((won / total) * 100) : 0;
