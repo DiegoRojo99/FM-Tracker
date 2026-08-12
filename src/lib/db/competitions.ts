@@ -45,44 +45,12 @@ export async function getActiveCompetitions(options: GetActiveCompetitionsOption
       ? { type: normalizeCompetitionType(options.type) ?? undefined }
       : {};
 
-  const womenNameMatcher = {
-    OR: [
-      { name: { contains: 'women', mode: 'insensitive' as const } },
-      { displayName: { contains: 'women', mode: 'insensitive' as const } },
-      { name: { contains: 'femenino', mode: 'insensitive' as const } },
-      { displayName: { contains: 'femenino', mode: 'insensitive' as const } },
-      { name: { contains: 'feminine', mode: 'insensitive' as const } },
-      { displayName: { contains: 'feminine', mode: 'insensitive' as const } },
-      { name: { contains: 'féminin', mode: 'insensitive' as const } },
-      { displayName: { contains: 'féminin', mode: 'insensitive' as const } },
-      { name: { contains: 'feminina', mode: 'insensitive' as const } },
-      { displayName: { contains: 'feminina', mode: 'insensitive' as const } },
-    ],
-  };
-
-  const mappedWomenCompetitionMatcher = {
-    apiCompetitions: {
-      some: {
-        apiCompetition: {
-          teamSeasons: {
-            some: {
-              team: { isFemale: true },
-            },
-          },
-        },
-      },
-    },
-  };
-
+  // Explicit gender filtering: women only when true, non-women when false.
   const genderFilter = options.isFemale === null || options.isFemale === undefined
     ? {}
     : options.isFemale
-      ? {
-        OR: [womenNameMatcher, mappedWomenCompetitionMatcher],
-      }
-      : {
-        NOT: womenNameMatcher,
-      };
+      ? { isFemale: true }
+      : { OR: [{ isFemale: false }, { isFemale: null }] };
 
   return prisma.competitionGroup.findMany({
     where: {

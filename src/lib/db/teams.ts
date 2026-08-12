@@ -52,11 +52,6 @@ async function getApiCompetitionIdsFromLeagueId(leagueId: number): Promise<numbe
   )
 }
 
-function isWomenCompetitionName(name: string | null | undefined): boolean {
-  if (!name) return false;
-  return /women|femenino|feminine|féminin|feminina/i.test(name);
-}
-
 export async function fetchTeamsByLeague(leagueId: number, gameId?: string | null): Promise<Team[]> {
   const season = gameId ? getSeasonFromGameId(gameId) : null
   const apiCompetitionIds = await getApiCompetitionIdsFromLeagueId(leagueId)

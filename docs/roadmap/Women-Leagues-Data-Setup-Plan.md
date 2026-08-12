@@ -1,6 +1,6 @@
 # Women Leagues Data Setup Plan
 
-Status last updated: 2026-08-11
+Status last updated: 2026-08-12
 
 ## Goal
 Build a reliable women leagues and teams data pipeline for FM26 and FM27 without activating additional leagues, then simplify app logic to depend on explicit gender fields instead of runtime heuristics.
@@ -74,14 +74,14 @@ Build a reliable women leagues and teams data pipeline for FM26 and FM27 without
   - [x] Conflicting signals: 0
 - [ ] Produce final unresolved audit lists after final seed run:
   - [x] Teams still null (current: 1110)
-  - [x] Competition groups still null (current: 414)
-  - [x] API competitions still null (current: 301)
+  - [x] Competition groups still null (current: 0)
+  - [x] API competitions still null (current: 0)
 
 ## Phase 5 - Application Logic Cleanup
-- [ ] Replace runtime heuristic filtering with explicit `CompetitionGroup.isFemale` filtering.
-- [ ] Keep product rule:
-  - [ ] Women teams can select only women competitions.
-  - [ ] Men/unknown teams default to non-women competitions.
+- [x] Replace runtime heuristic filtering with explicit `CompetitionGroup.isFemale` filtering.
+- [x] Keep product rule:
+  - [x] Women teams can select only women competitions.
+  - [x] Men/unknown teams default to non-women competitions.
 - [x] Remove broad team fallback behavior for league team lookup.
 - [x] Add cache version bumps where required after logic swaps.
 
@@ -111,7 +111,7 @@ Build a reliable women leagues and teams data pipeline for FM26 and FM27 without
   - [x] Run unified apply dry-run on prod.
   - [x] Run unified apply on prod.
   - [x] Re-run unified apply dry-run to confirm idempotency.
-- [ ] Final post-prod snapshot/log capture.
+- [x] Final post-prod snapshot/log capture.
 
 ## Completion Criteria
 - [ ] Women leagues in active FM set can create saves with visible teams.
