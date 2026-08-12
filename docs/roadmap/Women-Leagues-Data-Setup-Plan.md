@@ -87,18 +87,18 @@ Build a reliable women leagues and teams data pipeline for FM26 and FM27 without
 
 ## Phase 6 - QA and Verification
 - [ ] Save creation tests:
-  - [ ] FM26 women league save creation (FA WSL)
+  - [x] FM26 women league save creation (FA WSL)
   - [ ] FM27 women league save creation
   - [ ] Men league save creation in same country
 - [ ] Trophy flows:
-  - [ ] Add trophy with women team
+  - [x] Add trophy with women team
   - [ ] Add trophy with men/unknown team
   - [ ] Edit trophy and switch teams
 - [ ] Season flows:
   - [ ] Add cup results with women team
   - [ ] Add cup results with men team
 - [ ] API checks:
-  - [ ] `/api/competitions` with `isFemale=true`
+  - [x] `/api/competitions` with `isFemale=true`
   - [ ] `/api/competitions` with `isFemale=false`
   - [ ] `/api/teams` for women league in FM26/FM27
 - [ ] Compare post-run counts against baseline and capture delta.

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/app/components/AuthProvider';
 import TeamGrid from './TeamGrid';
 import { Team } from '@/lib/types/prisma/Team';
@@ -31,13 +31,24 @@ export default function NewSaveForm() {
   const [savingGame, setSavingGame] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
+  const submitLockRef = useRef(false);
+  const [requestId, setRequestId] = useState('');
 
   const inputClass = 'w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-4 py-3 text-white focus:border-[var(--color-accent)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50';
+
+  function buildRequestId(): string {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID().replace(/-/g, '');
+    }
+
+    return `${Date.now()}${Math.floor(Math.random() * 1_000_000)}`;
+  }
 
   // Fetch countries and games on mount
   useEffect(() => {
     fetch('/api/countries?fmOnly=true').then(res => res.json()).then(setCountries);
     fetch('/api/games?active=true').then(res => res.json()).then(data => setGames(data.games || []));
+    setRequestId(buildRequestId());
   }, []);
 
   // Fetch leagues when country changes
@@ -73,17 +84,25 @@ export default function NewSaveForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (currentStep !== 3) return;
     if (!user || (!selectedTeam && !isNoTeam)) return;
+    if (savingGame || submitLockRef.current) return;
+
+    submitLockRef.current = true;
 
     setSubmitError(null);
     setSubmitSuccess(null);
     setSavingGame(true);
 
+    const activeRequestId = requestId || buildRequestId();
+    if (!requestId) setRequestId(activeRequestId);
+
     const newSave: SaveInput = {
       gameId: selectedGame,
       countryCode: isNoTeam ? null : selectedCountry,
       leagueId: isNoTeam ? null : Number(selectedLeague),
-      startingTeamId: isNoTeam ? null : Number(selectedTeam)
+      startingTeamId: isNoTeam ? null : Number(selectedTeam),
+      requestId: activeRequestId,
     };
 
     try {
@@ -92,6 +111,8 @@ export default function NewSaveForm() {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${userToken}`,
+          'Content-Type': 'application/json',
+          'X-Idempotency-Key': activeRequestId,
         },
         body: JSON.stringify(newSave),
       });
@@ -99,7 +120,6 @@ export default function NewSaveForm() {
       if (!saveResponse.ok) {
         const errorText = await saveResponse.text();
         setSubmitError(errorText || 'Failed to create save. Please review your selections.');
-        setSavingGame(false);
         return;
       }
 
@@ -110,8 +130,8 @@ export default function NewSaveForm() {
         hasSelectedLeague: Boolean(selectedLeague),
       });
 
-      setSavingGame(false);
       setSubmitSuccess('Save created successfully. Redirecting to your saves...');
+      setRequestId(buildRequestId());
       setTimeout(() => {
         router.push(`/saves?created=1&start=${isNoTeam ? 'unemployed' : 'club'}`);
       }, 800);
@@ -119,6 +139,8 @@ export default function NewSaveForm() {
     catch (error) {
       console.error('Error creating save:', error);
       setSubmitError('Something went wrong while creating the save. Please try again.');
+    } finally {
+      submitLockRef.current = false;
       setSavingGame(false);
     }
   };

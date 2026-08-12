@@ -1,5 +1,6 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
+import { randomUUID } from 'node:crypto';
 import { fetchCompetition } from '@/lib/db/competitions';
 import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
 import { getUserPreviewSaves, getUserPreviewSavesCacheKey, invalidateUserPreviewSavesCache } from '@/lib/db/saves';
@@ -54,85 +55,198 @@ function getStartDateFromGameId(gameId: string): string {
   return '2023-07-01';
 }
 
+function isPrismaP2002(error: unknown): boolean {
+  return typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === 'P2002';
+}
+
+function getPrismaP2002Target(error: unknown): string {
+  if (typeof error !== 'object' || error === null || !('meta' in error)) return '';
+  const meta = (error as { meta?: { target?: unknown } }).meta;
+  const target = meta?.target;
+  if (Array.isArray(target)) return target.join(',');
+  if (typeof target === 'string') return target;
+  return '';
+}
+
+function getPrismaP2002Model(error: unknown): string {
+  if (typeof error !== 'object' || error === null || !('meta' in error)) return '';
+  const meta = (error as { meta?: { modelName?: unknown } }).meta;
+  return typeof meta?.modelName === 'string' ? meta.modelName : '';
+}
+
+async function repairCareerStintSequence() {
+  await prisma.$executeRawUnsafe(`
+    SELECT setval(
+      pg_get_serial_sequence('"CareerStint"', 'id'),
+      COALESCE((SELECT MAX(id) FROM "CareerStint"), 0),
+      true
+    )
+  `);
+}
+
+function buildSaveId(): string {
+  return randomUUID().replace(/-/g, '');
+}
+
+function normalizeRequestId(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  const normalized = trimmed.replace(/[^a-zA-Z0-9_-]/g, '');
+  if (normalized.length < 8 || normalized.length > 128) return null;
+  return normalized;
+}
+
 export async function POST(req: NextRequest) {
   return withAuth(req, async (uid) => {
     if (!uid) return new Response('Unauthorized', { status: 401 });
 
-    // Parse request body
-    const body = await req.json();
-    const { countryCode, leagueId, startingTeamId, gameId } = body;
-    const isUnemployedStart = !startingTeamId;
+    try {
+      const body = await req.json();
+      const { countryCode, leagueId, startingTeamId, gameId, requestId } = body;
+      const isUnemployedStart = !startingTeamId;
+      const requestIdFromHeader = req.headers.get('x-idempotency-key');
+      const normalizedRequestId = normalizeRequestId(requestId) ?? normalizeRequestId(requestIdFromHeader);
 
-    // Validate team id for non-unemployed starts
-    const startingTeam = isUnemployedStart ? null : await fetchTeam(Number(startingTeamId));
-    if (!isUnemployedStart && !startingTeam) return new Response('Invalid starting team ID', { status: 400 });
+      const startingTeam = isUnemployedStart ? null : await fetchTeam(Number(startingTeamId));
+      if (!isUnemployedStart && !startingTeam) return new Response('Invalid starting team ID', { status: 400 });
 
-    // Validate league id for non-unemployed starts
-    if (!isUnemployedStart) {
-      const currentLeagueData = await fetchCompetition(Number(leagueId));
-      if (!currentLeagueData) return new Response('Invalid league ID', { status: 400 });
-    }
+      if (!isUnemployedStart) {
+        if (!leagueId) return new Response('League is required for club starts', { status: 400 });
+        const currentLeagueData = await fetchCompetition(Number(leagueId));
+        if (!currentLeagueData) return new Response('Invalid league ID', { status: 400 });
+      }
 
-    // Validate required fields
-    const gameIdToUse = gameId || 'fm26';
-    const currentClubId = startingTeam && !startingTeam.national ? startingTeam.id : null;
-    const currentNTId = startingTeam && startingTeam.national ? startingTeam.id : null;
-    const saveId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    
-    // Prepare save data
-    const saveInputData: Save = {
-      id: saveId,
-      userId: uid,
-      gameId: gameIdToUse,
-      countryCode: countryCode || null,
-      currentClubId: currentClubId,
-      currentNTId: currentNTId,
-      currentLeagueId: Number(leagueId) || null,
-      season: getSeasonFromGameId(gameIdToUse),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+      const gameIdToUse = gameId || 'fm26';
+      const currentClubId = startingTeam && !startingTeam.national ? startingTeam.id : null;
+      const currentNTId = startingTeam && startingTeam.national ? startingTeam.id : null;
+      let saveId = normalizedRequestId ?? buildSaveId();
+      let wasIdempotentReplay = false;
+      let createdNewSave = false;
 
-    // Create save in database with connected team and league data
-    const docRef = await prisma.save.create({
-      data: saveInputData,
-    });
+      const createSaveWithStint = async (id: string): Promise<void> => {
+        const saveInputData: Save = {
+          id,
+          userId: uid,
+          gameId: gameIdToUse,
+          countryCode: countryCode || null,
+          currentClubId,
+          currentNTId,
+          currentLeagueId: Number(leagueId) || null,
+          season: getSeasonFromGameId(gameIdToUse),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
 
-    // Create a starting career stint
-    if (!isUnemployedStart && startingTeamId) {
-      const careerStintInputData: Omit<CareerStint, 'id'> = {
-        saveId: docRef.id,
-        teamId: Number(startingTeamId),
-        startDate: getStartDateFromGameId(gameIdToUse),
-        endDate: null,
-        isNational: startingTeam ? startingTeam.national : false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        await prisma.$transaction(async (tx) => {
+          await tx.save.create({ data: saveInputData });
+
+          if (!isUnemployedStart && startingTeamId) {
+            const careerStintInputData: Omit<CareerStint, 'id'> = {
+              saveId: id,
+              teamId: Number(startingTeamId),
+              startDate: getStartDateFromGameId(gameIdToUse),
+              endDate: null,
+              isNational: startingTeam ? startingTeam.national : false,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            };
+
+            await tx.careerStint.create({ data: careerStintInputData });
+          }
+        });
       };
 
-      // Create career stint in database
-      await prisma.careerStint.create({
-        data: careerStintInputData,
-      });
+      let sequenceRepaired = false;
+      let saveIdRegenerated = false;
+
+      while (!createdNewSave && !wasIdempotentReplay) {
+        try {
+          await createSaveWithStint(saveId);
+          createdNewSave = true;
+          break;
+        } catch (createError) {
+          if (!isPrismaP2002(createError)) throw createError;
+
+          const target = getPrismaP2002Target(createError);
+          const model = getPrismaP2002Model(createError);
+          const targetLower = target.toLowerCase();
+          const modelLower = model.toLowerCase();
+
+          console.error('Save create P2002 target/model:', target || '(unknown)', model || '(unknown)', createError);
+
+          if (normalizedRequestId) {
+            const existingSave = await prisma.save.findUnique({ where: { id: saveId } });
+            if (existingSave && existingSave.userId === uid) {
+              wasIdempotentReplay = true;
+              break;
+            }
+          }
+
+          const looksLikeCareerStintCollision =
+            modelLower.includes('careerstint') || targetLower.includes('careerstint');
+          const looksLikeSaveCollision =
+            modelLower.includes('save') || targetLower.includes('save') || targetLower === 'id';
+
+          if (!sequenceRepaired && (looksLikeCareerStintCollision || targetLower === 'id')) {
+            await repairCareerStintSequence();
+            sequenceRepaired = true;
+            continue;
+          }
+
+          if (!saveIdRegenerated && !normalizedRequestId && looksLikeSaveCollision) {
+            saveId = buildSaveId();
+            saveIdRegenerated = true;
+            continue;
+          }
+
+          throw createError;
+        }
+      }
+
+      const persistedSave = await prisma.save.findUnique({ where: { id: saveId } });
+      if (!persistedSave || persistedSave.userId !== uid) {
+        throw new Error(`Save ${saveId} was not persisted correctly`);
+      }
+
+      if (createdNewSave) {
+        const sideEffects = await Promise.allSettled([
+          !isUnemployedStart && startingTeamId
+            ? addChallengeForTeam(saveId, Number(startingTeamId))
+            : Promise.resolve(),
+          countryCode
+            ? addChallengeForCountry(saveId, countryCode)
+            : Promise.resolve(),
+          evaluateAchievementsForUser({
+            userId: uid,
+            saveId,
+            gameId: gameIdToUse,
+            eventType: 'save.created',
+            eventTimestamp: new Date(),
+          }),
+          deleteCacheKey('stats:global'),
+          invalidateUserPreviewSavesCache(uid),
+        ]);
+
+        sideEffects.forEach((result, index) => {
+          if (result.status === 'rejected') {
+            console.error(`Save side effect ${index} failed for save ${saveId}:`, result.reason);
+          }
+        });
+      }
+
+      return new Response(JSON.stringify(persistedSave), { status: wasIdempotentReplay ? 200 : 201 });
     }
-    
-    // Check if the team has any matching challenges
-    if (!isUnemployedStart && startingTeamId) await addChallengeForTeam(docRef.id, Number(startingTeamId));
-    if (countryCode) await addChallengeForCountry(docRef.id, countryCode);
-
-    await evaluateAchievementsForUser({
-      userId: uid,
-      saveId: docRef.id,
-      gameId: gameIdToUse,
-      eventType: 'save.created',
-      eventTimestamp: new Date(),
-    });
-
-    await Promise.all([
-      deleteCacheKey('stats:global'),
-      invalidateUserPreviewSavesCache(uid),
-    ]);
-
-    return new Response(JSON.stringify(saveInputData), { status: 201 });
+    catch (error) {
+      console.error('Error creating save:', error);
+      if (isPrismaP2002(error)) {
+        const target = getPrismaP2002Target(error);
+        const model = getPrismaP2002Model(error);
+        const details = [model, target].filter(Boolean).join(':');
+        return new Response(`Failed to create save due to duplicate key${details ? ` (${details})` : ''}. Please retry.`, { status: 409 });
+      }
+      return new Response('Failed to create save', { status: 500 });
+    }
   });
 }
