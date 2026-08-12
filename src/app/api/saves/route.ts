@@ -98,6 +98,35 @@ function normalizeRequestId(value: unknown): string | null {
   return normalized;
 }
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function runSaveSideEffectsWithBudget(
+  sideEffects: Array<Promise<unknown>>,
+  saveId: string,
+  maxWaitMs = 1200
+): Promise<void> {
+  if (sideEffects.length === 0) return;
+
+  const settledPromise = Promise.allSettled(sideEffects).then((results) => {
+    results.forEach((result, index) => {
+      if (result.status === 'rejected') {
+        console.error(`Optional save side effect ${index} failed for save ${saveId}:`, result.reason);
+      }
+    });
+  });
+
+  const timedOut = await Promise.race([
+    settledPromise.then(() => false),
+    delay(maxWaitMs).then(() => true),
+  ]);
+
+  if (timedOut) {
+    console.warn(`Optional save side effects exceeded ${maxWaitMs}ms for save ${saveId}. Returning response while side effects continue.`);
+  }
+}
+
 export async function POST(req: NextRequest) {
   return withAuth(req, async (uid) => {
     if (!uid) return new Response('Unauthorized', { status: 401 });
@@ -211,7 +240,14 @@ export async function POST(req: NextRequest) {
       }
 
       if (createdNewSave) {
-        const sideEffects = await Promise.allSettled([
+        // Keep cache consistency work in the critical path.
+        await Promise.allSettled([
+          deleteCacheKey('stats:global'),
+          invalidateUserPreviewSavesCache(uid),
+        ]);
+
+        // Non-critical work should not delay save creation response.
+        const optionalSideEffects = [
           !isUnemployedStart && startingTeamId
             ? addChallengeForTeam(saveId, Number(startingTeamId))
             : Promise.resolve(),
@@ -225,15 +261,9 @@ export async function POST(req: NextRequest) {
             eventType: 'save.created',
             eventTimestamp: new Date(),
           }),
-          deleteCacheKey('stats:global'),
-          invalidateUserPreviewSavesCache(uid),
-        ]);
+        ];
 
-        sideEffects.forEach((result, index) => {
-          if (result.status === 'rejected') {
-            console.error(`Save side effect ${index} failed for save ${saveId}:`, result.reason);
-          }
-        });
+        await runSaveSideEffectsWithBudget(optionalSideEffects, saveId);
       }
 
       return new Response(JSON.stringify(persistedSave), { status: wasIdempotentReplay ? 200 : 201 });
