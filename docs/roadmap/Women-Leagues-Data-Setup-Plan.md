@@ -1,10 +1,12 @@
 # Women Leagues Data Setup Plan
 
+Status last updated: 2026-08-11
+
 ## Goal
 Build a reliable women leagues and teams data pipeline for FM26 and FM27 without activating additional leagues, then simplify app logic to depend on explicit gender fields instead of runtime heuristics.
 
 ## Phase 0 - Scope Lock and Baseline
-- [ ] Confirm final scope: only currently active FM leagues are in-scope.
+- [x] Confirm final scope: only currently active FM leagues are in-scope.
 - [x] Export baseline counts from DB:
   - [x] Total teams
   - [x] Teams with `isFemale = true`
@@ -56,22 +58,32 @@ Build a reliable women leagues and teams data pipeline for FM26 and FM27 without
   - [x] `null` if mixed/unknown
 - [x] Implement `Team.isFemale` assignment/backfill logic.
 
-## Phase 4 - Backfill Existing Data
-- [ ] Backfill `ApiCompetition.isFemale` where null.
-- [ ] Backfill `CompetitionGroup.isFemale` where null.
-- [ ] Backfill `Team.isFemale` from women competition participation.
-- [ ] Produce unresolved audit lists:
-  - [ ] Teams still null
-  - [ ] Competition groups still null
-- [ ] Manual review pass for unresolved high-impact leagues (for example FA WSL).
+## Phase 4 - Data Alignment
+- [x] Replace one-off backfill scripts with explicit mapping and sync flow.
+- [x] Create missing `CompetitionGroup` rows from active `ApiCompetition` (`sync-groups-from-api`).
+- [x] Create/fix missing `CompetitionGroupApiCompetition` links (`sync-group-links`).
+- [x] Sync `ApiCompetition.isFemale` from active domestic group mappings (`sync-api-gender`).
+- [x] Validate women-league mapping gap closure (FA WSL and other target women leagues linked).
+- [x] Consolidate export/apply into one unified snapshot flow for prod parity.
+- [x] Keep explicit `Team.isFemale` sync script based on mapped competitions (`teams:sync-gender`).
+- [x] Run team gender sync from mapped competitions and capture current state:
+  - [x] Teams scanned: 3979
+  - [x] Teams updated: 14
+  - [x] Teams unchanged: 3965
+  - [x] Derived female/male/null: 126/2743/1110
+  - [x] Conflicting signals: 0
+- [ ] Produce final unresolved audit lists after final seed run:
+  - [x] Teams still null (current: 1110)
+  - [x] Competition groups still null (current: 414)
+  - [x] API competitions still null (current: 301)
 
 ## Phase 5 - Application Logic Cleanup
 - [ ] Replace runtime heuristic filtering with explicit `CompetitionGroup.isFemale` filtering.
 - [ ] Keep product rule:
   - [ ] Women teams can select only women competitions.
   - [ ] Men/unknown teams default to non-women competitions.
-- [ ] Keep temporary fallback in team lookup only if mapping gaps remain.
-- [ ] Add cache version bumps where required after logic swaps.
+- [x] Remove broad team fallback behavior for league team lookup.
+- [x] Add cache version bumps where required after logic swaps.
 
 ## Phase 6 - QA and Verification
 - [ ] Save creation tests:
@@ -92,11 +104,14 @@ Build a reliable women leagues and teams data pipeline for FM26 and FM27 without
 - [ ] Compare post-run counts against baseline and capture delta.
 
 ## Phase 7 - Operational Runbook (During Paid API Month)
-- [ ] Dry run on subset of active leagues.
-- [ ] Full run for FM26 and FM27 in controlled batches.
-- [ ] Re-run idempotency check.
-- [ ] Final full refresh near end of paid month.
-- [ ] Export final snapshots and logs for future offline maintenance.
+- [x] Consolidate operational docs into unified runbook (`docs/database/Competitions-Unified-Runbook.md`).
+- [x] Replace multi-file competition export/apply with single unified export/apply commands.
+- [x] Prod execution:
+  - [x] Run Prisma deploy/generate on prod.
+  - [x] Run unified apply dry-run on prod.
+  - [x] Run unified apply on prod.
+  - [x] Re-run unified apply dry-run to confirm idempotency.
+- [ ] Final post-prod snapshot/log capture.
 
 ## Completion Criteria
 - [ ] Women leagues in active FM set can create saves with visible teams.

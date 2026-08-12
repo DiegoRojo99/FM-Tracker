@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-08-11T15:22:02.412Z",
+    "generatedAt": "2026-08-12T09:38:26.224Z",
     "version": 1
   },
   "competitionGroups": [
@@ -11,7 +11,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/303.png"
     },
     {
@@ -21,7 +21,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/302.png"
     },
     {
@@ -31,7 +31,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/560.png"
     },
     {
@@ -41,7 +41,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/301.png"
     },
     {
@@ -51,7 +51,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/130.png"
     },
     {
@@ -61,7 +61,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1032.png"
     },
     {
@@ -81,7 +81,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/131.png"
     },
     {
@@ -91,7 +91,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/132.png"
     },
     {
@@ -101,7 +101,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/133.png"
     },
     {
@@ -121,7 +121,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/906.png"
     },
     {
@@ -131,7 +131,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/810.png"
     },
     {
@@ -141,7 +141,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1178.png"
     },
     {
@@ -151,7 +151,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/134.png"
     },
     {
@@ -161,7 +161,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1067.png"
     },
     {
@@ -171,7 +171,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/517.png"
     },
     {
@@ -201,7 +201,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/220.png"
     },
     {
@@ -211,7 +211,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/484.png"
     },
     {
@@ -241,7 +241,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/874.png"
     },
     {
@@ -251,7 +251,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1202.png"
     },
     {
@@ -261,7 +261,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/191.png"
     },
     {
@@ -271,7 +271,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/192.png"
     },
     {
@@ -281,7 +281,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/835.png"
     },
     {
@@ -291,7 +291,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1090.png"
     },
     {
@@ -301,7 +301,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/481.png"
     },
     {
@@ -311,7 +311,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/193.png"
     },
     {
@@ -321,7 +321,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/482.png"
     },
     {
@@ -331,7 +331,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/833.png"
     },
     {
@@ -341,7 +341,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/194.png"
     },
     {
@@ -351,7 +351,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/834.png"
     },
     {
@@ -361,7 +361,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/648.png"
     },
     {
@@ -381,7 +381,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/836.png"
     },
     {
@@ -391,7 +391,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/196.png"
     },
     {
@@ -401,7 +401,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1094.png"
     },
     {
@@ -421,7 +421,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/147.png"
     },
     {
@@ -451,7 +451,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/518.png"
     },
     {
@@ -461,7 +461,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1011.png"
     },
     {
@@ -471,7 +471,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/519.png"
     },
     {
@@ -481,7 +481,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/146.png"
     },
     {
@@ -491,7 +491,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/174.png"
     },
     {
@@ -521,7 +521,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/656.png"
     },
     {
@@ -531,7 +531,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/520.png"
     },
     {
@@ -541,7 +541,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/77.png"
     },
     {
@@ -551,7 +551,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/522.png"
     },
     {
@@ -561,7 +561,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/74.png"
     },
     {
@@ -571,7 +571,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/610.png"
     },
     {
@@ -581,7 +581,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/611.png"
     },
     {
@@ -601,7 +601,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/612.png"
     },
     {
@@ -611,7 +611,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1165.png"
     },
     {
@@ -621,7 +621,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1158.png"
     },
     {
@@ -631,7 +631,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1184.png"
     },
     {
@@ -641,7 +641,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/742.png"
     },
     {
@@ -651,7 +651,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/843.png"
     },
     {
@@ -661,7 +661,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/608.png"
     },
     {
@@ -671,7 +671,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/630.png"
     },
     {
@@ -681,7 +681,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/627.png"
     },
     {
@@ -691,7 +691,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/603.png"
     },
     {
@@ -701,7 +701,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/621.png"
     },
     {
@@ -711,7 +711,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/616.png"
     },
     {
@@ -721,7 +721,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/615.png"
     },
     {
@@ -731,7 +731,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/607.png"
     },
     {
@@ -741,7 +741,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/626.png"
     },
     {
@@ -781,7 +781,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/76.png"
     },
     {
@@ -791,7 +791,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/623.png"
     },
     {
@@ -801,7 +801,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/632.png"
     },
     {
@@ -811,7 +811,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/631.png"
     },
     {
@@ -831,7 +831,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/118.png"
     },
     {
@@ -841,7 +841,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/486.png"
     },
     {
@@ -861,7 +861,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/562.png"
     },
     {
@@ -871,7 +871,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/812.png"
     },
     {
@@ -881,7 +881,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/259.png"
     },
     {
@@ -901,7 +901,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/258.png"
     },
     {
@@ -911,7 +911,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1182.png"
     },
     {
@@ -921,7 +921,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/599.png"
     },
     {
@@ -931,7 +931,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/600.png"
     },
     {
@@ -941,7 +941,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/601.png"
     },
     {
@@ -951,7 +951,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/739.png"
     },
     {
@@ -971,7 +971,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1044.png"
     },
     {
@@ -981,7 +981,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/209.png"
     },
     {
@@ -1001,7 +1001,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/267.png"
     },
     {
@@ -1031,7 +1031,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/711.png"
     },
     {
@@ -1041,7 +1041,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/527.png"
     },
     {
@@ -1051,7 +1051,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/171.png"
     },
     {
@@ -1071,7 +1071,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/929.png"
     },
     {
@@ -1081,7 +1081,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/972.png"
     },
     {
@@ -1101,7 +1101,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/241.png"
     },
     {
@@ -1111,7 +1111,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/712.png"
     },
     {
@@ -1141,7 +1141,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/713.png"
     },
     {
@@ -1151,7 +1151,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/669.png"
     },
     {
@@ -1161,7 +1161,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/347.png"
     },
     {
@@ -1201,7 +1201,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1034.png"
     },
     {
@@ -1241,7 +1241,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/947.png"
     },
     {
@@ -1271,7 +1271,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1137.png"
     },
     {
@@ -1311,7 +1311,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/121.png"
     },
     {
@@ -1341,7 +1341,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/233.png"
     },
     {
@@ -1351,7 +1351,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/887.png"
     },
     {
@@ -1361,7 +1361,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/539.png"
     },
     {
@@ -1381,7 +1381,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/735.png"
     },
     {
@@ -1401,7 +1401,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/142.png"
     },
     {
@@ -1411,7 +1411,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/435.png"
     },
     {
@@ -1421,7 +1421,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/436.png"
     },
     {
@@ -1451,7 +1451,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/875.png"
     },
     {
@@ -1461,7 +1461,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/876.png"
     },
     {
@@ -1471,7 +1471,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/877.png"
     },
     {
@@ -1481,7 +1481,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/878.png"
     },
     {
@@ -1491,7 +1491,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/879.png"
     },
     {
@@ -1511,7 +1511,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1058.png"
     },
     {
@@ -1531,7 +1531,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/439.png"
     },
     {
@@ -1541,7 +1541,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/448.png"
     },
     {
@@ -1551,7 +1551,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/449.png"
     },
     {
@@ -1561,7 +1561,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/450.png"
     },
     {
@@ -1571,7 +1571,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/451.png"
     },
     {
@@ -1581,7 +1581,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/452.png"
     },
     {
@@ -1591,7 +1591,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/453.png"
     },
     {
@@ -1601,7 +1601,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/454.png"
     },
     {
@@ -1611,7 +1611,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/455.png"
     },
     {
@@ -1621,7 +1621,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/456.png"
     },
     {
@@ -1631,7 +1631,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/440.png"
     },
     {
@@ -1641,7 +1641,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/441.png"
     },
     {
@@ -1651,7 +1651,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/442.png"
     },
     {
@@ -1661,7 +1661,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/443.png"
     },
     {
@@ -1671,7 +1671,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/444.png"
     },
     {
@@ -1681,7 +1681,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/445.png"
     },
     {
@@ -1691,7 +1691,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/446.png"
     },
     {
@@ -1701,7 +1701,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/447.png"
     },
     {
@@ -1711,7 +1711,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/247.png"
     },
     {
@@ -1721,7 +1721,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/248.png"
     },
     {
@@ -1731,7 +1731,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/249.png"
     },
     {
@@ -1741,7 +1741,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/640.png"
     },
     {
@@ -1751,7 +1751,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/899.png"
     },
     {
@@ -1761,7 +1761,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/246.png"
     },
     {
@@ -1791,7 +1791,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/901.png"
     },
     {
@@ -1801,7 +1801,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1087.png"
     },
     {
@@ -1811,7 +1811,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/66.png"
     },
     {
@@ -1821,7 +1821,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/64.png"
     },
     {
@@ -1871,7 +1871,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/67.png"
     },
     {
@@ -1881,7 +1881,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/68.png"
     },
     {
@@ -1891,7 +1891,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/69.png"
     },
     {
@@ -1901,7 +1901,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/70.png"
     },
     {
@@ -1911,7 +1911,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/461.png"
     },
     {
@@ -1921,7 +1921,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/462.png"
     },
     {
@@ -1931,7 +1931,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/463.png"
     },
     {
@@ -1941,7 +1941,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/464.png"
     },
     {
@@ -1951,7 +1951,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/465.png"
     },
     {
@@ -1961,7 +1961,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/466.png"
     },
     {
@@ -1971,7 +1971,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1029.png"
     },
     {
@@ -1981,7 +1981,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/467.png"
     },
     {
@@ -1991,7 +1991,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/468.png"
     },
     {
@@ -2001,7 +2001,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/469.png"
     },
     {
@@ -2011,7 +2011,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/470.png"
     },
     {
@@ -2021,7 +2021,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/526.png"
     },
     {
@@ -2041,7 +2041,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/528.png"
     },
     {
@@ -2051,7 +2051,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/46.png"
     },
     {
@@ -2061,7 +2061,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/45.png"
     },
     {
@@ -2071,7 +2071,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/47.png"
     },
     {
@@ -2101,7 +2101,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/48.png"
     },
     {
@@ -2141,7 +2141,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1156.png"
     },
     {
@@ -2191,7 +2191,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/697.png"
     },
     {
@@ -2211,7 +2211,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1019.png"
     },
     {
@@ -2221,7 +2221,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/757.png"
     },
     {
@@ -2231,7 +2231,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/559.png"
     },
     {
@@ -2261,7 +2261,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1103.png"
     },
     {
@@ -2271,7 +2271,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/182.png"
     },
     {
@@ -2291,7 +2291,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/181.png"
     },
     {
@@ -2301,7 +2301,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/185.png"
     },
     {
@@ -2341,7 +2341,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1078.png"
     },
     {
@@ -2351,7 +2351,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1074.png"
     },
     {
@@ -2361,7 +2361,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/111.png"
     },
     {
@@ -2371,7 +2371,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/738.png"
     },
     {
@@ -2391,7 +2391,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/112.png"
     },
     {
@@ -2411,7 +2411,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/837.png"
     },
     {
@@ -2421,7 +2421,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1042.png"
     },
     {
@@ -2431,7 +2431,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/199.png"
     },
     {
@@ -2441,7 +2441,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/576.png"
     },
     {
@@ -2451,7 +2451,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/577.png"
     },
     {
@@ -2461,7 +2461,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/578.png"
     },
     {
@@ -2471,7 +2471,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/579.png"
     },
     {
@@ -2481,7 +2481,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/580.png"
     },
     {
@@ -2491,7 +2491,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/581.png"
     },
     {
@@ -2521,7 +2521,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/544.png"
     },
     {
@@ -2531,7 +2531,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/381.png"
     },
     {
@@ -2541,7 +2541,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1199.png"
     },
     {
@@ -2561,7 +2561,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/716.png"
     },
     {
@@ -2571,7 +2571,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/212.png"
     },
     {
@@ -2601,7 +2601,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/946.png"
     },
     {
@@ -2611,7 +2611,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1021.png"
     },
     {
@@ -2671,7 +2671,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/924.png"
     },
     {
@@ -2681,7 +2681,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/359.png"
     },
     {
@@ -2691,7 +2691,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/546.png"
     },
     {
@@ -2721,7 +2721,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1175.png"
     },
     {
@@ -2731,7 +2731,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/496.png"
     },
     {
@@ -2751,7 +2751,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/383.png"
     },
     {
@@ -2761,7 +2761,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/384.png"
     },
     {
@@ -2771,7 +2771,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/659.png"
     },
     {
@@ -2781,7 +2781,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/385.png"
     },
     {
@@ -2791,7 +2791,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/545.png"
     },
     {
@@ -2801,7 +2801,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1020.png"
     },
     {
@@ -2811,7 +2811,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1201.png"
     },
     {
@@ -2821,7 +2821,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/324.png"
     },
     {
@@ -2831,7 +2831,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/717.png"
     },
     {
@@ -2851,7 +2851,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/325.png"
     },
     {
@@ -2871,7 +2871,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/166.png"
     },
     {
@@ -2881,7 +2881,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/167.png"
     },
     {
@@ -2891,7 +2891,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/815.png"
     },
     {
@@ -2901,7 +2901,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/168.png"
     },
     {
@@ -2911,7 +2911,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/814.png"
     },
     {
@@ -2921,7 +2921,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/639.png"
     },
     {
@@ -2941,7 +2941,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/671.png"
     },
     {
@@ -2951,7 +2951,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/705.png"
     },
     {
@@ -2961,7 +2961,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/706.png"
     },
     {
@@ -2971,7 +2971,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/137.png"
     },
     {
@@ -2981,7 +2981,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/704.png"
     },
     {
@@ -2991,7 +2991,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/891.png"
     },
     {
@@ -3001,7 +3001,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/892.png"
     },
     {
@@ -3071,7 +3071,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/138.png"
     },
     {
@@ -3081,7 +3081,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/942.png"
     },
     {
@@ -3091,7 +3091,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/943.png"
     },
     {
@@ -3101,7 +3101,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/426.png"
     },
     {
@@ -3111,7 +3111,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/427.png"
     },
     {
@@ -3121,7 +3121,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/428.png"
     },
     {
@@ -3131,7 +3131,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/429.png"
     },
     {
@@ -3141,7 +3141,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/430.png"
     },
     {
@@ -3151,7 +3151,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/431.png"
     },
     {
@@ -3161,7 +3161,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/432.png"
     },
     {
@@ -3171,7 +3171,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/433.png"
     },
     {
@@ -3181,7 +3181,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/434.png"
     },
     {
@@ -3191,7 +3191,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/547.png"
     },
     {
@@ -3201,7 +3201,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/817.png"
     },
     {
@@ -3211,7 +3211,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/102.png"
     },
     {
@@ -3251,7 +3251,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/497.png"
     },
     {
@@ -3261,7 +3261,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/101.png"
     },
     {
@@ -3271,7 +3271,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/548.png"
     },
     {
@@ -3291,7 +3291,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/294.png"
     },
     {
@@ -3301,7 +3301,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/295.png"
     },
     {
@@ -3331,7 +3331,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/660.png"
     },
     {
@@ -3341,7 +3341,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/364.png"
     },
     {
@@ -3351,7 +3351,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/658.png"
     },
     {
@@ -3361,7 +3361,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1176.png"
     },
     {
@@ -3381,7 +3381,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/857.png"
     },
     {
@@ -3411,7 +3411,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/673.png"
     },
     {
@@ -3421,7 +3421,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/500.png"
     },
     {
@@ -3431,7 +3431,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/499.png"
     },
     {
@@ -3451,7 +3451,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/89.png"
     },
     {
@@ -3471,7 +3471,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/91.png"
     },
     {
@@ -3491,7 +3491,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/543.png"
     },
     {
@@ -3501,7 +3501,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/492.png"
     },
     {
@@ -3521,7 +3521,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/915.png"
     },
     {
@@ -3541,7 +3541,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/473.png"
     },
     {
@@ -3551,7 +3551,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/474.png"
     },
     {
@@ -3561,7 +3561,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/774.png"
     },
     {
@@ -3571,7 +3571,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/775.png"
     },
     {
@@ -3581,7 +3581,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/776.png"
     },
     {
@@ -3591,7 +3591,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/777.png"
     },
     {
@@ -3601,7 +3601,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/778.png"
     },
     {
@@ -3611,7 +3611,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/779.png"
     },
     {
@@ -3631,7 +3631,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/105.png"
     },
     {
@@ -3641,7 +3641,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/725.png"
     },
     {
@@ -3651,7 +3651,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/503.png"
     },
     {
@@ -3671,7 +3671,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/282.png"
     },
     {
@@ -3681,7 +3681,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/108.png"
     },
     {
@@ -3701,7 +3701,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1033.png"
     },
     {
@@ -3721,7 +3721,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/727.png"
     },
     {
@@ -3731,7 +3731,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/948.png"
     },
     {
@@ -3751,7 +3751,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/457.png"
     },
     {
@@ -3761,7 +3761,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/458.png"
     },
     {
@@ -3771,7 +3771,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/459.png"
     },
     {
@@ -3781,7 +3781,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/460.png"
     },
     {
@@ -3801,7 +3801,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/701.png"
     },
     {
@@ -3831,7 +3831,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/550.png"
     },
     {
@@ -3861,7 +3861,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/840.png"
     },
     {
@@ -3871,7 +3871,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/285.png"
     },
     {
@@ -3881,7 +3881,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/728.png"
     },
     {
@@ -3911,7 +3911,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/555.png"
     },
     {
@@ -3921,7 +3921,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/732.png"
     },
     {
@@ -3951,7 +3951,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/237.png"
     },
     {
@@ -3981,7 +3981,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/651.png"
     },
     {
@@ -3991,7 +3991,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/652.png"
     },
     {
@@ -4001,7 +4001,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/650.png"
     },
     {
@@ -4011,7 +4011,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/653.png"
     },
     {
@@ -4021,7 +4021,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/663.png"
     },
     {
@@ -4031,7 +4031,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/649.png"
     },
     {
@@ -4071,7 +4071,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/592.png"
     },
     {
@@ -4081,7 +4081,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/593.png"
     },
     {
@@ -4091,7 +4091,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/594.png"
     },
     {
@@ -4101,7 +4101,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/597.png"
     },
     {
@@ -4121,7 +4121,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/595.png"
     },
     {
@@ -4131,7 +4131,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/596.png"
     },
     {
@@ -4161,7 +4161,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/563.png"
     },
     {
@@ -4171,7 +4171,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/564.png"
     },
     {
@@ -4191,7 +4191,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/115.png"
     },
     {
@@ -4211,7 +4211,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/959.png"
     },
     {
@@ -4251,7 +4251,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/375.png"
     },
     {
@@ -4271,7 +4271,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/680.png"
     },
     {
@@ -4281,7 +4281,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/733.png"
     },
     {
@@ -4321,7 +4321,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/552.png"
     },
     {
@@ -4331,7 +4331,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/553.png"
     },
     {
@@ -4341,7 +4341,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/554.png"
     },
     {
@@ -4351,7 +4351,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1027.png"
     },
     {
@@ -4361,7 +4361,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/206.png"
     },
     {
@@ -4371,7 +4371,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/551.png"
     },
     {
@@ -4401,7 +4401,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/866.png"
     },
     {
@@ -4411,7 +4411,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/909.png"
     },
     {
@@ -4421,7 +4421,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/523.png"
     },
     {
@@ -4431,7 +4431,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1118.png"
     },
     {
@@ -4451,7 +4451,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/641.png"
     },
     {
@@ -4461,7 +4461,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/255.png"
     },
     {
@@ -4471,7 +4471,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/489.png"
     },
     {
@@ -4481,7 +4481,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1095.png"
     },
     {
@@ -4491,7 +4491,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/256.png"
     },
     {
@@ -4501,7 +4501,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1130.png"
     },
     {
@@ -4511,7 +4511,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1117.png"
     },
     {
@@ -4521,7 +4521,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/257.png"
     },
     {
@@ -4531,7 +4531,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1116.png"
     },
     {
@@ -4541,7 +4541,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/930.png"
     },
     {
@@ -4571,7 +4571,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/270.png"
     },
     {
@@ -4591,7 +4591,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/842.png"
     },
     {
@@ -4601,7 +4601,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1132.png"
     },
     {
@@ -4611,7 +4611,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/17.png"
     },
     {
@@ -4621,7 +4621,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/18.png"
     },
     {
@@ -4631,7 +4631,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1012.png"
     },
     {
@@ -4641,7 +4641,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/965.png"
     },
     {
@@ -4651,7 +4651,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1070.png"
     },
     {
@@ -4661,7 +4661,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1140.png"
     },
     {
@@ -4691,7 +4691,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/538.png"
     },
     {
@@ -4701,7 +4701,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1043.png"
     },
     {
@@ -4711,7 +4711,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1162.png"
     },
     {
@@ -4721,7 +4721,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1072.png"
     },
     {
@@ -4731,7 +4731,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1013.png"
     },
     {
@@ -4741,7 +4741,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/768.png"
     },
     {
@@ -4751,7 +4751,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/860.png"
     },
     {
@@ -4761,7 +4761,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/908.png"
     },
     {
@@ -4771,7 +4771,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1189.png"
     },
     {
@@ -4781,7 +4781,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1129.png"
     },
     {
@@ -4801,7 +4801,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1008.png"
     },
     {
@@ -4811,7 +4811,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/12.png"
     },
     {
@@ -4821,7 +4821,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/20.png"
     },
     {
@@ -4831,7 +4831,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/973.png"
     },
     {
@@ -4841,7 +4841,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/533.png"
     },
     {
@@ -4851,7 +4851,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1015.png"
     },
     {
@@ -4861,7 +4861,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/885.png"
     },
     {
@@ -4871,7 +4871,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/869.png"
     },
     {
@@ -4881,7 +4881,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/856.png"
     },
     {
@@ -4891,7 +4891,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/534.png"
     },
     {
@@ -4901,7 +4901,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1028.png"
     },
     {
@@ -4911,7 +4911,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/16.png"
     },
     {
@@ -4931,7 +4931,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/858.png"
     },
     {
@@ -4941,7 +4941,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/536.png"
     },
     {
@@ -4951,7 +4951,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/963.png"
     },
     {
@@ -4961,7 +4961,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/537.png"
     },
     {
@@ -4971,7 +4971,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1136.png"
     },
     {
@@ -4981,7 +4981,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1001.png"
     },
     {
@@ -5001,7 +5001,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/949.png"
     },
     {
@@ -5011,7 +5011,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/540.png"
     },
     {
@@ -5021,7 +5021,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1206.png"
     },
     {
@@ -5031,7 +5031,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/541.png"
     },
     {
@@ -5041,7 +5041,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/11.png"
     },
     {
@@ -5051,7 +5051,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/970.png"
     },
     {
@@ -5061,7 +5061,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1081.png"
     },
     {
@@ -5071,7 +5071,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/926.png"
     },
     {
@@ -5081,7 +5081,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/859.png"
     },
     {
@@ -5091,7 +5091,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/771.png"
     },
     {
@@ -5101,7 +5101,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/940.png"
     },
     {
@@ -5111,7 +5111,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/23.png"
     },
     {
@@ -5121,7 +5121,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1169.png"
     },
     {
@@ -5131,7 +5131,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1188.png"
     },
     {
@@ -5141,7 +5141,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/937.png"
     },
     {
@@ -5171,7 +5171,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1186.png"
     },
     {
@@ -5181,7 +5181,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1168.png"
     },
     {
@@ -5191,7 +5191,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/667.png"
     },
     {
@@ -5201,7 +5201,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/666.png"
     },
     {
@@ -5211,7 +5211,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/25.png"
     },
     {
@@ -5221,7 +5221,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1038.png"
     },
     {
@@ -5231,7 +5231,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/772.png"
     },
     {
@@ -5241,7 +5241,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/27.png"
     },
     {
@@ -5251,7 +5251,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/770.png"
     },
     {
@@ -5261,7 +5261,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1045.png"
     },
     {
@@ -5271,7 +5271,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1039.png"
     },
     {
@@ -5281,7 +5281,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1123.png"
     },
     {
@@ -5291,7 +5291,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/28.png"
     },
     {
@@ -5301,7 +5301,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/904.png"
     },
     {
@@ -5311,7 +5311,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/911.png"
     },
     {
@@ -5321,7 +5321,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/773.png"
     },
     {
@@ -5331,7 +5331,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/903.png"
     },
     {
@@ -5341,7 +5341,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/900.png"
     },
     {
@@ -5351,7 +5351,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/914.png"
     },
     {
@@ -5361,7 +5361,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/890.png"
     },
     {
@@ -5371,7 +5371,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1089.png"
     },
     {
@@ -5391,7 +5391,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1083.png"
     },
     {
@@ -5401,7 +5401,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/2.png"
     },
     {
@@ -5421,7 +5421,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1024.png"
     },
     {
@@ -5431,7 +5431,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/848.png"
     },
     {
@@ -5441,7 +5441,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1191.png"
     },
     {
@@ -5451,7 +5451,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/3.png"
     },
     {
@@ -5471,7 +5471,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/531.png"
     },
     {
@@ -5481,7 +5481,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/921.png"
     },
     {
@@ -5491,7 +5491,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/886.png"
     },
     {
@@ -5501,7 +5501,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1102.png"
     },
     {
@@ -5511,7 +5511,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/493.png"
     },
     {
@@ -5521,7 +5521,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/893.png"
     },
     {
@@ -5531,7 +5531,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/918.png"
     },
     {
@@ -5541,7 +5541,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/38.png"
     },
     {
@@ -5551,7 +5551,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/850.png"
     },
     {
@@ -5561,7 +5561,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/14.png"
     },
     {
@@ -5571,7 +5571,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1077.png"
     },
     {
@@ -5581,7 +5581,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/29.png"
     },
     {
@@ -5591,7 +5591,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/587.png"
     },
     {
@@ -5601,7 +5601,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/950.png"
     },
     {
@@ -5611,7 +5611,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/490.png"
     },
     {
@@ -5621,7 +5621,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/8.png"
     },
     {
@@ -5631,7 +5631,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/910.png"
     },
     {
@@ -5641,7 +5641,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/289.png"
     },
     {
@@ -5651,7 +5651,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/509.png"
     },
     {
@@ -5661,7 +5661,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/507.png"
     },
     {
@@ -5671,7 +5671,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/734.png"
     },
     {
@@ -5681,7 +5681,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/508.png"
     },
     {
@@ -5703,7 +5703,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/303.png"
     },
     {
@@ -5713,7 +5713,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/302.png"
     },
     {
@@ -5723,7 +5723,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/560.png"
     },
     {
@@ -5733,7 +5733,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/301.png"
     },
     {
@@ -5743,7 +5743,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/130.png"
     },
     {
@@ -5753,7 +5753,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1032.png"
     },
     {
@@ -5773,7 +5773,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/131.png"
     },
     {
@@ -5783,7 +5783,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/132.png"
     },
     {
@@ -5793,7 +5793,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/133.png"
     },
     {
@@ -5813,7 +5813,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/810.png"
     },
     {
@@ -5823,7 +5823,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1178.png"
     },
     {
@@ -5833,7 +5833,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/134.png"
     },
     {
@@ -5843,7 +5843,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1067.png"
     },
     {
@@ -5853,7 +5853,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/517.png"
     },
     {
@@ -5883,7 +5883,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/220.png"
     },
     {
@@ -5893,7 +5893,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/484.png"
     },
     {
@@ -5923,7 +5923,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/874.png"
     },
     {
@@ -5933,7 +5933,7 @@
       "type": "DOMESTIC_CUP",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1202.png"
     },
     {
@@ -5953,7 +5953,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/147.png"
     },
     {
@@ -5983,7 +5983,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/519.png"
     },
     {
@@ -5993,7 +5993,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/146.png"
     },
     {
@@ -6003,7 +6003,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/174.png"
     },
     {
@@ -6033,7 +6033,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/656.png"
     },
     {
@@ -6043,7 +6043,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/520.png"
     },
     {
@@ -6053,7 +6053,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/77.png"
     },
     {
@@ -6063,7 +6063,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/522.png"
     },
     {
@@ -6073,7 +6073,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/74.png"
     },
     {
@@ -6083,7 +6083,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/610.png"
     },
     {
@@ -6093,7 +6093,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/611.png"
     },
     {
@@ -6103,7 +6103,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/73.png"
     },
     {
@@ -6113,7 +6113,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/612.png"
     },
     {
@@ -6123,7 +6123,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1165.png"
     },
     {
@@ -6133,7 +6133,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1158.png"
     },
     {
@@ -6143,7 +6143,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1184.png"
     },
     {
@@ -6153,7 +6153,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/742.png"
     },
     {
@@ -6163,7 +6163,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/843.png"
     },
     {
@@ -6173,7 +6173,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/608.png"
     },
     {
@@ -6183,7 +6183,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/630.png"
     },
     {
@@ -6193,7 +6193,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/627.png"
     },
     {
@@ -6203,7 +6203,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/603.png"
     },
     {
@@ -6213,7 +6213,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/621.png"
     },
     {
@@ -6223,7 +6223,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/616.png"
     },
     {
@@ -6233,7 +6233,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/615.png"
     },
     {
@@ -6243,7 +6243,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/607.png"
     },
     {
@@ -6253,7 +6253,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/626.png"
     },
     {
@@ -6293,7 +6293,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/76.png"
     },
     {
@@ -6303,7 +6303,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/623.png"
     },
     {
@@ -6313,7 +6313,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/632.png"
     },
     {
@@ -6323,7 +6323,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/631.png"
     },
     {
@@ -6343,7 +6343,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/118.png"
     },
     {
@@ -6353,7 +6353,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/486.png"
     },
     {
@@ -6373,7 +6373,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/812.png"
     },
     {
@@ -6383,7 +6383,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/259.png"
     },
     {
@@ -6403,7 +6403,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1182.png"
     },
     {
@@ -6413,7 +6413,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/739.png"
     },
     {
@@ -6433,7 +6433,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1044.png"
     },
     {
@@ -6443,7 +6443,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/209.png"
     },
     {
@@ -6463,7 +6463,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/267.png"
     },
     {
@@ -6493,7 +6493,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/711.png"
     },
     {
@@ -6503,7 +6503,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/527.png"
     },
     {
@@ -6513,7 +6513,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/171.png"
     },
     {
@@ -6533,7 +6533,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/929.png"
     },
     {
@@ -6543,7 +6543,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/972.png"
     },
     {
@@ -6563,7 +6563,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/241.png"
     },
     {
@@ -6573,7 +6573,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/712.png"
     },
     {
@@ -6603,7 +6603,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/713.png"
     },
     {
@@ -6613,7 +6613,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/669.png"
     },
     {
@@ -6623,7 +6623,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/347.png"
     },
     {
@@ -6663,7 +6663,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1034.png"
     },
     {
@@ -6693,7 +6693,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/81.png"
     },
     {
@@ -6703,7 +6703,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/947.png"
     },
     {
@@ -6723,7 +6723,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/529.png"
     },
     {
@@ -6733,7 +6733,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1137.png"
     },
     {
@@ -6773,7 +6773,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/121.png"
     },
     {
@@ -6803,7 +6803,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/233.png"
     },
     {
@@ -6813,7 +6813,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/887.png"
     },
     {
@@ -6823,7 +6823,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/539.png"
     },
     {
@@ -6833,7 +6833,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/143.png"
     },
     {
@@ -6843,7 +6843,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/735.png"
     },
     {
@@ -6863,7 +6863,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/142.png"
     },
     {
@@ -6953,7 +6953,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1058.png"
     },
     {
@@ -6963,7 +6963,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/556.png"
     },
     {
@@ -6973,7 +6973,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/439.png"
     },
     {
@@ -6983,7 +6983,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/448.png"
     },
     {
@@ -6993,7 +6993,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/449.png"
     },
     {
@@ -7003,7 +7003,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/450.png"
     },
     {
@@ -7013,7 +7013,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/451.png"
     },
     {
@@ -7023,7 +7023,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/452.png"
     },
     {
@@ -7033,7 +7033,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/453.png"
     },
     {
@@ -7043,7 +7043,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/454.png"
     },
     {
@@ -7053,7 +7053,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/455.png"
     },
     {
@@ -7063,7 +7063,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/456.png"
     },
     {
@@ -7073,7 +7073,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/440.png"
     },
     {
@@ -7083,7 +7083,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/441.png"
     },
     {
@@ -7093,7 +7093,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/442.png"
     },
     {
@@ -7103,7 +7103,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/443.png"
     },
     {
@@ -7113,7 +7113,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/444.png"
     },
     {
@@ -7123,7 +7123,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/445.png"
     },
     {
@@ -7133,7 +7133,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/446.png"
     },
     {
@@ -7143,7 +7143,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 5,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/447.png"
     },
     {
@@ -7153,7 +7153,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/247.png"
     },
     {
@@ -7163,7 +7163,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/248.png"
     },
     {
@@ -7173,7 +7173,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/249.png"
     },
     {
@@ -7183,7 +7183,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/640.png"
     },
     {
@@ -7193,7 +7193,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/899.png"
     },
     {
@@ -7203,7 +7203,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/246.png"
     },
     {
@@ -7233,7 +7233,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/901.png"
     },
     {
@@ -7243,7 +7243,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1087.png"
     },
     {
@@ -7253,7 +7253,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/66.png"
     },
     {
@@ -7263,7 +7263,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/64.png"
     },
     {
@@ -7303,7 +7303,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/526.png"
     },
     {
@@ -7323,7 +7323,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/528.png"
     },
     {
@@ -7333,7 +7333,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/46.png"
     },
     {
@@ -7343,7 +7343,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/45.png"
     },
     {
@@ -7353,7 +7353,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/47.png"
     },
     {
@@ -7363,7 +7363,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/698.png"
     },
     {
@@ -7383,7 +7383,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/48.png"
     },
     {
@@ -7423,7 +7423,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1156.png"
     },
     {
@@ -7473,7 +7473,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/697.png"
     },
     {
@@ -7493,7 +7493,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1019.png"
     },
     {
@@ -7503,7 +7503,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/757.png"
     },
     {
@@ -7513,7 +7513,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/559.png"
     },
     {
@@ -7543,7 +7543,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1103.png"
     },
     {
@@ -7553,7 +7553,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/182.png"
     },
     {
@@ -7573,7 +7573,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/181.png"
     },
     {
@@ -7583,7 +7583,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/185.png"
     },
     {
@@ -7623,7 +7623,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1078.png"
     },
     {
@@ -7633,7 +7633,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1074.png"
     },
     {
@@ -7643,7 +7643,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/111.png"
     },
     {
@@ -7653,7 +7653,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/738.png"
     },
     {
@@ -7673,7 +7673,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/112.png"
     },
     {
@@ -7693,7 +7693,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/837.png"
     },
     {
@@ -7703,7 +7703,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1042.png"
     },
     {
@@ -7713,7 +7713,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/199.png"
     },
     {
@@ -7743,7 +7743,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/544.png"
     },
     {
@@ -7753,7 +7753,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1199.png"
     },
     {
@@ -7773,7 +7773,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/716.png"
     },
     {
@@ -7783,7 +7783,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/212.png"
     },
     {
@@ -7813,7 +7813,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/946.png"
     },
     {
@@ -7823,7 +7823,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1021.png"
     },
     {
@@ -7833,7 +7833,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/273.png"
     },
     {
@@ -7883,7 +7883,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/924.png"
     },
     {
@@ -7893,7 +7893,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/359.png"
     },
     {
@@ -7903,7 +7903,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/546.png"
     },
     {
@@ -7933,7 +7933,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1175.png"
     },
     {
@@ -7943,7 +7943,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/496.png"
     },
     {
@@ -7963,7 +7963,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/383.png"
     },
     {
@@ -7973,7 +7973,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/384.png"
     },
     {
@@ -7983,7 +7983,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/659.png"
     },
     {
@@ -7993,7 +7993,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/385.png"
     },
     {
@@ -8003,7 +8003,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/545.png"
     },
     {
@@ -8013,7 +8013,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1201.png"
     },
     {
@@ -8023,7 +8023,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/324.png"
     },
     {
@@ -8053,7 +8053,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/166.png"
     },
     {
@@ -8063,7 +8063,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/167.png"
     },
     {
@@ -8073,7 +8073,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/168.png"
     },
     {
@@ -8083,7 +8083,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/814.png"
     },
     {
@@ -8093,7 +8093,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/639.png"
     },
     {
@@ -8113,7 +8113,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/671.png"
     },
     {
@@ -8123,7 +8123,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/137.png"
     },
     {
@@ -8133,7 +8133,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/704.png"
     },
     {
@@ -8143,7 +8143,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/891.png"
     },
     {
@@ -8153,7 +8153,7 @@
       "type": "DOMESTIC_CUP",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/892.png"
     },
     {
@@ -8163,7 +8163,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1171.png"
     },
     {
@@ -8183,7 +8183,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1198.png"
     },
     {
@@ -8243,7 +8243,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/426.png"
     },
     {
@@ -8253,7 +8253,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/427.png"
     },
     {
@@ -8263,7 +8263,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/428.png"
     },
     {
@@ -8273,7 +8273,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/429.png"
     },
     {
@@ -8283,7 +8283,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/430.png"
     },
     {
@@ -8293,7 +8293,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/431.png"
     },
     {
@@ -8303,7 +8303,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/432.png"
     },
     {
@@ -8313,7 +8313,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/433.png"
     },
     {
@@ -8323,7 +8323,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/434.png"
     },
     {
@@ -8333,7 +8333,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/547.png"
     },
     {
@@ -8343,7 +8343,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/817.png"
     },
     {
@@ -8353,7 +8353,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/102.png"
     },
     {
@@ -8393,7 +8393,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/497.png"
     },
     {
@@ -8403,7 +8403,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/101.png"
     },
     {
@@ -8413,7 +8413,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/548.png"
     },
     {
@@ -8433,7 +8433,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/294.png"
     },
     {
@@ -8443,7 +8443,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/295.png"
     },
     {
@@ -8473,7 +8473,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/660.png"
     },
     {
@@ -8483,7 +8483,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/364.png"
     },
     {
@@ -8493,7 +8493,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/658.png"
     },
     {
@@ -8503,7 +8503,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1176.png"
     },
     {
@@ -8523,7 +8523,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/857.png"
     },
     {
@@ -8553,7 +8553,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/673.png"
     },
     {
@@ -8563,7 +8563,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/500.png"
     },
     {
@@ -8573,7 +8573,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/499.png"
     },
     {
@@ -8593,7 +8593,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/89.png"
     },
     {
@@ -8613,7 +8613,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/91.png"
     },
     {
@@ -8623,7 +8623,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/90.png"
     },
     {
@@ -8633,7 +8633,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/543.png"
     },
     {
@@ -8643,7 +8643,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/492.png"
     },
     {
@@ -8663,7 +8663,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/915.png"
     },
     {
@@ -8703,7 +8703,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/105.png"
     },
     {
@@ -8713,7 +8713,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/725.png"
     },
     {
@@ -8723,7 +8723,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/503.png"
     },
     {
@@ -8743,7 +8743,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/282.png"
     },
     {
@@ -8753,7 +8753,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/108.png"
     },
     {
@@ -8773,7 +8773,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1033.png"
     },
     {
@@ -8793,7 +8793,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/727.png"
     },
     {
@@ -8803,7 +8803,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/948.png"
     },
     {
@@ -8883,7 +8883,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/550.png"
     },
     {
@@ -8893,7 +8893,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/97.png"
     },
     {
@@ -8903,7 +8903,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/96.png"
     },
     {
@@ -8913,7 +8913,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/285.png"
     },
     {
@@ -8923,7 +8923,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/728.png"
     },
     {
@@ -8953,7 +8953,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/555.png"
     },
     {
@@ -8963,7 +8963,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/732.png"
     },
     {
@@ -8993,7 +8993,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/237.png"
     },
     {
@@ -9023,7 +9023,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/663.png"
     },
     {
@@ -9033,7 +9033,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/649.png"
     },
     {
@@ -9163,7 +9163,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/115.png"
     },
     {
@@ -9173,7 +9173,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/737.png"
     },
     {
@@ -9183,7 +9183,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/959.png"
     },
     {
@@ -9223,7 +9223,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/375.png"
     },
     {
@@ -9243,7 +9243,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/680.png"
     },
     {
@@ -9253,7 +9253,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/733.png"
     },
     {
@@ -9293,7 +9293,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/206.png"
     },
     {
@@ -9303,7 +9303,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/551.png"
     },
     {
@@ -9343,7 +9343,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/255.png"
     },
     {
@@ -9353,7 +9353,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 3,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/489.png"
     },
     {
@@ -9363,7 +9363,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1095.png"
     },
     {
@@ -9373,7 +9373,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 4,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/256.png"
     },
     {
@@ -9383,7 +9383,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1130.png"
     },
     {
@@ -9393,7 +9393,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1117.png"
     },
     {
@@ -9403,7 +9403,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/257.png"
     },
     {
@@ -9413,7 +9413,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/930.png"
     },
     {
@@ -9433,7 +9433,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 1,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/270.png"
     },
     {
@@ -9453,7 +9453,7 @@
       "type": "SUPER_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/842.png"
     },
     {
@@ -9463,7 +9463,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1132.png"
     },
     {
@@ -9473,7 +9473,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/17.png"
     },
     {
@@ -9483,7 +9483,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/18.png"
     },
     {
@@ -9493,7 +9493,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1012.png"
     },
     {
@@ -9503,7 +9503,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/965.png"
     },
     {
@@ -9513,7 +9513,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1070.png"
     },
     {
@@ -9523,7 +9523,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1140.png"
     },
     {
@@ -9533,7 +9533,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/6.png"
     },
     {
@@ -9543,7 +9543,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/538.png"
     },
     {
@@ -9553,7 +9553,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/768.png"
     },
     {
@@ -9563,7 +9563,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/860.png"
     },
     {
@@ -9573,7 +9573,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/908.png"
     },
     {
@@ -9583,7 +9583,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1189.png"
     },
     {
@@ -9593,7 +9593,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1129.png"
     },
     {
@@ -9603,7 +9603,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/7.png"
     },
     {
@@ -9613,7 +9613,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/12.png"
     },
     {
@@ -9623,7 +9623,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/20.png"
     },
     {
@@ -9633,7 +9633,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/973.png"
     },
     {
@@ -9643,7 +9643,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/533.png"
     },
     {
@@ -9653,7 +9653,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1015.png"
     },
     {
@@ -9663,7 +9663,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/885.png"
     },
     {
@@ -9673,7 +9673,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/856.png"
     },
     {
@@ -9683,7 +9683,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/534.png"
     },
     {
@@ -9693,7 +9693,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1028.png"
     },
     {
@@ -9703,7 +9703,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/16.png"
     },
     {
@@ -9713,7 +9713,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/22.png"
     },
     {
@@ -9723,7 +9723,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/536.png"
     },
     {
@@ -9733,7 +9733,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/963.png"
     },
     {
@@ -9743,7 +9743,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/537.png"
     },
     {
@@ -9753,7 +9753,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1136.png"
     },
     {
@@ -9763,7 +9763,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1001.png"
     },
     {
@@ -9773,7 +9773,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/13.png"
     },
     {
@@ -9783,7 +9783,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/949.png"
     },
     {
@@ -9793,7 +9793,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/540.png"
     },
     {
@@ -9803,7 +9803,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1206.png"
     },
     {
@@ -9813,7 +9813,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/541.png"
     },
     {
@@ -9823,7 +9823,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/11.png"
     },
     {
@@ -9833,7 +9833,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/926.png"
     },
     {
@@ -9843,7 +9843,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/859.png"
     },
     {
@@ -9853,7 +9853,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/15.png"
     },
     {
@@ -9863,7 +9863,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1168.png"
     },
     {
@@ -9873,7 +9873,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/25.png"
     },
     {
@@ -9883,7 +9883,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/772.png"
     },
     {
@@ -9893,7 +9893,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/27.png"
     },
     {
@@ -9903,7 +9903,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/904.png"
     },
     {
@@ -9913,7 +9913,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/773.png"
     },
     {
@@ -9923,7 +9923,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/743.png"
     },
     {
@@ -9933,7 +9933,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/2.png"
     },
     {
@@ -9943,7 +9943,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/525.png"
     },
     {
@@ -9953,7 +9953,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/1024.png"
     },
     {
@@ -9963,7 +9963,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/848.png"
     },
     {
@@ -9973,7 +9973,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1191.png"
     },
     {
@@ -9983,7 +9983,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/3.png"
     },
     {
@@ -9993,7 +9993,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1040.png"
     },
     {
@@ -10003,7 +10003,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/531.png"
     },
     {
@@ -10013,7 +10013,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/921.png"
     },
     {
@@ -10023,7 +10023,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/1102.png"
     },
     {
@@ -10033,7 +10033,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/493.png"
     },
     {
@@ -10043,7 +10043,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/918.png"
     },
     {
@@ -10053,7 +10053,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/38.png"
     },
     {
@@ -10063,7 +10063,7 @@
       "type": "CONTINENTAL_CLUB",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/14.png"
     },
     {
@@ -10073,7 +10073,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/587.png"
     },
     {
@@ -10083,7 +10083,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/950.png"
     },
     {
@@ -10093,7 +10093,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/490.png"
     },
     {
@@ -10103,7 +10103,7 @@
       "type": "INTERNATIONAL_NT",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": true,
       "logoUrl": "https://media.api-sports.io/football/leagues/8.png"
     },
     {
@@ -10113,7 +10113,7 @@
       "type": "DOMESTIC_LEAGUE",
       "tier": 2,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/289.png"
     },
     {
@@ -10123,7 +10123,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/509.png"
     },
     {
@@ -10133,7 +10133,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": true,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/507.png"
     },
     {
@@ -10143,7 +10143,7 @@
       "type": "DOMESTIC_CUP",
       "tier": null,
       "isActive": false,
-      "isFemale": null,
+      "isFemale": false,
       "logoUrl": "https://media.api-sports.io/football/leagues/508.png"
     },
     {

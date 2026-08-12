@@ -60,11 +60,12 @@ function parseArgs() {
   const args = process.argv.slice(2);
   return {
     dryRun: args.includes('--dry-run'),
+    preserveApiIsFemaleNonNull: args.includes('--preserve-api-isfemale-non-null'),
   };
 }
 
 async function run() {
-  const { dryRun } = parseArgs();
+  const { dryRun, preserveApiIsFemaleNonNull } = parseArgs();
   const snapshotPath = resolve(process.cwd(), 'scripts/data/competitions-unified-snapshot.json');
 
   if (!existsSync(snapshotPath)) {
@@ -89,6 +90,7 @@ async function run() {
     linksExisting: 0,
     linksUnmatched: 0,
   };
+  let apiIsFemaleNullPreserved = 0;
 
   const groupIdByKey = new Map<string, number>();
 
@@ -194,13 +196,22 @@ async function run() {
       continue;
     }
 
+    const nextIsFemale =
+      preserveApiIsFemaleNonNull && api.isFemale === null && existing.isFemale !== null
+        ? existing.isFemale
+        : api.isFemale;
+
+    if (nextIsFemale !== api.isFemale) {
+      apiIsFemaleNullPreserved += 1;
+    }
+
     const changed =
       existing.name !== api.name ||
       existing.countryCode !== api.countryCode ||
       existing.type !== api.type ||
       existing.tier !== api.tier ||
       existing.isActive !== api.isActive ||
-      existing.isFemale !== api.isFemale ||
+      existing.isFemale !== nextIsFemale ||
       existing.logoUrl !== api.logoUrl;
 
     if (!changed) {
@@ -218,7 +229,7 @@ async function run() {
           type: api.type,
           tier: api.tier,
           isActive: api.isActive,
-          isFemale: api.isFemale,
+          isFemale: nextIsFemale,
           logoUrl: api.logoUrl,
         },
       });
@@ -273,10 +284,12 @@ async function run() {
   }
 
   console.log(dryRun ? 'Unified apply dry run complete.' : 'Unified apply complete.');
+  console.log(`Mode preserve-api-isfemale-non-null: ${preserveApiIsFemaleNonNull ? 'enabled' : 'disabled'}`);
   console.log(`Snapshot version: ${snapshot.meta?.version ?? 'unknown'}`);
   console.log(`Snapshot generatedAt: ${snapshot.meta?.generatedAt ?? 'unknown'}`);
   console.log(`Groups created/updated/unchanged: ${summary.groupsCreated}/${summary.groupsUpdated}/${summary.groupsUnchanged}`);
   console.log(`API created/updated/unchanged: ${summary.apiCreated}/${summary.apiUpdated}/${summary.apiUnchanged}`);
+  console.log(`API null isFemale values preserved from DB: ${apiIsFemaleNullPreserved}`);
   console.log(`Links created/existing/unmatched: ${summary.linksCreated}/${summary.linksExisting}/${summary.linksUnmatched}`);
 
   await prisma.$disconnect();
