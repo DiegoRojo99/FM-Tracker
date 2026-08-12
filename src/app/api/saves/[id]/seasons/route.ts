@@ -15,8 +15,156 @@ function isUniqueConstraintError(error: unknown): boolean {
 function getPrismaErrorMetaTarget(error: unknown): string | null {
   if (typeof error !== 'object' || error === null || !('meta' in error)) return null;
   const meta = (error as { meta?: { target?: unknown } }).meta;
-  if (!meta || !Array.isArray(meta.target)) return null;
-  return meta.target.join(',');
+  if (!meta || !('target' in meta)) return null;
+
+  if (Array.isArray(meta.target)) return meta.target.join(',');
+  if (typeof meta.target === 'string') return meta.target;
+  return null;
+}
+
+function getPrismaErrorModelName(error: unknown): string | null {
+  if (typeof error !== 'object' || error === null || !('meta' in error)) return null;
+  const meta = (error as { meta?: { modelName?: unknown } }).meta;
+  if (!meta) return null;
+  return typeof meta.modelName === 'string' ? meta.modelName : null;
+}
+
+function hasUniqueIdTarget(error: unknown): boolean {
+  const target = (getPrismaErrorMetaTarget(error) ?? '').toLowerCase();
+  return target === 'id' || target.includes('season_pkey') || target.includes('id');
+}
+
+function shouldTreatAsSeasonIdCollision(error: unknown): boolean {
+  if (!isUniqueConstraintError(error)) return false;
+  if (hasUniqueIdTarget(error)) return true;
+
+  const model = (getPrismaErrorModelName(error) ?? '').toLowerCase();
+  return model === 'season';
+}
+
+function shouldTreatAsSeasonCompetitionIdCollision(error: unknown): boolean {
+  if (!isUniqueConstraintError(error)) return false;
+
+  const target = (getPrismaErrorMetaTarget(error) ?? '').toLowerCase();
+  const model = (getPrismaErrorModelName(error) ?? '').toLowerCase();
+
+  if (target.includes('leagueresult_pkey') || target.includes('cupresult_pkey')) return true;
+  if (model === 'leagueresult' || model === 'cupresult') return true;
+
+  // Prisma sometimes only reports generic id target for PK collisions.
+  return target === 'id' || target.includes('id');
+}
+
+async function repairSeasonIdSequence(): Promise<void> {
+  await prisma.$executeRawUnsafe(`
+    SELECT setval(
+      pg_get_serial_sequence('"Season"', 'id'),
+      COALESCE((SELECT MAX(id) FROM "Season"), 0) + 1,
+      false
+    )
+  `);
+}
+
+async function repairSeasonCompetitionSequences(): Promise<void> {
+  await prisma.$executeRawUnsafe(`
+    SELECT setval(
+      pg_get_serial_sequence('"LeagueResult"', 'id'),
+      COALESCE((SELECT MAX(id) FROM "LeagueResult"), 0) + 1,
+      false
+    )
+  `);
+
+  await prisma.$executeRawUnsafe(`
+    SELECT setval(
+      pg_get_serial_sequence('"CupResult"', 'id'),
+      COALESCE((SELECT MAX(id) FROM "CupResult"), 0) + 1,
+      false
+    )
+  `);
+}
+
+async function runSeasonCompetitionSyncWithRecovery(
+  seasonId: number,
+  body: Pick<SeasonInput, 'leagueId' | 'leaguePosition' | 'promoted' | 'relegated' | 'cupResults'>
+) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      return await prisma.$transaction(async (tx) => {
+        return syncSeasonCompetitionData(tx, seasonId, body);
+      });
+    }
+    catch (error) {
+      if (attempt === 1 || !shouldTreatAsSeasonCompetitionIdCollision(error)) {
+        throw error;
+      }
+
+      console.warn('Detected LeagueResult/CupResult id sequence drift. Repairing sequences and retrying transaction once...');
+      await repairSeasonCompetitionSequences();
+    }
+  }
+
+  return [];
+}
+
+async function syncSeasonDataAndRunSideEffects(params: {
+  uid: string;
+  saveId: string;
+  gameId: string;
+  seasonId: number;
+  body: SeasonInput;
+}): Promise<void> {
+  const { uid, saveId, gameId, seasonId, body } = params;
+
+  const cups = await runSeasonCompetitionSyncWithRecovery(seasonId, body);
+
+  // Core save state update must succeed.
+  await updateSaveSeason(uid, saveId, body.season);
+  await invalidateUserPreviewSavesCache(uid);
+
+  // Side effects must never fail season creation response.
+  const sideEffects: Array<Promise<unknown>> = [];
+
+  if (body.leaguePosition === 1 && body.leagueId) {
+    sideEffects.push(
+      addTrophyToSave({
+        uid,
+        saveId,
+        competitionId: Number(body.leagueId),
+        teamId: Number(body.teamId),
+        season: body.season,
+      })
+    );
+  }
+
+  for (const cup of cups) {
+    if (!isCupWinningRound(cup.reachedRound)) continue;
+    sideEffects.push(
+      addTrophyToSave({
+        uid,
+        saveId,
+        competitionId: Number(cup.competitionId),
+        teamId: Number(body.teamId),
+        season: body.season,
+      })
+    );
+  }
+
+  sideEffects.push(
+    evaluateAchievementsForUser({
+      userId: uid,
+      saveId,
+      gameId,
+      eventType: 'season.created',
+      eventTimestamp: new Date(),
+    })
+  );
+
+  const sideEffectResults = await Promise.allSettled(sideEffects);
+  sideEffectResults.forEach((result, index) => {
+    if (result.status === 'rejected') {
+      console.error(`Season side effect ${index} failed for save ${saveId}:`, result.reason);
+    }
+  });
 }
 
 export async function POST(req: NextRequest) {
@@ -58,66 +206,207 @@ export async function POST(req: NextRequest) {
       if (!league) return NextResponse.json({ error: 'League not found' }, { status: 404 });
     }
 
-    try {
-      const createdSeason = await prisma.season.create({
-        data: {
-          saveId: saveId,
-          season: body.season,
-          teamId: Number(body.teamId),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      });
-
-      const cups = await prisma.$transaction(async (tx) => {
-        return syncSeasonCompetitionData(tx, createdSeason.id, body);
-      });
-
-    if (body.leaguePosition === 1 && body.leagueId) {
-      await addTrophyToSave({
-        uid,
+    const existingSeason = await prisma.season.findFirst({
+      where: {
         saveId,
-        competitionId: Number(body.leagueId),
+        season: body.season,
         teamId: Number(body.teamId),
-        season: body.season
-      });
-    }
-
-    // If the season is a cup win, add the trophy
-    for (const cup of cups) {
-      if (isCupWinningRound(cup.reachedRound)) {
-        await addTrophyToSave({
-          uid,
-          saveId,
-          competitionId: Number(cup.competitionId),
-          teamId: Number(body.teamId),
-          season: body.season
-        });
-      }
-    }
-
-    // Update the season in the save
-    await updateSaveSeason(uid, saveId, body.season);
-    await evaluateAchievementsForUser({
-      userId: uid,
-      saveId,
-      gameId: save.gameId,
-      eventType: 'season.created',
-      eventTimestamp: new Date(),
+      },
+      select: {
+        id: true,
+        saveId: true,
+        season: true,
+        teamId: true,
+        leagueResult: { select: { id: true } },
+        cupResults: { select: { id: true } },
+      },
     });
 
-    await invalidateUserPreviewSavesCache(uid);
-    return NextResponse.json(createdSeason, { status: 201 });
+    if (existingSeason) {
+      const requestHasCompetitionData =
+        (hasLeagueId && hasLeaguePosition)
+        || (Array.isArray(body.cupResults) && body.cupResults.length > 0);
+
+      const looksLikePartialWrite = !existingSeason.leagueResult && existingSeason.cupResults.length === 0;
+
+      if (requestHasCompetitionData && looksLikePartialWrite) {
+        await syncSeasonDataAndRunSideEffects({
+          uid,
+          saveId,
+          gameId: save.gameId,
+          seasonId: existingSeason.id,
+          body,
+        });
+      }
+
+      return NextResponse.json(
+        {
+          id: existingSeason.id,
+          saveId: existingSeason.saveId,
+          season: existingSeason.season,
+          teamId: existingSeason.teamId,
+          duplicate: true,
+          repaired: requestHasCompetitionData && looksLikePartialWrite,
+        },
+        { status: 200 }
+      );
+    }
+
+    try {
+      const seasonCreateData = {
+        saveId: saveId,
+        season: body.season,
+        teamId: Number(body.teamId),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      let createdSeason;
+      try {
+        createdSeason = await prisma.season.create({ data: seasonCreateData });
+      }
+      catch (createError) {
+        if (!shouldTreatAsSeasonIdCollision(createError)) {
+          throw createError;
+        }
+
+        console.warn('Detected Season.id sequence drift. Repairing sequence and retrying season create once...');
+        await repairSeasonIdSequence();
+
+        try {
+          createdSeason = await prisma.season.create({ data: seasonCreateData });
+        }
+        catch (retryError) {
+          if (!isUniqueConstraintError(retryError)) {
+            throw retryError;
+          }
+
+          const duplicatedAfterRetry = await prisma.season.findFirst({
+            where: {
+              saveId,
+              season: body.season,
+              teamId: Number(body.teamId),
+            },
+            select: { id: true, saveId: true, season: true, teamId: true },
+          });
+
+          if (duplicatedAfterRetry) {
+            return NextResponse.json(
+              {
+                id: duplicatedAfterRetry.id,
+                saveId: duplicatedAfterRetry.saveId,
+                season: duplicatedAfterRetry.season,
+                teamId: duplicatedAfterRetry.teamId,
+                duplicate: true,
+              },
+              { status: 200 }
+            );
+          }
+
+          if (!shouldTreatAsSeasonIdCollision(retryError)) {
+            throw retryError;
+          }
+
+          let explicitCreateError: unknown = retryError;
+          for (let attempt = 0; attempt < 3; attempt += 1) {
+            const maxIdResult = await prisma.season.aggregate({ _max: { id: true } });
+            const nextId = (maxIdResult._max.id ?? 0) + 1;
+            console.warn(`Season.id collision persists after sequence repair. Retrying with explicit id=${nextId} (attempt ${attempt + 1}/3).`);
+
+            try {
+              createdSeason = await prisma.season.create({
+                data: {
+                  id: nextId,
+                  ...seasonCreateData,
+                },
+              });
+              explicitCreateError = null;
+              break;
+            } catch (explicitIdError) {
+              explicitCreateError = explicitIdError;
+
+              const duplicatedAfterExplicitRetry = await prisma.season.findFirst({
+                where: {
+                  saveId,
+                  season: body.season,
+                  teamId: Number(body.teamId),
+                },
+                select: { id: true, saveId: true, season: true, teamId: true },
+              });
+
+              if (duplicatedAfterExplicitRetry) {
+                return NextResponse.json(
+                  {
+                    id: duplicatedAfterExplicitRetry.id,
+                    saveId: duplicatedAfterExplicitRetry.saveId,
+                    season: duplicatedAfterExplicitRetry.season,
+                    teamId: duplicatedAfterExplicitRetry.teamId,
+                    duplicate: true,
+                  },
+                  { status: 200 }
+                );
+              }
+
+              if (!shouldTreatAsSeasonIdCollision(explicitIdError)) {
+                throw explicitIdError;
+              }
+            }
+          }
+
+          if (explicitCreateError) {
+            throw explicitCreateError;
+          }
+        }
+      }
+
+      if (!createdSeason) {
+        throw new Error('Season creation failed before persistence step completed');
+      }
+
+      await syncSeasonDataAndRunSideEffects({
+        uid,
+        saveId,
+        gameId: save.gameId,
+        seasonId: createdSeason!.id,
+        body,
+      });
+
+      return NextResponse.json(createdSeason!, { status: 201 });
     }
     catch (error) {
       if (error instanceof SeasonValidationError) return NextResponse.json({ error: error.message }, { status: 400 });
       if (isUniqueConstraintError(error)) {
         const target = getPrismaErrorMetaTarget(error);
-        console.error('Unique constraint creating season:', target || error);
+        const modelName = getPrismaErrorModelName(error);
+
+        const duplicatedSeason = await prisma.season.findFirst({
+          where: {
+            saveId,
+            season: body.season,
+            teamId: Number(body.teamId),
+          },
+          select: { id: true, saveId: true, season: true, teamId: true },
+        });
+
+        if (duplicatedSeason) {
+          console.warn('Season create replay detected after P2002:', duplicatedSeason.id);
+          return NextResponse.json(
+            {
+              id: duplicatedSeason.id,
+              saveId: duplicatedSeason.saveId,
+              season: duplicatedSeason.season,
+              teamId: duplicatedSeason.teamId,
+              duplicate: true,
+            },
+            { status: 200 }
+          );
+        }
+
+        console.error('Unique constraint creating season:', modelName || '(unknown model)', target || error);
         return NextResponse.json(
           {
             error: 'A season with this team and season already exists, or cup competitions are duplicated',
-            details: target ? `Unique target: ${target}` : undefined,
+            details: [modelName, target].filter(Boolean).join(':') || undefined,
           },
           { status: 409 }
         );
@@ -195,56 +484,93 @@ export async function PUT(req: NextRequest) {
     }
 
     try {
-      const { updatedSeason, cups } = await prisma.$transaction(async (tx) => {
-        const season = await tx.season.update({
-          where: { id: body.seasonId },
-          data: {
-            season: body.season,
-            teamId: Number(body.teamId),
-          },
-        });
+      let updatedSeason;
+      let cups;
 
-        const syncedCups = await syncSeasonCompetitionData(tx, body.seasonId, body);
-        return {
-          updatedSeason: season,
-          cups: syncedCups,
-        };
-      });
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        try {
+          const result = await prisma.$transaction(async (tx) => {
+            const season = await tx.season.update({
+              where: { id: body.seasonId },
+              data: {
+                season: body.season,
+                teamId: Number(body.teamId),
+              },
+            });
 
+            const syncedCups = await syncSeasonCompetitionData(tx, body.seasonId, body);
+            return {
+              updatedSeason: season,
+              cups: syncedCups,
+            };
+          });
+
+          updatedSeason = result.updatedSeason;
+          cups = result.cups;
+          break;
+        }
+        catch (error) {
+          if (attempt === 1 || !shouldTreatAsSeasonCompetitionIdCollision(error)) {
+            throw error;
+          }
+
+          console.warn('Detected LeagueResult/CupResult id sequence drift during season update. Repairing sequences and retrying transaction once...');
+          await repairSeasonCompetitionSequences();
+        }
+      }
+
+      if (!updatedSeason || !cups) {
+        throw new Error('Season update transaction failed before persistence step completed');
+      }
+
+      await invalidateUserPreviewSavesCache(uid);
+
+      const sideEffects: Array<Promise<unknown>> = [];
       const leagueWin = hasLeagueId && hasLeaguePosition && Number(body.leaguePosition) === 1 && body.leagueId;
       if (leagueWin) {
-        await addTrophyToSave({
-          uid,
-          saveId,
-          competitionId: Number(body.leagueId),
-          teamId: Number(body.teamId),
-          season: body.season,
-        });
+        sideEffects.push(
+          addTrophyToSave({
+            uid,
+            saveId,
+            competitionId: Number(body.leagueId),
+            teamId: Number(body.teamId),
+            season: body.season,
+          })
+        );
       }
 
       for (const cup of cups) {
         if (!isCupWinningRound(cup.reachedRound)) continue;
-        await addTrophyToSave({
-          uid,
-          saveId,
-          competitionId: Number(cup.competitionId),
-          teamId: Number(body.teamId),
-          season: body.season,
-        });
+        sideEffects.push(
+          addTrophyToSave({
+            uid,
+            saveId,
+            competitionId: Number(cup.competitionId),
+            teamId: Number(body.teamId),
+            season: body.season,
+          })
+        );
       }
 
-      await invalidateUserPreviewSavesCache(uid);
+      const sideEffectResults = await Promise.allSettled(sideEffects);
+      sideEffectResults.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.error(`Season update side effect ${index} failed for save ${saveId}:`, result.reason);
+        }
+      });
+
       return NextResponse.json(updatedSeason, { status: 200 });
     }
     catch (error) {
       if (error instanceof SeasonValidationError) return NextResponse.json({ error: error.message }, { status: 400 });
       if (isUniqueConstraintError(error)) {
         const target = getPrismaErrorMetaTarget(error);
-        console.error('Unique constraint updating season:', target || error);
+        const modelName = getPrismaErrorModelName(error);
+        console.error('Unique constraint updating season:', modelName || '(unknown model)', target || error);
         return NextResponse.json(
           {
             error: 'A season with this team and season already exists, or cup competitions are duplicated',
-            details: target ? `Unique target: ${target}` : undefined,
+            details: [modelName, target].filter(Boolean).join(':') || undefined,
           },
           { status: 409 }
         );
