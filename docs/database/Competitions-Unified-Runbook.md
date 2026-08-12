@@ -9,20 +9,7 @@ Scope covered by unified snapshot:
 
 ## 1) Dev: prepare competition data
 
-1. Optional: normalize type values if you imported legacy type labels.
-   npm run competitions:normalise-types
-
-2. Optional: create any missing CompetitionGroup rows and links from active ApiCompetition rows.
-   npm run competitions:sync-groups-from-api:dry-run
-   npm run competitions:sync-groups-from-api
-
-3. Optional: ensure women-marked groups have links, then roll isFemale to ApiCompetition.
-   npm run competitions:sync-group-links:dry-run
-   npm run competitions:sync-group-links
-   npm run competitions:sync-api-gender:dry-run
-   npm run competitions:sync-api-gender
-
-4. Export one unified snapshot.
+1. Export one unified snapshot.
    npm run competitions:export-unified
 
 Output file:
@@ -52,6 +39,7 @@ Output file:
 
 Note:
 - If there are no new migration files, `npx prisma migrate deploy` will complete without applying changes.
+- The unified apply command uses safe mode to preserve existing non-null ApiCompetition.isFemale values.
 
 ## Tiers
 

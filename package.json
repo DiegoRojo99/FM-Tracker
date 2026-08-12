@@ -16,17 +16,12 @@
     "challenges:seed": "tsx scripts/data/seed-challenges.ts",
     "fix:promotions": "tsx scripts/data/fix-top-flight-promotions.ts",
     "competitions:export-unified": "tsx scripts/data/export-competitions-unified.ts",
-    "competitions:apply-unified:dry-run": "tsx scripts/data/apply-competitions-unified.ts --dry-run",
-    "competitions:apply-unified": "tsx scripts/data/apply-competitions-unified.ts",
-    "competitions:sync-api-gender:dry-run": "tsx scripts/data/sync-api-competition-gender-from-groups.ts --dry-run",
-    "competitions:sync-api-gender": "tsx scripts/data/sync-api-competition-gender-from-groups.ts",
-    "competitions:sync-group-links:dry-run": "tsx scripts/data/sync-api-competition-links-from-groups.ts --dry-run",
-    "competitions:sync-group-links": "tsx scripts/data/sync-api-competition-links-from-groups.ts",
-    "competitions:sync-groups-from-api:dry-run": "tsx scripts/data/sync-competition-groups-from-api.ts",
-    "competitions:sync-groups-from-api": "tsx scripts/data/sync-competition-groups-from-api.ts --execute",
+    "competitions:apply-unified:dry-run": "tsx scripts/data/apply-competitions-unified.ts --dry-run --preserve-api-isfemale-non-null",
+    "competitions:apply-unified": "tsx scripts/data/apply-competitions-unified.ts --preserve-api-isfemale-non-null",
+    "teams:sync-gender:dry-run": "tsx scripts/data/sync-team-gender-from-competitions.ts",
+    "teams:sync-gender": "tsx scripts/data/sync-team-gender-from-competitions.ts --execute",
     "women-leagues:seed-active:female-groups": "tsx scripts/data/seed-active-competitions-and-teams.ts --only-female-groups",
-    "women-leagues:seed-active:female-groups:execute": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --only-female-groups",
-    "competitions:normalise-types": "tsx scripts/data/normalise-competition-types.ts"
+    "women-leagues:seed-active:female-groups:execute": "tsx scripts/data/seed-active-competitions-and-teams.ts --execute --only-female-groups"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",
