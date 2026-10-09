@@ -1,6 +1,6 @@
 {
   "name": "fm-tracker",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -8,8 +8,6 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "migrate:data": "tsx scripts/migration/migrate-data.ts",
-    "migrate:help": "tsx scripts/migration/migrate-data.ts --help",
     "db:copy:prod-to-dev:dry-run": "tsx scripts/data/copy-prod-to-dev.ts --dry-run",
     "db:copy:prod-to-dev": "tsx scripts/data/copy-prod-to-dev.ts --confirm",
     "achievements:seed": "tsx scripts/data/seed-achievements.ts",
