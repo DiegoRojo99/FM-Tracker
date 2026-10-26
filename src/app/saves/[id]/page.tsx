@@ -3,8 +3,8 @@ import { useAuth } from '@/app/components/AuthProvider';
 import Link from 'next/link';
 import { notFound, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import FootballLoader from '@/app/components/FootBallLoader';
 import CareerStintsSection from './CareerStintSection';
+import { SaveDetailsSkeleton } from './SaveDetailsSkeleton';
 import TrophyCase from './TrophyCase';
 import SeasonSection from './SeasonSection';
 import ChallengeSection from './ChallengeSection';
@@ -61,13 +61,7 @@ export default function SavePage() {
   }, [id, user, refresh]);
 
   if (loading || refresh) {
-    return (
-      <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
-        <div className="flex min-h-[52vh] items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-xl backdrop-blur-sm">
-          <FootballLoader />
-        </div>
-      </div>
-    );
+    return <SaveDetailsSkeleton />;
   }
 
   if (!saveDetails) notFound();

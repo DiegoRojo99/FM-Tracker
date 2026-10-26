@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '../components/AuthProvider';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
-import FootballLoader from '../components/FootBallLoader';
 import { SaveCard } from './SaveCard';
+import { SaveCardSkeleton } from './SaveCardSkeleton';
 import GradientButton from '../components/GradientButton';
 import { Game } from '@/lib/types/prisma/Game';
 import { PreviewSave, Save } from '@/lib/types/prisma/Save';
@@ -130,9 +130,30 @@ export default function SavesPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
-        <div className="flex min-h-[52vh] items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-xl backdrop-blur-sm">
-          <FootballLoader />
+      <div className="mx-auto max-w-7xl animate-pulse p-4 sm:p-6 lg:p-8" aria-busy="true" aria-live="polite">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="space-y-2">
+            <div className="h-3 w-24 rounded bg-[var(--color-surface-soft)]" />
+            <div className="h-8 w-48 rounded bg-[var(--color-surface-soft)]" />
+            <div className="h-4 w-40 rounded bg-[var(--color-surface-soft)]" />
+          </div>
+          <div className="h-10 w-44 rounded-xl bg-[var(--color-surface-soft)]" />
+        </div>
+
+        <div className="mb-7 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-lg backdrop-blur-sm">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div className="h-5 w-20 rounded bg-[var(--color-surface-soft)]" />
+            <div className="grid w-full gap-3 sm:w-auto sm:grid-cols-2">
+              <div className="h-[58px] w-full rounded-xl bg-[var(--color-surface-soft)] sm:w-64" />
+              <div className="h-[58px] w-full rounded-xl bg-[var(--color-surface-soft)] sm:w-44" />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <SaveCardSkeleton key={index} />
+          ))}
         </div>
       </div>
     );
@@ -276,8 +297,8 @@ export default function SavesPage() {
       )}
       
       <div className="mb-7 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-lg backdrop-blur-sm">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div className="inline-flex items-center gap-2 text-sm font-semibold text-gray-200">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="inline-flex items-center gap-2 pt-2 text-sm font-semibold text-gray-200">
             <SlidersHorizontal className="h-4 w-4 text-[var(--color-highlight)]" />
             Filters
           </div>
