@@ -3,6 +3,7 @@
 import { createContext, useEffect, useState, useContext } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/db/firebase';
+import { getOrCreateVisitorId } from '@/lib/analytics/visitor';
 
 const AuthContext = createContext<{ user: User | null, userLoading: boolean }>({ user: null, userLoading: true })
 
@@ -18,6 +19,7 @@ const createUserIfNotExists = async (firebaseUser: User) => {
         email: firebaseUser.email,
         displayName: firebaseUser.displayName || 'Anonymous',
         photoURL: firebaseUser.photoURL || '',
+        visitorId: getOrCreateVisitorId(),
       }),
     });
 

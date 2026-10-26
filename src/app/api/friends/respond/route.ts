@@ -3,6 +3,8 @@ import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
 import { FriendRequestStatus, FriendRequestWithRequester } from '@/lib/types/prisma/Friends';
 import { normalizeFriendRequestAction } from '@/lib/friends/requestLifecycle';
+import { trackServerEvent } from '@/lib/analytics/server';
+import { AnalyticsEvents } from '@/lib/analytics/eventNames';
 
 // POST /api/friends/respond - Accept or reject a friend request
 export async function POST(request: NextRequest) {
@@ -83,6 +85,11 @@ export async function POST(request: NextRequest) {
         const friend = result.friendship.user1Id === uid 
           ? result.friendship.user2 
           : result.friendship.user1;
+
+        void trackServerEvent(AnalyticsEvents.FriendRequestAccepted, {
+          userId: uid,
+          payload: { requesterId: friendRequest.requesterId },
+        });
 
         return NextResponse.json({
           success: true,

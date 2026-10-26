@@ -9,6 +9,8 @@ import {
   AchievementEventType,
 } from '../achievements/catalog';
 import { prisma } from './prisma';
+import { trackServerEvent } from '../analytics/server';
+import { AnalyticsEvents } from '../analytics/eventNames';
 
 type UserAchievementWithDefinition = UserAchievement & {
   achievement: AchievementDefinition;
@@ -237,6 +239,19 @@ export async function evaluateAchievementsForUser(input: EvaluateAchievementsInp
         gameId: input.gameId ?? null,
         saveId: input.saveId ?? null,
         sourceMetadata,
+      },
+    });
+  }
+
+  for (const achievementKey of unlockedNow) {
+    const definition = relevantDefinitions.find((d) => d.key === achievementKey);
+    void trackServerEvent(AnalyticsEvents.AchievementUnlocked, {
+      userId: input.userId,
+      payload: {
+        achievementKey,
+        rarity: definition?.rarity,
+        points: definition?.points,
+        saveId: input.saveId ?? null,
       },
     });
   }

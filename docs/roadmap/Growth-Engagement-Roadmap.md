@@ -26,26 +26,28 @@ Net: don't treat this purely as a post-signup retention problem. Phase 0's funne
 Because the Hobby plan can't visualize custom events, this phase builds **first-party, self-hosted** tracking rather than depending on Vercel Analytics for anything beyond raw anonymous page views. The existing `@vercel/analytics` calls can stay (they're free and harmless) but should not be relied on to answer funnel/retention questions.
 
 ### 1) Event Taxonomy & First-Party Storage
-- [ ] Define a versioned event taxonomy covering the full lifecycle: `signup_completed`, `onboarding_step_completed`, `save_created`, `season_logged`, `trophy_recorded`, `achievement_unlocked`, `challenge_started`, `challenge_completed`, `friend_request_sent/accepted`, `session_start`
-  - Files: `src/lib/analytics/events.ts`
-- [ ] Add a dedicated `AnalyticsEvent` Prisma table (`userId`, `event`, `payload` (Json), `createdAt`) — this is the only option that gives queryable funnels/cohorts given the Vercel Hobby constraint; it's also effectively free since it reuses the existing Postgres instance
+- [x] Define a versioned event taxonomy covering the full lifecycle: `signup_completed`, `onboarding_step_completed`, `save_created`, `season_logged`, `trophy_recorded`, `achievement_unlocked`, `challenge_started`, `challenge_completed`, `friend_request_sent/accepted`, `session_start`
+  - Files: `src/lib/analytics/events.ts`, `src/lib/analytics/eventNames.ts` (`onboarding_step_completed` not yet emitted anywhere — no onboarding flow exists yet)
+- [x] Add a dedicated `AnalyticsEvent` Prisma table (`userId`, `event`, `payload` (Json), `createdAt`) — this is the only option that gives queryable funnels/cohorts given the Vercel Hobby constraint; it's also effectively free since it reuses the existing Postgres instance
   - Files: `prisma/schema.prisma`, new `src/lib/analytics/server.ts`
-- [ ] Add a thin server-side tracking helper so API routes can log events directly to that table (not just client-side), since several key actions (season logged, achievement unlocked) happen server-side in `src/app/api/*`
-- [ ] Keep the client-side `trackEvent()` helper, but have it write to the first-party table (via a lightweight `/api/analytics/track` endpoint) instead of/in addition to `@vercel/analytics`, so events are actually visible somewhere
-- [ ] Respect existing opt-out/exclusion logic in `src/lib/analytics/controls.ts` for any new tracking path
+- [x] Add a thin server-side tracking helper so API routes can log events directly to that table (not just client-side), since several key actions (season logged, achievement unlocked) happen server-side in `src/app/api/*`
+- [x] Keep the client-side `trackEvent()` helper, but have it write to the first-party table (via a lightweight `/api/analytics/track` endpoint) instead of/in addition to `@vercel/analytics`, so events are actually visible somewhere
+- [x] Respect existing opt-out/exclusion logic in `src/lib/analytics/controls.ts` for any new tracking path
 - [ ] If budget allows later, evaluate a free-tier hosted alternative (e.g. PostHog's free tier) as a replacement for the hand-rolled dashboard below — but don't block on this; the Prisma-table approach is zero-cost and ships faster
 
 ### 2) Funnel & Retention Visibility
-- [ ] Add an internal "Growth" view under `src/app/admin` showing two separate, chained funnels rather than one blended one:
+- [x] Add an internal "Growth" view under `src/app/admin` showing two separate, chained funnels rather than one blended one:
   - **Top-of-funnel (anonymous):** landing page view → `/login` or `/add-save` view → `signup_completed` — track this even for anonymous visitors so it's comparable with the Vercel page-level numbers (`/` 120 visitors → `/login` 10 → `/add-save` 11 today)
   - **Post-signup (per-user):** `signup_completed` → first save → first season logged → first achievement/trophy → day-7 return
-- [ ] Add weekly/monthly active user (WAU/MAU) and D1/D7/D30 retention cohort views, scoped only to the post-signup funnel
-- [ ] Add per-feature engagement breakdown (saves, challenges, friends, achievements) to identify which existing feature already retains users best
+  - Files: `src/app/api/admin/growth/route.ts`, `src/app/admin/growth/page.tsx`
+- [x] Add weekly/monthly active user (WAU/MAU) and D7 retention cohort view, scoped only to the post-signup funnel (D1/D30 cohorts not yet implemented — follow-up)
+- [x] Add per-feature engagement breakdown (saves, challenges, friends, achievements) to identify which existing feature already retains users best
 - [ ] Tag traffic to individual `/saves/<id>` detail pages as "shared link views" vs. authenticated owner views, since the current page breakdown can't distinguish the two and it skews any read of `/saves` engagement
 - [ ] Add a scheduled summary (weekly email or Slack/webhook) so drop-off trends are visible without manually opening the dashboard
 - [ ] Keep using Vercel's basic analytics (visitors/page views/bounce rate) as a free, rough cross-check on the top-of-funnel numbers above, not as a source of post-signup behavior insight
 
 ### Diagnosis Success Metrics
+_(Instrumentation and the dashboard to read these are now live — but the metrics themselves need a few weeks of real traffic before they mean anything. Check these off once you've actually looked at the numbers in `/admin/growth` and written down the baseline, not just because the tooling exists.)_
 - [ ] Baseline landing → signup conversion rate is documented (today's page-level proxy: only ~8% of visitors even reach `/login` or `/add-save`)
 - [ ] Baseline activation rate (signup → first save created) is documented from first-party data
 - [ ] Baseline D1/D7/D30 retention is documented from first-party data

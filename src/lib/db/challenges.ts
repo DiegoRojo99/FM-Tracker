@@ -3,6 +3,8 @@ import { getTrophiesForSave } from './trophies';
 import { dedupeTrophiesForChallengeEvaluation } from '../challenges/progression';
 import { challengeGoalToCareerChallengeGoal } from '../dto/challenges';
 import { evaluateAchievementsForUser } from './achievements';
+import { trackServerEvent } from '../analytics/server';
+import { AnalyticsEvents } from '../analytics/eventNames';
 import { Prisma } from '../../../prisma/generated/client';
 import type {
   ChallengeGoalWithDetails,
@@ -696,6 +698,19 @@ export async function upsertCareerChallenge(
   } else {
     savedChallenge = await prisma.challengeRun.create({
       data: userChallenge,
+    });
+  }
+
+  if (!existingChallenge) {
+    void trackServerEvent(AnalyticsEvents.ChallengeStarted, {
+      userId: uid,
+      payload: { challengeDefinitionId: challengeId, saveId },
+    });
+  }
+  else if (!existingChallenge.completedAt && completedAt) {
+    void trackServerEvent(AnalyticsEvents.ChallengeCompleted, {
+      userId: uid,
+      payload: { challengeDefinitionId: challengeId, saveId },
     });
   }
 

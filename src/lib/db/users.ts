@@ -2,19 +2,20 @@ import { User, UserInput } from "../types/prisma/User";
 import { prisma } from "./prisma";
 import { User as FirebaseUser} from 'firebase/auth';
 
-export async function createUserIfNotExists(user: FirebaseUser) {
-  if (!user?.uid) return
+export async function createUserIfNotExists(user: FirebaseUser): Promise<{ created: boolean }> {
+  if (!user?.uid) return { created: false };
   const userRef = await prisma.user.findUnique({
     where: { uid: user.uid },
   })
-  
-  if (userRef) return;
+
+  if (userRef) return { created: false };
   await createUser({
     uid: user.uid,
     email: user.email,
     displayName: user.displayName || 'Anonymous',
     avatarURL: user.photoURL || '',
   })
+  return { created: true };
 }
 export function getUserById(userId: string): Promise<User | null> {
   return prisma.user.findUnique({

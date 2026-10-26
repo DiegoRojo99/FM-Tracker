@@ -1,6 +1,8 @@
 import { fetchCompetition } from './competitions';
 import { addChallengeForTrophy } from './challenges';
 import { evaluateAchievementsForUser } from './achievements';
+import { trackServerEvent } from '../analytics/server';
+import { AnalyticsEvents } from '../analytics/eventNames';
 import { Trophy } from '../../../prisma/generated/client';
 import { prisma } from './prisma';
 import { FullTrophy } from '../types/prisma/Trophy';
@@ -242,6 +244,16 @@ export async function addTrophyToSave(
       saveId,
       trophy,
       gameId: save.gameId,
+    });
+
+    void trackServerEvent(AnalyticsEvents.TrophyRecorded, {
+      userId: uid,
+      payload: {
+        saveId,
+        teamId: trophy.teamId,
+        competitionGroupId: trophy.competitionGroupId,
+        season: trophy.season,
+      },
     });
 
     return trophy.id;

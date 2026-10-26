@@ -2,6 +2,8 @@ import { withAuth } from '@/lib/auth/withAuth';
 import { updateSaveSeason } from '@/lib/db/saves';
 import { addTrophyToSave } from '@/lib/db/trophies';
 import { evaluateAchievementsForUser } from '@/lib/db/achievements';
+import { trackServerEvent } from '@/lib/analytics/server';
+import { AnalyticsEvents } from '@/lib/analytics/eventNames';
 import { SeasonInput, SeasonUpdateInput } from '@/lib/types/prisma/Season';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
@@ -144,6 +146,11 @@ async function syncSeasonDataAndRunSideEffects(params: {
   body: SeasonInput;
 }): Promise<void> {
   const { uid, saveId, gameId, seasonId, body } = params;
+
+  void trackServerEvent(AnalyticsEvents.SeasonLogged, {
+    userId: uid,
+    payload: { saveId, season: body.season, teamId: body.teamId },
+  });
 
   const cups = await runSeasonCompetitionSyncWithRecovery(seasonId, body);
 
