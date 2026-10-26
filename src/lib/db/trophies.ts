@@ -1,6 +1,5 @@
 import { fetchCompetition } from './competitions';
-import { addChallengeForTrophy } from './challenges';
-import { evaluateAchievementsForUser } from './achievements';
+import { safeRecomputeSaveProgress } from './progress';
 import { trackServerEvent } from '../analytics/server';
 import { AnalyticsEvents } from '../analytics/eventNames';
 import { Trophy } from '../../../prisma/generated/client';
@@ -131,50 +130,28 @@ async function createTrophyWithIdSequenceRecovery(data: {
 async function runTrophySideEffects(params: {
   uid: string;
   saveId: string;
-  trophy: Trophy;
   gameId: string;
+  skipProgress?: boolean;
 }): Promise<void> {
-  const { uid, saveId, trophy, gameId } = params;
-
-  try {
-    await addChallengeForTrophy(uid, saveId, trophy);
-  }
-  catch (challengeError) {
-    if (isPrismaP2002(challengeError)) {
-      console.error('Challenge side-effect P2002 target:', getPrismaP2002Target(challengeError), 'meta:', getPrismaMetaJson(challengeError));
-    }
-    else {
-      console.error('Challenge side-effect failed:', challengeError);
-    }
-  }
-
-  try {
-    await evaluateAchievementsForUser({
-      userId: uid,
-      saveId,
-      gameId,
-      eventType: 'trophy.added',
-      eventTimestamp: new Date(),
-    });
-  }
-  catch (achievementError) {
-    if (isPrismaP2002(achievementError)) {
-      console.error('Achievement side-effect P2002 target:', getPrismaP2002Target(achievementError), 'meta:', getPrismaMetaJson(achievementError));
-    }
-    else {
-      console.error('Achievement side-effect failed:', achievementError);
-    }
-  }
+  if (params.skipProgress) return;
+  await safeRecomputeSaveProgress({
+    userId: params.uid,
+    saveId: params.saveId,
+    gameId: params.gameId,
+    eventType: 'trophy.added',
+  });
 }
 
 export async function addTrophyToSave(
-  { teamId, competitionId, uid, season, saveId }: 
+  { teamId, competitionId, uid, season, saveId, skipProgress }: 
   {
     teamId: number;
     competitionId: number;
     uid: string;
     season: string;
     saveId: string;
+    /** Set when the caller runs a single progress recompute after adding several trophies. */
+    skipProgress?: boolean;
   }
 ): Promise<number | null> {
   try {
@@ -201,21 +178,11 @@ export async function addTrophyToSave(
           data: { teamId: Number(teamId) },
         });
 
-        await runTrophySideEffects({
-          uid,
-          saveId,
-          trophy: updatedExistingTrophy,
-          gameId: save.gameId,
-        });
+        await runTrophySideEffects({ uid, saveId, gameId: save.gameId, skipProgress });
         return updatedExistingTrophy.id;
       }
 
-      await runTrophySideEffects({
-        uid,
-        saveId,
-        trophy: existingTrophy,
-        gameId: save.gameId,
-      });
+      await runTrophySideEffects({ uid, saveId, gameId: save.gameId, skipProgress });
       return existingTrophy.id;
     }
 
@@ -239,12 +206,7 @@ export async function addTrophyToSave(
       throw createError;
     }
 
-    await runTrophySideEffects({
-      uid,
-      saveId,
-      trophy,
-      gameId: save.gameId,
-    });
+    await runTrophySideEffects({ uid, saveId, gameId: save.gameId, skipProgress });
 
     void trackServerEvent(AnalyticsEvents.TrophyRecorded, {
       userId: uid,

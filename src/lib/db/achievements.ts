@@ -23,7 +23,6 @@ type EvaluateAchievementsInput = {
   eventType: AchievementEventType;
   eventTimestamp?: Date;
   evaluateAll?: boolean;
-  skipSeed?: boolean;
 };
 
 type UserAggregates = {
@@ -92,7 +91,6 @@ export async function backfillAchievementsForAllUsers(): Promise<{
       eventType: 'season.created',
       evaluateAll: true,
       eventTimestamp: new Date(),
-      skipSeed: true,
     });
 
     totalEvaluatedCount += result.evaluatedCount;
@@ -166,8 +164,7 @@ export async function evaluateAchievementsForUser(input: EvaluateAchievementsInp
   evaluatedCount: number;
   unlockedNow: string[];
 }> {
-  if (!input.skipSeed) await seedAchievementDefinitions();
-
+  // Definitions are seeded out-of-band via `npm run achievements:seed`.
   const definitions = await getAchievementDefinitions();
   const relevantDefinitions = input.evaluateAll
     ? definitions
@@ -206,6 +203,13 @@ export async function evaluateAchievementsForUser(input: EvaluateAchievementsInp
     if (!existingRecord?.unlockedAt && unlockedAt) {
       unlockedNow.push(definition.key);
     }
+
+    const isUnchanged =
+      !!existingRecord &&
+      existingRecord.progress === nextProgress &&
+      existingRecord.pointsAwarded === pointsAwarded &&
+      (existingRecord.unlockedAt?.getTime() ?? null) === (unlockedAt?.getTime() ?? null);
+    if (isUnchanged) continue;
 
     const sourceMetadata: Prisma.InputJsonValue = {
       eventType: input.eventType,

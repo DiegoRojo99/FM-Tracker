@@ -2,7 +2,6 @@ import { prisma } from './prisma';
 import { getTrophiesForSave } from './trophies';
 import { dedupeTrophiesForChallengeEvaluation } from '../challenges/progression';
 import { challengeGoalToCareerChallengeGoal } from '../dto/challenges';
-import { evaluateAchievementsForUser } from './achievements';
 import { trackServerEvent } from '../analytics/server';
 import { AnalyticsEvents } from '../analytics/eventNames';
 import { Prisma } from '../../../prisma/generated/client';
@@ -402,21 +401,7 @@ export async function backfillChallengeProgressForAllSaves(): Promise<{
   }
 
   const saves = await prisma.save.findMany({
-    select: {
-      id: true,
-      userId: true,
-      gameId: true,
-      trophies: {
-        select: {
-          id: true,
-          competitionGroupId: true,
-          teamId: true,
-          season: true,
-          saveId: true,
-          gameId: true,
-        },
-      },
-    },
+    select: { id: true, userId: true, gameId: true },
   });
 
   let runsUpdated = 0;
@@ -424,67 +409,15 @@ export async function backfillChallengeProgressForAllSaves(): Promise<{
   let runsSkipped = 0;
 
   for (const save of saves) {
-    const uniqueTrophies = dedupeTrophiesForChallengeEvaluation(save.trophies as Trophy[]);
-
-    const competitionIds = [...new Set(uniqueTrophies.map((trophy) => trophy.competitionGroupId))];
-    const teamIds = [...new Set(uniqueTrophies.map((trophy) => trophy.teamId))];
-
-    const [competitions, teams, existingRuns] = await Promise.all([
-      competitionIds.length > 0
-        ? prisma.competitionGroup.findMany({
-            where: { id: { in: competitionIds } },
-              select: { id: true, name: true, countryCode: true, type: true },
-          })
-          : Promise.resolve([] as Array<{ id: number; name: string; countryCode: string | null; type: string }>),
-      teamIds.length > 0
-        ? prisma.team.findMany({
-            where: { id: { in: teamIds } },
-            select: { id: true, countryCode: true },
-          })
-        : Promise.resolve([] as Array<{ id: number; countryCode: string }>),
-      prisma.challengeRun.findMany({
-        where: { saveId: save.id },
-        select: { id: true, challengeDefinitionId: true },
-      }),
-    ]);
-
-    const context: TrophyMatchContext = {
-      competitionNameById: new Map(competitions.map((competition) => [competition.id, competition.name])),
-      competitionCountryById: new Map(
-        competitions
-          .filter((competition): competition is typeof competition & { countryCode: string } => !!competition.countryCode)
-          .map((competition) => [competition.id, competition.countryCode])
-      ),
-      competitionTypeById: new Map(competitions.map((competition) => [competition.id, competition.type])),
-      teamCountryById: new Map(
-        teams
-          .filter((team): team is typeof team & { countryCode: string } => !!team.countryCode)
-          .map((team) => [team.id, team.countryCode])
-      ),
-    };
-
-    const existingChallengeIds = new Set(existingRuns.map((run) => run.challengeDefinitionId));
-
-    for (const challenge of challenges) {
-      const goalProgress = filterCompletedChallengeGoalsBasedOnTrophies(
-        challenge,
-        uniqueTrophies,
-        context
-      );
-
-      const hasProgress = goalProgress.some((goal) => goal.isComplete);
-      const hasExistingRun = existingChallengeIds.has(challenge.id);
-
-      if (!hasProgress && !hasExistingRun) {
-        runsSkipped += 1;
-        continue;
-      }
-
-      await upsertCareerChallenge(save.userId, save.id, save.gameId, challenge.id, goalProgress);
-
-      if (hasExistingRun) runsUpdated += 1;
-      else runsCreated += 1;
-    }
+    const result = await syncChallengeRunsForSave({
+      userId: save.userId,
+      saveId: save.id,
+      gameId: save.gameId,
+      challenges,
+    });
+    runsUpdated += result.updated;
+    runsCreated += result.created;
+    runsSkipped += result.unchanged;
   }
 
   return {
@@ -553,31 +486,26 @@ export async function checkForMatchingChallenges(trophyData: Trophy, context: Tr
   return allChallenges.filter((challenge) => challenge.goals.some((goal) => filterGoalByTrophy(goal, trophyData, context)));
 }
 
-/* Checks for matching challenges and adds them to the user's save */
-export async function addChallengeForTrophy(
-  uid: string,
-  saveId: string,
-  trophyData: Trophy
-): Promise<void> {
-  const saveTrophies = await getTrophiesForSave(saveId);
-  if (!saveTrophies.includes(trophyData)) saveTrophies.push(trophyData);
-
-  const uniqueTrophies = dedupeTrophiesForChallengeEvaluation([...saveTrophies, trophyData]);
-  const competitionIds = [...new Set(uniqueTrophies.map((trophy) => trophy.competitionGroupId))];
-  const teamIds = [...new Set(uniqueTrophies.map((trophy) => trophy.teamId))];
+export async function buildTrophyMatchContext(trophies: Trophy[]): Promise<TrophyMatchContext> {
+  const competitionIds = [...new Set(trophies.map((trophy) => trophy.competitionGroupId))];
+  const teamIds = [...new Set(trophies.map((trophy) => trophy.teamId))];
 
   const [competitions, teams] = await Promise.all([
-    prisma.competitionGroup.findMany({
-      where: { id: { in: competitionIds } },
-      select: { id: true, name: true, countryCode: true, type: true },
-    }),
-    prisma.team.findMany({
-      where: { id: { in: teamIds } },
-      select: { id: true, countryCode: true },
-    }),
+    competitionIds.length > 0
+      ? prisma.competitionGroup.findMany({
+          where: { id: { in: competitionIds } },
+          select: { id: true, name: true, countryCode: true, type: true },
+        })
+      : Promise.resolve([] as Array<{ id: number; name: string; countryCode: string | null; type: string }>),
+    teamIds.length > 0
+      ? prisma.team.findMany({
+          where: { id: { in: teamIds } },
+          select: { id: true, countryCode: true },
+        })
+      : Promise.resolve([] as Array<{ id: number; countryCode: string | null }>),
   ]);
 
-  const context: TrophyMatchContext = {
+  return {
     competitionNameById: new Map(competitions.map((competition) => [competition.id, competition.name])),
     competitionCountryById: new Map(
       competitions
@@ -591,200 +519,199 @@ export async function addChallengeForTrophy(
         .map((team) => [team.id, team.countryCode])
     ),
   };
+}
 
-  const challenges = await getAllChallenges();
-  const existingRuns = await prisma.challengeRun.findMany({
-    where: { userId: uid, saveId },
-    select: { challengeDefinitionId: true },
-  });
-  const existingChallengeIds = new Set(existingRuns.map((run) => run.challengeDefinitionId));
+/* Returns ids of challenges with a goal targeting any of the given teams or countries. */
+export function getChallengeIdsForTeamsOrCountries(
+  challenges: ChallengeWithGoals[],
+  teamIds: number[],
+  countryCodes: string[]
+): number[] {
+  const teamSet = new Set(teamIds);
+  const countrySet = new Set(countryCodes.filter(Boolean));
+
+  return challenges
+    .filter((challenge) =>
+      challenge.goals.some(
+        (goal) =>
+          goal.teams.some((team) => teamSet.has(team.teamId)) ||
+          (!!goal.country?.code && countrySet.has(goal.country.code))
+      )
+    )
+    .map((challenge) => challenge.id);
+}
+
+export type ChallengeSyncResult = {
+  created: number;
+  updated: number;
+  unchanged: number;
+};
+
+type ExistingRun = ChallengeRun & { runGoals: ChallengeRunGoal[] };
+
+/*
+ * Recomputes every challenge run for a save from its current trophies.
+ * Loads data once, evaluates in memory and only writes runs/goals whose state changed.
+ * A run is created when a challenge has progress or its id is in `ensureChallengeIds`.
+ */
+export async function syncChallengeRunsForSave(params: {
+  userId: string;
+  saveId: string;
+  gameId: string;
+  challenges?: ChallengeWithGoals[];
+  ensureChallengeIds?: number[];
+}): Promise<ChallengeSyncResult> {
+  const { userId, saveId, gameId } = params;
+
+  const [challenges, trophies, existingRuns] = await Promise.all([
+    params.challenges ? Promise.resolve(params.challenges) : getAllChallenges(),
+    getTrophiesForSave(saveId),
+    prisma.challengeRun.findMany({
+      where: { userId, saveId },
+      include: { runGoals: true },
+    }),
+  ]);
+
+  const result: ChallengeSyncResult = { created: 0, updated: 0, unchanged: 0 };
+  if (challenges.length === 0) return result;
+
+  const uniqueTrophies = dedupeTrophiesForChallengeEvaluation(trophies);
+  const context = await buildTrophyMatchContext(uniqueTrophies);
+  const runsByChallengeId = new Map(existingRuns.map((run) => [run.challengeDefinitionId, run]));
+  const ensured = new Set(params.ensureChallengeIds ?? []);
 
   for (const challenge of challenges) {
-    const processedGoals: CareerChallengeGoalInput[] = filterCompletedChallengeGoalsBasedOnTrophies(
-      challenge,
-      uniqueTrophies,
-      context
-    );
-
-    const hasProgress = processedGoals.some((goal) => goal.isComplete);
-    if (!hasProgress && !existingChallengeIds.has(challenge.id)) continue;
-
-    await upsertCareerChallenge(uid, saveId, trophyData.gameId, challenge.id, processedGoals);
-  }
-}
-
-export async function addChallengeForTeam(
-  saveId: string,
-  teamId: number
-): Promise<void> {
-  const matchingChallenges = await getTeamMatchingChallenges(teamId);
-  await addNewEmptyCareerChallenges(saveId, matchingChallenges);
-}
-
-export async function addChallengeForCountry(
-  saveId: string,
-  countryCode: string
-): Promise<void> {
-  const matchingChallenges = await getCountryMatchingChallenges(countryCode);
-  await addNewEmptyCareerChallenges(saveId, matchingChallenges);
-}
-
-export async function addNewEmptyCareerChallenges(
-  saveId: string,
-  challenges: ChallengeWithGoals[]
-): Promise<void> {
-  const save = await prisma.save.findUnique({
-    where: { id: saveId },
-    select: { id: true, userId: true, gameId: true },
-  });
-  if (!save) return;
-
-  const userChallenges = await getChallengesForSave(saveId);
-  const nonExistingChallenges = challenges.filter((challenge) =>
-    !userChallenges.some((careerChallenge) => careerChallenge.challengeDefinitionId === challenge.id)
-  );
-
-  for (const challenge of nonExistingChallenges) {
-    await upsertCareerChallenge(
-      save.userId,
-      save.id,
-      save.gameId,
-      challenge.id,
-      challenge.goals.map((goal) => challengeGoalToCareerChallengeGoal({ goal, isCompleted: false }))
-    );
-  }
-}
-
-export async function upsertCareerChallenge(
-  uid: string,
-  saveId: string,
-  gameId: string,
-  challengeId: number,
-  goalProgress: CareerChallengeGoalInput[]
-): Promise<CareerChallengeWithDetails> {
-  const completedAt = goalProgress.length > 0 && goalProgress.every((goal) => goal.isComplete) ? new Date() : null;
-  const runStatus = completedAt ? 'COMPLETED' as const : 'ACTIVE' as const;
-  const progressSnapshot = {
-    completedGoals: goalProgress.filter((goal) => goal.isComplete).length,
-    totalGoals: goalProgress.length,
-  };
-
-  const userChallenge = {
-    userId: uid,
-    challengeDefinitionId: challengeId,
-    gameId,
-    saveId,
-    startedAt: new Date(),
-    completedAt,
-    status: runStatus,
-    progressSnapshot: progressSnapshot as Prisma.InputJsonValue,
-    metadata: Prisma.JsonNull,
-  };
-
-  const existingChallenge = await prisma.challengeRun.findFirst({
-    where: {
-      userId: userChallenge.userId,
-      saveId: userChallenge.saveId,
-      challengeDefinitionId: userChallenge.challengeDefinitionId,
-    },
-  });
-
-  let savedChallenge: ChallengeRun;
-  if (existingChallenge) {
-    savedChallenge = await prisma.challengeRun.update({
-      where: { id: existingChallenge.id },
-      data: userChallenge,
-    });
-  } else {
-    savedChallenge = await prisma.challengeRun.create({
-      data: userChallenge,
-    });
-  }
-
-  if (!existingChallenge) {
-    void trackServerEvent(AnalyticsEvents.ChallengeStarted, {
-      userId: uid,
-      payload: { challengeDefinitionId: challengeId, saveId },
-    });
-  }
-  else if (!existingChallenge.completedAt && completedAt) {
-    void trackServerEvent(AnalyticsEvents.ChallengeCompleted, {
-      userId: uid,
-      payload: { challengeDefinitionId: challengeId, saveId },
-    });
-  }
-
-  for (const goal of goalProgress) {
-    const existingGoal = await prisma.challengeRunGoal.findFirst({
-      where: {
-        challengeRunId: savedChallenge.id,
-        challengeGoalId: goal.challengeGoalId,
-      },
-    });
-
-    if (existingGoal) {
-      const goalUpdateData = {
-        ...goal,
-        evidence: goal.evidence ?? Prisma.JsonNull,
-      };
-
-      await prisma.challengeRunGoal.update({
-        where: { id: existingGoal.id },
-        data: goalUpdateData,
-      });
-    } else {
-      const goalCreateData = {
-        ...goal,
-        evidence: goal.evidence ?? Prisma.JsonNull,
-        challengeRunId: savedChallenge.id,
-      };
-
-      await prisma.challengeRunGoal.create({
-        data: goalCreateData,
-      });
+    const existingRun = runsByChallengeId.get(challenge.id);
+    if (existingRun?.status === 'ABANDONED') {
+      result.unchanged += 1;
+      continue;
     }
+
+    const goalProgress = filterCompletedChallengeGoalsBasedOnTrophies(challenge, uniqueTrophies, context);
+    const hasProgress = goalProgress.some((goal) => goal.isComplete);
+    if (!existingRun && !hasProgress && !ensured.has(challenge.id)) continue;
+
+    const outcome = await writeChallengeRun({ userId, saveId, gameId, challengeId: challenge.id, goalProgress, existingRun });
+    result[outcome] += 1;
   }
 
-  await evaluateAchievementsForUser({
-    userId: uid,
-    saveId,
-    gameId,
-    eventType: 'challenge.progress.updated',
-    eventTimestamp: new Date(),
-  });
+  return result;
+}
 
-  const fullChallenge = await prisma.challengeRun.findUnique({
-    where: { id: savedChallenge.id },
-    include: {
-      challengeDefinition: {
-        include: {
-          goals: {
-            include: { rules: true },
-            orderBy: { position: 'asc' },
-          },
+function readSnapshotCount(snapshot: unknown, key: 'completedGoals' | 'totalGoals'): number | null {
+  if (!snapshot || typeof snapshot !== 'object') return null;
+  const value = (snapshot as Record<string, unknown>)[key];
+  return typeof value === 'number' ? value : null;
+}
+
+async function writeChallengeRun(params: {
+  userId: string;
+  saveId: string;
+  gameId: string;
+  challengeId: number;
+  goalProgress: CareerChallengeGoalInput[];
+  existingRun?: ExistingRun;
+}): Promise<keyof ChallengeSyncResult> {
+  const { userId, saveId, gameId, challengeId, goalProgress, existingRun } = params;
+  const now = new Date();
+  const completedGoals = goalProgress.filter((goal) => goal.isComplete).length;
+  const totalGoals = goalProgress.length;
+  const isComplete = totalGoals > 0 && completedGoals === totalGoals;
+  const progressSnapshot = { completedGoals, totalGoals } as Prisma.InputJsonValue;
+
+  if (!existingRun) {
+    await prisma.challengeRun.upsert({
+      where: {
+        userId_challengeDefinitionId_saveId: { userId, challengeDefinitionId: challengeId, saveId },
+      },
+      update: {},
+      create: {
+        userId,
+        saveId,
+        gameId,
+        challengeDefinitionId: challengeId,
+        status: isComplete ? 'COMPLETED' : 'ACTIVE',
+        completedAt: isComplete ? now : null,
+        progressSnapshot,
+        metadata: Prisma.JsonNull,
+        runGoals: {
+          create: goalProgress.map((goal) => ({ ...goal, evidence: goal.evidence ?? Prisma.JsonNull })),
         },
       },
-      runGoals: true,
-      game: true,
-      save: true,
-    },
-  });
+    });
 
-  if (!fullChallenge) {
-    throw new Error(`Challenge run ${savedChallenge.id} was not found after upsert.`);
+    void trackServerEvent(AnalyticsEvents.ChallengeStarted, {
+      userId,
+      payload: { challengeDefinitionId: challengeId, saveId },
+    });
+    if (isComplete) {
+      void trackServerEvent(AnalyticsEvents.ChallengeCompleted, {
+        userId,
+        payload: { challengeDefinitionId: challengeId, saveId },
+      });
+    }
+    return 'created';
   }
 
-  const lookups = await loadChallengeLookups([fullChallenge.challengeDefinition as ChallengeDefinitionWithGoals]);
-  const challenge = mapChallengeDefinition(fullChallenge.challengeDefinition as ChallengeDefinitionWithGoals, lookups);
-  const mapped = mapRunWithDetails(
-    fullChallenge as ChallengeRunWithDetails,
-    challenge
-  );
+  const existingGoalsById = new Map(existingRun.runGoals.map((goal) => [goal.challengeGoalId, goal]));
+  const goalsToCreate: CareerChallengeGoalInput[] = [];
+  const goalUpdates: Array<{ id: number; isComplete: boolean }> = [];
 
-  return {
-    ...mapped,
-    goalProgress: fullChallenge.runGoals,
-  };
+  for (const goal of goalProgress) {
+    const existingGoal = existingGoalsById.get(goal.challengeGoalId);
+    if (!existingGoal) goalsToCreate.push(goal);
+    else if (existingGoal.isComplete !== goal.isComplete) goalUpdates.push({ id: existingGoal.id, isComplete: goal.isComplete });
+  }
+
+  const wasComplete = existingRun.completedAt !== null;
+  const runChanged =
+    wasComplete !== isComplete ||
+    existingRun.status !== (isComplete ? 'COMPLETED' : 'ACTIVE') ||
+    readSnapshotCount(existingRun.progressSnapshot, 'completedGoals') !== completedGoals ||
+    readSnapshotCount(existingRun.progressSnapshot, 'totalGoals') !== totalGoals;
+
+  if (!runChanged && goalsToCreate.length === 0 && goalUpdates.length === 0) return 'unchanged';
+
+  await prisma.$transaction([
+    prisma.challengeRun.update({
+      where: { id: existingRun.id },
+      data: {
+        status: isComplete ? 'COMPLETED' : 'ACTIVE',
+        completedAt: isComplete ? (existingRun.completedAt ?? now) : null,
+        progressSnapshot,
+      },
+    }),
+    ...(goalsToCreate.length > 0
+      ? [
+          prisma.challengeRunGoal.createMany({
+            data: goalsToCreate.map((goal) => ({
+              ...goal,
+              evidence: goal.evidence ?? Prisma.JsonNull,
+              challengeRunId: existingRun.id,
+            })),
+            skipDuplicates: true,
+          }),
+        ]
+      : []),
+    ...goalUpdates.map((goal) =>
+      prisma.challengeRunGoal.update({
+        where: { id: goal.id },
+        data: {
+          isComplete: goal.isComplete,
+          progress: goal.isComplete ? 1 : 0,
+          completedAt: goal.isComplete ? now : null,
+        },
+      })
+    ),
+  ]);
+
+  if (!wasComplete && isComplete) {
+    void trackServerEvent(AnalyticsEvents.ChallengeCompleted, {
+      userId,
+      payload: { challengeDefinitionId: challengeId, saveId },
+    });
+  }
+  return 'updated';
 }
 
 /* FILTERS */

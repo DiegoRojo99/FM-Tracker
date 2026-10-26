@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/withAuth';
 import { prisma } from '@/lib/db/prisma';
 import { invalidateUserPreviewSavesCache } from '@/lib/db/saves';
+import { safeRecomputeSaveProgress } from '@/lib/db/progress';
 
 export async function PUT(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -17,7 +18,7 @@ export async function PUT(req: NextRequest) {
       // Check if save exists and user owns it
       const save = await prisma.save.findUnique({
         where: { id: saveId },
-        select: { userId: true }
+        select: { userId: true, gameId: true }
       });
 
       if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
@@ -88,6 +89,13 @@ export async function PUT(req: NextRequest) {
       }
 
       await invalidateUserPreviewSavesCache(save.userId);
+      await safeRecomputeSaveProgress({
+        userId: uid,
+        saveId,
+        gameId: save.gameId,
+        eventType: 'career.updated',
+        ensureForTeamIds: [teamIdNumber],
+      });
       return NextResponse.json(updatedCareerStint, { status: 200 });
     } 
     catch (error) {
@@ -111,7 +119,7 @@ export async function DELETE(req: NextRequest) {
       // Check if save exists and user owns it
       const save = await prisma.save.findUnique({
         where: { id: saveId },
-        select: { userId: true }
+        select: { userId: true, gameId: true }
       });
 
       if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });      
@@ -133,6 +141,7 @@ export async function DELETE(req: NextRequest) {
       });
 
       await invalidateUserPreviewSavesCache(save.userId);
+      await safeRecomputeSaveProgress({ userId: uid, saveId, gameId: save.gameId, eventType: 'career.updated' });
       return NextResponse.json({ message: 'Career stint deleted successfully' }, { status: 200 });
     } 
     catch (error) {

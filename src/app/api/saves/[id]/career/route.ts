@@ -1,7 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchTeam } from '@/lib/db/teams';
-import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
+import { safeRecomputeSaveProgress } from '@/lib/db/progress';
 import { prisma } from '@/lib/db/prisma';
 import { CareerStintInput } from '@/lib/types/prisma/Career';
 import { invalidateUserPreviewSavesCache } from '@/lib/db/saves';
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       // Check if save exists first
       const save = await prisma.save.findUnique({
         where: { id },
-        select: { userId: true }
+        select: { userId: true, gameId: true }
       });
 
       if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
@@ -98,14 +98,19 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         updateData.currentLeagueId = competitionId;
       }
 
-      // Check if the team has any matching challenges
-      await addChallengeForTeam(id, teamIdNumber);
-      await addChallengeForCountry(id, teamData.countryCode);
-
       // Update the save document
       await prisma.save.update({
         where: { id },
         data: updateData,
+      });
+
+      await safeRecomputeSaveProgress({
+        userId: uid,
+        saveId: id,
+        gameId: save.gameId,
+        eventType: 'career.updated',
+        ensureForTeamIds: [teamIdNumber],
+        ensureForCountryCodes: teamData.countryCode ? [teamData.countryCode] : [],
       });
 
       await invalidateUserPreviewSavesCache(uid);

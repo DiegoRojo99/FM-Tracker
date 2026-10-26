@@ -2,7 +2,6 @@ import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
 import { randomUUID } from 'node:crypto';
 import { fetchCompetition } from '@/lib/db/competitions';
-import { addChallengeForCountry, addChallengeForTeam } from '@/lib/db/challenges';
 import { getUserPreviewSaves, getUserPreviewSavesCacheKey, invalidateUserPreviewSavesCache } from '@/lib/db/saves';
 import { Save } from '@/lib/types/prisma/Save';
 import { fetchTeam } from '@/lib/db/teams';
@@ -10,7 +9,7 @@ import { prisma } from '@/lib/db/prisma';
 import { CareerStint } from '@/lib/types/prisma/Career';
 import { deleteCacheKey } from '@/lib/cache/redis';
 import { readThroughCache } from '@/lib/cache/redis';
-import { evaluateAchievementsForUser } from '@/lib/db/achievements';
+import { safeRecomputeSaveProgress } from '@/lib/db/progress';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -248,18 +247,13 @@ export async function POST(req: NextRequest) {
 
         // Non-critical work should not delay save creation response.
         const optionalSideEffects = [
-          !isUnemployedStart && startingTeamId
-            ? addChallengeForTeam(saveId, Number(startingTeamId))
-            : Promise.resolve(),
-          countryCode
-            ? addChallengeForCountry(saveId, countryCode)
-            : Promise.resolve(),
-          evaluateAchievementsForUser({
+          safeRecomputeSaveProgress({
             userId: uid,
             saveId,
             gameId: gameIdToUse,
             eventType: 'save.created',
-            eventTimestamp: new Date(),
+            ensureForTeamIds: !isUnemployedStart && startingTeamId ? [Number(startingTeamId)] : [],
+            ensureForCountryCodes: countryCode ? [countryCode] : [],
           }),
         ];
 

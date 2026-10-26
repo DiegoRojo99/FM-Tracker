@@ -1,7 +1,7 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import { updateSaveSeason } from '@/lib/db/saves';
 import { addTrophyToSave } from '@/lib/db/trophies';
-import { evaluateAchievementsForUser } from '@/lib/db/achievements';
+import { safeRecomputeSaveProgress } from '@/lib/db/progress';
 import { trackServerEvent } from '@/lib/analytics/server';
 import { AnalyticsEvents } from '@/lib/analytics/eventNames';
 import { SeasonInput, SeasonUpdateInput } from '@/lib/types/prisma/Season';
@@ -138,6 +138,37 @@ async function runSideEffectsWithBudget(
   }
 }
 
+/* Creates trophies for wins first, then runs a single progress recompute for the save. */
+async function addSeasonTrophiesAndRecompute(params: {
+  uid: string;
+  saveId: string;
+  gameId: string;
+  season: string;
+  teamId: number;
+  leagueWinId: number | null;
+  cups: Array<{ competitionId: number; reachedRound: string | null }>;
+  eventType: 'season.created' | 'season.updated';
+}): Promise<void> {
+  const { uid, saveId, gameId, season, teamId, leagueWinId, cups, eventType } = params;
+  const competitionIds = [
+    ...(leagueWinId ? [leagueWinId] : []),
+    ...cups.filter((cup) => isCupWinningRound(cup.reachedRound)).map((cup) => Number(cup.competitionId)),
+  ];
+
+  const trophyResults = await Promise.allSettled(
+    competitionIds.map((competitionId) =>
+      addTrophyToSave({ uid, saveId, competitionId, teamId, season, skipProgress: true })
+    )
+  );
+  trophyResults.forEach((result, index) => {
+    if (result.status === 'rejected') {
+      console.error(`Season trophy ${competitionIds[index]} failed for save ${saveId}:`, result.reason);
+    }
+  });
+
+  await safeRecomputeSaveProgress({ userId: uid, saveId, gameId, eventType });
+}
+
 async function syncSeasonDataAndRunSideEffects(params: {
   uid: string;
   saveId: string;
@@ -159,44 +190,18 @@ async function syncSeasonDataAndRunSideEffects(params: {
   await invalidateUserPreviewSavesCache(uid);
 
   // Side effects must never fail season creation response.
-  const sideEffects: Array<Promise<unknown>> = [];
+  const progressWork = addSeasonTrophiesAndRecompute({
+    uid,
+    saveId,
+    gameId,
+    season: body.season,
+    teamId: Number(body.teamId),
+    leagueWinId: body.leaguePosition === 1 && body.leagueId ? Number(body.leagueId) : null,
+    cups,
+    eventType: 'season.created',
+  });
 
-  if (body.leaguePosition === 1 && body.leagueId) {
-    sideEffects.push(
-      addTrophyToSave({
-        uid,
-        saveId,
-        competitionId: Number(body.leagueId),
-        teamId: Number(body.teamId),
-        season: body.season,
-      })
-    );
-  }
-
-  for (const cup of cups) {
-    if (!isCupWinningRound(cup.reachedRound)) continue;
-    sideEffects.push(
-      addTrophyToSave({
-        uid,
-        saveId,
-        competitionId: Number(cup.competitionId),
-        teamId: Number(body.teamId),
-        season: body.season,
-      })
-    );
-  }
-
-  sideEffects.push(
-    evaluateAchievementsForUser({
-      userId: uid,
-      saveId,
-      gameId,
-      eventType: 'season.created',
-      eventTimestamp: new Date(),
-    })
-  );
-
-  await runSideEffectsWithBudget(sideEffects, 'create', saveId);
+  await runSideEffectsWithBudget([progressWork], 'create', saveId);
 }
 
 export async function POST(req: NextRequest) {
@@ -460,7 +465,7 @@ export async function PUT(req: NextRequest) {
 
     const save = await prisma.save.findUnique({
       where: { id: saveId },
-      select: { userId: true }
+      select: { userId: true, gameId: true }
     });
 
     if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
@@ -557,34 +562,19 @@ export async function PUT(req: NextRequest) {
 
       await invalidateUserPreviewSavesCache(uid);
 
-      const sideEffects: Array<Promise<unknown>> = [];
       const leagueWin = hasLeagueId && hasLeaguePosition && Number(body.leaguePosition) === 1 && body.leagueId;
-      if (leagueWin) {
-        sideEffects.push(
-          addTrophyToSave({
-            uid,
-            saveId,
-            competitionId: Number(body.leagueId),
-            teamId: Number(body.teamId),
-            season: body.season,
-          })
-        );
-      }
+      const progressWork = addSeasonTrophiesAndRecompute({
+        uid,
+        saveId,
+        gameId: save.gameId,
+        season: body.season,
+        teamId: Number(body.teamId),
+        leagueWinId: leagueWin ? Number(body.leagueId) : null,
+        cups,
+        eventType: 'season.updated',
+      });
 
-      for (const cup of cups) {
-        if (!isCupWinningRound(cup.reachedRound)) continue;
-        sideEffects.push(
-          addTrophyToSave({
-            uid,
-            saveId,
-            competitionId: Number(cup.competitionId),
-            teamId: Number(body.teamId),
-            season: body.season,
-          })
-        );
-      }
-
-      await runSideEffectsWithBudget(sideEffects, 'update', saveId);
+      await runSideEffectsWithBudget([progressWork], 'update', saveId);
 
       return NextResponse.json(updatedSeason, { status: 200 });
     }
@@ -640,7 +630,7 @@ export async function DELETE(req: NextRequest) {
     // Check if save exists and user owns it
     const save = await prisma.save.findUnique({
       where: { id: saveId },
-      select: { userId: true }
+      select: { userId: true, gameId: true }
     });
 
     if (!save) return NextResponse.json({ error: 'Save not found' }, { status: 404 });
@@ -663,6 +653,7 @@ export async function DELETE(req: NextRequest) {
       });
 
       await invalidateUserPreviewSavesCache(save.userId);
+      await safeRecomputeSaveProgress({ userId: uid, saveId, gameId: save.gameId, eventType: 'season.deleted' });
       return NextResponse.json({ message: 'Season deleted successfully' }, { status: 200 });
     } 
     catch (error) {
