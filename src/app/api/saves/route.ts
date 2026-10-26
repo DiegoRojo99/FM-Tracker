@@ -1,5 +1,6 @@
 import { withAuth } from '@/lib/auth/withAuth';
 import type { NextRequest } from 'next/server';
+import { after } from 'next/server';
 import { randomUUID } from 'node:crypto';
 import { fetchCompetition } from '@/lib/db/competitions';
 import { getUserPreviewSaves, getUserPreviewSavesCacheKey, invalidateUserPreviewSavesCache } from '@/lib/db/saves';
@@ -97,34 +98,28 @@ function normalizeRequestId(value: unknown): string | null {
   return normalized;
 }
 
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function runSaveSideEffectsWithBudget(
-  sideEffects: Array<Promise<unknown>>,
-  saveId: string,
-  maxWaitMs = 1200
-): Promise<void> {
+/*
+ * Schedules non-critical work to run after the response is sent, using Next's `after()`.
+ * Unlike a time-boxed race, the platform keeps the function alive until the callback
+ * settles (bounded by the route's `maxDuration`), so the work reliably completes instead
+ * of racing a fixed timeout and possibly being frozen mid-flight.
+ */
+function runAfterResponse(sideEffects: Array<Promise<unknown>>, saveId: string): void {
   if (sideEffects.length === 0) return;
 
-  const settledPromise = Promise.allSettled(sideEffects).then((results) => {
+  after(async () => {
+    const results = await Promise.allSettled(sideEffects);
     results.forEach((result, index) => {
       if (result.status === 'rejected') {
         console.error(`Optional save side effect ${index} failed for save ${saveId}:`, result.reason);
       }
     });
   });
-
-  const timedOut = await Promise.race([
-    settledPromise.then(() => false),
-    delay(maxWaitMs).then(() => true),
-  ]);
-
-  if (timedOut) {
-    console.warn(`Optional save side effects exceeded ${maxWaitMs}ms for save ${saveId}. Returning response while side effects continue.`);
-  }
 }
+
+// Gives `after()` progress work enough runway beyond the default limit on Vercel's Hobby plan.
+export const maxDuration = 30;
+
 
 export async function POST(req: NextRequest) {
   return withAuth(req, async (uid) => {
@@ -257,7 +252,7 @@ export async function POST(req: NextRequest) {
           }),
         ];
 
-        await runSaveSideEffectsWithBudget(optionalSideEffects, saveId);
+        runAfterResponse(optionalSideEffects, saveId);
       }
 
       return new Response(JSON.stringify(persistedSave), { status: wasIdempotentReplay ? 200 : 201 });

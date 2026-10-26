@@ -5,10 +5,13 @@ import { safeRecomputeSaveProgress } from '@/lib/db/progress';
 import { trackServerEvent } from '@/lib/analytics/server';
 import { AnalyticsEvents } from '@/lib/analytics/eventNames';
 import { SeasonInput, SeasonUpdateInput } from '@/lib/types/prisma/Season';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { getSaveSeasons, isCupWinningRound, SeasonValidationError, syncSeasonCompetitionData, validateLeagueInputShape } from '@/lib/db/seasons';
 import { invalidateUserPreviewSavesCache } from '@/lib/db/saves';
+
+// Gives `after()` progress work enough runway beyond the default limit on Vercel's Hobby plan.
+export const maxDuration = 30;
 
 function isUniqueConstraintError(error: unknown): boolean {
   return typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === 'P2002';
@@ -108,34 +111,27 @@ async function runSeasonCompetitionSyncWithRecovery(
   return [];
 }
 
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function runSideEffectsWithBudget(
+/*
+ * Schedules non-critical work to run after the response is sent, using Next's `after()`.
+ * Unlike a time-boxed race, the platform keeps the function alive until the callback
+ * settles (bounded by the route's `maxDuration`), so the work reliably completes instead
+ * of racing a fixed timeout and possibly being frozen mid-flight.
+ */
+function runAfterResponse(
   sideEffects: Array<Promise<unknown>>,
   context: 'create' | 'update',
-  saveId: string,
-  maxWaitMs = 1200
-): Promise<void> {
+  saveId: string
+): void {
   if (sideEffects.length === 0) return;
 
-  const settledPromise = Promise.allSettled(sideEffects).then((results) => {
+  after(async () => {
+    const results = await Promise.allSettled(sideEffects);
     results.forEach((result, index) => {
       if (result.status === 'rejected') {
         console.error(`Season ${context} side effect ${index} failed for save ${saveId}:`, result.reason);
       }
     });
   });
-
-  const timedOut = await Promise.race([
-    settledPromise.then(() => false),
-    delay(maxWaitMs).then(() => true),
-  ]);
-
-  if (timedOut) {
-    console.warn(`Season ${context} side effects exceeded ${maxWaitMs}ms for save ${saveId}. Returning response while side effects continue.`);
-  }
 }
 
 /* Creates trophies for wins first, then runs a single progress recompute for the save. */
@@ -201,7 +197,7 @@ async function syncSeasonDataAndRunSideEffects(params: {
     eventType: 'season.created',
   });
 
-  await runSideEffectsWithBudget([progressWork], 'create', saveId);
+  runAfterResponse([progressWork], 'create', saveId);
 }
 
 export async function POST(req: NextRequest) {
@@ -574,7 +570,7 @@ export async function PUT(req: NextRequest) {
         eventType: 'season.updated',
       });
 
-      await runSideEffectsWithBudget([progressWork], 'update', saveId);
+      runAfterResponse([progressWork], 'update', saveId);
 
       return NextResponse.json(updatedSeason, { status: 200 });
     }
