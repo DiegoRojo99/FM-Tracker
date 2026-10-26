@@ -2,6 +2,7 @@ import type { AchievementEventType } from '../achievements/catalog';
 import { evaluateAchievementsForUser } from './achievements';
 import { getAllChallenges, getChallengeIdsForTeamsOrCountries, syncChallengeRunsForSave } from './challenges';
 import { prisma } from './prisma';
+import { withSaveProgressLock } from './saveLock';
 
 // Events that can only increase counts; anything else (edits/deletes) re-evaluates every achievement.
 const ADDITIVE_EVENTS: ReadonlySet<AchievementEventType> = new Set([
@@ -28,41 +29,43 @@ type RecomputeSaveProgressInput = {
 export async function recomputeSaveProgress(input: RecomputeSaveProgressInput): Promise<void> {
   const { userId, saveId, eventType } = input;
 
-  let gameId = input.gameId;
-  if (!gameId) {
-    const save = await prisma.save.findUnique({ where: { id: saveId }, select: { gameId: true } });
-    if (!save) {
-      await recomputeUserProgress({ userId, eventType });
-      return;
+  await withSaveProgressLock(saveId, async () => {
+    let gameId = input.gameId;
+    if (!gameId) {
+      const save = await prisma.save.findUnique({ where: { id: saveId }, select: { gameId: true } });
+      if (!save) {
+        await recomputeUserProgress({ userId, eventType });
+        return;
+      }
+      gameId = save.gameId;
     }
-    gameId = save.gameId;
-  }
 
-  const challenges = await getAllChallenges();
-  const ensureChallengeIds = getChallengeIdsForTeamsOrCountries(
-    challenges,
-    input.ensureForTeamIds ?? [],
-    input.ensureForCountryCodes ?? []
-  );
+    const challenges = await getAllChallenges();
+    const ensureChallengeIds = getChallengeIdsForTeamsOrCountries(
+      challenges,
+      input.ensureForTeamIds ?? [],
+      input.ensureForCountryCodes ?? []
+    );
 
-  const challengeResult = await syncChallengeRunsForSave({
-    userId,
-    saveId,
-    gameId,
-    challenges,
-    ensureChallengeIds,
-  });
+    const challengeResult = await syncChallengeRunsForSave({
+      userId,
+      saveId,
+      gameId,
+      challenges,
+      ensureChallengeIds,
+    });
 
-  const challengesChanged = challengeResult.created > 0 || challengeResult.updated > 0;
+    const challengesChanged = challengeResult.created > 0 || challengeResult.updated > 0;
 
-  await evaluateAchievementsForUser({
-    userId,
-    saveId,
-    gameId,
-    eventType,
-    eventTimestamp: new Date(),
-    // Challenge changes can affect challenge-based achievements regardless of the triggering event.
-    evaluateAll: !ADDITIVE_EVENTS.has(eventType) || challengesChanged,
+    await evaluateAchievementsForUser({
+      userId,
+      saveId,
+      gameId,
+      eventType,
+      eventTimestamp: new Date(),
+      // Challenge changes can affect challenge-based achievements regardless of the triggering event.
+      evaluateAll: !ADDITIVE_EVENTS.has(eventType) || challengesChanged,
+    });
   });
 }
 

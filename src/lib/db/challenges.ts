@@ -1,5 +1,6 @@
 import { prisma } from './prisma';
 import { getTrophiesForSave } from './trophies';
+import { withSaveProgressLock } from './saveLock';
 import { dedupeTrophiesForChallengeEvaluation } from '../challenges/progression';
 import { challengeGoalToCareerChallengeGoal } from '../dto/challenges';
 import { trackServerEvent } from '../analytics/server';
@@ -426,12 +427,14 @@ export async function backfillChallengeProgressForAllSaves(): Promise<{
   let runsSkipped = 0;
 
   for (const save of saves) {
-    const result = await syncChallengeRunsForSave({
-      userId: save.userId,
-      saveId: save.id,
-      gameId: save.gameId,
-      challenges,
-    });
+    const result = await withSaveProgressLock(save.id, () =>
+      syncChallengeRunsForSave({
+        userId: save.userId,
+        saveId: save.id,
+        gameId: save.gameId,
+        challenges,
+      })
+    );
     runsUpdated += result.updated;
     runsCreated += result.created;
     runsSkipped += result.unchanged;
@@ -588,6 +591,16 @@ function readSnapshotCount(snapshot: unknown, key: 'completedGoals' | 'totalGoal
   return typeof value === 'number' ? value : null;
 }
 
+function evidenceEqual(a: unknown, b: unknown): boolean {
+  const normalize = (value: unknown): string => {
+    if (!value || typeof value !== 'object') return 'null';
+    const trophyIds = (value as Record<string, unknown>).trophyIds;
+    if (!Array.isArray(trophyIds)) return JSON.stringify(value);
+    return JSON.stringify([...trophyIds].sort((x, y) => Number(x) - Number(y)));
+  };
+  return normalize(a) === normalize(b);
+}
+
 async function writeChallengeRun(params: {
   userId: string;
   saveId: string;
@@ -639,12 +652,24 @@ async function writeChallengeRun(params: {
 
   const existingGoalsById = new Map(existingRun.runGoals.map((goal) => [goal.challengeGoalId, goal]));
   const goalsToCreate: CareerChallengeGoalInput[] = [];
-  const goalUpdates: Array<{ id: number; isComplete: boolean }> = [];
+  const goalUpdates: Array<{ id: number; isComplete: boolean; completedAt: Date | null; evidence: Prisma.InputJsonValue | typeof Prisma.JsonNull }> = [];
 
   for (const goal of goalProgress) {
     const existingGoal = existingGoalsById.get(goal.challengeGoalId);
-    if (!existingGoal) goalsToCreate.push(goal);
-    else if (existingGoal.isComplete !== goal.isComplete) goalUpdates.push({ id: existingGoal.id, isComplete: goal.isComplete });
+    if (!existingGoal) {
+      goalsToCreate.push(goal);
+      continue;
+    }
+
+    if (existingGoal.isComplete === goal.isComplete && evidenceEqual(existingGoal.evidence, goal.evidence)) continue;
+
+    goalUpdates.push({
+      id: existingGoal.id,
+      isComplete: goal.isComplete,
+      // Keep the original completion timestamp if the goal was already complete and only its evidence changed.
+      completedAt: goal.isComplete ? (existingGoal.isComplete ? existingGoal.completedAt ?? now : now) : null,
+      evidence: goal.isComplete ? (goal.evidence ?? Prisma.JsonNull) : Prisma.JsonNull,
+    });
   }
 
   const wasComplete = existingRun.completedAt !== null;
@@ -683,7 +708,8 @@ async function writeChallengeRun(params: {
         data: {
           isComplete: goal.isComplete,
           progress: goal.isComplete ? 1 : 0,
-          completedAt: goal.isComplete ? now : null,
+          completedAt: goal.completedAt,
+          evidence: goal.evidence,
         },
       })
     ),
@@ -700,6 +726,13 @@ async function writeChallengeRun(params: {
 
 /* FILTERS */
 
+export type GoalEvidence = { trophyIds: number[] };
+
+type GoalEvaluation = {
+  isComplete: boolean;
+  evidence: GoalEvidence | null;
+};
+
 export function filterCompletedChallengeGoalsBasedOnTrophies(
   challenge: ChallengeWithGoals,
   trophies: Trophy[],
@@ -708,8 +741,12 @@ export function filterCompletedChallengeGoalsBasedOnTrophies(
   const uniqueTrophies = dedupeTrophiesForChallengeEvaluation(trophies);
 
   return challenge.goals.map((goal) => {
-    const isCompleted = evaluateGoalCompletion(goal, uniqueTrophies, context);
-    return challengeGoalToCareerChallengeGoal({ goal, isCompleted });
+    const { isComplete, evidence } = evaluateGoalCompletion(goal, uniqueTrophies, context);
+    return challengeGoalToCareerChallengeGoal({
+      goal,
+      isCompleted: isComplete,
+      evidence: evidence as unknown as Prisma.JsonValue | null,
+    });
   });
 }
 
@@ -717,7 +754,7 @@ function evaluateGoalCompletion(
   goal: ChallengeGoalWithDetails,
   trophies: Trophy[],
   context: TrophyMatchContext
-): boolean {
+): GoalEvaluation {
   const distinctCountryRule = goal.rules.find((rule) => rule.kind.toLowerCase() === 'country.distinct-titles-min');
   if (distinctCountryRule) {
     const minCountries =
@@ -726,18 +763,26 @@ function evaluateGoalCompletion(
       readNumber((distinctCountryRule.config as Record<string, unknown>).min) ??
       1;
 
-    return getDistinctPrimaryTrophyCountryCodes(trophies, context).size >= minCountries;
+    const representatives = getDistinctPrimaryTrophyCountryRepresentatives(trophies, context);
+    const isComplete = representatives.size >= minCountries;
+    return {
+      isComplete,
+      evidence: isComplete ? { trophyIds: [...representatives.values()] } : null,
+    };
   }
 
   if (goal.rules.some((rule) => rule.kind.toLowerCase() === 'domestic.league.any-country')) {
-    return trophies.some((trophy) => isDomesticLeagueTrophy(trophy, context));
+    const match = trophies.find((trophy) => isDomesticLeagueTrophy(trophy, context));
+    return { isComplete: !!match, evidence: match ? { trophyIds: [match.id] } : null };
   }
 
   if (goal.rules.some((rule) => rule.kind.toLowerCase() === 'domestic.double.same-country')) {
-    return hasDomesticDoubleInSameCountry(trophies, context);
+    const match = findDomesticDoubleInSameCountry(trophies, context);
+    return { isComplete: !!match, evidence: match };
   }
 
-  return trophies.some((trophy) => filterGoalByTrophy(goal, trophy, context));
+  const match = trophies.find((trophy) => filterGoalByTrophy(goal, trophy, context));
+  return { isComplete: !!match, evidence: match ? { trophyIds: [match.id] } : null };
 }
 
 function filterGoalByTrophy(
@@ -788,15 +833,15 @@ function getCountryCodesForTrophy(trophy: Trophy, context: TrophyMatchContext): 
   return [...new Set(codes)];
 }
 
-function getDistinctPrimaryTrophyCountryCodes(trophies: Trophy[], context: TrophyMatchContext): Set<string> {
-  const countryCodes = new Set<string>();
+function getDistinctPrimaryTrophyCountryRepresentatives(trophies: Trophy[], context: TrophyMatchContext): Map<string, number> {
+  const representatives = new Map<string, number>();
 
   for (const trophy of trophies) {
     const primaryCode = getPrimaryCountryCodeForTrophy(trophy, context);
-    if (primaryCode) countryCodes.add(primaryCode);
+    if (primaryCode && !representatives.has(primaryCode)) representatives.set(primaryCode, trophy.id);
   }
 
-  return countryCodes;
+  return representatives;
 }
 
 function getPrimaryCountryCodeForTrophy(trophy: Trophy, context: TrophyMatchContext): string | null {
@@ -810,24 +855,29 @@ function getPrimaryCountryCodeForTrophy(trophy: Trophy, context: TrophyMatchCont
   return null;
 }
 
-function hasDomesticDoubleInSameCountry(trophies: Trophy[], context: TrophyMatchContext): boolean {
-  const leaguesByCountry = new Set<string>();
-  const cupsByCountry = new Set<string>();
+function findDomesticDoubleInSameCountry(trophies: Trophy[], context: TrophyMatchContext): GoalEvidence | null {
+  const leagueTrophyByCountry = new Map<string, number>();
+  const cupTrophyByCountry = new Map<string, number>();
 
   for (const trophy of trophies) {
     const countryCode = getPrimaryCountryCodeForTrophy(trophy, context);
     if (!countryCode) continue;
 
-    if (isDomesticLeagueTrophy(trophy, context)) {
-      leaguesByCountry.add(countryCode);
+    if (isDomesticLeagueTrophy(trophy, context) && !leagueTrophyByCountry.has(countryCode)) {
+      leagueTrophyByCountry.set(countryCode, trophy.id);
     }
 
-    if (isDomesticCupTrophy(trophy, context)) {
-      cupsByCountry.add(countryCode);
+    if (isDomesticCupTrophy(trophy, context) && !cupTrophyByCountry.has(countryCode)) {
+      cupTrophyByCountry.set(countryCode, trophy.id);
     }
   }
 
-  return [...leaguesByCountry].some((countryCode) => cupsByCountry.has(countryCode));
+  for (const [countryCode, leagueTrophyId] of leagueTrophyByCountry) {
+    const cupTrophyId = cupTrophyByCountry.get(countryCode);
+    if (cupTrophyId !== undefined) return { trophyIds: [leagueTrophyId, cupTrophyId] };
+  }
+
+  return null;
 }
 
 function isDomesticLeagueTrophy(trophy: Trophy, context: TrophyMatchContext): boolean {
