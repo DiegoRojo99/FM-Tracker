@@ -515,3 +515,23 @@ model ChallengeRunGoal {
   @@index([challengeGoalId])
   @@index([isComplete])
 }
+
+// First-party product analytics (Growth & Engagement Roadmap, Phase 0).
+// Vercel Hobby plan can't visualize custom events, so funnels/retention are
+// computed from this table instead. Not modeled as a User relation so that
+// anonymous (pre-signup) events can be recorded and so event history survives
+// account deletion.
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  event     String
+  userId    String?
+  visitorId String?
+  payload   Json?
+  createdAt DateTime @default(now())
+
+  @@index([event])
+  @@index([userId])
+  @@index([visitorId])
+  @@index([createdAt])
+  @@index([event, createdAt])
+}
