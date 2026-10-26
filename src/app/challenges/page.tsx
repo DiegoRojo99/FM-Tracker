@@ -3,7 +3,7 @@ import ChallengeSection from './ChallengeSection';
 import { useEffect, useState } from "react";
 import Link from 'next/link';
 import { CareerChallengeWithDetails, Challenge } from "@/lib/types/prisma/Challenge";
-import FootballLoader from "../components/FootBallLoader";
+import { ChallengesPageSkeleton } from './ChallengesPageSkeleton';
 import { useAuth } from "../components/AuthProvider";
 import { Flag, SlidersHorizontal } from 'lucide-react';
 
@@ -113,13 +113,7 @@ export default function ChallengesPage() {
     : challenges;
 
   if (loading) {
-    return (
-      <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
-        <div className="flex min-h-[52vh] items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-xl backdrop-blur-sm">
-          <FootballLoader />
-        </div>
-      </div>
-    );
+    return <ChallengesPageSkeleton />;
   }
 
   // Group challenges by status
