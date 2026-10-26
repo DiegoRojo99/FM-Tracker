@@ -9,7 +9,6 @@ import type {
   ChallengeGoalWithDetails,
   ChallengeGoalTeamLink,
   ChallengeWithGoals,
-  CareerChallenge,
   CareerChallengeGoalInput,
   CareerChallengeWithDetails,
   CareerChallengeWithSaveDetails,
@@ -326,9 +325,27 @@ async function loadChallengeRuns(where: Prisma.ChallengeRunWhereInput): Promise<
   });
 }
 
+// Challenge definitions only change via the offline seed script (`npm run challenges:seed`),
+// so a short-lived in-process cache avoids reloading the published catalog (and its
+// competition/country/team lookups) on every progress recompute within a warm instance.
+const CHALLENGE_CATALOG_CACHE_TTL_MS = 5 * 60 * 1000;
+let challengeCatalogCache: { data: ChallengeWithGoals[]; expiresAt: number } | null = null;
+
 export async function getAllChallenges(): Promise<ChallengeWithGoals[]> {
-  return loadChallengesWithDetails();
+  if (challengeCatalogCache && challengeCatalogCache.expiresAt > Date.now()) {
+    return challengeCatalogCache.data;
+  }
+
+  const data = await loadChallengesWithDetails();
+  challengeCatalogCache = { data, expiresAt: Date.now() + CHALLENGE_CATALOG_CACHE_TTL_MS };
+  return data;
 }
+
+/* Clears the in-process challenge catalog cache. Called after reseeding the catalog. */
+export async function invalidateChallengeCatalogCache(): Promise<void> {
+  challengeCatalogCache = null;
+}
+
 
 export async function getChallengeById(challengeId: number): Promise<ChallengeWithGoals | null> {
   const challenge = await prisma.challengeDefinition.findUnique({
@@ -451,39 +468,6 @@ export async function getDetailedChallengesForSaves(saveIds: string[]): Promise<
 export async function getUserChallengeById(challengeId: number, userId: string): Promise<CareerChallengeWithDetails | null> {
   const challenges = await loadUserChallengeRuns(userId, challengeId);
   return challenges[0] ?? null;
-}
-
-export async function getTeamMatchingChallenges(teamId: number) {
-  const challenges = await getAllChallenges();
-  return challenges.filter((challenge) =>
-    challenge.goals.some((goal) => goal.teams.some((team) => team.teamId === teamId))
-  );
-}
-
-export async function getCountryMatchingChallenges(countryCode: string | undefined) {
-  if (!countryCode) return [];
-  const challenges = await getAllChallenges();
-  return challenges.filter((challenge) =>
-    challenge.goals.some((goal) => goal.country?.code === countryCode)
-  );
-}
-
-export async function getCompetitionMatchingChallenges(competitionId: number) {
-  const challenges = await getAllChallenges();
-  return challenges.filter((challenge) =>
-    challenge.goals.some((goal) => goal.competition?.id === competitionId)
-  );
-}
-
-export async function getChallengesForSave(saveId: string): Promise<CareerChallenge[]> {
-  return prisma.challengeRun.findMany({
-    where: { saveId },
-  });
-}
-
-export async function checkForMatchingChallenges(trophyData: Trophy, context: TrophyMatchContext) {
-  const allChallenges = await getAllChallenges();
-  return allChallenges.filter((challenge) => challenge.goals.some((goal) => filterGoalByTrophy(goal, trophyData, context)));
 }
 
 export async function buildTrophyMatchContext(trophies: Trophy[]): Promise<TrophyMatchContext> {
