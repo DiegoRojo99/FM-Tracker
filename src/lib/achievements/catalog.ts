@@ -4,7 +4,14 @@ export type AchievementEventType =
   | 'save.created'
   | 'season.created'
   | 'trophy.added'
-  | 'challenge.progress.updated';
+  | 'challenge.progress.updated'
+  // Edit/delete events can lower any count, so they always evaluate the full catalog.
+  | 'save.deleted'
+  | 'season.updated'
+  | 'season.deleted'
+  | 'trophy.updated'
+  | 'trophy.deleted'
+  | 'career.updated';
 
 export type AchievementCatalogEntry = {
   key: string;

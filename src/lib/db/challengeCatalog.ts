@@ -2,6 +2,7 @@ import { Prisma } from '../../../prisma/generated/client';
 import { prisma } from './prisma';
 import { CHALLENGE_CATALOG } from '../challenges/catalog';
 import { readTeamKey, TEAM_RESOLVER } from './challengeTeamResolver';
+import { invalidateChallengeCatalogCache } from './challenges';
 
 type CompetitionKey =
   | 'uefa.champions-league'
@@ -564,6 +565,8 @@ export async function seedChallengeCatalog(): Promise<SeedChallengeCatalogResult
     maxWait: 10_000,
     timeout: 60_000,
   });
+
+  await invalidateChallengeCatalogCache();
 
   return result;
 }

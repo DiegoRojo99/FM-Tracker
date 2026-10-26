@@ -1,8 +1,10 @@
 import { ChallengeGoalWithDetails, CareerChallengeGoalInput, CareerChallenge } from "../types/prisma/Challenge";
+import type { Prisma } from "../../../prisma/generated/client";
 
 type goalToCareerGoal = {
   goal: ChallengeGoalWithDetails;
   isCompleted: boolean;
+  evidence?: Prisma.JsonValue | null;
 }
 
 export function challengeGoalToCareerChallengeGoal(props: goalToCareerGoal): CareerChallengeGoalInput {
@@ -11,7 +13,7 @@ export function challengeGoalToCareerChallengeGoal(props: goalToCareerGoal): Car
     isComplete: props.isCompleted,
     completedAt: props.isCompleted ? new Date() : null,
     progress: props.isCompleted ? 1 : 0,
-    evidence: null,
+    evidence: props.isCompleted ? (props.evidence ?? null) : null,
   };
 }
 

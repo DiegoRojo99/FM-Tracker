@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import FootballLoader from '@/app/components/FootBallLoader';
 import TrophiesHeader from './TrophiesHeader';
 import TrophyCountry from './TrophyCountry';
 import { useTrophies } from './useTrophies';
+import { TrophiesPageSkeleton } from './TrophiesPageSkeleton';
 import { Trophy } from 'lucide-react';
 
 export default function TrophiesPage() {
@@ -33,13 +33,7 @@ export default function TrophiesPage() {
   }, [trophies, selectedGender]);
 
   if (loading) {
-    return (
-      <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
-        <div className="flex min-h-[52vh] items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-xl backdrop-blur-sm">
-          <FootballLoader />
-        </div>
-      </div>
-    );
+    return <TrophiesPageSkeleton />;
   }
 
   if (!filteredCountries?.length) {

@@ -3,7 +3,6 @@ import {
   getAchievementDefinitions,
   getUserAchievementSummary,
   getUserAchievements,
-  seedAchievementDefinitions,
 } from '@/lib/db/achievements';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -12,8 +11,6 @@ export async function GET(req: NextRequest) {
     try {
       const url = new URL(req.url);
       const gameId = url.searchParams.get('gameId') ?? undefined;
-
-      await seedAchievementDefinitions();
 
       const [definitions, userAchievements, summary] = await Promise.all([
         getAchievementDefinitions(),
