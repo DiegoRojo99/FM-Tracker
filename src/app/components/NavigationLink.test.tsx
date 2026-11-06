@@ -26,6 +26,7 @@ describe('active navigation', () => {
     ['/friends', '/friends', true],
     ['/add-save', '/add-save', true],
     ['/login', '/login', true],
+    ['/settings', '/settings', true],
     ['/saves-other', '/saves', false],
     ['/trophies', '/saves', false],
     ['/', '/saves', false],
@@ -43,12 +44,14 @@ describe('active navigation', () => {
     expect(html).toContain(`href="${href}"`);
   });
 
-  it.each(['/saves', '/saves/career-1', '/trophies', '/challenges/league-title', '/achievements', '/login'])(
+  it.each(['/saves', '/saves/career-1', '/trophies', '/challenges/league-title', '/achievements', '/login', '/settings'])(
     'marks exactly one desktop destination on %s',
     pathname => {
       navigation.pathname = pathname;
       const html = renderToStaticMarkup(<ThemeProvider><Navbar /></ThemeProvider>);
       expect(html.match(/aria-current="page"/g)).toHaveLength(1);
+      expect(html).toContain('href="/settings"');
+      expect(html).not.toContain('<select');
     }
   );
 });

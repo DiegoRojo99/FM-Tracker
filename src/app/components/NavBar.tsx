@@ -14,6 +14,7 @@ import {
   UserCircle,
   LogIn,
   LogOut,
+  Settings,
 } from 'lucide-react'
 import Link from 'next/link'
 import NavigationLink from './NavigationLink';
@@ -22,7 +23,6 @@ import { NavBarProfile } from './NavBarProfile';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/db/firebase';
 import { useRouter } from 'next/navigation';
-import ThemeSelector from './ThemeSelector';
 
 interface FriendRequestsCount {
   pendingCount: number
@@ -121,7 +121,9 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <ThemeSelector />
+          <NavigationLink href="/settings" aria-label="Settings" className="hidden rounded-md p-2.5 xl:inline-flex">
+            <Settings className="h-5 w-5" />
+          </NavigationLink>
           <div className="xl:hidden">
             <button
               aria-label="Toggle menu"
@@ -142,6 +144,7 @@ export default function Navbar() {
             <NavigationLink href="/trophies" className={mobileLinkClass} style={{ animationDelay: '80ms' }} onClick={() => setOpen(false)}><Trophy className="h-4 w-4" />Trophies</NavigationLink>
             <NavigationLink href="/challenges" className={mobileLinkClass} style={{ animationDelay: '120ms' }} onClick={() => setOpen(false)}><Target className="h-4 w-4" />Challenges</NavigationLink>
             <NavigationLink href="/achievements" className={mobileLinkClass} style={{ animationDelay: '160ms' }} onClick={() => setOpen(false)}><Star className="h-4 w-4" />Achievements</NavigationLink>
+            <NavigationLink href="/settings" className={mobileLinkClass} style={{ animationDelay: '180ms' }} onClick={() => setOpen(false)}><Settings className="h-4 w-4" />Settings</NavigationLink>
           
             {user && user.uid === adminUID && (
               <NavigationLink href="/admin" className={mobileLinkClass} style={{ animationDelay: '180ms' }} onClick={() => setOpen(false)}>
