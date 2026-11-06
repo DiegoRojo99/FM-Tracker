@@ -109,7 +109,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="my-2 hidden xl:flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-1.5 py-1">
+        <div className="my-2 hidden md:flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-1.5 py-1">
           <NavigationLink href="/saves" className={desktopLinkClass}><Save className="h-4 w-4" />Saves</NavigationLink>
           <NavigationLink href="/trophies" className={desktopLinkClass}><Trophy className="h-4 w-4" />Trophies</NavigationLink>
           <NavigationLink href="/challenges" className={desktopLinkClass}><Target className="h-4 w-4" />Challenges</NavigationLink>
@@ -118,27 +118,25 @@ export default function Navbar() {
             <NavigationLink href="/admin" className={desktopLinkClass}><Shield className="h-4 w-4" />Admin</NavigationLink>
           )}
           <NavBarProfile />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <NavigationLink href="/settings" aria-label="Settings" className="hidden rounded-md p-2.5 xl:inline-flex">
+          <NavigationLink href="/settings" aria-label="Settings" className="inline-flex rounded-full p-2.5">
             <Settings className="h-5 w-5" />
           </NavigationLink>
-          <div className="xl:hidden">
-            <button
-              aria-label="Toggle menu"
-              aria-expanded={open}
-              onClick={() => setOpen(!open)}
-              className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-2 text-[var(--color-foreground)]"
-            >
-              {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
+        </div>
+
+        <div className="md:hidden">
+          <button
+            aria-label="Toggle menu"
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+            className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-2 text-[var(--color-foreground)]"
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
       </div>
 
       {open && (
-        <div className="xl:hidden border-t border-[var(--color-surface-border)] bg-[var(--color-background)]/95 px-2 pb-2 pt-1">
+        <div className="md:hidden border-t border-[var(--color-surface-border)] bg-[var(--color-background)]/95 px-2 pb-2 pt-1">
           <div className="mobile-menu-panel overflow-hidden rounded-md border border-[var(--color-surface-border)] bg-[var(--color-dark)]/95 backdrop-blur-sm">
             <NavigationLink href="/saves" className={mobileLinkClass} style={{ animationDelay: '40ms' }} onClick={() => setOpen(false)}><Save className="h-4 w-4" />Saves</NavigationLink>
             <NavigationLink href="/trophies" className={mobileLinkClass} style={{ animationDelay: '80ms' }} onClick={() => setOpen(false)}><Trophy className="h-4 w-4" />Trophies</NavigationLink>

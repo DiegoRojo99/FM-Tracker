@@ -54,4 +54,12 @@ describe('active navigation', () => {
       expect(html).not.toContain('<select');
     }
   );
+
+  it('retains the original desktop breakpoint and keeps settings inside the navigation pill', () => {
+    const html = renderToStaticMarkup(<ThemeProvider><Navbar /></ThemeProvider>);
+    expect(html).toContain('my-2 hidden md:flex');
+    expect(html).toContain('class="md:hidden"');
+    expect(html).not.toContain('xl:');
+    expect(html).toMatch(/aria-label="Settings"[^>]*class="fm-nav-link inline-flex rounded-full p-2.5"/);
+  });
 });
