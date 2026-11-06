@@ -45,6 +45,7 @@ function getSeasonFromGameId(gameId: string): string {
   if (gameId.includes('fm24')) return '2023/24';
   if (gameId.includes('fm25')) return '2024/25';
   if (gameId.includes('fm26')) return '2025/26';
+  if (gameId.includes('fm27')) return '2026/27';
   return '2023/24';
 }
 
@@ -52,6 +53,7 @@ function getStartDateFromGameId(gameId: string): string {
   if (gameId.includes('fm24')) return '2023-07-01';
   if (gameId.includes('fm25')) return '2024-07-01';
   if (gameId.includes('fm26')) return '2025-07-01';
+  if (gameId.includes('fm27')) return '2026-07-01';
   return '2023-07-01';
 }
 

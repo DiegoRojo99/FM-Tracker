@@ -10,6 +10,7 @@
     "test": "vitest run",
     "db:copy:prod-to-dev:dry-run": "tsx scripts/data/copy-prod-to-dev.ts --dry-run",
     "db:copy:prod-to-dev": "tsx scripts/data/copy-prod-to-dev.ts --confirm",
+    "games:seed:fm27": "tsx src/scripts/seed/seedGames.ts fm27",
     "achievements:seed": "tsx scripts/data/seed-achievements.ts",
     "challenges:seed": "tsx scripts/data/seed-challenges.ts",
     "fix:promotions": "tsx scripts/data/fix-top-flight-promotions.ts",

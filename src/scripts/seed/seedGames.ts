@@ -1,4 +1,6 @@
-import { prisma } from "@/lib/db/prisma";
+import { config } from 'dotenv';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 // Using a simpler type for seeding since we're bypassing the client-side types
 type SeedGame = {
@@ -48,14 +50,47 @@ const initialGames: SeedGame[] = [
     releaseDate: new Date('2025-11-04'),
     isActive: true,
     sortOrder: 4,
+  },
+  {
+    id: 'fm27',
+    name: 'Football Manager 2027',
+    shortName: 'FM27',
+    version: '2027',
+    platform: 'PC',
+    variant: 'Standard',
+    releaseDate: new Date('2026-11-04'),
+    isActive: true,
+    sortOrder: 5,
   }
 ];
 
-export async function seedGames() {
+function loadSeedEnvironment() {
+  const baseEnvPath = resolve(process.cwd(), '.env');
+  if (existsSync(baseEnvPath)) config({ path: baseEnvPath });
+  else config();
+
+  const envFile = process.env.NODE_ENV === 'production'
+    ? '.env.production.local'
+    : '.env.development.local';
+  const envPath = resolve(process.cwd(), envFile);
+  if (existsSync(envPath)) config({ path: envPath, override: true });
+}
+
+export async function seedGames(gameId?: string) {
+  loadSeedEnvironment();
+
+  const gamesToSeed = gameId
+    ? initialGames.filter((game) => game.id === gameId)
+    : initialGames;
+  if (gamesToSeed.length === 0) {
+    throw new Error(`Unknown game ID: ${gameId}`);
+  }
+
+  const { prisma } = await import('@/lib/db/prisma');
   console.log('Starting games seeding...');
   
   try {    
-    for (const game of initialGames) {
+    for (const game of gamesToSeed) {
       const { id, ...gameData } = game;
       
       await prisma.game.upsert({
@@ -75,6 +110,13 @@ export async function seedGames() {
       });
       console.log(`✓ Seeded: ${game.name}`);
     }
+
+    for (const game of gamesToSeed) {
+      const seededGame = await prisma.game.findUnique({ where: { id: game.id } });
+      if (!seededGame || seededGame.shortName !== game.shortName || !seededGame.isActive) {
+        throw new Error(`Game verification failed for ${game.id}`);
+      }
+    }
     
     console.log('Games seeding completed successfully!');
   } catch (error) {
@@ -85,7 +127,7 @@ export async function seedGames() {
 
 // Function to run the seeding
 if (require.main === module) {
-  seedGames()
+  seedGames(process.argv[2])
     .then(() => {
       console.log('Seeding process completed.');
       process.exit(0);

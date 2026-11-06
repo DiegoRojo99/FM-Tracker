@@ -38,6 +38,7 @@ function getSeasonFromGameId(gameId: string): string {
   if (gameId.includes('fm24')) return '2023/2024'
   if (gameId.includes('fm25')) return '2024/2025'
   if (gameId.includes('fm26')) return '2025/2026'
+  if (gameId.includes('fm27')) return '2026/2027'
   return '2023/2024'
 }
 
