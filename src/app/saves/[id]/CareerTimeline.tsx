@@ -46,7 +46,7 @@ export default function CareerTimeline({ saveDetails, onUpdateStint, onDeleteSti
         {grouped.map(({ startDate, entries }, idx) => (
           <div key={idx} className="relative pl-8 sm:pl-10">
             <span className="absolute left-0 top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[var(--color-surface-border)] bg-[var(--color-dark)] text-[10px] font-semibold text-[var(--color-highlight)] sm:h-8 sm:w-8">
-              {idx + 1}
+              {grouped.length - idx}
             </span>
 
             <div className="mb-3 inline-flex rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
