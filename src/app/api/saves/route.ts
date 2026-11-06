@@ -8,7 +8,6 @@ import { Save } from '@/lib/types/prisma/Save';
 import { fetchTeam } from '@/lib/db/teams';
 import { prisma } from '@/lib/db/prisma';
 import { CareerStint } from '@/lib/types/prisma/Career';
-import { deleteCacheKey } from '@/lib/cache/redis';
 import { readThroughCache } from '@/lib/cache/redis';
 import { safeRecomputeSaveProgress } from '@/lib/db/progress';
 
@@ -237,10 +236,12 @@ export async function POST(req: NextRequest) {
 
       if (createdNewSave) {
         // Keep cache consistency work in the critical path.
-        await Promise.allSettled([
-          deleteCacheKey('stats:global'),
+        const cacheResults = await Promise.allSettled([
           invalidateUserPreviewSavesCache(uid),
         ]);
+        for (const result of cacheResults) {
+          if (result.status === 'rejected') console.error('Save creation cache invalidation failed:', result.reason);
+        }
 
         // Non-critical work should not delay save creation response.
         const optionalSideEffects = [

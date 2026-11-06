@@ -43,6 +43,19 @@ Each cached response includes an `x-cache` header with one of:
 - `miss` (fetched from DB and stored in Redis)
 - `disabled` (Redis unavailable or not configured)
 
+Global statistics aggregate all game versions, including FM27. Profile statistics
+are uncached, and the friends leaderboard filters by the requested `gameId`.
+Save-preview invalidation also clears global statistics after save, season, and
+career changes. Trophy additions/deletions, user creation, and challenge catalog
+seeding clear global statistics separately, including trophies added after a
+season response.
+
+## Firebase Admin
+
+Firebase initialization does not assign administrator permissions. Manage admin
+custom claims explicitly through trusted administrative tooling; builds and
+server imports must not modify them. Existing custom claims remain unchanged.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

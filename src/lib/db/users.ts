@@ -1,6 +1,7 @@
 import { User, UserInput } from "../types/prisma/User";
 import { prisma } from "./prisma";
 import { User as FirebaseUser} from 'firebase/auth';
+import { deleteCacheKey } from '../cache/redis';
 
 export async function createUserIfNotExists(user: FirebaseUser): Promise<{ created: boolean }> {
   if (!user?.uid) return { created: false };
@@ -42,7 +43,7 @@ export async function createUser(userData: UserInput): Promise<User> {
     throw new Error("User UID and email are required to create a user.");
   }
 
-  return prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       uid: userData.uid,
       email: userData.email,
@@ -51,4 +52,6 @@ export async function createUser(userData: UserInput): Promise<User> {
       createdAt: new Date(),
     },
   });
+  await deleteCacheKey('stats:global');
+  return user;
 }

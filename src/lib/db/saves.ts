@@ -46,7 +46,10 @@ export function getUserPreviewSavesCacheKey(userId: string): string {
 }
 
 export async function invalidateUserPreviewSavesCache(userId: string): Promise<void> {
-  await deleteCacheKey(getUserPreviewSavesCacheKey(userId))
+  await Promise.all([
+    deleteCacheKey(getUserPreviewSavesCacheKey(userId)),
+    deleteCacheKey('stats:global'),
+  ])
 }
 
 /**

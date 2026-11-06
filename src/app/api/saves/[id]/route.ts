@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server';
 import { FullDetailsSave } from '@/lib/types/prisma/Save';
 import { getFullSave, invalidateUserPreviewSavesCache } from '@/lib/db/saves';
 import { prisma } from '@/lib/db/prisma';
-import { deleteCacheKey } from '@/lib/cache/redis';
 import { safeRecomputeUserProgress } from '@/lib/db/progress';
 import { apiError, badRequest, forbidden, notFound, ok, success } from '@/lib/api/response';
 
@@ -50,10 +49,7 @@ export async function DELETE(req: NextRequest) {
         where: { id: saveId },
       });
 
-      await Promise.all([
-        deleteCacheKey('stats:global'),
-        invalidateUserPreviewSavesCache(save.userId),
-      ]);
+      await invalidateUserPreviewSavesCache(save.userId);
 
       // Challenge runs cascade with the save; user-level achievement counts need a refresh.
       await safeRecomputeUserProgress({ userId: save.userId, eventType: 'save.deleted' });
