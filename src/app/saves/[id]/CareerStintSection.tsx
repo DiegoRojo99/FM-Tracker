@@ -64,7 +64,7 @@ export default function CareerStintsSection({ saveDetails, setRefresh }: Props) 
             <BriefcaseBusiness className="h-3.5 w-3.5" />
             Career History
           </p>
-          <h3 className="mt-1 text-xl font-semibold text-white">Career Stints</h3>
+          <h3 className="mt-1 text-xl font-semibold text-[var(--color-foreground)]">Career Stints</h3>
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">Track each role change through your journey timeline.</p>
         </div>
 

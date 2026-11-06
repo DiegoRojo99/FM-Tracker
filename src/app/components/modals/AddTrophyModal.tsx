@@ -95,7 +95,7 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
                   setCompetition(null);
                 }
               }}
-              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
             >
               <option value="">Select a team</option>
               {Array.from(new Map(saveDetails.careerStints.map(stint => [stint.teamId, stint])).values()).map((stint) => (
@@ -112,7 +112,7 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
           {selectedTeam && (
             <div className="mt-2 flex items-center gap-3 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2">
               <Image src={selectedTeam.logo} alt={selectedTeam.name} width={24} height={24} className="h-6 w-6 object-contain" unoptimized />
-              <span className="text-sm font-semibold text-white">{selectedTeam.name}</span>
+              <span className="text-sm font-semibold text-[var(--color-foreground)]">{selectedTeam.name}</span>
             </div>
           )}
         </div>
@@ -134,7 +134,7 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
             </p>
           )}
           {competition && (
-            <p className="mt-1.5 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm font-semibold text-white">
+            <p className="mt-1.5 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm font-semibold text-[var(--color-foreground)]">
               {competition.name}
             </p>
           )}
@@ -148,7 +148,7 @@ export default function AddTrophyModal({ open, onClose, saveId, saveDetails, onS
             name="dateWon"
             value={dateWon}
             onChange={(e) => setDateWon(e.target.value)}
-            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
             required
           />
         </div>

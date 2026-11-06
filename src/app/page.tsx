@@ -49,7 +49,7 @@ export default function LandingPage() {
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
               Your FM Career, Organized
             </p>
-            <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+            <h1 className="text-3xl font-bold leading-tight text-[var(--color-foreground)] sm:text-4xl lg:text-5xl">
               Build a living record of every save, challenge, and trophy.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--text-muted)] sm:text-lg">
@@ -80,19 +80,19 @@ export default function LandingPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">At a Glance</p>
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="fm-inset p-4">
-                <p className="text-lg font-semibold text-white">All Saves</p>
+                <p className="text-lg font-semibold text-[var(--color-foreground)]">All Saves</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)]">Your complete manager journey</p>
               </div>
               <div className="fm-inset p-4">
-                <p className="text-lg font-semibold text-white">Challenge Paths</p>
+                <p className="text-lg font-semibold text-[var(--color-foreground)]">Challenge Paths</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)]">Track elite career objectives</p>
               </div>
               <div className="fm-inset p-4">
-                <p className="text-lg font-semibold text-white">Trophies</p>
+                <p className="text-lg font-semibold text-[var(--color-foreground)]">Trophies</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)]">Country by country checklist</p>
               </div>
               <div className="fm-inset p-4">
-                <p className="text-lg font-semibold text-white">Friends</p>
+                <p className="text-lg font-semibold text-[var(--color-foreground)]">Friends</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)]">Compare and compete together</p>
               </div>
             </div>
@@ -102,7 +102,7 @@ export default function LandingPage() {
 
       <section id="features" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12">
         <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
-          <h2 className="text-2xl font-semibold text-white sm:text-3xl">Everything you need to track your legacy</h2>
+          <h2 className="text-2xl font-semibold text-[var(--color-foreground)] sm:text-3xl">Everything you need to track your legacy</h2>
           <p className="max-w-md text-sm text-[var(--text-muted)]">Designed for quick updates after every session and deeper reflection over full careers.</p>
         </div>
 
@@ -117,14 +117,14 @@ export default function LandingPage() {
                   </span>
                 )}
               </div>
-              <h3 className="text-lg font-semibold text-white">{title}</h3>
+              <h3 className="text-lg font-semibold text-[var(--color-foreground)]">{title}</h3>
               <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">{desc}</p>
             </div>
           ))}
         </div>
 
         <div className="fm-panel mt-8 p-5 sm:p-6">
-          <h3 className="text-2xl font-semibold text-white">Pick your story back up</h3>
+          <h3 className="text-2xl font-semibold text-[var(--color-foreground)]">Pick your story back up</h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-text-muted)]">
             Keep your career history close while you play. Return to your saves to record the next season, trophy, or milestone.
           </p>

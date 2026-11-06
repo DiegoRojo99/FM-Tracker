@@ -60,13 +60,13 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
     return (
       <div className="fm-inset px-4 py-8 text-center">
         <div className="mb-3 text-3xl">👫</div>
-        <h3 className="mb-2 text-xl font-semibold text-white">
+        <h3 className="mb-2 text-xl font-semibold text-[var(--color-foreground)]">
           No friends yet
         </h3>
         <p className="mb-6 text-[var(--color-text-muted)]">
           Start building your network by searching for friends to connect with!
         </p>
-        <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs text-gray-200">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs text-[var(--color-text-muted)]">
           <UserRoundPlus className="h-3.5 w-3.5" />
           Use Add Friends to begin
         </span>
@@ -77,7 +77,7 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-white">
+        <h2 className="text-xl font-bold text-[var(--color-foreground)]">
           Your Friends ({friends.length})
         </h2>
       </div>
@@ -93,10 +93,10 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
                 {friend.displayName.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-white font-semibold truncate">
+                <h3 className="text-[var(--color-foreground)] font-semibold truncate">
                   {friend.displayName}
                 </h3>
-                <p className="text-gray-300 text-sm truncate">
+                <p className="text-[var(--color-text-muted)] text-sm truncate">
                   {friend.email}
                 </p>
               </div>

@@ -13,7 +13,7 @@ const ChallengeSection: React.FC<ChallengeSectionProps> = ({ name, icon, challen
   return (
     <section className="fm-panel p-4 sm:p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+        <h2 className="flex items-center gap-2 text-lg font-semibold text-[var(--color-foreground)]">
           <span role="img" aria-label={name}>{icon}</span> {name}
         </h2>
         <span className="rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-2.5 py-1 text-xs font-semibold text-[var(--color-text-muted)]">

@@ -341,7 +341,7 @@ export default function ApiCompetitionsAdminPage() {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Admin</p>
-              <h1 className="mt-1 text-2xl font-black text-white sm:text-3xl">API Competitions</h1>
+              <h1 className="mt-1 text-2xl font-black text-[var(--color-foreground)] sm:text-3xl">API Competitions</h1>
               <p className="mt-1 text-sm text-[var(--color-text-muted)]">
                 Inspect, edit, delete, and create ApiCompetition rows from API-Football league IDs.
               </p>
@@ -349,7 +349,7 @@ export default function ApiCompetitionsAdminPage() {
             <button
               onClick={fetchRows}
               disabled={loading || savingAll}
-              className="inline-flex items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-4 py-2 text-sm font-semibold text-white hover:border-[var(--color-accent)] disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-4 py-2 text-sm font-semibold text-[var(--color-foreground)] hover:border-[var(--color-accent)] disabled:opacity-50"
             >
               <RefreshCw className="h-4 w-4" />
               Refresh
@@ -357,14 +357,14 @@ export default function ApiCompetitionsAdminPage() {
             <button
               onClick={saveAllRows}
               disabled={savingAll || dirtyCount === 0}
-              className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-4 py-2 text-sm font-semibold text-emerald-200 hover:bg-emerald-500/25 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-4 py-2 text-sm font-semibold text-emerald-700 dark:text-emerald-200 hover:bg-emerald-500/25 disabled:opacity-50"
             >
               {savingAll ? 'Saving...' : `Save All${dirtyCount > 0 ? ` (${dirtyCount})` : ''}`}
             </button>
           </div>
 
           {error && (
-            <p className="mt-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+            <p className="mt-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-700 dark:text-rose-200">
               {error}
             </p>
           )}
@@ -376,19 +376,19 @@ export default function ApiCompetitionsAdminPage() {
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Search by name or country code"
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] py-2 pl-9 pr-3 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
+                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] py-2 pl-9 pr-3 text-sm text-[var(--color-foreground)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
               />
             </div>
             <input
               value={country}
               onChange={(event) => setCountry(event.target.value.toUpperCase())}
               placeholder="Country code"
-              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
+              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
             />
             <select
               value={typeFilter}
               onChange={(event) => setTypeFilter(event.target.value)}
-              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
             >
               <option value="">All types</option>
               {TYPE_OPTIONS.map((type) => (
@@ -398,7 +398,7 @@ export default function ApiCompetitionsAdminPage() {
             <select
               value={femaleFilter}
               onChange={(event) => setFemaleFilter(event.target.value as 'all' | 'female' | 'male' | 'unknown')}
-              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
             >
               <option value="all">Gender: all</option>
               <option value="female">Gender: women</option>
@@ -407,7 +407,7 @@ export default function ApiCompetitionsAdminPage() {
             </select>
           </div>
 
-          <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white">
+          <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)]">
             <input
               type="checkbox"
               checked={activeOnly}
@@ -419,7 +419,7 @@ export default function ApiCompetitionsAdminPage() {
         </div>
 
         <div className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-6 shadow-2xl backdrop-blur-sm">
-          <h2 className="text-lg font-bold text-white">Add or Sync by API League ID</h2>
+          <h2 className="text-lg font-bold text-[var(--color-foreground)]">Add or Sync by API League ID</h2>
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">
             This fetches from API-Football using the given league ID and upserts the row in ApiCompetition.
           </p>
@@ -429,12 +429,12 @@ export default function ApiCompetitionsAdminPage() {
               value={newApiId}
               onChange={(event) => setNewApiId(event.target.value)}
               placeholder="API league id"
-              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
+              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
             />
             <select
               value={newType}
               onChange={(event) => setNewType(event.target.value)}
-              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
             >
               <option value="">Type: from API</option>
               {TYPE_OPTIONS.map((type) => (
@@ -445,19 +445,19 @@ export default function ApiCompetitionsAdminPage() {
               value={newTier}
               onChange={(event) => setNewTier(event.target.value)}
               placeholder="Tier (optional)"
-              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
+              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
             />
             <select
               value={newIsFemale}
               onChange={(event) => setNewIsFemale(event.target.value as 'auto' | 'true' | 'false' | 'null')}
-              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
             >
               <option value="auto">Gender: auto-detect</option>
               <option value="true">Gender: women</option>
               <option value="false">Gender: men</option>
               <option value="null">Gender: unknown</option>
             </select>
-            <label className="inline-flex items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white">
+            <label className="inline-flex items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)]">
               <input
                 type="checkbox"
                 checked={newIsActive}
@@ -469,7 +469,7 @@ export default function ApiCompetitionsAdminPage() {
             <button
               onClick={addByApiId}
               disabled={adding}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-4 py-2 text-sm font-semibold text-emerald-200 hover:bg-emerald-500/25 disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-4 py-2 text-sm font-semibold text-emerald-700 dark:text-emerald-200 hover:bg-emerald-500/25 disabled:opacity-50"
             >
               <Plus className="h-4 w-4" />
               {adding ? 'Working...' : 'Add / Sync'}
@@ -503,7 +503,7 @@ export default function ApiCompetitionsAdminPage() {
                   const busy = saving[row.id] === true;
 
                   return (
-                    <tr key={row.id} className="border-b border-[var(--color-surface-border)]/40 hover:bg-white/2">
+                    <tr key={row.id} className="border-b border-[var(--color-surface-border)]/40 hover:bg-[var(--color-surface-soft)]">
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           {row.logoUrl ? (
@@ -513,13 +513,13 @@ export default function ApiCompetitionsAdminPage() {
                               width={24}
                               height={24}
                               unoptimized
-                              className="h-6 w-6 rounded object-contain bg-white/10"
+                              className="h-6 w-6 rounded object-contain bg-[var(--color-surface-soft)]"
                             />
                           ) : (
                             <Database className="h-5 w-5 text-[var(--color-text-muted)]" />
                           )}
                           <div>
-                            <p className="font-semibold text-white">{row.name}</p>
+                            <p className="font-semibold text-[var(--color-foreground)]">{row.name}</p>
                             <p className="text-xs text-[var(--color-text-muted)]">ID {row.id}</p>
                           </div>
                         </div>
@@ -529,7 +529,7 @@ export default function ApiCompetitionsAdminPage() {
                         <select
                           value={editType[row.id] ?? row.type}
                           onChange={(event) => setEditType((prev) => ({ ...prev, [row.id]: event.target.value }))}
-                          className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-xs text-white focus:border-[var(--color-accent)] focus:outline-none"
+                          className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-xs text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
                         >
                           {TYPE_OPTIONS.map((type) => (
                             <option key={type} value={type}>{type}</option>
@@ -541,14 +541,14 @@ export default function ApiCompetitionsAdminPage() {
                           value={editTier[row.id] ?? ''}
                           onChange={(event) => setEditTier((prev) => ({ ...prev, [row.id]: event.target.value }))}
                           placeholder="-"
-                          className="w-16 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-center text-xs text-white focus:border-[var(--color-accent)] focus:outline-none"
+                          className="w-16 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-center text-xs text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
                         />
                       </td>
                       <td className="px-4 py-3">
                         <select
                           value={editIsFemale[row.id] ?? 'null'}
                           onChange={(event) => setEditIsFemale((prev) => ({ ...prev, [row.id]: event.target.value as 'true' | 'false' | 'null' }))}
-                          className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-xs text-white focus:border-[var(--color-accent)] focus:outline-none"
+                          className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-xs text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
                         >
                           <option value="null">Unknown</option>
                           <option value="true">Women</option>
@@ -570,14 +570,14 @@ export default function ApiCompetitionsAdminPage() {
                           <button
                             onClick={() => saveRow(row.id)}
                             disabled={!dirty || busy}
-                            className="rounded-lg border border-sky-500/40 bg-sky-500/15 px-2.5 py-1 text-xs font-semibold text-sky-200 hover:bg-sky-500/25 disabled:opacity-40"
+                            className="rounded-lg border border-sky-500/40 bg-sky-500/15 px-2.5 py-1 text-xs font-semibold text-sky-700 dark:text-sky-200 hover:bg-sky-500/25 disabled:opacity-40"
                           >
                             {busy ? '...' : 'Save'}
                           </button>
                           <button
                             onClick={() => deleteRow(row.id)}
                             disabled={busy}
-                            className="inline-flex items-center gap-1 rounded-lg border border-rose-500/40 bg-rose-500/15 px-2.5 py-1 text-xs font-semibold text-rose-200 hover:bg-rose-500/25 disabled:opacity-40"
+                            className="inline-flex items-center gap-1 rounded-lg border border-rose-500/40 bg-rose-500/15 px-2.5 py-1 text-xs font-semibold text-rose-700 dark:text-rose-200 hover:bg-rose-500/25 disabled:opacity-40"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                             Delete

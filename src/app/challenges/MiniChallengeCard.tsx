@@ -49,7 +49,7 @@ const MiniChallengeCard: React.FC<MiniChallengeCardProps> = ({ userChallenge }) 
       </span>
 
       <div className="flex flex-1 items-center py-3">
-        <span className="break-words text-sm font-semibold text-white">
+        <span className="break-words text-sm font-semibold text-[var(--color-foreground)]">
           {challengeName}
         </span>
       </div>

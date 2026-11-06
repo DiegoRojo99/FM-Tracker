@@ -41,7 +41,7 @@ export default function TrophiesPage() {
       <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
         <div className="fm-panel flex min-h-[40vh] flex-col items-center justify-center p-6 text-center">
           <Trophy className="mb-4 h-12 w-12 text-[var(--color-highlight)]" />
-          <h2 className="text-2xl font-bold text-white">No Competitions Found</h2>
+          <h2 className="text-2xl font-bold text-[var(--color-foreground)]">No Competitions Found</h2>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Start tracking your trophies by adding competitions.</p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             <Link href="/saves" className="fm-action">
@@ -75,7 +75,7 @@ export default function TrophiesPage() {
 
         {filteredTrophies.length === 0 && (
           <div className="fm-panel border-[var(--color-accent)]/35 p-4">
-            <h2 className="text-lg font-bold text-white">No trophy milestones recorded yet</h2>
+            <h2 className="text-lg font-bold text-[var(--color-foreground)]">No trophy milestones recorded yet</h2>
             <p className="mt-1 text-sm text-[var(--color-text-muted)]">
               Your first trophy is a key activation milestone. Add one from a save to begin your cabinet timeline.
             </p>

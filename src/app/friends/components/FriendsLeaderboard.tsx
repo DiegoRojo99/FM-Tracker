@@ -109,8 +109,8 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
     return (
       <div className="fm-inset px-4 py-8 text-center">
         <div className="text-3xl mb-3">🏁</div>
-        <h3 className="text-xl font-semibold text-white mb-2">No ranking data yet</h3>
-        <p className="text-gray-300">Add saves and trophies to start climbing the leaderboard.</p>
+        <h3 className="text-xl font-semibold text-[var(--color-foreground)] mb-2">No ranking data yet</h3>
+        <p className="text-[var(--color-text-muted)]">Add saves and trophies to start climbing the leaderboard.</p>
       </div>
     )
   }
@@ -119,14 +119,14 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
     <div>
       <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-xl font-bold text-white">🏆 Friends Leaderboard</h2>
-          <p className="text-sm text-gray-300">
+          <h2 className="text-xl font-bold text-[var(--color-foreground)]">🏆 Friends Leaderboard</h2>
+          <p className="text-sm text-[var(--color-text-muted)]">
             Ranking {data.participantCount} players by real achievements: trophies and promotions.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <label htmlFor="leaderboard-game" className="text-sm text-gray-300">Game</label>
+          <label htmlFor="leaderboard-game" className="text-sm text-[var(--color-text-muted)]">Game</label>
           <select
             id="leaderboard-game"
             value={selectedGame}
@@ -143,9 +143,9 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
 
       {myEntry && (
         <div className="fm-inset mb-5 border-[var(--color-accent)]/40 p-3">
-          <p className="text-sm text-gray-300">Your position</p>
+          <p className="text-sm text-[var(--color-text-muted)]">Your position</p>
           <div className="flex flex-wrap items-center justify-between gap-2 mt-1">
-            <p className="min-w-0 break-words text-white font-semibold text-base">
+            <p className="min-w-0 break-words text-[var(--color-foreground)] font-semibold text-base">
               {renderRankMedal(myEntry.rank)} {myEntry.displayName}
             </p>
             <p className="text-[var(--color-accent)] font-bold text-xl">{myEntry.score.toLocaleString()} pts</p>
@@ -161,20 +161,20 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex items-center gap-4 min-w-0">
-                <div className="text-lg font-bold text-white w-12 shrink-0">{renderRankMedal(entry.rank)}</div>
+                <div className="text-lg font-bold text-[var(--color-foreground)] w-12 shrink-0">{renderRankMedal(entry.rank)}</div>
                 <div className="h-10 w-10 shrink-0 bg-[var(--color-primary)]/15 rounded-md flex items-center justify-center text-[var(--color-accent)] font-semibold">
                   {entry.displayName.charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-white font-semibold truncate">{entry.displayName}</p>
-                  <p className="text-xs text-gray-400 truncate">{entry.email}</p>
+                  <p className="text-[var(--color-foreground)] font-semibold truncate">{entry.displayName}</p>
+                  <p className="text-xs text-[var(--color-text-muted)] truncate">{entry.email}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-4 md:gap-6">
                 <div className="text-right">
                   <p className="text-[var(--color-accent)] font-bold text-xl">{entry.score.toLocaleString()}</p>
-                  <p className="text-xs text-gray-400">points</p>
+                  <p className="text-xs text-[var(--color-text-muted)]">points</p>
                 </div>
                 <GradientButton
                   size="sm"
@@ -186,8 +186,8 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
-              <div className="rounded-lg border border-[var(--color-surface-border)] bg-black/20 p-2 text-gray-300">🏆 {entry.stats.totalTrophies} ({entry.breakdown.trophiesPoints} pts)</div>
-              <div className="rounded-lg border border-[var(--color-surface-border)] bg-black/20 p-2 text-gray-300">📈 {entry.stats.promotions} ({entry.breakdown.promotionsPoints} pts)</div>
+              <div className="rounded-lg border border-[var(--color-surface-border)] bg-black/20 p-2 text-[var(--color-text-muted)]">🏆 {entry.stats.totalTrophies} ({entry.breakdown.trophiesPoints} pts)</div>
+              <div className="rounded-lg border border-[var(--color-surface-border)] bg-black/20 p-2 text-[var(--color-text-muted)]">📈 {entry.stats.promotions} ({entry.breakdown.promotionsPoints} pts)</div>
             </div>
           </div>
         ))}

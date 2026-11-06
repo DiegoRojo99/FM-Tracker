@@ -96,19 +96,19 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
   const getStatusDisplay = (status: string, canSendRequest: boolean) => {
     switch (status) {
       case 'friend':
-        return { text: '✓ Friends', color: 'text-green-400', bgColor: 'bg-green-500/20' }
+        return { text: '✓ Friends', color: 'text-green-700 dark:text-green-400', bgColor: 'bg-green-500/20' }
       case 'request_sent_pending':
-        return { text: '⏳ Request Sent', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20' }
+        return { text: '⏳ Request Sent', color: 'text-yellow-700 dark:text-yellow-400', bgColor: 'bg-yellow-500/20' }
       case 'request_sent_rejected':
-        return { text: '✗ Request Rejected', color: 'text-red-400', bgColor: 'bg-red-500/20' }
+        return { text: '✗ Request Rejected', color: 'text-red-700 dark:text-red-400', bgColor: 'bg-red-500/20' }
       case 'request_sent_blocked':
         return { text: '🚫 Blocked', color: 'text-red-600', bgColor: 'bg-red-600/20' }
       case 'request_received_pending':
-        return { text: '📨 Sent You Request', color: 'text-blue-400', bgColor: 'bg-blue-500/20' }
+        return { text: '📨 Sent You Request', color: 'text-blue-700 dark:text-blue-400', bgColor: 'bg-blue-500/20' }
       default:
         return canSendRequest 
-          ? { text: 'Send Request', color: 'text-white', bgColor: '' }
-          : { text: 'Unavailable', color: 'text-gray-400', bgColor: 'bg-gray-500/20' }
+          ? { text: 'Send Request', color: 'text-[var(--color-foreground)]', bgColor: '' }
+          : { text: 'Unavailable', color: 'text-[var(--color-text-muted)]', bgColor: 'bg-gray-500/20' }
     }
   }
 
@@ -121,7 +121,7 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
   return (
     <div>
       <div className="fm-inset mb-5 p-4">
-        <h2 className="mb-4 text-xl font-bold text-white">
+        <h2 className="mb-4 text-xl font-bold text-[var(--color-foreground)]">
           🔍 Search & Add Friends
         </h2>
         
@@ -154,7 +154,7 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
           <button
             onClick={() => setShowMessage(!showMessage)}
             aria-expanded={showMessage}
-            className="min-h-11 rounded text-left text-sm text-[var(--color-accent)] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
+            className="min-h-11 rounded text-left text-sm text-[var(--color-accent)] transition-colors hover:text-[var(--color-foreground)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
           >
             {showMessage ? '▼ Hide Message' : '▶ Add optional message to friend requests'}
           </button>
@@ -170,7 +170,7 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
                 maxLength={200}
                 className="fm-field resize-none placeholder:text-[var(--color-text-muted)]/70"
               />
-              <div className="text-gray-400 text-xs mt-1">
+              <div className="text-[var(--color-text-muted)] text-xs mt-1">
                 {message.length}/200 characters
               </div>
             </div>
@@ -181,7 +181,7 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
       {/* Search Results */}
       {searchResults.length > 0 && (
         <div>
-          <h3 className="mb-4 text-lg font-semibold text-white">
+          <h3 className="mb-4 text-lg font-semibold text-[var(--color-foreground)]">
             Search Results ({searchResults.length})
           </h3>
           <div className="grid gap-4">
@@ -199,13 +199,13 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
                         {searchUser.displayName.charAt(0).toUpperCase()}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-white font-semibold truncate">
+                        <h4 className="text-[var(--color-foreground)] font-semibold truncate">
                           {searchUser.displayName}
                         </h4>
-                        <p className="text-gray-300 text-sm truncate">
+                        <p className="text-[var(--color-text-muted)] text-sm truncate">
                           {searchUser.email}
                         </p>
-                        <p className="text-gray-400 text-xs">
+                        <p className="text-[var(--color-text-muted)] text-xs">
                           Joined {new Date(searchUser.createdAt).toLocaleDateString()}
                         </p>
                       </div>
@@ -264,10 +264,10 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
       {searchResults.length === 0 && searchQuery && !searching && (
         <div className="text-center py-8">
           <div className="text-4xl mb-4">🔍</div>
-          <h3 className="text-lg font-semibold text-white mb-2">
+          <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-2">
             No users found
           </h3>
-          <p className="text-gray-300">
+          <p className="text-[var(--color-text-muted)]">
             Try different search terms or check the spelling.
           </p>
         </div>
@@ -276,8 +276,8 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
       {/* Search Tips */}
       {!searchQuery && searchResults.length === 0 && (
         <div className="fm-inset p-4">
-          <h3 className="mb-3 font-semibold text-white">💡 Search Tips</h3>
-          <ul className="text-gray-300 space-y-2 text-sm">
+          <h3 className="mb-3 font-semibold text-[var(--color-foreground)]">💡 Search Tips</h3>
+          <ul className="text-[var(--color-text-muted)] space-y-2 text-sm">
             <li>• Search by display name or email address</li>
             <li>• Use at least 2 characters for better results</li>
             <li>• Add an optional message to personalize your friend request</li>

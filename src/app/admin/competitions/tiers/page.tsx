@@ -17,10 +17,10 @@ type Competition = {
 };
 
 const TIER_COLORS: Record<number, string> = {
-  1: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-  2: 'bg-sky-500/20 text-sky-300 border-sky-500/40',
-  3: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
-  4: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+  1: 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/40',
+  2: 'bg-sky-500/20 text-sky-700 dark:text-sky-300 border-sky-500/40',
+  3: 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/40',
+  4: 'bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-500/40',
 };
 const tierStyle = (tier: number | null) =>
   tier && TIER_COLORS[tier]
@@ -170,7 +170,7 @@ export default function CompetitionTiersPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Admin</p>
-              <h1 className="mt-1 text-2xl font-black text-white sm:text-3xl">Competition Tiers</h1>
+              <h1 className="mt-1 text-2xl font-black text-[var(--color-foreground)] sm:text-3xl">Competition Tiers</h1>
               <p className="mt-1 text-sm text-[var(--color-text-muted)]">
                 Tier 1 = top flight. Promotions are blocked for tier-1 seasons.
               </p>
@@ -178,7 +178,7 @@ export default function CompetitionTiersPage() {
             <Layers className="h-8 w-8 text-[var(--color-highlight)]" />
           </div>
           {error && (
-            <p className="mt-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+            <p className="mt-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-700 dark:text-rose-200">
               {error}
             </p>
           )}
@@ -190,16 +190,16 @@ export default function CompetitionTiersPage() {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search competition name…"
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] py-2 pl-9 pr-3 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
+                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] py-2 pl-9 pr-3 text-sm text-[var(--color-foreground)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
               />
             </div>
             <input
               value={country}
               onChange={e => setCountry(e.target.value.toUpperCase())}
               placeholder="Country code (e.g. ESP)"
-              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none sm:w-52"
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none sm:w-52"
             />
-            <label className="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white select-none">
+            <label className="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] select-none">
               <input
                 type="checkbox"
                 checked={activeOnly}
@@ -208,7 +208,7 @@ export default function CompetitionTiersPage() {
               />
               Active only
             </label>
-            <label className="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white select-none">
+            <label className="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] select-none">
               <input
                 type="checkbox"
                 checked={groupByCountry}
@@ -252,14 +252,14 @@ export default function CompetitionTiersPage() {
                   <div key={code}>
                     <button
                       onClick={toggle}
-                      className="flex w-full items-center justify-between px-5 py-3 text-left hover:bg-white/2"
+                      className="flex w-full items-center justify-between px-5 py-3 text-left hover:bg-[var(--color-surface-soft)]"
                     >
                       <div className="flex items-center gap-3">
                         {isOpen ? <ChevronDown className="h-4 w-4 text-[var(--color-text-muted)]" /> : <ChevronRight className="h-4 w-4 text-[var(--color-text-muted)]" />}
-                        <span className="font-mono text-sm font-bold text-white">{code}</span>
+                        <span className="font-mono text-sm font-bold text-[var(--color-foreground)]">{code}</span>
                         <span className="text-xs text-[var(--color-text-muted)]">{comps.length} competition{comps.length !== 1 ? 's' : ''}</span>
                       </div>
-                      <span className={`text-xs font-semibold ${tieredCount === comps.length ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      <span className={`text-xs font-semibold ${tieredCount === comps.length ? 'text-emerald-700 dark:text-emerald-400' : 'text-amber-700 dark:text-amber-400'}`}>
                         {tieredCount}/{comps.length} tiered
                       </span>
                     </button>
@@ -270,20 +270,20 @@ export default function CompetitionTiersPage() {
                             const currentTierStr = editTier[c.id] ?? '';
                             const isDirty = currentTierStr !== (c.tier?.toString() ?? '');
                             return (
-                              <tr key={c.id} className="border-b border-[var(--color-surface-border)]/30 hover:bg-white/2">
-                                <td className="px-8 py-2 font-semibold text-white">{c.displayName || c.name}</td>
+                              <tr key={c.id} className="border-b border-[var(--color-surface-border)]/30 hover:bg-[var(--color-surface-soft)]">
+                                <td className="px-8 py-2 font-semibold text-[var(--color-foreground)]">{c.displayName || c.name}</td>
                                 <td className="px-4 py-2">
                                   <div className="flex items-center gap-1">
                                     <select
                                       value={editType[c.id] ?? c.type}
                                       onChange={e => setEditType(prev => ({ ...prev, [c.id]: e.target.value }))}
-                                      className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-xs text-white focus:border-[var(--color-accent)] focus:outline-none"
+                                      className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-xs text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
                                     >
                                       {COMPETITION_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                                     </select>
                                     {editType[c.id] !== c.type && (
                                       <button onClick={() => saveType(c.id)} disabled={saving[c.id]}
-                                        className="rounded-lg border border-sky-500/40 bg-sky-500/15 px-2 py-1 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 disabled:opacity-50">
+                                        className="rounded-lg border border-sky-500/40 bg-sky-500/15 px-2 py-1 text-xs font-semibold text-sky-700 dark:text-sky-300 hover:bg-sky-500/25 disabled:opacity-50">
                                         {saving[c.id] ? '…' : 'Save'}
                                       </button>
                                     )}
@@ -298,11 +298,11 @@ export default function CompetitionTiersPage() {
                                       onChange={e => setEditTier(prev => ({ ...prev, [c.id]: e.target.value }))}
                                       onKeyDown={e => e.key === 'Enter' && saveTier(c.id)}
                                       placeholder="—"
-                                      className="w-14 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-center text-xs text-white focus:border-[var(--color-accent)] focus:outline-none"
+                                      className="w-14 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-center text-xs text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
                                     />
                                     {isDirty && (
                                       <button onClick={() => saveTier(c.id)} disabled={saving[c.id]}
-                                        className="rounded-lg border border-[var(--color-highlight)]/40 bg-[var(--color-highlight)]/15 px-2 py-1 text-xs font-semibold text-white transition hover:bg-[var(--color-highlight)]/25 disabled:opacity-50">
+                                        className="rounded-lg border border-[var(--color-highlight)]/40 bg-[var(--color-highlight)]/15 px-2 py-1 text-xs font-semibold text-[var(--color-foreground)] transition hover:bg-[var(--color-highlight)]/25 disabled:opacity-50">
                                         {saving[c.id] ? '…' : 'Save'}
                                       </button>
                                     )}
@@ -314,8 +314,8 @@ export default function CompetitionTiersPage() {
                                     disabled={saving[c.id]}
                                     className={`rounded-full border px-2 py-0.5 text-xs font-bold transition disabled:opacity-50 ${
                                       c.isActive
-                                        ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-400 hover:bg-rose-500/15 hover:text-rose-400 hover:border-rose-500/40'
-                                        : 'border-rose-500/40 bg-rose-500/15 text-rose-400 hover:bg-emerald-500/15 hover:text-emerald-400 hover:border-emerald-500/40'
+                                        ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 hover:bg-rose-500/15 hover:text-rose-700 dark:hover:text-rose-400 hover:border-rose-500/40'
+                                        : 'border-rose-500/40 bg-rose-500/15 text-rose-700 dark:text-rose-400 hover:bg-emerald-500/15 hover:text-emerald-700 dark:hover:text-emerald-400 hover:border-emerald-500/40'
                                     }`}
                                   >
                                     {c.isActive ? 'Active' : 'Inactive'}
@@ -327,8 +327,8 @@ export default function CompetitionTiersPage() {
                                     disabled={saving[c.id]}
                                     className={`rounded-full border px-2 py-0.5 text-xs font-bold transition disabled:opacity-50 ${
                                       c.isFemale === true
-                                        ? 'border-fuchsia-500/40 bg-fuchsia-500/15 text-fuchsia-300 hover:bg-slate-500/15 hover:text-slate-200 hover:border-slate-500/40'
-                                        : 'border-slate-500/40 bg-slate-500/15 text-slate-200 hover:bg-fuchsia-500/15 hover:text-fuchsia-300 hover:border-fuchsia-500/40'
+                                        ? 'border-fuchsia-500/40 bg-fuchsia-500/15 text-fuchsia-700 dark:text-fuchsia-300 hover:bg-slate-500/15 hover:text-[var(--color-text-muted)] hover:border-slate-500/40'
+                                        : 'border-slate-500/40 bg-slate-500/15 text-[var(--color-text-muted)] hover:bg-fuchsia-500/15 hover:text-fuchsia-700 dark:hover:text-fuchsia-300 hover:border-fuchsia-500/40'
                                     }`}
                                   >
                                     {c.isFemale === true ? 'Women' : 'Men'}
@@ -363,9 +363,9 @@ export default function CompetitionTiersPage() {
                   const currentTierStr = editTier[c.id] ?? '';
                   const isDirty = currentTierStr !== (c.tier?.toString() ?? '');
                   return (
-                    <tr key={c.id} className="border-b border-[var(--color-surface-border)]/50 hover:bg-white/2">
+                    <tr key={c.id} className="border-b border-[var(--color-surface-border)]/50 hover:bg-[var(--color-surface-soft)]">
                       <td className="px-4 py-3">
-                        <span className="font-semibold text-white">{c.displayName || c.name}</span>
+                        <span className="font-semibold text-[var(--color-foreground)]">{c.displayName || c.name}</span>
                         {!c.isActive && <span className="ml-2 text-xs text-[var(--color-text-muted)]">inactive</span>}
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-[var(--color-text-muted)]">{c.countryCode}</td>
@@ -375,13 +375,13 @@ export default function CompetitionTiersPage() {
                           <select
                             value={editType[c.id] ?? c.type}
                             onChange={e => setEditType(prev => ({ ...prev, [c.id]: e.target.value }))}
-                            className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-xs text-white focus:border-[var(--color-accent)] focus:outline-none"
+                            className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-xs text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
                           >
                             {COMPETITION_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                           </select>
                           {editType[c.id] !== c.type && (
                             <button onClick={() => saveType(c.id)} disabled={saving[c.id]}
-                              className="rounded-lg border border-sky-500/40 bg-sky-500/15 px-2 py-1 text-xs font-semibold text-sky-300 transition hover:bg-sky-500/25 disabled:opacity-50">
+                              className="rounded-lg border border-sky-500/40 bg-sky-500/15 px-2 py-1 text-xs font-semibold text-sky-700 dark:text-sky-300 transition hover:bg-sky-500/25 disabled:opacity-50">
                               {saving[c.id] ? '…' : 'Save'}
                             </button>
                           )}
@@ -399,7 +399,7 @@ export default function CompetitionTiersPage() {
                             onChange={e => setEditTier(prev => ({ ...prev, [c.id]: e.target.value }))}
                             onKeyDown={e => e.key === 'Enter' && saveTier(c.id)}
                             placeholder="—"
-                            className="w-14 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-center text-xs text-white focus:border-[var(--color-accent)] focus:outline-none"
+                            className="w-14 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-2 py-1 text-center text-xs text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
                           />
                         </div>
                       </td>
@@ -409,8 +409,8 @@ export default function CompetitionTiersPage() {
                           disabled={saving[c.id]}
                           className={`rounded-full border px-2 py-0.5 text-xs font-bold transition disabled:opacity-50 ${
                             c.isActive
-                              ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-400 hover:bg-rose-500/15 hover:text-rose-400 hover:border-rose-500/40'
-                              : 'border-rose-500/40 bg-rose-500/15 text-rose-400 hover:bg-emerald-500/15 hover:text-emerald-400 hover:border-emerald-500/40'
+                              ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 hover:bg-rose-500/15 hover:text-rose-700 dark:hover:text-rose-400 hover:border-rose-500/40'
+                              : 'border-rose-500/40 bg-rose-500/15 text-rose-700 dark:text-rose-400 hover:bg-emerald-500/15 hover:text-emerald-700 dark:hover:text-emerald-400 hover:border-emerald-500/40'
                           }`}
                         >
                           {c.isActive ? 'Active' : 'Inactive'}
@@ -422,8 +422,8 @@ export default function CompetitionTiersPage() {
                           disabled={saving[c.id]}
                           className={`rounded-full border px-2 py-0.5 text-xs font-bold transition disabled:opacity-50 ${
                             c.isFemale === true
-                              ? 'border-fuchsia-500/40 bg-fuchsia-500/15 text-fuchsia-300 hover:bg-slate-500/15 hover:text-slate-200 hover:border-slate-500/40'
-                              : 'border-slate-500/40 bg-slate-500/15 text-slate-200 hover:bg-fuchsia-500/15 hover:text-fuchsia-300 hover:border-fuchsia-500/40'
+                              ? 'border-fuchsia-500/40 bg-fuchsia-500/15 text-fuchsia-700 dark:text-fuchsia-300 hover:bg-slate-500/15 hover:text-[var(--color-text-muted)] hover:border-slate-500/40'
+                              : 'border-slate-500/40 bg-slate-500/15 text-[var(--color-text-muted)] hover:bg-fuchsia-500/15 hover:text-fuchsia-700 dark:hover:text-fuchsia-300 hover:border-fuchsia-500/40'
                           }`}
                         >
                           {c.isFemale === true ? 'Women' : 'Men'}
@@ -434,7 +434,7 @@ export default function CompetitionTiersPage() {
                           <button
                             onClick={() => saveTier(c.id)}
                             disabled={saving[c.id]}
-                            className="rounded-lg border border-[var(--color-highlight)]/40 bg-[var(--color-highlight)]/15 px-3 py-1 text-xs font-semibold text-white transition hover:bg-[var(--color-highlight)]/25 disabled:opacity-50"
+                            className="rounded-lg border border-[var(--color-highlight)]/40 bg-[var(--color-highlight)]/15 px-3 py-1 text-xs font-semibold text-[var(--color-foreground)] transition hover:bg-[var(--color-highlight)]/25 disabled:opacity-50"
                           >
                             {saving[c.id] ? 'Saving…' : 'Save'}
                           </button>

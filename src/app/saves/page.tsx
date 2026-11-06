@@ -163,7 +163,7 @@ export default function SavesPage() {
     return (
       <div className="mx-auto max-w-5xl p-6 sm:p-8">
         <div className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-dark)] p-6 text-center sm:p-8">
-          <h1 className="text-2xl font-bold text-white">Your Saves</h1>
+          <h1 className="text-2xl font-bold text-[var(--color-foreground)]">Your Saves</h1>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Please log in to view and manage your career saves.</p>
           <Link href="/login" className="mt-5 inline-block">
             <GradientButton>
@@ -188,7 +188,7 @@ export default function SavesPage() {
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Career Hub</p>
-            <h1 className="mt-1 text-3xl font-semibold text-white">Your Saves</h1>
+            <h1 className="mt-1 text-3xl font-semibold text-[var(--color-foreground)]">Your Saves</h1>
             <p className="mt-2 text-sm text-[var(--color-text-muted)]">Build your timeline, one save at a time.</p>
           </div>
           <Link href="/add-save" className="inline-block">
@@ -203,10 +203,10 @@ export default function SavesPage() {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg bg-[var(--color-surface-soft)] text-[var(--color-accent)]">
             <SaveIcon className="h-7 w-7" />
           </div>
-          <h2 className="text-xl font-bold text-white">No saves yet</h2>
+          <h2 className="text-xl font-bold text-[var(--color-foreground)]">No saves yet</h2>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Create your first save and start tracking your FM legacy.</p>
           <div className="mt-5">
-            <Link href="/trophies" className="inline-flex rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]">
+            <Link href="/trophies" className="inline-flex rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-[var(--color-foreground)] transition hover:border-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]">
               Explore Trophy Tracker
             </Link>
           </div>
@@ -223,30 +223,30 @@ export default function SavesPage() {
             <CheckCircle2 className="h-3.5 w-3.5" />
             First Value Unlocked
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-white">Your save is live. Keep momentum going.</h2>
+          <h2 className="mt-2 text-xl font-semibold text-[var(--color-foreground)]">Your save is live. Keep momentum going.</h2>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Start by logging milestones and growing your career timeline.</p>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/70 p-3">
               <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Saves</p>
-              <p className="mt-1 text-2xl font-black text-white">{saves.length}</p>
+              <p className="mt-1 text-2xl font-black text-[var(--color-foreground)]">{saves.length}</p>
             </div>
             <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/70 p-3">
               <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Trophy Groups Won</p>
-              <p className="mt-1 text-2xl font-black text-white">{trophyGroupsCount}</p>
+              <p className="mt-1 text-2xl font-black text-[var(--color-foreground)]">{trophyGroupsCount}</p>
             </div>
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <Link href="/trophies" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+            <Link href="/trophies" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-[var(--color-foreground)] transition hover:border-[var(--color-highlight)]">
               <Trophy className="h-4 w-4" />
               Log Trophy Progress
             </Link>
-            <Link href="/friends" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+            <Link href="/friends" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-[var(--color-foreground)] transition hover:border-[var(--color-highlight)]">
               <Users className="h-4 w-4" />
               Discover Friends
             </Link>
-            <Link href="/profile" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+            <Link href="/profile" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-[var(--color-foreground)] transition hover:border-[var(--color-highlight)]">
               <Compass className="h-4 w-4" />
               Open Profile
             </Link>
@@ -257,7 +257,7 @@ export default function SavesPage() {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Career Hub</p>
-          <h1 className="mt-1 text-3xl font-semibold text-white">Your Saves</h1>
+          <h1 className="mt-1 text-3xl font-semibold text-[var(--color-foreground)]">Your Saves</h1>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">
             {filteredSaves.length} of {saves.length} saves visible
           </p>
@@ -276,7 +276,7 @@ export default function SavesPage() {
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Onboarding Checklist</p>
-              <h2 className="mt-1 text-lg font-semibold text-white">Complete your first milestone loop</h2>
+              <h2 className="mt-1 text-lg font-semibold text-[var(--color-foreground)]">Complete your first milestone loop</h2>
             </div>
             <span className="rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs font-semibold text-[var(--color-text-muted)]">
               {onboardingStepsDone}/2 complete
@@ -285,11 +285,11 @@ export default function SavesPage() {
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className={`rounded-md border p-3 ${hasFirstSave ? 'border-[var(--color-success)]/40 bg-[var(--color-success)]/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
-              <p className="text-sm font-semibold text-white">First Save</p>
+              <p className="text-sm font-semibold text-[var(--color-foreground)]">First Save</p>
               <p className="mt-1 text-xs text-[var(--color-text-muted)]">Choose FM27 or an older game version and create your first tracked career save.</p>
             </div>
             <div className={`rounded-md border p-3 ${hasFirstMilestone ? 'border-[var(--color-success)]/40 bg-[var(--color-success)]/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
-              <p className="text-sm font-semibold text-white">First Milestone</p>
+              <p className="text-sm font-semibold text-[var(--color-foreground)]">First Milestone</p>
               <p className="mt-1 text-xs text-[var(--color-text-muted)]">Record your first trophy milestone.</p>
             </div>
           </div>

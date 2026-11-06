@@ -64,7 +64,7 @@ const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
             unoptimized
           />
           <div className="min-w-0">
-            <h3 className="truncate font-semibold text-white">{country.name}</h3>
+            <h3 className="truncate font-semibold text-[var(--color-foreground)]">{country.name}</h3>
             <p className="truncate text-xs text-[var(--color-text-muted)]">
               {won} of {total} competitions
             </p>
@@ -115,8 +115,8 @@ const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
                   ) : <div className="h-5 w-5 flex-shrink-0 rounded bg-[var(--color-surface-strong)]" />}
                   <span className={`min-w-0 flex-1 break-words text-sm ${
                     won 
-                      ? 'font-medium text-emerald-300' 
-                      : 'text-gray-300'
+                      ? 'font-medium text-emerald-700 dark:text-emerald-300' 
+                      : 'text-[var(--color-text-muted)]'
                   }`}>
                     {comp.name}
                   </span>

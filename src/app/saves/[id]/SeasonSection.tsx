@@ -150,7 +150,7 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
             <CalendarDays className="h-3.5 w-3.5" />
             Campaign Log
           </p>
-          <h2 className="mt-1 text-xl font-semibold text-white">Seasons</h2>
+          <h2 className="mt-1 text-xl font-semibold text-[var(--color-foreground)]">Seasons</h2>
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">Every campaign phase in one scan-friendly grid.</p>
         </div>
 
@@ -174,25 +174,25 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
             icon={<CalendarDays className="h-3.5 w-3.5" />}
             label="Seasons"
             value={seasonCount}
-            accentClass="bg-sky-500/15 text-sky-300"
+            accentClass="bg-sky-500/15 text-sky-700 dark:text-sky-300"
           />
           <SeasonStatChip
             icon={<Trophy className="h-3.5 w-3.5" />}
             label="League Titles"
             value={leagueTitles}
-            accentClass="bg-amber-500/15 text-amber-300"
+            accentClass="bg-amber-500/15 text-amber-700 dark:text-amber-300"
           />
           <SeasonStatChip
             icon={<TrendingUp className="h-3.5 w-3.5" />}
             label="Promotions"
             value={promotedCount}
-            accentClass="bg-emerald-500/15 text-emerald-300"
+            accentClass="bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
           />
           <SeasonStatChip
             icon={<ChevronDown className="h-3.5 w-3.5" />}
             label="Relegations"
             value={relegatedCount}
-            accentClass="bg-rose-500/15 text-rose-300"
+            accentClass="bg-rose-500/15 text-rose-700 dark:text-rose-300"
           />
         </div>
       )}
@@ -253,7 +253,7 @@ function SeasonStatChip({
             {icon}
           </div>
         </div>
-        <p className="mt-1 font-mono text-xl font-semibold leading-none text-white">{value}</p>
+        <p className="mt-1 font-mono text-xl font-semibold leading-none text-[var(--color-foreground)]">{value}</p>
       </div>
       <div className="sr-only">
         {label}: {value}

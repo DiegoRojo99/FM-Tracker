@@ -148,13 +148,13 @@ export default function ChallengesPage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Progress Board</p>
-            <h1 className="mt-1 text-3xl font-semibold text-white">Challenges</h1>
+            <h1 className="mt-1 text-3xl font-semibold text-[var(--color-foreground)]">Challenges</h1>
             <p className="mt-2 text-sm text-[var(--color-text-muted)]">Track long-term goals and milestone runs across saves.</p>
           </div>
 
           {gameOptions.length > 0 && (
             <div className="w-full sm:w-72">
-              <label htmlFor="game-select" className="mb-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-300">
+              <label htmlFor="game-select" className="mb-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
                 <SlidersHorizontal className="h-3.5 w-3.5 text-[var(--color-highlight)]" />
                 Filter by Game
               </label>
@@ -175,7 +175,7 @@ export default function ChallengesPage() {
 
         {allTags.length > 0 && (
           <div className="mt-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Filter by Type</p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Filter by Type</p>
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setSelectedTag('')}
@@ -201,15 +201,15 @@ export default function ChallengesPage() {
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div className="fm-inset p-3">
             <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Total Challenges</p>
-            <p className="mt-1 font-mono text-2xl font-semibold text-white">{totalCount}</p>
+            <p className="mt-1 font-mono text-2xl font-semibold text-[var(--color-foreground)]">{totalCount}</p>
           </div>
           <div className="fm-inset p-3">
             <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">In Progress</p>
-            <p className="mt-1 font-mono text-2xl font-semibold text-white">{inProgressCount}</p>
+            <p className="mt-1 font-mono text-2xl font-semibold text-[var(--color-foreground)]">{inProgressCount}</p>
           </div>
           <div className="fm-inset p-3">
             <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Completed</p>
-            <p className="mt-1 font-mono text-2xl font-semibold text-white">{completedCount}</p>
+            <p className="mt-1 font-mono text-2xl font-semibold text-[var(--color-foreground)]">{completedCount}</p>
           </div>
         </div>
       </div>
@@ -217,7 +217,7 @@ export default function ChallengesPage() {
       <div className="mt-5 space-y-5">
         {user && totalCount > 0 && filteredUserChallenges.length === 0 && (
           <div className="fm-panel border-[var(--color-accent)]/35 p-4">
-            <h2 className="text-lg font-bold text-white">No active challenges yet</h2>
+            <h2 className="text-lg font-bold text-[var(--color-foreground)]">No active challenges yet</h2>
             <p className="mt-1 text-sm text-[var(--color-text-muted)]">
               Start one challenge now to unlock progression, achievement momentum, and clearer next steps for this save.
             </p>

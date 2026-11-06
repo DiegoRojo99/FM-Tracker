@@ -86,7 +86,7 @@ export default function LoginPage() {
             <Sparkles className="h-3.5 w-3.5" />
             Welcome Back
           </p>
-          <h1 className="text-4xl font-semibold leading-tight text-white">
+          <h1 className="text-4xl font-semibold leading-tight text-[var(--color-foreground)]">
             Continue your Football Manager legacy.
           </h1>
           <p className="mt-5 max-w-md text-sm leading-7 text-[var(--color-text-muted)]">
@@ -95,7 +95,7 @@ export default function LoginPage() {
         </div>
 
         <div className="fm-panel p-5 sm:p-6">
-          <h2 className="text-2xl font-semibold text-white">Login to FM Tracker</h2>
+          <h2 className="text-2xl font-semibold text-[var(--color-foreground)]">Login to FM Tracker</h2>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Use your account to pick up where you left off.</p>
 
           {error && (
@@ -106,7 +106,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleEmailSignIn} className="mt-6 space-y-4">
             <label className="block">
-              <span className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-gray-200">
+              <span className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)]">
                 <Mail className="h-4 w-4" />
                 Email
               </span>
@@ -121,7 +121,7 @@ export default function LoginPage() {
             </label>
 
             <label className="block">
-              <span className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-gray-200">
+              <span className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)]">
                 <Lock className="h-4 w-4" />
                 Password
               </span>
@@ -145,7 +145,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="my-6 text-center text-xs uppercase tracking-[0.18em] text-gray-400">or</div>
+          <div className="my-6 text-center text-xs uppercase tracking-[0.18em] text-[var(--color-text-muted)]">or</div>
 
           <button
             onClick={handleGoogleSignIn}

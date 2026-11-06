@@ -23,14 +23,14 @@ export default function ChallengeGoalCard({ goal, selectedUserChallenge }: Chall
       <div className="flex items-start gap-3">
         <div className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-black ${
           isCompleted
-            ? 'bg-emerald-300/20 text-emerald-200'
-            : 'bg-amber-300/20 text-amber-200'
+            ? 'bg-emerald-300/20 text-emerald-700 dark:text-emerald-200'
+            : 'bg-amber-300/20 text-amber-700 dark:text-amber-200'
         }`}>
           {isCompleted ? '✓' : '•'}
         </div>
 
         <div className="min-w-0 flex-1 space-y-3">
-          <div className="break-words text-sm text-white">{goal.description}</div>
+          <div className="break-words text-sm text-[var(--color-foreground)]">{goal.description}</div>
 
           <div className="flex flex-wrap items-center gap-2">
             {goal.country && (
@@ -42,7 +42,7 @@ export default function ChallengeGoalCard({ goal, selectedUserChallenge }: Chall
                   height={12}
                   className="rounded-sm"
                 />
-                <span className="text-xs font-semibold text-sky-100">
+                <span className="text-xs font-semibold text-sky-700 dark:text-sky-100">
                   {goal.country.name}
                 </span>
               </div>
@@ -79,7 +79,7 @@ export default function ChallengeGoalCard({ goal, selectedUserChallenge }: Chall
                       height={16}
                       className="rounded-sm"
                     />
-                    <span className="text-xs font-semibold text-amber-100">
+                    <span className="text-xs font-semibold text-amber-700 dark:text-amber-100">
                       {goalTeam.team.name}
                     </span>
                   </div>

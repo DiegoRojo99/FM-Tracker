@@ -189,7 +189,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
             value={season}
             onChange={(e) => setSeason(e.target.value)}
             placeholder="2023/24"
-            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
+            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
             pattern="^\d{4}/\d{2}$"
             title="Season must be in the format YYYY/YY (e.g., 2023/24)"
             required
@@ -217,7 +217,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                   setCupResults([]);
                 }
               }}
-              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
             >
               <option value="">Select a team</option>
               {uniqueTeams.map((team) => (
@@ -232,7 +232,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
           {selectedTeam && (
             <div className="mt-2 flex items-center gap-3 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2">
               <Image src={selectedTeam.logo} alt={selectedTeam.name} width={24} height={24} className="h-6 w-6 object-contain" unoptimized />
-              <span className="text-sm font-semibold text-white">{selectedTeam.name}</span>
+              <span className="text-sm font-semibold text-[var(--color-foreground)]">{selectedTeam.name}</span>
             </div>
           )}
         </div>
@@ -252,7 +252,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
               }}
             />
             {selectedLeague && (
-              <p className="mt-1.5 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm font-semibold text-white">
+              <p className="mt-1.5 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm font-semibold text-[var(--color-foreground)]">
                 {selectedLeague.name}
               </p>
             )}
@@ -273,12 +273,12 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                 min={1}
                 value={leaguePosition}
                 onChange={(e) => setLeaguePosition(e.target.value === "" ? "" : Number(e.target.value))}
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
                 required
               />
             </div>
             <div className="flex flex-wrap gap-4">
-              <label className={`flex cursor-pointer items-center gap-2 text-sm ${selectedLeague?.tier === 1 ? 'cursor-not-allowed opacity-40' : 'text-white'}`}>
+              <label className={`flex cursor-pointer items-center gap-2 text-sm ${selectedLeague?.tier === 1 ? 'cursor-not-allowed opacity-40' : 'text-[var(--color-foreground)]'}`}>
                 <input
                   type="checkbox"
                   checked={promoted}
@@ -289,7 +289,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                 Promoted
                 {selectedLeague?.tier === 1 && <span className="text-xs text-[var(--color-text-muted)]">(top flight)</span>}
               </label>
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-white">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-[var(--color-foreground)]">
                 <input
                   type="checkbox"
                   checked={relegated}
@@ -330,7 +330,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                 <select
                   value={cup.reachedRound}
                   onChange={(e) => handleCupChange(idx, "reachedRound", e.target.value)}
-                  className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
                 >
                   {CUP_ROUNDS.map(round => (
                     <option key={round} value={round}>{round}</option>
@@ -339,7 +339,7 @@ export const AddSeasonModal: React.FC<AddSeasonModalProps> = ({
                 <button
                   type="button"
                   onClick={() => handleRemoveCup(idx)}
-                  className="mt-3 text-xs font-semibold text-rose-400 transition hover:text-rose-300"
+                  className="mt-3 text-xs font-semibold text-rose-700 dark:text-rose-400 transition hover:text-rose-700 dark:hover:text-rose-300"
                 >
                   Remove
                 </button>

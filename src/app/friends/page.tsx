@@ -100,7 +100,7 @@ export default function FriendsPage() {
     return (
       <div className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
         <div className="fm-panel p-6 text-center">
-          <h1 className="text-2xl font-semibold text-white">Friends & Social</h1>
+          <h1 className="text-2xl font-semibold text-[var(--color-foreground)]">Friends & Social</h1>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Login to view your social hub and leaderboard.</p>
         </div>
       </div>
@@ -118,12 +118,12 @@ export default function FriendsPage() {
                 <Sparkles className="h-3.5 w-3.5" />
                 Social Hub
               </p>
-              <h1 className="mt-2 text-3xl font-semibold text-white">Friends & Social</h1>
+              <h1 className="mt-2 text-3xl font-semibold text-[var(--color-foreground)]">Friends & Social</h1>
               <p className="mt-2 text-sm text-[var(--color-text-muted)]">Grow your network, manage requests, and compare progress.</p>
             </div>
 
             <div className="fm-inset px-3 py-2 text-sm text-[var(--color-text-muted)]">
-              <span className="font-semibold text-white">{data.friends.length}</span> friends • <span className="font-semibold text-white">{pendingRequestsCount}</span> pending requests
+              <span className="font-semibold text-[var(--color-foreground)]">{data.friends.length}</span> friends • <span className="font-semibold text-[var(--color-foreground)]">{pendingRequestsCount}</span> pending requests
             </div>
           </div>
 
@@ -180,7 +180,7 @@ export default function FriendsPage() {
               {activeTab === 'feed' && (
                 <div>
                   <div className="mb-4">
-                    <h2 className="text-xl font-semibold text-white">Activity Feed</h2>
+                    <h2 className="text-xl font-semibold text-[var(--color-foreground)]">Activity Feed</h2>
                     <p className="mt-1 text-sm text-[var(--color-text-muted)]">Recent save milestones, challenge completions, trophies, and friend activity.</p>
                   </div>
                   <SocialFeed />

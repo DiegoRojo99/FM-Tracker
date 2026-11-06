@@ -5,6 +5,8 @@ import Footer from "@/app/components/Footer";
 import { AuthProvider } from '@/app/components/AuthProvider'
 import AnalyticsGate from '@/app/components/AnalyticsGate'
 import { RouteGuard } from '@/app/components/RouteGuard'
+import ThemeProvider from '@/app/components/ThemeProvider'
+import { themeInitializationScript } from '@/lib/theme'
 import "./globals.css";
 
 const sora = Sora({
@@ -64,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#0a0f1e" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -74,20 +76,23 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/logos/icon-192x192.png" />
         <meta name="msapplication-TileImage" content="/logos/icon-144x144.png" />
         <meta name="msapplication-TileColor" content="#0a0f1e" />
+        <script dangerouslySetInnerHTML={{ __html: themeInitializationScript }} />
       </head>
       <body
         className={`${sora.variable} ${ibmPlexMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        <AuthProvider>
-          <RouteGuard>
-            <Navbar />
-            <div className="flex-grow">
-              {children}
-            </div>
-            <Footer />
-            <AnalyticsGate />
-          </RouteGuard>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <RouteGuard>
+              <Navbar />
+              <div className="flex-grow">
+                {children}
+              </div>
+              <Footer />
+              <AnalyticsGate />
+            </RouteGuard>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

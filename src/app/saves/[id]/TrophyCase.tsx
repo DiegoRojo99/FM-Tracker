@@ -76,18 +76,18 @@ export default function TrophyCase({ save, setRefresh }: Props) {
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Honours</p>
-            <h2 className="mt-1 text-xl font-semibold text-white">Honours Cabinet</h2>
+            <h2 className="mt-1 text-xl font-semibold text-[var(--color-foreground)]">Honours Cabinet</h2>
             <p className="mt-1 text-sm text-[var(--color-text-muted)]">Every final won, grouped by competition.</p>
           </div>
 
           <div className="grid grid-cols-2 gap-2 md:min-w-[18rem]">
             <div className="fm-inset p-3">
               <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Trophies</p>
-              <p className="mt-2 text-2xl font-black leading-none text-white">{totalTrophies}</p>
+              <p className="mt-2 text-2xl font-black leading-none text-[var(--color-foreground)]">{totalTrophies}</p>
             </div>
             <div className="fm-inset p-3">
               <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Competitions</p>
-              <p className="mt-2 text-2xl font-black leading-none text-white">{totalCompetitions}</p>
+              <p className="mt-2 text-2xl font-black leading-none text-[var(--color-foreground)]">{totalCompetitions}</p>
             </div>
           </div>
         </div>
@@ -187,7 +187,7 @@ function TrophyGroupCard({
     <div className="fm-inset overflow-hidden">
       <div className="p-4">
         <div className="flex items-start gap-3 border-b border-[var(--color-surface-border)] pb-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[var(--color-foreground)]">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[var(--fm-air)]">
             {trophies.competitionGroup.logoUrl ? (
               <Image
                 src={trophies.competitionGroup.logoUrl}
@@ -201,7 +201,7 @@ function TrophyGroupCard({
             )}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-base font-bold text-white">{trophies.competitionGroup.name}</p>
+            <p className="truncate text-base font-bold text-[var(--color-foreground)]">{trophies.competitionGroup.name}</p>
             <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
               {sortedTrophies.length} {sortedTrophies.length === 1 ? 'title' : 'titles'}
             </p>
@@ -221,7 +221,7 @@ function TrophyGroupCard({
                 />
 
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-white">{trophyItem.team.name}</p>
+                  <p className="truncate text-sm font-semibold text-[var(--color-foreground)]">{trophyItem.team.name}</p>
                   <p className="text-xs font-medium text-[var(--color-text-muted)]">{trophyItem.season}</p>
                 </div>
 

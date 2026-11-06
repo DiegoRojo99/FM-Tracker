@@ -134,7 +134,7 @@ function CareerStintCard({
         )}
 
         <div className="min-w-0">
-          <h4 className="break-words text-base font-semibold text-white">{stint.team?.name}</h4>
+          <h4 className="break-words text-base font-semibold text-[var(--color-foreground)]">{stint.team?.name}</h4>
           <p className="mt-1 text-xs text-[var(--color-text-muted)]">
             {formatDate(stint.startDate)} - {stint.endDate ? formatDate(stint.endDate) : 'Present'}
           </p>

@@ -86,10 +86,10 @@ export default function ChallengeDetailPage() {
   return (
     <main className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
       <header className="fm-panel p-4 sm:p-5">
-        <h1 className="break-words text-3xl font-semibold text-white">{challenge.name}</h1>
+        <h1 className="break-words text-3xl font-semibold text-[var(--color-foreground)]">{challenge.name}</h1>
         <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">{challenge.description}</p>
         {challenge.bonus && (
-          <div className="mt-4 inline-flex items-center rounded-lg border border-amber-300/40 bg-amber-400/15 px-3 py-1 text-sm font-semibold text-amber-100">
+          <div className="mt-4 inline-flex items-center rounded-lg border border-amber-300/40 bg-amber-400/15 px-3 py-1 text-sm font-semibold text-amber-700 dark:text-amber-100">
             Bonus: {challenge.bonus}
           </div>
         )}
@@ -100,7 +100,7 @@ export default function ChallengeDetailPage() {
           return (
             <div className="mt-5 border-t border-[var(--color-surface-border)] pt-4">
               <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <h3 className="text-lg font-bold text-white">Your Progress</h3>
+                <h3 className="text-lg font-bold text-[var(--color-foreground)]">Your Progress</h3>
                 {sortedUserChallenges.length > 1 && (
                   <select 
                     aria-label="Tracked challenge run"
@@ -142,13 +142,13 @@ export default function ChallengeDetailPage() {
                                 className="h-12 w-12 shrink-0 object-contain"
                               />
                             ) : (
-                              <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-white/10 text-base font-semibold text-white/85">
+                              <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[var(--color-surface-soft)] text-base font-semibold text-[var(--color-foreground)]/85">
                                 FC
                               </span>
                             )}
 
                             <div className="min-w-0">
-                              <p className="break-words text-base font-semibold leading-tight text-white">
+                              <p className="break-words text-base font-semibold leading-tight text-[var(--color-foreground)]">
                                 {selectedChallenge.save.currentClub?.name ?? 'No current club'}
                               </p>
                             </div>
@@ -159,13 +159,13 @@ export default function ChallengeDetailPage() {
                           </p>
                         </div>
                       ) : (
-                        <div className="rounded-lg border border-amber-300/35 bg-amber-400/10 px-3 py-2 text-center text-xs text-amber-100 sm:text-left">
+                        <div className="rounded-lg border border-amber-300/35 bg-amber-400/10 px-3 py-2 text-center text-xs text-amber-700 dark:text-amber-100 sm:text-left">
                           Save data is missing for this run. New runs should always be linked to a save.
                         </div>
                       )}
                     </div>
                     {selectedChallenge.completedAt && (
-                      <span className="self-center text-sm font-semibold text-emerald-300 sm:self-start">
+                      <span className="self-center text-sm font-semibold text-emerald-700 dark:text-emerald-300 sm:self-start">
                         ✓ Completed {new Date(selectedChallenge.completedAt).toLocaleDateString()}
                       </span>
                     )}
@@ -183,7 +183,7 @@ export default function ChallengeDetailPage() {
       </header>
       
       <section className="fm-panel mt-5 p-4 sm:p-5">
-        <h2 className="mb-3 text-xl font-bold text-white">Goals</h2>
+        <h2 className="mb-3 text-xl font-bold text-[var(--color-foreground)]">Goals</h2>
         <div className="space-y-3">
           {challenge.goals.map((goal: ChallengeGoalWithDetails) => 
             <ChallengeGoalCard 

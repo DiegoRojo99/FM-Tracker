@@ -84,7 +84,7 @@ export default function SavePage() {
               Back to Saves
             </Link>
 
-            <h1 className="break-words text-3xl font-semibold text-white">{saveLabel}</h1>
+            <h1 className="break-words text-3xl font-semibold text-[var(--color-foreground)]">{saveLabel}</h1>
             <p className="mt-2 text-sm text-[var(--color-text-muted)]">
               {saveDetails.game?.name || 'FM Save'} | Current season {saveDetails.season}
             </p>
@@ -153,7 +153,7 @@ function StatChip({
         <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{label}</p>
       </div>
       <div className="mt-2 flex flex-wrap items-baseline justify-start gap-1">
-        <p className="font-mono text-xl font-semibold leading-none text-white">{value}</p>
+        <p className="font-mono text-xl font-semibold leading-none text-[var(--color-foreground)]">{value}</p>
         <p className="text-[12px] leading-none text-[var(--color-text-muted)]">{subtitle}</p>
       </div>
     </div>

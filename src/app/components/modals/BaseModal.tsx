@@ -48,13 +48,13 @@ export const BaseModal: React.FC<BaseModalProps> = ({
           className={`
             w-full ${maxWidth} ${maxHeight} h-fit my-auto 
             fm-panel relative
-            text-white
+            text-[var(--color-foreground)]
             ${panelClassName}
           `}
         >
           {/* Header */}
           <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[var(--color-surface-border)] sm:px-5">
-            <Dialog.Title className="text-lg font-semibold text-white">
+            <Dialog.Title className="text-lg font-semibold text-[var(--color-foreground)]">
               {title}
             </Dialog.Title>
             

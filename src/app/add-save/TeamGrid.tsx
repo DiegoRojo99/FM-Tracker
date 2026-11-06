@@ -12,7 +12,7 @@ type Props = {
 export default function TeamGrid({ teams, selectedTeamId, onSelect }: Props) {
   if (teams.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-400">
+      <div className="text-center py-8 text-[var(--color-text-muted)]">
         <div className="text-4xl mb-2">⚽</div>
         <p>No teams available</p>
       </div>
@@ -40,7 +40,7 @@ export default function TeamGrid({ teams, selectedTeamId, onSelect }: Props) {
             height={48}
             loading="lazy"
           />
-          <p className="break-words text-sm font-medium text-white leading-tight">{team.name}</p>
+          <p className="break-words text-sm font-medium text-[var(--color-foreground)] leading-tight">{team.name}</p>
         </button>
       ))}
     </div>

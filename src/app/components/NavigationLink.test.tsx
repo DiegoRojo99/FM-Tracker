@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import NavigationLink from './NavigationLink';
 import Navbar from './NavBar';
+import ThemeProvider from './ThemeProvider';
 
 const navigation = vi.hoisted(() => ({ pathname: '/saves' as string | null }));
 
@@ -46,7 +47,7 @@ describe('active navigation', () => {
     'marks exactly one desktop destination on %s',
     pathname => {
       navigation.pathname = pathname;
-      const html = renderToStaticMarkup(<Navbar />);
+      const html = renderToStaticMarkup(<ThemeProvider><Navbar /></ThemeProvider>);
       expect(html.match(/aria-current="page"/g)).toHaveLength(1);
     }
   );

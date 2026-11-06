@@ -60,7 +60,7 @@ function CustomSearchBox({
       value={query}
       onChange={handleChange}
       placeholder="Search for a team..."
-      className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
+      className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none"
     />
   );
 }
@@ -90,7 +90,7 @@ function CustomHits({ onTeamSelect }: { onTeamSelect: (team: Team) => void }) {
         return (
           <li
             key={team.id}
-            className="flex cursor-pointer items-center justify-between px-3 py-2 text-sm text-white transition hover:bg-white/8"
+            className="flex cursor-pointer items-center justify-between px-3 py-2 text-sm text-[var(--color-foreground)] transition hover:bg-[var(--color-surface-soft)]"
             onMouseDown={() => onTeamSelect(parseTeam(team))}
           >
             <span className="font-medium">{team.name}</span>

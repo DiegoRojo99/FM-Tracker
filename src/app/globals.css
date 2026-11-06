@@ -1,6 +1,8 @@
 @import "tailwindcss";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
+  color-scheme: dark;
   --fm-midnight: #0a0f1e;
   --fm-twilight: #6e0fd7;
   --fm-horizon: #af78ff;
@@ -35,6 +37,32 @@
   --danger-soft-bg: #ff41641a;
   --danger-soft-border: #ff416466;
   --danger-soft-text: #ff9e9e;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --darker: #f5f3fc;
+  --dark: #ffffff;
+  --primary: var(--fm-twilight);
+  --accent: var(--fm-twilight);
+  --highlight: #c00056;
+  --background: var(--fm-air);
+  --foreground: var(--fm-midnight);
+  --surface: var(--fm-cloud);
+  --text-muted: #4b4563;
+  --success: #087a50;
+  --error: #b71c3b;
+  --surface-strong: #0a0f1e10;
+  --surface-soft: #0a0f1e08;
+  --surface-border: #0a0f1e26;
+  --glass-border: #0a0f1e26;
+  --glass-bg-start: #ffffffdd;
+  --glass-bg-end: #ffffffaa;
+  --shadow-soft: #0a0f1e14;
+  --shadow-card: #0a0f1e10;
+  --danger-soft-bg: #b71c3b0d;
+  --danger-soft-border: #b71c3b66;
+  --danger-soft-text: #a31935;
 }
 
 @theme inline {
@@ -226,4 +254,8 @@ a {
 
 .white-image {
   filter: invert(1);
+}
+
+:root[data-theme="light"] .white-image {
+  filter: none;
 }

@@ -55,10 +55,10 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'PENDING': return 'text-yellow-400'
-      case 'REJECTED': return 'text-red-400'
+      case 'PENDING': return 'text-yellow-700 dark:text-yellow-400'
+      case 'REJECTED': return 'text-red-700 dark:text-red-400'
       case 'BLOCKED': return 'text-red-600'
-      default: return 'text-gray-400'
+      default: return 'text-[var(--color-text-muted)]'
     }
   }
 
@@ -104,7 +104,7 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
         <div>
           {pendingReceived.length > 0 && (
             <>
-              <h3 className="text-lg font-semibold text-white mb-4">
+              <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-4">
                 ⏳ Pending Requests ({pendingReceived.length})
               </h3>
               <div className="grid gap-4 mb-8">
@@ -119,17 +119,17 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
                           {request.requester?.displayName.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0 break-words">
-                          <h4 className="text-white font-semibold">
+                          <h4 className="text-[var(--color-foreground)] font-semibold">
                             {request.requester?.displayName}
                           </h4>
                           <p className="break-all text-[var(--color-text-muted)] text-sm">
                             {request.requester?.email}
                           </p>
-                          <p className="text-gray-400 text-xs">
+                          <p className="text-[var(--color-text-muted)] text-xs">
                             {formatDate(request.requestedAt)}
                           </p>
                           {request.message && (
-                            <p className="text-gray-300 text-sm mt-2 italic">
+                            <p className="text-[var(--color-text-muted)] text-sm mt-2 italic">
                               &ldquo;{request.message}&rdquo;
                             </p>
                           )}
@@ -174,7 +174,7 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
 
           {processedReceived.length > 0 && (
             <>
-              <h3 className="text-lg font-semibold text-white mb-4">
+              <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-4">
                 📋 Request History ({processedReceived.length})
               </h3>
               <div className="grid gap-3">
@@ -185,14 +185,14 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-[var(--color-foreground)] font-bold text-sm">
                           {request.requester?.displayName.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <span className="text-white text-sm">
+                          <span className="text-[var(--color-foreground)] text-sm">
                             {request.requester?.displayName}
                           </span>
-                          <p className="text-gray-400 text-xs">
+                          <p className="text-[var(--color-text-muted)] text-xs">
                             {formatDate(request.requestedAt)}
                           </p>
                         </div>
@@ -210,10 +210,10 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
           {receivedRequests.length === 0 && (
             <div className="text-center py-12">
               <div className="text-4xl mb-4">📭</div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-2">
                 No friend requests received
               </h3>
-              <p className="text-gray-300">
+              <p className="text-[var(--color-text-muted)]">
                 When someone sends you a friend request, it will appear here.
               </p>
             </div>
@@ -237,17 +237,17 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
                         {request.receiver?.displayName.charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0 break-words">
-                        <h4 className="text-white font-medium">
+                        <h4 className="text-[var(--color-foreground)] font-medium">
                           {request.receiver?.displayName}
                         </h4>
                         <p className="break-all text-[var(--color-text-muted)] text-sm">
                           {request.receiver?.email}
                         </p>
-                        <p className="text-gray-400 text-xs">
+                        <p className="text-[var(--color-text-muted)] text-xs">
                           Sent {formatDate(request.requestedAt)}
                         </p>
                         {request.respondedAt && (
-                          <p className="text-gray-400 text-xs">
+                          <p className="text-[var(--color-text-muted)] text-xs">
                             Responded {formatDate(request.respondedAt)}
                           </p>
                         )}
@@ -258,7 +258,7 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
                         {getStatusText(request.status)}
                       </span>
                       {request.message && (
-                        <p className="text-gray-400 text-xs mt-1">
+                        <p className="text-[var(--color-text-muted)] text-xs mt-1">
                           Message sent
                         </p>
                       )}
@@ -270,10 +270,10 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
           ) : (
             <div className="text-center py-12">
               <div className="text-4xl mb-4">📤</div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-2">
                 No friend requests sent
               </h3>
-              <p className="text-gray-300">
+              <p className="text-[var(--color-text-muted)]">
                 Start connecting with people by searching for friends to add!
               </p>
             </div>

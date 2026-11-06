@@ -22,6 +22,7 @@ import { NavBarProfile } from './NavBarProfile';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/db/firebase';
 import { useRouter } from 'next/navigation';
+import ThemeSelector from './ThemeSelector';
 
 interface FriendRequestsCount {
   pendingCount: number
@@ -35,8 +36,8 @@ export default function Navbar() {
   const adminUID = process.env.NEXT_PUBLIC_ADMIN_UID;
   const router = useRouter();
   const [pendingCount, setPendingCount] = useState(0);
-  const desktopLinkClass = 'inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-[var(--color-foreground)]/88 hover:text-white hover:bg-[var(--color-surface-strong)] transition';
-  const mobileLinkClass = 'mobile-menu-item flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-[var(--color-foreground)]/90 hover:bg-[var(--color-surface-soft)] hover:text-white transition';
+  const desktopLinkClass = 'inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-[var(--color-foreground)]/88 hover:text-[var(--color-foreground)] hover:bg-[var(--color-surface-strong)] transition';
+  const mobileLinkClass = 'mobile-menu-item flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-[var(--color-foreground)]/90 hover:bg-[var(--color-surface-soft)] hover:text-[var(--color-foreground)] transition';
 
   // Fetch pending friend requests for mobile navigation
   useEffect(() => {
@@ -104,11 +105,11 @@ export default function Navbar() {
         <div className="text-xl font-bold tracking-tight">
           <Link href="/" className="group inline-flex items-center gap-2" onClick={() => setOpen(false)}>
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-[var(--color-highlight)] shadow-[0_0_14px_var(--color-highlight)]" />
-            <span className="text-white group-hover:text-[var(--color-highlight)] transition-colors">FM Tracker</span>
+            <span className="text-[var(--color-foreground)] group-hover:text-[var(--color-highlight)] transition-colors">FM Tracker</span>
           </Link>
         </div>
 
-        <div className="my-2 hidden md:flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-1.5 py-1">
+        <div className="my-2 hidden xl:flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-1.5 py-1">
           <NavigationLink href="/saves" className={desktopLinkClass}><Save className="h-4 w-4" />Saves</NavigationLink>
           <NavigationLink href="/trophies" className={desktopLinkClass}><Trophy className="h-4 w-4" />Trophies</NavigationLink>
           <NavigationLink href="/challenges" className={desktopLinkClass}><Target className="h-4 w-4" />Challenges</NavigationLink>
@@ -119,19 +120,23 @@ export default function Navbar() {
           <NavBarProfile />
         </div>
 
-        <div className="md:hidden">
-          <button
-            aria-label="Toggle menu"
-            onClick={() => setOpen(!open)}
-            className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-2 text-white"
-          >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+        <div className="flex items-center gap-2">
+          <ThemeSelector />
+          <div className="xl:hidden">
+            <button
+              aria-label="Toggle menu"
+              aria-expanded={open}
+              onClick={() => setOpen(!open)}
+              className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-2 text-[var(--color-foreground)]"
+            >
+              {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-[var(--color-surface-border)] bg-[var(--color-background)]/95 px-2 pb-2 pt-1">
+        <div className="xl:hidden border-t border-[var(--color-surface-border)] bg-[var(--color-background)]/95 px-2 pb-2 pt-1">
           <div className="mobile-menu-panel overflow-hidden rounded-md border border-[var(--color-surface-border)] bg-[var(--color-dark)]/95 backdrop-blur-sm">
             <NavigationLink href="/saves" className={mobileLinkClass} style={{ animationDelay: '40ms' }} onClick={() => setOpen(false)}><Save className="h-4 w-4" />Saves</NavigationLink>
             <NavigationLink href="/trophies" className={mobileLinkClass} style={{ animationDelay: '80ms' }} onClick={() => setOpen(false)}><Trophy className="h-4 w-4" />Trophies</NavigationLink>
@@ -176,7 +181,7 @@ export default function Navbar() {
                 <button
                   onClick={handleMobileLogout}
                   style={{ animationDelay: '300ms' }}
-                  className="mobile-menu-item flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm font-medium text-red-300 transition hover:bg-red-500/20"
+                  className="mobile-menu-item flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm font-medium text-red-700 dark:text-red-300 transition hover:bg-red-500/20"
                 >
                   <LogOut className="h-4 w-4" />
                   Sign Out

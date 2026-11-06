@@ -235,7 +235,7 @@ export default function NewSaveForm() {
           <Sparkles className="h-3.5 w-3.5" />
           New Career Save
         </p>
-        <h1 className="mt-2 text-3xl font-semibold text-white">Create New Save</h1>
+        <h1 className="mt-2 text-3xl font-semibold text-[var(--color-foreground)]">Create New Save</h1>
         <p className="mt-2 max-w-2xl text-sm text-[var(--color-text-muted)]">
           Pick your game version, choose your starting setup, and launch the next chapter of your manager story.
         </p>
@@ -257,7 +257,7 @@ export default function NewSaveForm() {
         {currentStep === 1 && (
           <>
             <div className="fm-inset space-y-2 p-4">
-              <label htmlFor="saveGameVersion" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
+              <label htmlFor="saveGameVersion" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-[var(--color-foreground)]">
                 <Gamepad2 className="h-4 w-4 text-[var(--color-highlight)]" />
                 Game Version
               </label>
@@ -284,7 +284,7 @@ export default function NewSaveForm() {
             </div>
 
             <div className="fm-inset space-y-3 p-4">
-              <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-[var(--color-foreground)]">
                 <ClipboardList className="h-4 w-4 text-[var(--color-highlight)]" />
                 Starting Option
               </p>
@@ -324,14 +324,14 @@ export default function NewSaveForm() {
             {isNoTeam ? (
               <div className="fm-inset border-dashed border-[var(--color-accent)] p-5 text-center">
                 <div className="mb-3 text-3xl">🆓</div>
-                <h3 className="mb-2 text-xl font-bold text-white">Unemployed Mode</h3>
-                <p className="text-gray-300">Start your career without a team and take your first job from the market.</p>
+                <h3 className="mb-2 text-xl font-bold text-[var(--color-foreground)]">Unemployed Mode</h3>
+                <p className="text-[var(--color-text-muted)]">Start your career without a team and take your first job from the market.</p>
               </div>
             ) : (
               <>
                 <div className="grid gap-5 md:grid-cols-2">
                   <div className="fm-inset space-y-2 p-4">
-                    <label htmlFor="saveCountry" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
+                    <label htmlFor="saveCountry" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-[var(--color-foreground)]">
                       <Globe2 className="h-4 w-4 text-[var(--color-highlight)]" />
                       Country
                     </label>
@@ -358,7 +358,7 @@ export default function NewSaveForm() {
                   </div>
 
                   <div className="fm-inset space-y-2 p-4">
-                    <label htmlFor="saveLeague" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
+                    <label htmlFor="saveLeague" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-[var(--color-foreground)]">
                       <ShieldCheck className="h-4 w-4 text-[var(--color-highlight)]" />
                       League
                     </label>
@@ -406,15 +406,15 @@ export default function NewSaveForm() {
         {currentStep === 3 && (
           <div className="space-y-4">
             <div className="fm-inset p-4">
-              <h3 className="text-lg font-bold text-white">Review Your Setup</h3>
+              <h3 className="text-lg font-bold text-[var(--color-foreground)]">Review Your Setup</h3>
               <ul className="mt-3 space-y-2 break-words text-sm text-[var(--color-text-muted)]">
-                <li>Game: <span className="font-semibold text-white">{selectedGameDetails?.name ?? 'Not selected'}</span></li>
-                <li>Start type: <span className="font-semibold text-white">{isNoTeam ? 'Unemployed' : 'Choose Team'}</span></li>
+                <li>Game: <span className="font-semibold text-[var(--color-foreground)]">{selectedGameDetails?.name ?? 'Not selected'}</span></li>
+                <li>Start type: <span className="font-semibold text-[var(--color-foreground)]">{isNoTeam ? 'Unemployed' : 'Choose Team'}</span></li>
                 {!isNoTeam && (
                   <>
-                    <li>Country: <span className="font-semibold text-white">{selectedCountryDetails?.name ?? 'Not selected'}</span></li>
-                    <li>League: <span className="font-semibold text-white">{selectedLeagueDetails?.name ?? 'Not selected'}{selectedLeagueDetails?.isFemale === true ? ' (Women)' : ''}</span></li>
-                    <li>Team: <span className="font-semibold text-white">{selectedTeamDetails?.name ?? 'Not selected'}</span></li>
+                    <li>Country: <span className="font-semibold text-[var(--color-foreground)]">{selectedCountryDetails?.name ?? 'Not selected'}</span></li>
+                    <li>League: <span className="font-semibold text-[var(--color-foreground)]">{selectedLeagueDetails?.name ?? 'Not selected'}{selectedLeagueDetails?.isFemale === true ? ' (Women)' : ''}</span></li>
+                    <li>Team: <span className="font-semibold text-[var(--color-foreground)]">{selectedTeamDetails?.name ?? 'Not selected'}</span></li>
                   </>
                 )}
               </ul>
@@ -422,7 +422,7 @@ export default function NewSaveForm() {
 
             <div className="fm-inset border-[var(--color-accent)]/40 p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-accent)]">Starter Challenge Recommendation</p>
-              <h4 className="mt-1 text-lg font-bold text-white">{starterChallengeTitle}</h4>
+              <h4 className="mt-1 text-lg font-bold text-[var(--color-foreground)]">{starterChallengeTitle}</h4>
               <p className="mt-1 text-sm text-[var(--color-text-muted)]">{starterChallengeDescription}</p>
             </div>
           </div>
@@ -441,7 +441,7 @@ export default function NewSaveForm() {
         )}
 
         {submitSuccess && (
-          <div role="status" className="inline-flex w-full items-center gap-2 rounded-md border border-[var(--color-success)]/40 bg-[var(--color-success)]/10 px-4 py-3 text-sm text-white">
+          <div role="status" className="inline-flex w-full items-center gap-2 rounded-md border border-[var(--color-success)]/40 bg-[var(--color-success)]/10 px-4 py-3 text-sm text-[var(--color-foreground)]">
             <CheckCircle2 className="h-4 w-4 shrink-0 text-[var(--color-success)]" />
             {submitSuccess}
           </div>
