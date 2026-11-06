@@ -25,11 +25,28 @@ export function trackEvent(event: EventName, payload?: EventPayload, options?: T
   void sendToFirstPartyAnalytics(event, payload);
 }
 
-function sendToFirstPartyAnalytics(event: EventName, payload?: EventPayload) {
+async function sendToFirstPartyAnalytics(event: EventName, payload?: EventPayload) {
   const visitorId = getOrCreateVisitorId();
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+
+  // Attach the Firebase ID token when a user is signed in so the server can
+  // verify and record a real userId, instead of silently logging the event
+  // as anonymous. Without this, every client-tracked event (login_success,
+  // session_start, save_created, etc.) was stored with userId = null,
+  // which breaks activation/retention queries in the Growth dashboard.
+  const currentUser = auth.currentUser;
+  if (currentUser) {
+    try {
+      const token = await currentUser.getIdToken();
+      headers.Authorization = `Bearer ${token}`;
+    } catch (error) {
+      console.error(`Failed to attach auth token to analytics event "${event}":`, error);
+    }
+  }
+
   return fetch('/api/analytics/track', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ event, payload, visitorId }),
     keepalive: true,
   }).catch((error) => {
