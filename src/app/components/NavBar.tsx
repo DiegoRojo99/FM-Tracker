@@ -16,6 +16,7 @@ import {
   LogOut,
 } from 'lucide-react'
 import Link from 'next/link'
+import NavigationLink from './NavigationLink';
 import { useAuth } from './AuthProvider';
 import { NavBarProfile } from './NavBarProfile';
 import { signOut } from 'firebase/auth';
@@ -108,12 +109,12 @@ export default function Navbar() {
         </div>
 
         <div className="my-2 hidden md:flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-1.5 py-1">
-          <Link href="/saves" className={desktopLinkClass}><Save className="h-4 w-4" />Saves</Link>
-          <Link href="/trophies" className={desktopLinkClass}><Trophy className="h-4 w-4" />Trophies</Link>
-          <Link href="/challenges" className={desktopLinkClass}><Target className="h-4 w-4" />Challenges</Link>
-          <Link href="/achievements" className={desktopLinkClass}><Star className="h-4 w-4" />Achievements</Link>
+          <NavigationLink href="/saves" className={desktopLinkClass}><Save className="h-4 w-4" />Saves</NavigationLink>
+          <NavigationLink href="/trophies" className={desktopLinkClass}><Trophy className="h-4 w-4" />Trophies</NavigationLink>
+          <NavigationLink href="/challenges" className={desktopLinkClass}><Target className="h-4 w-4" />Challenges</NavigationLink>
+          <NavigationLink href="/achievements" className={desktopLinkClass}><Star className="h-4 w-4" />Achievements</NavigationLink>
           {user && user.uid === adminUID && (
-            <Link href="/admin" className={desktopLinkClass}><Shield className="h-4 w-4" />Admin</Link>
+            <NavigationLink href="/admin" className={desktopLinkClass}><Shield className="h-4 w-4" />Admin</NavigationLink>
           )}
           <NavBarProfile />
         </div>
@@ -132,21 +133,21 @@ export default function Navbar() {
       {open && (
         <div className="md:hidden border-t border-[var(--color-surface-border)] bg-[var(--color-background)]/95 px-2 pb-2 pt-1">
           <div className="mobile-menu-panel overflow-hidden rounded-md border border-[var(--color-surface-border)] bg-[var(--color-dark)]/95 backdrop-blur-sm">
-            <Link href="/saves" className={mobileLinkClass} style={{ animationDelay: '40ms' }} onClick={() => setOpen(false)}><Save className="h-4 w-4" />Saves</Link>
-            <Link href="/trophies" className={mobileLinkClass} style={{ animationDelay: '80ms' }} onClick={() => setOpen(false)}><Trophy className="h-4 w-4" />Trophies</Link>
-            <Link href="/challenges" className={mobileLinkClass} style={{ animationDelay: '120ms' }} onClick={() => setOpen(false)}><Target className="h-4 w-4" />Challenges</Link>
-            <Link href="/achievements" className={mobileLinkClass} style={{ animationDelay: '160ms' }} onClick={() => setOpen(false)}><Star className="h-4 w-4" />Achievements</Link>
+            <NavigationLink href="/saves" className={mobileLinkClass} style={{ animationDelay: '40ms' }} onClick={() => setOpen(false)}><Save className="h-4 w-4" />Saves</NavigationLink>
+            <NavigationLink href="/trophies" className={mobileLinkClass} style={{ animationDelay: '80ms' }} onClick={() => setOpen(false)}><Trophy className="h-4 w-4" />Trophies</NavigationLink>
+            <NavigationLink href="/challenges" className={mobileLinkClass} style={{ animationDelay: '120ms' }} onClick={() => setOpen(false)}><Target className="h-4 w-4" />Challenges</NavigationLink>
+            <NavigationLink href="/achievements" className={mobileLinkClass} style={{ animationDelay: '160ms' }} onClick={() => setOpen(false)}><Star className="h-4 w-4" />Achievements</NavigationLink>
           
             {user && user.uid === adminUID && (
-              <Link href="/admin" className={mobileLinkClass} style={{ animationDelay: '180ms' }} onClick={() => setOpen(false)}>
+              <NavigationLink href="/admin" className={mobileLinkClass} style={{ animationDelay: '180ms' }} onClick={() => setOpen(false)}>
                 <Shield className="h-4 w-4" />
                 Admin
-              </Link>
+              </NavigationLink>
             )}
           
             {user && (
               <>
-                <Link href="/friends" className={`${mobileLinkClass} justify-between`} style={{ animationDelay: '180ms' }} onClick={() => setOpen(false)}>
+                <NavigationLink href="/friends" className={`${mobileLinkClass} justify-between`} style={{ animationDelay: '180ms' }} onClick={() => setOpen(false)}>
                   <div className="flex items-center">
                     <Users className="mr-3 h-4 w-4" />
                     <span>Friends</span>
@@ -156,21 +157,21 @@ export default function Navbar() {
                       {pendingCount > 9 ? '9+' : pendingCount}
                     </span>
                   )}
-                </Link>
+                </NavigationLink>
               
-                <Link href="/add-save" className={mobileLinkClass} style={{ animationDelay: '220ms' }} onClick={() => setOpen(false)}>
+                <NavigationLink href="/add-save" className={mobileLinkClass} style={{ animationDelay: '220ms' }} onClick={() => setOpen(false)}>
                   <Plus className="h-4 w-4" />
                   Add Save
-                </Link>
+                </NavigationLink>
               </>
             )}
           
             {user ? (
               <>
-                <Link href="/profile" className={mobileLinkClass} style={{ animationDelay: '260ms' }} onClick={() => setOpen(false)}>
+                <NavigationLink href="/profile" className={mobileLinkClass} style={{ animationDelay: '260ms' }} onClick={() => setOpen(false)}>
                   <UserCircle className="h-4 w-4" />
                   View Profile
-                </Link>
+                </NavigationLink>
               
                 <button
                   onClick={handleMobileLogout}
@@ -182,10 +183,10 @@ export default function Navbar() {
                 </button>
               </>
             ) : (
-              <Link href="/login" className={mobileLinkClass} style={{ animationDelay: '200ms' }} onClick={() => setOpen(false)}>
+              <NavigationLink href="/login" className={mobileLinkClass} style={{ animationDelay: '200ms' }} onClick={() => setOpen(false)}>
                 <LogIn className="h-4 w-4" />
                 Login
-              </Link>
+              </NavigationLink>
             )}
           </div>
         </div>
