@@ -15,6 +15,7 @@ import TrophyCountry from '../trophies/TrophyCountry';
 import { TrophiesPageSkeleton } from '../trophies/TrophiesPageSkeleton';
 import LandingPage from '../page';
 import GradientButton from './GradientButton';
+import LoadingButton from './LoadingButton';
 
 vi.mock('./AuthProvider', () => ({
   useAuth: () => ({ user: null, userLoading: false }),
@@ -73,6 +74,41 @@ const season: SeasonSummary = {
 };
 
 describe('companion UI rendering', () => {
+  it('uses the shared pink-to-violet action style for modal loading buttons', () => {
+    const html = renderToStaticMarkup(
+      <LoadingButton type="submit" width="full" size="lg" className="mt-3">Save Career Stint</LoadingButton>
+    );
+    expect(html).toContain('fm-action');
+    expect(html).not.toContain('from-[var(--color-primary)]');
+    expect(html).toContain('type="submit"');
+    expect(html).toContain('w-full');
+    expect(html).toContain('text-lg');
+    expect(html).toContain('mt-3');
+    expect(html).toContain('Save Career Stint');
+    expect(html).not.toContain('disabled=""');
+  });
+
+  it('keeps loading buttons disabled with their spinner and custom loading text', () => {
+    const html = renderToStaticMarkup(
+      <LoadingButton isLoading loadingText="Saving Season...">Save Season</LoadingButton>
+    );
+    expect(html).toContain('fm-action');
+    expect(html).toContain('disabled=""');
+    expect(html).toContain('animate-spin');
+    expect(html).toContain('Saving Season...');
+    expect(html).not.toContain('>Save Season<');
+  });
+
+  it('preserves explicit disabled and default loading states', () => {
+    const disabled = renderToStaticMarkup(<LoadingButton disabled>Save Trophy</LoadingButton>);
+    expect(disabled).toContain('disabled=""');
+    expect(disabled).toContain('Save Trophy');
+    expect(disabled).not.toContain('animate-spin');
+    const loading = renderToStaticMarkup(<LoadingButton isLoading>Save Trophy</LoadingButton>);
+    expect(loading).toContain('Loading...');
+    expect(loading).toContain('disabled=""');
+  });
+
   it('retains a 44px minimum touch height for small destructive actions', () => {
     const html = renderToStaticMarkup(<GradientButton size="sm" destructive>Remove</GradientButton>);
     expect(html).toContain('min-h-11');
