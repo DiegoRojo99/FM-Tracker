@@ -3,6 +3,7 @@ loadNodeEnv();
 
 import { fetchFromApi } from '../../src/lib/apiFootball';
 import type { ApiLeague, ApiLeagueSeason, ApiTeam } from '../../src/lib/types/FootballAPI';
+import { fm27LeagueAdditions, getImportApiSeason, getTeamCoordinateUpdate, includeImportLeague, includeImportTeam } from '../../src/lib/fm27Import';
 
 type ScriptOptions = {
   dryRun: boolean;
@@ -12,6 +13,8 @@ type ScriptOptions = {
   refreshMetadata: boolean;
   onlyFemaleGroups: boolean;
   syncAlgoliaTeams: boolean;
+  fm27: boolean;
+  algoliaOnly: boolean;
 };
 
 type Summary = {
@@ -111,7 +114,9 @@ function parseArgs(): ScriptOptions {
 
   const executeFromArgs = /(^|\s)--execute(\s|$)/.test(argText);
   const executeFromEnv = process.env.SEED_EXECUTE === '1' || process.env.npm_config_execute === 'true' || process.env.npm_config_execute === '1';
-  const execute = executeFromArgs || executeFromEnv;
+  const explicitDryRun = args.includes('--dry-run');
+  if (explicitDryRun && executeFromArgs) throw new Error('Use either --dry-run or --execute, not both.');
+  const execute = !explicitDryRun && (executeFromArgs || executeFromEnv);
   const dryRun = !execute;
   const refreshExisting = /(^|\s)--refresh-existing(\s|$)/.test(argText)
     || process.env.SEED_REFRESH_EXISTING === '1'
@@ -136,7 +141,18 @@ function parseArgs(): ScriptOptions {
     seasonsRawFromArgs.length > 0 ? seasonsRawFromArgs : seasonsRawFromEnv,
     2001
   );
-  const seasons = parsedSeasons.length > 0 ? parsedSeasons : [2025, 2026];
+  const fm27 = args.includes('--fm27');
+  const algoliaOnly = args.includes('--algolia-only');
+  if (algoliaOnly && (!syncAlgoliaTeams || dryRun)) {
+    throw new Error('--algolia-only requires --execute --sync-algolia.');
+  }
+  if (syncAlgoliaTeams && !dryRun && process.env.NODE_ENV !== 'production') {
+    throw new Error('The shared Algolia index may only be synced from production.');
+  }
+  const seasons = parsedSeasons.length > 0 ? parsedSeasons : fm27 ? [2026] : [2025, 2026];
+  if (fm27 && (seasons.length !== 1 || seasons[0] !== 2026)) {
+    throw new Error('--fm27 requires the app season 2026 only.');
+  }
 
   const limitMatch = argText.match(/--limit=(\d+)/);
   const limitRaw = limitMatch?.[1] ?? process.env.SEED_LIMIT ?? process.env.npm_config_limit;
@@ -151,6 +167,8 @@ function parseArgs(): ScriptOptions {
     refreshMetadata,
     onlyFemaleGroups,
     syncAlgoliaTeams,
+    fm27,
+    algoliaOnly,
   };
 }
 
@@ -180,9 +198,16 @@ function isWomenCompetitionName(name: string | null | undefined): boolean {
 async function run() {
   const { prisma } = await import('../../src/lib/db/prisma');
   const options = parseArgs();
+  let lastApiRequestAt = 0;
+  async function fetchSeedApi(endpoint: string) {
+    const delay = 500 - (Date.now() - lastApiRequestAt);
+    if (delay > 0) await new Promise((resolve) => setTimeout(resolve, delay));
+    lastApiRequestAt = Date.now();
+    return fetchFromApi(endpoint);
+  }
 
-  if (!options.dryRun && !process.env.API_FOOTBALL_KEY) {
-    throw new Error('API_FOOTBALL_KEY is required when running with --execute.');
+  if (!process.env.API_FOOTBALL_KEY) {
+    throw new Error('API_FOOTBALL_KEY is required for API-backed dry-run and execute modes.');
   }
   if (
     options.syncAlgoliaTeams
@@ -244,7 +269,7 @@ async function run() {
       },
     }),
     prisma.country.findMany({
-      select: { code: true, name: true },
+      select: { code: true, name: true, inFootballManager: true },
     }),
   ]);
 
@@ -269,7 +294,7 @@ async function run() {
   for (const group of activeGroups) {
     for (const mapping of group.apiCompetitions) {
       const apiCompetition = mapping.apiCompetition;
-      if (!apiCompetition) continue;
+      if (!apiCompetition || !includeImportLeague(apiCompetition.id, apiCompetition.type, options.fm27)) continue;
       const sourceFemaleFromGroups = group.isFemale === true;
       const existing = competitionMap.get(apiCompetition.id);
       competitionMap.set(apiCompetition.id, {
@@ -284,6 +309,20 @@ async function run() {
     }
   }
 
+  if (options.fm27) {
+    for (const addition of fm27LeagueAdditions) {
+      if (!countries.some((country) => country.code === addition.countryCode)) {
+        throw new Error(`Missing country ${addition.countryCode} for FM27 league ${addition.id}`);
+      }
+      competitionMap.set(addition.id, {
+        ...addition,
+        type: 'DOMESTIC_LEAGUE',
+        sourceFemaleFromGroups: addition.isFemale,
+        logoUrl: null,
+      });
+    }
+  }
+
   const mappedCompetitions = Array.from(competitionMap.values());
   summary.mappedApiCompetitions = mappedCompetitions.length;
 
@@ -291,7 +330,7 @@ async function run() {
     ? mappedCompetitions.filter((competition) => competition.sourceFemaleFromGroups)
     : mappedCompetitions;
 
-  const competitionsToProcess = options.limit
+  const competitionsToProcess = options.algoliaOnly ? [] : options.limit
     ? scopedCompetitions.slice(0, options.limit)
     : scopedCompetitions;
 
@@ -322,16 +361,32 @@ async function run() {
   if (options.syncAlgoliaTeams) console.log('Algolia teams_index sync: enabled');
   if (options.limit) console.log(`Limit: ${options.limit}`);
   if (options.dryRun) {
-    console.log('Dry run mode enabled. Use --execute to perform API fetch + database writes.');
+    console.log('Dry run: API fetches and database comparisons only; no database or Algolia writes.');
   }
 
   for (const competition of competitionsToProcess) {
     summary.processedApiCompetitions += 1;
+    console.log(`[${new Date().toISOString()}] League ${summary.processedApiCompetitions}/${competitionsToProcess.length}: ${competition.name} (${competition.id})`);
 
-    if (options.dryRun) continue;
+    if (options.fm27) {
+      const addition = fm27LeagueAdditions.find((row) => row.id === competition.id);
+      if (addition) {
+        const group = await prisma.competitionGroup.findUnique({
+          where: { name_countryCode: { name: addition.name, countryCode: addition.countryCode } },
+          include: { apiCompetitions: true },
+        });
+        const country = countries.find((row) => row.code === addition.countryCode);
+        if (!country) throw new Error(`Missing country ${addition.countryCode}`);
+        console.log(JSON.stringify({
+          leagueId: addition.id, groupAction: !group ? 'create' : group.isActive && group.tier === addition.tier ? 'unchanged' : 'update',
+          linkAction: group?.apiCompetitions.some((row) => row.apiCompetitionId === addition.id) ? 'unchanged' : 'create',
+          countryActivation: !country.inFootballManager,
+        }));
+      }
+    }
 
     const seasonsToFetch = options.seasons.filter((year) => {
-      if (options.refreshExisting) return true;
+      if (options.refreshExisting || options.fm27) return true;
       const seasonLabel = `${year}/${year + 1}`;
       const alreadySeeded = seededPairSet.has(`${competition.id}::${seasonLabel}`);
       if (alreadySeeded) {
@@ -353,12 +408,16 @@ async function run() {
     if (shouldFetchLeagueMeta) {
       summary.leagueMetadataCalls += 1;
       try {
-        const leagueMetaResponse = await fetchFromApi(`/leagues?id=${competition.id}`) as ApiLeague[];
+        const leagueMetaResponse = await fetchSeedApi(`/leagues?id=${competition.id}`) as ApiLeague[];
         const leagueMeta = leagueMetaResponse[0];
 
         if (!leagueMeta) {
           summary.missingLeagueMetadata += 1;
+          throw new Error(`Missing league metadata for ${competition.id}`);
         } else {
+          if (leagueMeta.league.id !== competition.id || leagueMeta.league.type !== 'League') {
+            throw new Error(`Invalid league metadata for ${competition.id}`);
+          }
           availableYears = new Set(
             leagueMeta.seasons
               .map((season: ApiLeagueSeason) => Number(season.year))
@@ -367,44 +426,74 @@ async function run() {
 
           inferredIsFemale = isWomenCompetitionName(leagueMeta.league.name) || competition.isFemale === true;
 
-          await prisma.apiCompetition.update({
-            where: { id: competition.id },
-            data: {
+          const metadata = {
               name: leagueMeta.league.name,
               logoUrl: leagueMeta.league.logo,
-              countryCode: leagueMeta.country.code ?? competition.countryCode,
+              countryCode: competition.countryCode,
               isFemale: inferredIsFemale,
-            },
-          });
+          };
+          const existingMetadata = await prisma.apiCompetition.findUnique({ where: { id: competition.id } });
+          console.log(JSON.stringify({ leagueId: competition.id, metadataAction: !existingMetadata ? 'create'
+            : Object.entries(metadata).some(([key, value]) => existingMetadata[key as keyof typeof existingMetadata] !== value) ? 'update' : 'unchanged' }));
+          if (!options.dryRun) {
+            await prisma.apiCompetition.upsert({
+              where: { id: competition.id },
+              create: { id: competition.id, ...metadata, type: 'DOMESTIC_LEAGUE', isActive: true },
+              update: metadata,
+            });
+            const addition = options.fm27 && fm27LeagueAdditions.find((row) => row.id === competition.id);
+            if (addition) {
+              const group = await prisma.competitionGroup.upsert({
+                where: { name_countryCode: { name: addition.name, countryCode: addition.countryCode } },
+                create: { name: addition.name, displayName: addition.id === 64 ? 'Arkema Première Ligue' : addition.name,
+                  countryCode: addition.countryCode, tier: addition.tier, isFemale: addition.isFemale, type: 'DOMESTIC_LEAGUE', isActive: true },
+                update: { tier: addition.tier, isFemale: addition.isFemale, isActive: true,
+                  ...(addition.id === 64 ? { displayName: 'Arkema Première Ligue' } : {}) },
+              });
+              await prisma.competitionGroupApiCompetition.upsert({
+                where: { competitionGroupId_apiCompetitionId: { competitionGroupId: group.id, apiCompetitionId: addition.id } },
+                create: { competitionGroupId: group.id, apiCompetitionId: addition.id },
+                update: {},
+              });
+              await prisma.country.update({ where: { code: addition.countryCode }, data: { inFootballManager: true } });
+            }
+          }
         }
-      } catch {
-        summary.missingLeagueMetadata += 1;
+      } catch (error) {
+        console.error(`League metadata failed for ${competition.id}:`, error);
+        throw error;
       }
     }
 
     for (const year of seasonsToFetch) {
-      if (availableYears && !availableYears.has(year)) {
+      const apiYear = getImportApiSeason(competition.id, year, options.fm27);
+      if (availableYears && !availableYears.has(apiYear)) {
         summary.seasonsSkippedUnavailable += 1;
+        console.error(`Unavailable API season ${apiYear} for league ${competition.id}`);
         continue;
       }
 
       let teamResponse: ApiTeam[] = [];
       try {
-        teamResponse = await fetchFromApi(`/teams?league=${competition.id}&season=${year}`) as ApiTeam[];
-      } catch {
+        teamResponse = await fetchSeedApi(`/teams?league=${competition.id}&season=${apiYear}`) as ApiTeam[];
+        teamResponse = teamResponse.filter((row) => includeImportTeam(competition.id, row.team.id, year, options.fm27));
+        if (new Set(teamResponse.map((row) => row.team.id)).size !== teamResponse.length) {
+          throw new Error(`Duplicate team IDs for league ${competition.id}`);
+        }
+      } catch (error) {
         summary.seasonApiErrors += 1;
-        continue;
+        console.error(`Teams failed for league ${competition.id}, API season ${apiYear}:`, error);
+        throw error;
       }
 
       summary.seasonsProcessed += 1;
       summary.teamsFetched += teamResponse.length;
 
-      if (teamResponse.length === 0) continue;
+      if (teamResponse.length === 0) throw new Error(`No teams for league ${competition.id}, API season ${apiYear}`);
 
       const teamIds = teamResponse.map((entry) => entry.team.id);
       const existingTeams = await prisma.team.findMany({
         where: { id: { in: teamIds } },
-        select: { id: true, isFemale: true },
       });
       const existingById = new Map(existingTeams.map((team) => [team.id, team]));
 
@@ -423,7 +512,23 @@ async function run() {
             ? { isFemale: false }
             : {};
 
-        await prisma.team.upsert({
+        const update = {
+          name: teamEntry.team.name,
+          logo: teamEntry.team.logo,
+          national: teamEntry.team.national || false,
+          countryCode: resolvedCountryCode,
+          ...getTeamCoordinateUpdate(teamEntry.venue?.lat, teamEntry.venue?.lng),
+          ...updateGenderData,
+        };
+        const changes = existing ? Object.entries(update)
+          .filter(([key, value]) => existing[key as keyof typeof existing] !== value)
+          .map(([field, after]) => ({ field, before: existing[field as keyof typeof existing], after })) : [];
+        const changed = changes.length > 0;
+        if (changed) console.log(JSON.stringify({
+          kind: 'team-update', teamId: teamEntry.team.id, teamName: existing?.name,
+          leagueId: competition.id, appSeason: `${year}/${year + 1}`, changes,
+        }));
+        if (!options.dryRun) await prisma.team.upsert({
           where: { id: teamEntry.team.id },
           create: {
             id: teamEntry.team.id,
@@ -435,34 +540,34 @@ async function run() {
             lng: teamEntry.venue?.lng ?? null,
             isFemale: createIsFemale,
           },
-          update: {
-            name: teamEntry.team.name,
-            logo: teamEntry.team.logo,
-            national: teamEntry.team.national || false,
-            countryCode: resolvedCountryCode,
-            lat: teamEntry.venue?.lat ?? null,
-            lng: teamEntry.venue?.lng ?? null,
-            ...updateGenderData,
-          },
+          update,
         });
 
-        if (existing) summary.teamsUpdated += 1;
-        else summary.teamsCreated += 1;
+        if (changed) summary.teamsUpdated += 1;
+        else if (!existing) summary.teamsCreated += 1;
 
         if (createIsFemale) summary.teamsMarkedFemale += 1;
         else if (!existing || existing.isFemale === null) summary.teamsMarkedMale += 1;
       }
 
       const seasonLabel = `${year}/${year + 1}`;
-      const createManyResult = await prisma.teamSeason.createMany({
-        data: teamResponse.map((entry) => ({
+      const existingMemberships = await prisma.teamSeason.findMany({
+        where: { apiCompetitionId: competition.id, season: seasonLabel, teamId: { in: teamIds } },
+        select: { teamId: true },
+      });
+      const existingMemberIds = new Set(existingMemberships.map((row) => row.teamId));
+      const missingMemberships = teamResponse.filter((row) => !existingMemberIds.has(row.team.id));
+      const data = missingMemberships.map((entry) => ({
           teamId: entry.team.id,
           apiCompetitionId: competition.id,
           season: seasonLabel,
-        })),
-        skipDuplicates: true,
-      });
-      summary.teamSeasonsInserted += createManyResult.count;
+      }));
+      const inserted = options.dryRun ? data.length
+        : (await prisma.teamSeason.createMany({ data, skipDuplicates: true })).count;
+      summary.teamSeasonsInserted += inserted;
+      console.log(JSON.stringify({ leagueId: competition.id, apiSeason: apiYear, appSeason: seasonLabel,
+        teams: teamResponse.length, newTeams: teamResponse.filter((row) => !existingById.has(row.team.id)).length,
+        membershipsToInsert: inserted }));
       seededPairSet.add(`${competition.id}::${seasonLabel}`);
     }
 
@@ -532,15 +637,16 @@ async function run() {
       const teamChunks = chunkArray(teamRecords, 1000);
       for (const chunk of teamChunks) {
         if (chunk.length === 0) continue;
-        await teamsIndex.saveObjects(chunk);
+        await teamsIndex.saveObjects(chunk).wait();
         summary.algoliaTeamsUpserted += chunk.length;
+        console.log(`Algolia indexed ${summary.algoliaTeamsUpserted}/${teamRecords.length} teams`);
       }
     }
   }
 
   const unknownGenderRemaining = await prisma.team.count({ where: { isFemale: null } });
 
-  console.log('\nSeed summary:');
+  console.log(`\n${options.dryRun ? 'Proposed changes (no writes)' : 'Seed'} summary:`);
   console.log(`- Active competition groups: ${summary.activeCompetitionGroups}`);
   console.log(`- Mapped API competitions: ${summary.mappedApiCompetitions}`);
   console.log(`- Processed API competitions: ${summary.processedApiCompetitions}`);
