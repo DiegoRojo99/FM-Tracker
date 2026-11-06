@@ -58,6 +58,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
+Install dependencies with `npm ci` to use the committed lockfile. Keep Next.js
+and `eslint-config-next` on matching versions, and keep the resolved Sharp
+version at `0.35.5` or newer for the image-optimization security fix.
+
+Before deploying dependency updates, run `npm run lint`, `npm test`, and
+`npm run build`. Production builds continue to use Webpack; Turbopack is enabled
+only for development.
+
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
