@@ -66,7 +66,7 @@ export default function ChallengeDetailPage() {
   if (loading) {
     return (
       <div className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
-        <div className="flex min-h-[50vh] items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 shadow-xl backdrop-blur-sm">
+        <div className="fm-panel flex min-h-[40vh] items-center justify-center">
           <FootballLoader />
         </div>
       </div>
@@ -76,7 +76,7 @@ export default function ChallengeDetailPage() {
   if (!challenge) {
     return (
       <div className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
-        <div className="rounded-3xl border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] px-5 py-4 text-[var(--color-danger-soft-text)] shadow-lg">
+        <div className="rounded-lg border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] px-5 py-4 text-[var(--color-danger-soft-text)]">
           Challenge not found.
         </div>
       </div>
@@ -85,14 +85,9 @@ export default function ChallengeDetailPage() {
 
   return (
     <main className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
-      <header className="relative overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-5 shadow-2xl backdrop-blur-sm sm:p-8">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute left-[8%] top-[-2rem] h-36 w-36 rounded-full bg-[var(--color-highlight)]/15 blur-3xl" />
-          <div className="absolute right-[10%] top-[8%] h-40 w-40 rounded-full bg-[var(--color-accent)]/20 blur-3xl" />
-        </div>
-
-        <h1 className="text-3xl font-black text-white sm:text-4xl">{challenge.name}</h1>
-        <p className="mt-2 text-base text-[var(--color-text-muted)] sm:text-lg">{challenge.description}</p>
+      <header className="fm-panel p-4 sm:p-5">
+        <h1 className="break-words text-3xl font-semibold text-white">{challenge.name}</h1>
+        <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">{challenge.description}</p>
         {challenge.bonus && (
           <div className="mt-4 inline-flex items-center rounded-lg border border-amber-300/40 bg-amber-400/15 px-3 py-1 text-sm font-semibold text-amber-100">
             Bonus: {challenge.bonus}
@@ -103,14 +98,15 @@ export default function ChallengeDetailPage() {
         {sortedUserChallenges.length > 0 && (() => {
           const selectedChallenge = sortedUserChallenges[selectedSaveIndex];
           return (
-            <div className="mt-6 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]/70 p-4">
+            <div className="mt-5 border-t border-[var(--color-surface-border)] pt-4">
               <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <h3 className="text-lg font-bold text-white">Your Progress</h3>
                 {sortedUserChallenges.length > 1 && (
                   <select 
+                    aria-label="Tracked challenge run"
                     value={selectedSaveIndex} 
                     onChange={(e) => setSelectedSaveIndex(Number(e.target.value))}
-                    className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-dark)] px-3 py-1.5 text-sm text-white focus:border-[var(--color-highlight)] focus:outline-none"
+                    className="fm-field sm:w-auto sm:max-w-sm"
                   >
                     {sortedUserChallenges.map((challenge, index) => (
                       <option key={challenge.id} value={index}>
@@ -123,7 +119,7 @@ export default function ChallengeDetailPage() {
               </div>
               
               {selectedChallenge && (
-                <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/65 p-4">
+                <div className="fm-inset p-4">
                   <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div className="w-full">
                       {selectedChallenge.save ? (
@@ -143,16 +139,16 @@ export default function ChallengeDetailPage() {
                               <img
                                 src={selectedChallenge.save.currentClub.logo}
                                 alt={selectedChallenge.save.currentClub?.name ?? 'Current club'}
-                                className="h-16 w-16 rounded-full object-cover"
+                                className="h-12 w-12 shrink-0 object-contain"
                               />
                             ) : (
-                              <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-base font-bold text-white/85 shadow-md">
+                              <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-white/10 text-base font-semibold text-white/85">
                                 FC
                               </span>
                             )}
 
-                            <div>
-                              <p className="text-lg font-black leading-tight text-white sm:text-xl">
+                            <div className="min-w-0">
+                              <p className="break-words text-base font-semibold leading-tight text-white">
                                 {selectedChallenge.save.currentClub?.name ?? 'No current club'}
                               </p>
                             </div>
@@ -186,7 +182,7 @@ export default function ChallengeDetailPage() {
         })()}
       </header>
       
-      <section className="mt-6 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+      <section className="fm-panel mt-5 p-4 sm:p-5">
         <h2 className="mb-3 text-xl font-bold text-white">Goals</h2>
         <div className="space-y-3">
           {challenge.goals.map((goal: ChallengeGoalWithDetails) => 

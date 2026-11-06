@@ -39,15 +39,15 @@ export default function TrophiesPage() {
   if (!filteredCountries?.length) {
     return (
       <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
-        <div className="flex min-h-[55vh] flex-col items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-6 text-center shadow-xl backdrop-blur-sm">
+        <div className="fm-panel flex min-h-[40vh] flex-col items-center justify-center p-6 text-center">
           <Trophy className="mb-4 h-12 w-12 text-[var(--color-highlight)]" />
           <h2 className="text-2xl font-bold text-white">No Competitions Found</h2>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Start tracking your trophies by adding competitions.</p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
-            <Link href="/saves" className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-[var(--color-background)] transition hover:opacity-90">
+            <Link href="/saves" className="fm-action">
               Open My Saves
             </Link>
-            <Link href="/challenges" className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+            <Link href="/challenges" className="fm-secondary">
               Start a Challenge
             </Link>
           </div>
@@ -62,7 +62,7 @@ export default function TrophiesPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-5">
         <TrophiesHeader 
           games={games}
           selectedGame={selectedGame}
@@ -74,16 +74,16 @@ export default function TrophiesPage() {
         />
 
         {filteredTrophies.length === 0 && (
-          <div className="rounded-2xl border border-[var(--color-highlight)]/35 bg-[var(--color-highlight)]/10 p-5 shadow-lg">
+          <div className="fm-panel border-[var(--color-accent)]/35 p-4">
             <h2 className="text-lg font-bold text-white">No trophy milestones recorded yet</h2>
             <p className="mt-1 text-sm text-[var(--color-text-muted)]">
               Your first trophy is a key activation milestone. Add one from a save to begin your cabinet timeline.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
-              <Link href="/saves" className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-[var(--color-background)] transition hover:opacity-90">
+              <Link href="/saves" className="fm-action">
                 Add Milestone From Save
               </Link>
-              <Link href="/challenges" className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+              <Link href="/challenges" className="fm-secondary">
                 Find Trophy-Oriented Challenges
               </Link>
             </div>

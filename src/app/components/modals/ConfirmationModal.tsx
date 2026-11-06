@@ -70,7 +70,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         <div className="flex flex-col-reverse gap-3 sm:flex-row">
           <button
             onClick={onClose}
-            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-6 py-3 font-medium text-gray-200 transition hover:border-[var(--color-accent)] hover:text-white sm:flex-1"
+            className="fm-secondary w-full sm:flex-1"
             disabled={isConfirming}
           >
             {cancelText}

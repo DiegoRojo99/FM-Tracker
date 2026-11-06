@@ -88,6 +88,94 @@ a {
   backdrop-filter: blur(10px);
 }
 
+@layer components {
+  .fm-panel {
+    min-width: 0;
+    border: 1px solid var(--surface-border);
+    border-radius: 0.5rem;
+    background: var(--dark);
+  }
+
+  .fm-inset {
+    min-width: 0;
+    border: 1px solid var(--surface-border);
+    border-radius: 0.375rem;
+    background: var(--darker);
+  }
+
+  .fm-field {
+    width: 100%;
+    min-height: 2.75rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 0.375rem;
+    background: var(--darker);
+    padding: 0.625rem 0.75rem;
+    color: var(--foreground);
+    font-size: 0.875rem;
+  }
+
+  .fm-action,
+  .fm-secondary,
+  .fm-choice {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 0.375rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 180ms ease, border-color 180ms ease;
+  }
+
+  .fm-action {
+    background: linear-gradient(to right in srgb, var(--fm-highlight-pink), var(--fm-highlight-violet));
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .fm-action:hover:not(:disabled) {
+    filter: brightness(1.05);
+  }
+
+  .fm-secondary,
+  .fm-choice {
+    background: var(--darker);
+    color: var(--text-muted);
+  }
+
+  .fm-secondary:hover:not(:disabled),
+  .fm-choice:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--foreground);
+  }
+
+  .fm-choice[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--primary) 15%, var(--dark));
+    color: var(--accent);
+  }
+
+  .fm-field:focus-visible,
+  .fm-action:focus-visible,
+  .fm-secondary:focus-visible,
+  .fm-choice:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .fm-field:disabled,
+  .fm-action:disabled,
+  .fm-secondary:disabled,
+  .fm-choice:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
 @keyframes mobileMenuIn {
   from {
     opacity: 0;

@@ -85,7 +85,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/60 py-12">
+      <div className="fm-inset py-8">
         <FootballLoader />
       </div>
     )
@@ -93,7 +93,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] p-4 text-center text-[var(--color-danger-soft-text)]">
+      <div className="rounded-md border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] p-4 text-center text-[var(--color-danger-soft-text)]">
         {error}
         <button
           onClick={() => fetchLeaderboard(selectedGame)}
@@ -107,8 +107,8 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
 
   if (!data || data.leaderboard.length === 0) {
     return (
-      <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/60 py-12 text-center">
-        <div className="text-6xl mb-4">🏁</div>
+      <div className="fm-inset px-4 py-8 text-center">
+        <div className="text-3xl mb-3">🏁</div>
         <h3 className="text-xl font-semibold text-white mb-2">No ranking data yet</h3>
         <p className="text-gray-300">Add saves and trophies to start climbing the leaderboard.</p>
       </div>
@@ -117,7 +117,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
 
   return (
     <div>
-      <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/60 p-5 md:flex-row md:items-center md:justify-between">
+      <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="text-xl font-bold text-white">🏆 Friends Leaderboard</h2>
           <p className="text-sm text-gray-300">
@@ -131,7 +131,7 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
             id="leaderboard-game"
             value={selectedGame}
             onChange={(event) => setSelectedGame(event.target.value)}
-            className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)] px-3 py-2 text-sm text-white"
+            className="fm-field md:w-auto"
           >
             <option value="">All Games</option>
             {data.games.map((game) => (
@@ -142,10 +142,10 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
       </div>
 
       {myEntry && (
-        <div className="mb-6 rounded-2xl border border-[var(--color-accent)] bg-[var(--color-darker)]/85 p-4">
+        <div className="fm-inset mb-5 border-[var(--color-accent)]/40 p-3">
           <p className="text-sm text-gray-300">Your position</p>
-          <div className="flex items-center justify-between mt-1">
-            <p className="text-white font-semibold text-lg">
+          <div className="flex flex-wrap items-center justify-between gap-2 mt-1">
+            <p className="min-w-0 break-words text-white font-semibold text-base">
               {renderRankMedal(myEntry.rank)} {myEntry.displayName}
             </p>
             <p className="text-[var(--color-accent)] font-bold text-xl">{myEntry.score.toLocaleString()} pts</p>
@@ -157,12 +157,12 @@ export default function FriendsLeaderboard({ user }: FriendsLeaderboardProps) {
         {data.leaderboard.map((entry) => (
           <div
             key={entry.userId}
-            className={`rounded-2xl border p-4 transition ${entry.userId === currentUserId ? 'border-[var(--color-accent)] bg-[var(--color-darker)]' : 'border-[var(--color-surface-border)] bg-[var(--color-darker)]/70 hover:border-gray-500'}`}
+            className={`fm-inset p-3 ${entry.userId === currentUserId ? 'border-[var(--color-accent)]' : 'border-[var(--color-surface-border)]'}`}
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex items-center gap-4 min-w-0">
                 <div className="text-lg font-bold text-white w-12 shrink-0">{renderRankMedal(entry.rank)}</div>
-                <div className="w-10 h-10 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white font-bold">
+                <div className="h-10 w-10 shrink-0 bg-[var(--color-primary)]/15 rounded-md flex items-center justify-center text-[var(--color-accent)] font-semibold">
                   {entry.displayName.charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0">

@@ -47,22 +47,20 @@ export const BaseModal: React.FC<BaseModalProps> = ({
         <Dialog.Panel 
           className={`
             w-full ${maxWidth} ${maxHeight} h-fit my-auto 
-            bg-[var(--color-dark)]/95 backdrop-blur-sm
-            border border-[var(--color-surface-border)]
-            rounded-2xl shadow-2xl relative
+            fm-panel relative
             text-white
             ${panelClassName}
           `}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-[var(--color-surface-border)]">
-            <Dialog.Title className="text-lg font-black text-white">
+          <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[var(--color-surface-border)] sm:px-5">
+            <Dialog.Title className="text-lg font-semibold text-white">
               {title}
             </Dialog.Title>
             
             {showCloseButton && (
               <button
-                className="rounded-lg p-1 text-[var(--color-text-muted)] transition hover:bg-white/10 hover:text-white"
+                className="fm-secondary h-11 w-11 shrink-0 p-0"
                 onClick={onClose}
                 aria-label="Close modal"
               >
@@ -72,7 +70,7 @@ export const BaseModal: React.FC<BaseModalProps> = ({
           </div>
 
           {/* Modal content */}
-          <div className="overflow-y-auto max-h-[calc(80vh-6rem)] px-6 py-5">
+          <div className="overflow-y-auto max-h-[calc(80vh-6rem)] px-4 py-4 sm:px-5">
             {children}
           </div>
         </Dialog.Panel>

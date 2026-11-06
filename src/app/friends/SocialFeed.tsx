@@ -59,7 +59,7 @@ export default function SocialFeed() {
 
   if (loading) return <p className="text-sm text-[var(--color-text-muted)]">Loading your social activity…</p>;
   if (items.length === 0) return (
-    <div className="rounded-2xl border border-dashed border-[var(--color-surface-border)] bg-[var(--color-dark)]/60 p-6 text-center text-sm text-[var(--color-text-muted)]">
+    <div className="fm-inset border-dashed p-5 text-center text-sm text-[var(--color-text-muted)]">
       No activity yet. Add a save, complete a challenge, or connect with friends to start filling this feed.
     </div>
   );
@@ -67,9 +67,9 @@ export default function SocialFeed() {
   return (
     <div className="space-y-3">
       {items.map((item) => (
-        <div key={item.id} className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/80 p-4">
+        <div key={item.id} className="fm-inset p-3">
           <div className="flex flex-wrap items-start justify-between gap-2">
-            <div>
+            <div className="min-w-0 break-words">
               <p className="text-sm font-semibold text-white">{formatFeedItemTitle(item.type)}</p>
               <p className="mt-1 text-sm text-[var(--color-text-muted)]">{item.message}</p>
             </div>
@@ -77,7 +77,7 @@ export default function SocialFeed() {
               {item.visibility === 'friends' ? 'Friends' : 'Public'}
             </span>
           </div>
-          <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[var(--color-highlight)]">
+          <p className="mt-2 text-xs text-[var(--color-text-muted)]">
             {new Date(item.createdAt).toLocaleString()}
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function SocialFeed() {
         <button
           onClick={() => loadFeed(page + 1, true)}
           disabled={loadingMore}
-          className="w-full rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--color-surface-border)] disabled:cursor-not-allowed disabled:opacity-70"
+          className="fm-secondary w-full"
         >
           {loadingMore ? 'Loading more…' : 'Show more'}
         </button>

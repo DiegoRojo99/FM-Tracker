@@ -120,7 +120,7 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
 
   return (
     <div>
-      <div className="mb-6 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/60 p-4 sm:p-5">
+      <div className="fm-inset mb-5 p-4">
         <h2 className="mb-4 text-xl font-bold text-white">
           🔍 Search & Add Friends
         </h2>
@@ -129,11 +129,12 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
           <div className="flex-1">
             <input
               type="text"
+              aria-label="Search friends by name or email"
               placeholder="Search by name or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyPress}
-              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)] px-4 py-3 text-white placeholder:text-gray-400 focus:border-[var(--color-accent)] focus:outline-none"
+              className="fm-field placeholder:text-[var(--color-text-muted)]/70"
             />
           </div>
           <GradientButton
@@ -152,7 +153,8 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
         <div className="mb-4">
           <button
             onClick={() => setShowMessage(!showMessage)}
-            className="text-sm text-[var(--color-accent)] transition-colors hover:text-white"
+            aria-expanded={showMessage}
+            className="min-h-11 rounded text-left text-sm text-[var(--color-accent)] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
           >
             {showMessage ? '▼ Hide Message' : '▶ Add optional message to friend requests'}
           </button>
@@ -160,12 +162,13 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
           {showMessage && (
             <div className="mt-2">
               <textarea
+                aria-label="Optional friend request message"
                 placeholder="Leave a message with your friend request (optional)..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={3}
                 maxLength={200}
-                className="w-full resize-none rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)] px-4 py-3 text-white placeholder:text-gray-400 focus:border-[var(--color-accent)] focus:outline-none"
+                className="fm-field resize-none placeholder:text-[var(--color-text-muted)]/70"
               />
               <div className="text-gray-400 text-xs mt-1">
                 {message.length}/200 characters
@@ -188,11 +191,11 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
               return (
                 <div
                   key={searchUser.uid}
-                  className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/75 p-5 transition hover:border-[var(--color-accent)]/60"
+                  className="fm-inset p-4"
                 >
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="h-10 w-10 shrink-0 bg-[var(--color-primary)]/15 rounded-md flex items-center justify-center text-[var(--color-accent)] font-semibold text-lg">
                         {searchUser.displayName.charAt(0).toUpperCase()}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -272,7 +275,7 @@ export default function SearchFriends({ onUpdate, user }: SearchFriendsProps) {
 
       {/* Search Tips */}
       {!searchQuery && searchResults.length === 0 && (
-        <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/60 p-6">
+        <div className="fm-inset p-4">
           <h3 className="mb-3 font-semibold text-white">💡 Search Tips</h3>
           <ul className="text-gray-300 space-y-2 text-sm">
             <li>• Search by display name or email address</li>

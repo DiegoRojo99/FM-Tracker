@@ -44,10 +44,10 @@ export function SeasonCard({ season, onDelete, onEdit }: SeasonCardProps) {
     : "bg-rose-500/15 text-rose-300";
 
   return (
-    <div className="glass-panel h-full w-full overflow-hidden rounded-2xl p-4 transition-transform duration-300 hover:-translate-y-0.5">
+    <div className="fm-inset h-full w-full p-4">
       <div className="flex h-full w-full flex-col gap-4 text-white">
         <div className="flex items-start justify-between gap-3">
-          <div className="inline-flex items-center rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+          <div className="inline-flex items-center rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-2 py-1 font-mono text-xs font-semibold text-[var(--color-text-muted)]">
             {season.season}
           </div>
 
@@ -56,7 +56,7 @@ export function SeasonCard({ season, onDelete, onEdit }: SeasonCardProps) {
               <button
                 type="button"
                 onClick={() => onEdit(season)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] text-[var(--color-text-muted)] transition-colors hover:text-white"
+                className="fm-secondary h-11 w-11 p-0"
                 aria-label="Edit season"
               >
                 <Pencil className="h-4 w-4" />
@@ -66,7 +66,7 @@ export function SeasonCard({ season, onDelete, onEdit }: SeasonCardProps) {
               <button
                 type="button"
                 onClick={handleDelete}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-700 transition-colors hover:bg-rose-500/20"
+                className="fm-secondary h-11 w-11 p-0 text-[var(--color-danger-soft-text)]"
                 aria-label="Delete season"
               >
                 <Trash2 className="h-4 w-4" />

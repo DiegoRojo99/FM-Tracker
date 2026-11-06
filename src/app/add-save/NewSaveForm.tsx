@@ -36,7 +36,7 @@ export default function NewSaveForm() {
   const submitLockRef = useRef(false);
   const [requestId, setRequestId] = useState('');
 
-  const inputClass = 'w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-4 py-3 text-white focus:border-[var(--color-accent)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50';
+  const inputClass = 'fm-field';
 
   function buildRequestId(): string {
     if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -230,12 +230,12 @@ export default function NewSaveForm() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <div className="mb-6 rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/86 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
-        <p className="inline-flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">
+      <div className="mb-5">
+        <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">
           <Sparkles className="h-3.5 w-3.5" />
           New Career Save
         </p>
-        <h1 className="mt-4 text-3xl font-black text-white sm:text-4xl">Create New Save</h1>
+        <h1 className="mt-2 text-3xl font-semibold text-white">Create New Save</h1>
         <p className="mt-2 max-w-2xl text-sm text-[var(--color-text-muted)]">
           Pick your game version, choose your starting setup, and launch the next chapter of your manager story.
         </p>
@@ -245,10 +245,10 @@ export default function NewSaveForm() {
         </p>
       </div>
       
-      <form onSubmit={handleSubmit} className="space-y-5 rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-5 shadow-2xl backdrop-blur-sm sm:p-8">
+      <form onSubmit={handleSubmit} className="fm-panel space-y-4 p-4 sm:p-6">
         <div className="grid gap-2 sm:grid-cols-3">
           {[1, 2, 3].map((step) => (
-            <div key={step} className={`rounded-xl border px-3 py-2 text-xs font-semibold uppercase tracking-wide ${currentStep === step ? 'border-[var(--color-highlight)] bg-[var(--color-surface-soft)] text-white' : 'border-[var(--color-surface-border)] bg-[var(--color-darker)]/70 text-[var(--color-text-muted)]'}`}>
+            <div key={step} aria-current={currentStep === step ? 'step' : undefined} className={`rounded-md border px-3 py-2 text-xs font-semibold uppercase tracking-wide ${currentStep === step ? 'border-[var(--color-accent)] bg-[var(--color-primary)]/15 text-[var(--color-accent)]' : 'border-[var(--color-surface-border)] bg-[var(--color-darker)] text-[var(--color-text-muted)]'}`}>
               Step {step}: {step === 1 ? 'Setup' : step === 2 ? 'Team' : 'Review'}
             </div>
           ))}
@@ -256,7 +256,7 @@ export default function NewSaveForm() {
 
         {currentStep === 1 && (
           <>
-            <div className="space-y-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
+            <div className="fm-inset space-y-2 p-4">
               <label htmlFor="saveGameVersion" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
                 <Gamepad2 className="h-4 w-4 text-[var(--color-highlight)]" />
                 Game Version
@@ -283,11 +283,11 @@ export default function NewSaveForm() {
               </select>
             </div>
 
-            <div className="space-y-4 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
-              <label htmlFor="saveCountry" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
+            <div className="fm-inset space-y-3 p-4">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
                 <ClipboardList className="h-4 w-4 text-[var(--color-highlight)]" />
                 Starting Option
-              </label>
+              </p>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <button
@@ -296,11 +296,8 @@ export default function NewSaveForm() {
                     setIsNoTeam(false);
                     setSelectedTeam('');
                   }}
-                  className={`rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 ${
-                    !isNoTeam
-                      ? 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white shadow-lg'
-                      : 'border border-[var(--color-surface-border)] bg-[var(--color-dark)] text-gray-300'
-                  }`}
+                  aria-pressed={!isNoTeam}
+                  className="fm-choice"
                 >
                   Choose Team
                 </button>
@@ -312,11 +309,8 @@ export default function NewSaveForm() {
                     setSelectedCountry('');
                     setSelectedLeague('');
                   }}
-                  className={`rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 ${
-                    isNoTeam
-                      ? 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white shadow-lg'
-                      : 'border border-[var(--color-surface-border)] bg-[var(--color-dark)] text-gray-300'
-                  }`}
+                  aria-pressed={isNoTeam}
+                  className="fm-choice"
                 >
                   Unemployed
                 </button>
@@ -328,16 +322,16 @@ export default function NewSaveForm() {
         {currentStep === 2 && (
           <>
             {isNoTeam ? (
-              <div className="rounded-xl border border-dashed border-[var(--color-accent)] bg-[var(--color-dark)] p-6 text-center">
-                <div className="mb-4 text-6xl">🆓</div>
+              <div className="fm-inset border-dashed border-[var(--color-accent)] p-5 text-center">
+                <div className="mb-3 text-3xl">🆓</div>
                 <h3 className="mb-2 text-xl font-bold text-white">Unemployed Mode</h3>
                 <p className="text-gray-300">Start your career without a team and take your first job from the market.</p>
               </div>
             ) : (
               <>
                 <div className="grid gap-5 md:grid-cols-2">
-                  <div className="space-y-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
-                    <label className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
+                  <div className="fm-inset space-y-2 p-4">
+                    <label htmlFor="saveCountry" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
                       <Globe2 className="h-4 w-4 text-[var(--color-highlight)]" />
                       Country
                     </label>
@@ -363,7 +357,7 @@ export default function NewSaveForm() {
                     </select>
                   </div>
 
-                  <div className="space-y-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
+                  <div className="fm-inset space-y-2 p-4">
                     <label htmlFor="saveLeague" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white">
                       <ShieldCheck className="h-4 w-4 text-[var(--color-highlight)]" />
                       League
@@ -390,7 +384,7 @@ export default function NewSaveForm() {
                   </div>
                 </div>
 
-                <div className={`rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 transition-opacity duration-200 sm:p-5 ${!selectedLeague ? 'pointer-events-none opacity-50' : ''}`}>
+                <div className={`fm-inset p-4 transition-opacity duration-200 ${!selectedLeague ? 'pointer-events-none opacity-50' : ''}`}>
                   {!loadingTeams && (
                     <TeamGrid
                       teams={teams}
@@ -411,7 +405,7 @@ export default function NewSaveForm() {
 
         {currentStep === 3 && (
           <div className="space-y-4">
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 sm:p-5">
+            <div className="fm-inset p-4">
               <h3 className="text-lg font-bold text-white">Review Your Setup</h3>
               <ul className="mt-3 space-y-2 break-words text-sm text-[var(--color-text-muted)]">
                 <li>Game: <span className="font-semibold text-white">{selectedGameDetails?.name ?? 'Not selected'}</span></li>
@@ -426,8 +420,8 @@ export default function NewSaveForm() {
               </ul>
             </div>
 
-            <div className="rounded-2xl border border-[var(--color-highlight)]/40 bg-[var(--color-highlight)]/10 p-4 sm:p-5">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-highlight)]">Starter Challenge Recommendation</p>
+            <div className="fm-inset border-[var(--color-accent)]/40 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-accent)]">Starter Challenge Recommendation</p>
               <h4 className="mt-1 text-lg font-bold text-white">{starterChallengeTitle}</h4>
               <p className="mt-1 text-sm text-[var(--color-text-muted)]">{starterChallengeDescription}</p>
             </div>
@@ -441,14 +435,14 @@ export default function NewSaveForm() {
         )}
 
         {submitError && (
-          <div className="rounded-xl border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] px-4 py-3 text-sm text-[var(--color-danger-soft-text)]">
+          <div role="alert" className="rounded-md border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] px-4 py-3 text-sm text-[var(--color-danger-soft-text)]">
             {submitError}
           </div>
         )}
 
         {submitSuccess && (
-          <div className="inline-flex w-full items-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-3 text-sm text-white">
-            <CheckCircle2 className="h-4 w-4 text-[var(--color-highlight)]" />
+          <div role="status" className="inline-flex w-full items-center gap-2 rounded-md border border-[var(--color-success)]/40 bg-[var(--color-success)]/10 px-4 py-3 text-sm text-white">
+            <CheckCircle2 className="h-4 w-4 shrink-0 text-[var(--color-success)]" />
             {submitSuccess}
           </div>
         )}
@@ -458,7 +452,7 @@ export default function NewSaveForm() {
             type="button"
             onClick={() => setCurrentStep((prev) => (prev > 1 ? (prev - 1) as 1 | 2 | 3 : prev))}
             disabled={currentStep === 1 || savingGame}
-            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-6 py-3 font-semibold text-white transition hover:border-[var(--color-highlight)] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+            className="fm-secondary w-full sm:w-auto"
           >
             Back
           </button>
@@ -468,7 +462,7 @@ export default function NewSaveForm() {
               type="button"
               onClick={() => setCurrentStep((prev) => (prev < 3 ? (prev + 1) as 1 | 2 | 3 : prev))}
               disabled={!canProceedFromStep(currentStep)}
-              className="w-full rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:from-[var(--color-highlight)] hover:to-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+              className="fm-action w-full sm:w-auto"
             >
               Continue
             </button>
@@ -476,7 +470,7 @@ export default function NewSaveForm() {
             <button
               type="submit"
               disabled={!selectedGame || (!selectedTeam && !isNoTeam) || savingGame}
-              className="w-full rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] px-6 py-3 font-bold text-white shadow-lg transition-all duration-300 hover:from-[var(--color-highlight)] hover:to-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+              className="fm-action w-full sm:w-auto"
             >
               {savingGame
                 ? 'Creating Save...'

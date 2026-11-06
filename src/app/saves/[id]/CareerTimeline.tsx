@@ -42,7 +42,7 @@ export default function CareerTimeline({ saveDetails, onUpdateStint, onDeleteSti
     <div className="relative py-2">
       <div className="absolute bottom-2 left-3 top-2 w-px bg-[var(--color-surface-border)] sm:left-4" />
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {grouped.map(({ startDate, entries }, idx) => (
           <div key={idx} className="relative pl-8 sm:pl-10">
             <span className="absolute left-0 top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[var(--color-surface-border)] bg-[var(--color-dark)] text-[10px] font-semibold text-[var(--color-highlight)] sm:h-8 sm:w-8">
@@ -97,14 +97,14 @@ function CareerStintCard({
   };
 
   return (
-    <article className="relative rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-4 shadow-lg backdrop-blur-sm">
+    <article className="fm-inset relative p-3 sm:p-4">
       {/* Action buttons */}
       {isOwner && (onUpdate || onDelete) && (
         <div className="absolute right-3 top-3 flex gap-1">
           {onUpdate && (
             <button
               onClick={handleUpdate}
-              className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-1.5 text-[var(--color-text-muted)] transition hover:text-white"
+              className="fm-secondary h-11 w-11 p-0"
               title="Edit career stint"
             >
               <Pencil className="h-3.5 w-3.5" />
@@ -113,7 +113,7 @@ function CareerStintCard({
           {onDelete && (
             <button
               onClick={handleDelete}
-              className="rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-1.5 text-red-300 transition hover:text-red-200"
+              className="fm-secondary h-11 w-11 p-0 text-[var(--color-danger-soft-text)]"
               title="Delete career stint"
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -122,19 +122,19 @@ function CareerStintCard({
         </div>
       )}
 
-      <div className="flex items-start gap-3 pr-16">
+      <div className={`flex items-start gap-3 ${isOwner && (onUpdate || onDelete) ? 'pr-24' : ''}`}>
         {stint.team && stint.team.logo && (
           <Image
             width={72}
             height={72}
             src={stint.team.logo}
             alt={stint.team.name}
-            className="h-14 w-14 flex-none object-contain sm:h-16 sm:w-16"
+            className="h-10 w-10 flex-none object-contain sm:h-12 sm:w-12"
           />
         )}
 
         <div className="min-w-0">
-          <h4 className="truncate text-base font-bold text-white">{stint.team?.name}</h4>
+          <h4 className="break-words text-base font-semibold text-white">{stint.team?.name}</h4>
           <p className="mt-1 text-xs text-[var(--color-text-muted)]">
             {formatDate(stint.startDate)} - {stint.endDate ? formatDate(stint.endDate) : 'Present'}
           </p>

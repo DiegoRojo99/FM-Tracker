@@ -144,18 +144,19 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
 
   return (
     <div className="min-w-0">
-      <div className="mb-4 mt-2 flex flex-col gap-3 sm:mt-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">
+          <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">
             <CalendarDays className="h-3.5 w-3.5" />
             Campaign Log
           </p>
-          <h2 className="mt-1 text-xl font-black text-white">Seasons</h2>
+          <h2 className="mt-1 text-xl font-semibold text-white">Seasons</h2>
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">Every campaign phase in one scan-friendly grid.</p>
         </div>
 
         {saveDetails.isOwner && (
           <GradientButton
+            size="sm"
             className="w-full sm:w-auto"
             onClick={() => {
               setEditingSeason(null);
@@ -197,7 +198,7 @@ const SeasonSection: React.FC<SeasonSectionProps> = ({ saveDetails, setRefresh }
       )}
 
       {!sortedSeasons.length ? (
-        <div className="rounded-2xl border border-dashed border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-6 text-center">
+        <div className="fm-inset border-dashed p-5 text-center">
           <p className='text-sm text-[var(--color-text-muted)]'>No seasons available yet.</p>
         </div>
       ) : (
@@ -244,8 +245,7 @@ function SeasonStatChip({
   accentClass: string;
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2.5 sm:py-3">
-      <div className="pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-white/5 blur-2xl transition-opacity duration-300 group-hover:opacity-80" />
+    <div className="fm-inset px-3 py-2.5">
       <div className="relative min-w-0">
         <div className="flex items-center justify-between gap-2">
           <p className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)] sm:text-[11px]">{label}</p>
@@ -253,7 +253,7 @@ function SeasonStatChip({
             {icon}
           </div>
         </div>
-        <p className="mt-1 text-xl font-black leading-none text-white sm:text-2xl">{value}</p>
+        <p className="mt-1 font-mono text-xl font-semibold leading-none text-white">{value}</p>
       </div>
       <div className="sr-only">
         {label}: {value}

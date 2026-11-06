@@ -43,7 +43,7 @@ export const GradientButton: React.FC<GradientButtonProps> = ({
   const baseClasses = `
     ${sizeClasses[size]}
     ${widthClasses[width]}
-    inline-flex items-center justify-center gap-2
+    inline-flex min-h-11 items-center justify-center gap-2
     rounded-md font-bold
     border border-[var(--color-surface-border)]
     transition-colors duration-200
@@ -54,7 +54,7 @@ export const GradientButton: React.FC<GradientButtonProps> = ({
 
   const colorClasses = destructive
     ? 'bg-gradient-to-r from-[#b42318] to-[#d92d20] text-white'
-    : 'bg-linear-to-r/srgb from-[var(--color-highlight)] to-[var(--color-highlight-violet)] text-white';
+    : 'fm-action';
 
   return (
     <button

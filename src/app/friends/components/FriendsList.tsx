@@ -58,8 +58,8 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
 
   if (friends.length === 0) {
     return (
-      <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/55 py-12 text-center">
-        <div className="mb-4 text-6xl">👫</div>
+      <div className="fm-inset px-4 py-8 text-center">
+        <div className="mb-3 text-3xl">👫</div>
         <h3 className="mb-2 text-xl font-semibold text-white">
           No friends yet
         </h3>
@@ -86,10 +86,10 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
         {friends.map((friend) => (
           <div
             key={friend.uid}
-            className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-5 transition hover:-translate-y-0.5 hover:border-[var(--color-accent)]/60"
+            className="fm-inset p-4 transition-colors hover:border-[var(--color-accent)]/60"
           >
             <div className="flex items-center space-x-4 mb-4">
-              <div className="w-12 h-12 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white font-bold text-lg">
+              <div className="h-10 w-10 shrink-0 rounded-md bg-[var(--color-primary)]/15 flex items-center justify-center text-[var(--color-accent)] font-semibold text-lg">
                 {friend.displayName.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">

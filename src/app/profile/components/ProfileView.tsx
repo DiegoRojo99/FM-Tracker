@@ -212,7 +212,7 @@ export default function ProfileView({ userId }: ProfileViewProps) {
   if (userLoading || loading) {
     return (
       <div className="min-h-screen p-4 sm:p-6 lg:p-8">
-        <div className="mx-auto flex min-h-[60vh] max-w-6xl items-center justify-center rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-2xl backdrop-blur-sm">
+        <div className="fm-panel mx-auto flex min-h-[40vh] max-w-6xl items-center justify-center">
           <FootballLoader />
         </div>
       </div>
@@ -222,7 +222,7 @@ export default function ProfileView({ userId }: ProfileViewProps) {
   if (error) {
     return (
       <div className="min-h-screen p-4 sm:p-6 lg:p-8">
-        <div className="mx-auto flex min-h-[60vh] max-w-6xl items-center justify-center rounded-3xl border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] p-8 text-center shadow-2xl">
+        <div className="mx-auto flex min-h-[40vh] max-w-6xl items-center justify-center rounded-lg border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] p-6 text-center">
           <div>
             <div className="mb-4 text-6xl">😕</div>
             <h1 className="mb-2 text-2xl font-bold text-white">Profile Not Found</h1>
@@ -241,23 +241,23 @@ export default function ProfileView({ userId }: ProfileViewProps) {
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-6 rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-2xl backdrop-blur-sm sm:p-8">
+        <div className="fm-panel mb-5 p-4 sm:p-5">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-start gap-4 sm:gap-6">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-highlight)] text-2xl font-black text-white shadow-lg sm:h-24 sm:w-24 sm:text-3xl">
+            <div className="flex min-w-0 items-start gap-3 sm:gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md border border-[var(--color-accent)]/40 bg-[var(--color-primary)]/15 text-xl font-semibold text-[var(--color-accent)] sm:h-16 sm:w-16">
                 {profile.user.displayName.charAt(0).toUpperCase()}
               </div>
 
-              <div>
-                <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">
+              <div className="min-w-0">
+                <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">
                   <Sparkles className="h-3.5 w-3.5" />
                   Player Profile
                 </p>
-                <h1 className="mt-2 text-2xl font-black text-white sm:text-3xl">
+                <h1 className="mt-2 break-words text-2xl font-semibold text-white sm:text-3xl">
                   {profile.user.displayName}
                 </h1>
-                <p className="mt-1 text-sm text-gray-300 sm:text-base">{profile.user.email}</p>
-                <p className="mt-1 inline-flex items-center gap-2 text-sm text-[var(--color-text-muted)]">
+                <p className="mt-1 break-all text-sm text-[var(--color-text-muted)]">{profile.user.email}</p>
+                <p className="mt-1 inline-flex flex-wrap items-center gap-2 text-sm text-[var(--color-text-muted)]">
                   <Calendar className="h-3.5 w-3.5" />
                   Joined {getJoinDate()}
                 </p>
@@ -282,8 +282,8 @@ export default function ProfileView({ userId }: ProfileViewProps) {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-2xl backdrop-blur-sm sm:p-8">
-          <h2 className="mb-6 text-2xl font-black text-white">
+        <div className="fm-panel p-4 sm:p-5">
+          <h2 className="mb-4 break-words text-xl font-semibold text-white">
             📊 {profile.isOwnProfile ? 'Your' : `${profile.user.displayName}'s`} Career Statistics
           </h2>
 
@@ -295,18 +295,18 @@ export default function ProfileView({ userId }: ProfileViewProps) {
               { label: 'Promotions', value: profile.stats.totalPromotions, icon: <TrendingUp className="h-5 w-5" />, color: 'text-sky-400', border: 'border-sky-400/30' },
               { label: 'Active Saves', value: profile.stats.activeSaves, icon: <ShieldCheck className="h-5 w-5" />, color: 'text-[var(--color-accent)]', border: 'border-[var(--color-accent)]/30' },
             ].map(({ label, value, icon, color, border }) => (
-              <div key={label} className={`rounded-2xl border ${border} bg-[var(--color-darker)]/80 p-4`}>
+              <div key={label} className={`fm-inset ${border} p-3`}>
                 <div className={`mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide ${color}`}>
                   {icon}
                   {label}
                 </div>
-                <p className={`text-3xl font-black ${color}`}>{value}</p>
+                <p className={`font-mono text-2xl font-semibold ${color}`}>{value}</p>
               </div>
             ))}
           </div>
 
           {/* Achievements */}
-          <div className="mt-4 rounded-2xl border border-amber-400/25 bg-amber-400/6 p-5">
+          <div className="fm-inset mt-4 border-amber-400/25 p-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-400/15">
@@ -341,7 +341,7 @@ export default function ProfileView({ userId }: ProfileViewProps) {
 
           {/* Challenges + career row */}
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-4">
+            <div className="fm-inset p-3">
               <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-purple-400">
                 <Flag className="h-4 w-4" />
                 Challenges
@@ -352,7 +352,7 @@ export default function ProfileView({ userId }: ProfileViewProps) {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-4">
+            <div className="fm-inset p-3">
               <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-[var(--color-success)]">
                 <Crown className="h-4 w-4" />
                 Longest Save
@@ -365,7 +365,7 @@ export default function ProfileView({ userId }: ProfileViewProps) {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-4">
+            <div className="fm-inset p-3">
               <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-[var(--color-highlight)]">
                 <Users className="h-4 w-4" />
                 Favourite Teams
@@ -376,7 +376,7 @@ export default function ProfileView({ userId }: ProfileViewProps) {
           </div>
 
           {profile.isOwnProfile && profile.stats.activeSaves === 0 && (
-            <div className="mt-8 rounded-2xl border border-[var(--color-accent)] bg-[var(--color-accent)]/15 p-6 text-center">
+            <div className="fm-inset mt-5 border-[var(--color-accent)]/40 p-4 text-center">
               <div className="mb-4 text-4xl">🚀</div>
               <h3 className="mb-2 text-xl font-bold text-white">Ready to Start Your Journey?</h3>
               <p className="mb-4 text-gray-300">You haven&apos;t created any saves yet. Start your Football Manager career!</p>

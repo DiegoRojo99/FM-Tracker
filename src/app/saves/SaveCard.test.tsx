@@ -102,7 +102,7 @@ describe('companion save cards', () => {
     );
     expect(normal).toContain('disabled=""');
     expect(normal).toContain('type="submit"');
-    expect(normal).toContain('bg-linear-to-r/srgb from-[var(--color-highlight)] to-[var(--color-highlight-violet)] text-black');
+    expect(normal).toContain('fm-action');
     const destructive = renderToStaticMarkup(
       <GradientButton destructive>Delete</GradientButton>
     );

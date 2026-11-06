@@ -41,16 +41,18 @@ const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
 
   const completionClass =
     completionPercentage === 100
-      ? 'border-emerald-400/60 bg-emerald-500/12 text-emerald-300'
+      ? 'border-[var(--color-success)]/60 bg-[var(--color-success)]/10 text-[var(--color-success)]'
       : completionPercentage >= 50
-      ? 'border-[var(--color-highlight)]/60 bg-[var(--color-highlight)]/12 text-[var(--color-highlight)]'
+      ? 'border-[var(--color-accent)]/60 bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
       : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] text-[var(--color-text-muted)]';
 
   return (
-    <div className="h-fit overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 shadow-lg transition-all duration-200 hover:border-[var(--color-accent)]/60 hover:shadow-xl">
+    <div className="fm-panel h-fit overflow-hidden transition-colors hover:border-[var(--color-accent)]/60">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="flex w-full items-center justify-between gap-3 p-4 text-left transition-colors hover:bg-[var(--color-surface-soft)]"
+        aria-expanded={isExpanded}
+        aria-controls={`trophy-country-${country.code}`}
+        className="flex min-h-11 w-full items-center justify-between gap-3 p-3 text-left transition-colors hover:bg-[var(--color-surface-soft)] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[var(--color-accent)]"
       >
         <div className="flex min-w-0 items-center gap-3">
           <Image
@@ -88,7 +90,7 @@ const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
       </button>
 
       {isExpanded && (
-        <div className="border-t border-[var(--color-surface-border)] bg-[var(--color-darker)]/45">
+        <div id={`trophy-country-${country.code}`} className="border-t border-[var(--color-surface-border)] bg-[var(--color-darker)]">
           <ul className="divide-y divide-[var(--color-surface-border)]">
             {comps.map((comp, index) => {
               const won = hasWon(comp.id);
@@ -111,7 +113,7 @@ const TrophyCountry: React.FC<TrophyCountryProps> = ({ country, trophies }) => {
                       unoptimized
                     />
                   ) : <div className="h-5 w-5 flex-shrink-0 rounded bg-[var(--color-surface-strong)]" />}
-                  <span className={`flex-1 text-sm ${
+                  <span className={`min-w-0 flex-1 break-words text-sm ${
                     won 
                       ? 'font-medium text-emerald-300' 
                       : 'text-gray-300'
