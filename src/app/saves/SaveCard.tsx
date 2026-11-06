@@ -1,7 +1,7 @@
 import { PreviewSave } from "@/lib/types/prisma/Save";
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2 } from "lucide-react";
+import { ArrowUpRight, Trash2 } from "lucide-react";
 
 export function SaveCard({ save, handleDelete, isPendingDelete }: { save: PreviewSave, handleDelete: (event: React.MouseEvent<HTMLButtonElement>, saveId: string) => void, isPendingDelete?: boolean }) {
   const teamName = save.currentClub?.name ?? save.currentNT?.name ?? 'No Team';
@@ -9,8 +9,8 @@ export function SaveCard({ save, handleDelete, isPendingDelete }: { save: Previe
 
   if (isPendingDelete) {
     return (
-      <article className="group relative overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-lg backdrop-blur-sm opacity-70">
-        <div className="p-4 text-center text-sm text-[var(--color-text-muted)]">
+      <article className="overflow-hidden rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-dark)] opacity-70" aria-busy="true">
+        <div className="p-4 text-center text-sm text-[var(--color-text-muted)]" role="status">
           Removing save…
         </div>
       </article>
@@ -18,48 +18,48 @@ export function SaveCard({ save, handleDelete, isPendingDelete }: { save: Previe
   }
 
   return (
-    <article className="group relative overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 shadow-lg backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-[var(--color-accent)]/70">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[var(--color-accent)]/8 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
-
-      <Link href={`/saves/${save.id}`} className="relative block h-full p-4">
-        <div className="mb-3 flex items-start justify-between gap-2">
-          <div>
-            <p className="text-sm font-semibold text-white">{save.season ?? '2023/24'}</p>
-            <p className="mt-1 text-xs uppercase tracking-[0.15em] text-[var(--color-text-muted)]">
-              {save.game.shortName ?? 'Unknown Game'}
-            </p>
-          </div>
-
-          {save.currentLeague?.logoUrl && (
-            <div className="rounded-lg bg-black/20 p-1.5">
-              <Image
-                src={save.currentLeague?.logoUrl}
-                alt={save.currentLeague?.name}
-                width={128}
-                height={128}
-                className="h-10 w-auto max-w-28 object-contain"
-              />
-            </div>
-          )}
+    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-dark)] transition-colors hover:border-[var(--color-accent)] focus-within:border-[var(--color-accent)]">
+      <Link href={`/saves/${save.id}`} className="flex flex-1 flex-col p-4 transition-colors hover:bg-[var(--color-surface-soft)] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[var(--color-accent)]">
+        <div className="mb-4 flex items-center justify-between gap-2">
+          <span className="rounded border border-[var(--color-accent)]/30 bg-[var(--color-primary)]/15 px-2 py-1 text-xs font-semibold text-[var(--color-accent)]">
+            {save.game.shortName ?? 'Unknown Game'}
+          </span>
+          <ArrowUpRight className="h-4 w-4 shrink-0 text-[var(--color-text-muted)] group-hover:text-[var(--color-accent)]" aria-hidden="true" />
         </div>
 
-        <div className="flex min-h-[150px] flex-col items-center justify-center gap-2 pb-6 text-center">
+        <div className="flex items-center gap-3">
           <Image
             src={teamLogo}
             alt={teamName}
             width={120}
             height={120}
-            className="h-20 w-20 object-contain"
+            className="h-12 w-12 shrink-0 object-contain"
           />
-          <h2 className="line-clamp-2 max-w-full break-words text-lg font-bold text-white">{teamName}</h2>
+          <div className="min-w-0">
+            <h2 className="break-words text-base font-semibold text-[var(--color-foreground)]">{teamName}</h2>
+            <p className="mt-1 font-mono text-xs text-[var(--color-text-muted)]">{save.season ?? '2023/24'}</p>
+          </div>
         </div>
       </Link>
-
-      <div className="absolute bottom-3 right-3">
+      <div className="flex items-center justify-between gap-3 border-t border-[var(--color-surface-border)] px-4 py-2">
+        <div className="flex min-w-0 items-center gap-2">
+          {save.currentLeague?.logoUrl && (
+            <Image
+              src={save.currentLeague.logoUrl}
+              alt=""
+              width={32}
+              height={32}
+              className="h-6 w-6 shrink-0 object-contain"
+            />
+          )}
+          <p className="truncate text-xs text-[var(--color-text-muted)]" title={save.currentLeague?.name}>
+            {save.currentLeague?.name ?? 'No current league'}
+          </p>
+        </div>
         <button
           type="button"
           onClick={(event) => handleDelete(event, save.id)}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] text-[var(--color-danger-soft-text)] transition hover:scale-105 hover:bg-red-500/25"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-[var(--color-danger-soft-text)] transition-colors hover:bg-[var(--color-danger-soft-bg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-error)]"
           aria-label={`Delete save ${teamName}`}
         >
           <Trash2 className="h-4 w-4" />

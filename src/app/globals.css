@@ -6,7 +6,8 @@
   --fm-horizon: #af78ff;
   --fm-cloud: #d2c8f5;
   --fm-air: #e6e6fa;
-  --fm-highlight-pink: #e664ff;
+  --fm-highlight-pink: #ff0073;
+  --fm-highlight-violet: #bf00ff;
   --fm-highlight-red: #ff4164;
   --fm-highlight-orange: #ff5a28;
 
@@ -17,9 +18,9 @@
   --highlight: var(--fm-highlight-pink);
   --background: var(--fm-midnight);
   --foreground: var(--fm-air);
-  --surface: #1b1733;
-  --text-muted: #c1b7e6;
-  --success: #9f89ff;
+  --surface: #182036;
+  --text-muted: var(--fm-cloud);
+  --success: #6ee7b7;
   --error: var(--fm-highlight-red);
 
   --surface-strong: #ffffff10;
@@ -30,7 +31,7 @@
   --glass-bg-end: #ffffff0f;
   --shadow-soft: #00000033;
   --shadow-card: #0000002b;
-  --shadow-highlight: #e664ff55;
+  --shadow-highlight: #ff007326;
   --danger-soft-bg: #ff41641a;
   --danger-soft-border: #ff416466;
   --danger-soft-text: #ff9e9e;
@@ -42,6 +43,7 @@
   --color-primary: var(--primary);
   --color-accent: var(--accent);
   --color-highlight: var(--highlight);
+  --color-highlight-violet: var(--fm-highlight-violet);
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-foreground: var(--foreground);
@@ -64,11 +66,7 @@
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(60rem 42rem at -10% -20%, #6e0fd733 0%, transparent 55%),
-    radial-gradient(60rem 42rem at 115% -20%, #e664ff33 0%, transparent 50%),
-    radial-gradient(44rem 28rem at 50% 120%, #af78ff2a 0%, transparent 55%),
-    linear-gradient(180deg, #0a0f1e 0%, #0a0f1e 55%, #080c18 100%);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
   text-rendering: optimizeLegibility;
@@ -79,8 +77,8 @@ a {
 }
 
 ::selection {
-  background: #e664ff66;
-  color: #0a0f1e;
+  background: var(--fm-cloud);
+  color: var(--fm-midnight);
 }
 
 .glass-panel {
