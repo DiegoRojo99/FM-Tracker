@@ -22,10 +22,12 @@ export default function TeamGrid({ teams, selectedTeamId, onSelect }: Props) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4 max-h-96 overflow-y-auto pr-2">
       {teams.map((team) => (
-        <div
+        <button
+          type="button"
           key={team.id}
           onClick={() => onSelect(team.id.toString())}
-          className={`rounded-xl border p-4 cursor-pointer text-center shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg
+          aria-pressed={selectedTeamId === team.id.toString()}
+          className={`min-w-0 rounded-xl border p-4 cursor-pointer text-center shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]
             ${selectedTeamId === team.id.toString()
               ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/15'
               : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] hover:border-[var(--color-accent)]/60'}`}
@@ -38,8 +40,8 @@ export default function TeamGrid({ teams, selectedTeamId, onSelect }: Props) {
             height={48}
             loading="lazy"
           />
-          <p className="text-sm font-medium text-white leading-tight">{team.name}</p>
-        </div>
+          <p className="break-words text-sm font-medium text-white leading-tight">{team.name}</p>
+        </button>
       ))}
     </div>
   );

@@ -279,14 +279,14 @@ export default function SavesPage() {
               <h2 className="mt-1 text-xl font-black text-white">Complete your first milestone loop</h2>
             </div>
             <span className="rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs font-semibold text-[var(--color-text-muted)]">
-              {onboardingStepsDone}/3 complete
+              {onboardingStepsDone}/2 complete
             </span>
           </div>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className={`rounded-xl border p-3 ${hasFirstSave ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
               <p className="text-sm font-semibold text-white">First Save</p>
-              <p className="mt-1 text-xs text-[var(--color-text-muted)]">Create your first tracked career save.</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">Choose FM27 or an older game version and create your first tracked career save.</p>
             </div>
             <div className={`rounded-xl border p-3 ${hasFirstMilestone ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
               <p className="text-sm font-semibold text-white">First Milestone</p>

@@ -60,6 +60,10 @@ export default function LandingPage() {
             <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--text-muted)] sm:text-lg">
               FM Tracker keeps your Football Manager story in one place, from first promotion to continental glory.
             </p>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-muted)]">
+              Track FM27 alongside your older careers. Start with a men&apos;s or women&apos;s club, or begin unemployed.
+              Choose the matching game version when creating each save.
+            </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
                 href="/saves"

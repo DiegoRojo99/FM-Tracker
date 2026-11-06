@@ -16,6 +16,18 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Tracking FM27
+
+New saves default to FM27 (starting season `2026/27`). Choose another active game
+version to track an older career; existing saves retain their original version.
+For a club start, choose a country, a men's or women's domestic league, and a
+team. Changing the game version, country, or league clears dependent selections.
+Review the displayed game and team names before creating the save, or choose
+Unemployed and add your first appointment later.
+
+Game selectors use game names and save cards use short names such as `FM27`.
+FM27 uses the existing FM Tracker branding; no third-party FM27 artwork is needed.
+
 ## Analytics
 
 Vercel Analytics is enabled in the root layout via `@vercel/analytics`.

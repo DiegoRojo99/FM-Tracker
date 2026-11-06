@@ -51,7 +51,7 @@ export function SaveCard({ save, handleDelete, isPendingDelete }: { save: Previe
             height={120}
             className="h-20 w-20 object-contain"
           />
-          <h2 className="line-clamp-2 text-lg font-bold text-white">{teamName}</h2>
+          <h2 className="line-clamp-2 max-w-full break-words text-lg font-bold text-white">{teamName}</h2>
         </div>
       </Link>
 
