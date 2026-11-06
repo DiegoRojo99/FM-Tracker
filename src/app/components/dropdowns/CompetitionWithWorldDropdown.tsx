@@ -81,17 +81,17 @@ const CompetitionWithWorldDropdown: React.FC<CompetitionWithWorldDropdownProps> 
       value={value || ''}
       onChange={handleChange}
       disabled={loading}
-      className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+      className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
     >
-      <option value="" className="bg-[var(--color-darker)] text-white">
+      <option value="" className="bg-[var(--color-darker)] text-[var(--color-foreground)]">
         {loading ? 'Loading...' : placeholder}
       </option>
       
       {/* National Competitions */}
       {nationalCompetitions.length > 0 && (
-        <optgroup label={`National Competitions${genderSuffix}`} className="bg-[var(--color-darker)] text-white font-semibold">
+        <optgroup label={`National Competitions${genderSuffix}`} className="bg-[var(--color-darker)] text-[var(--color-foreground)] font-semibold">
           {nationalCompetitions.map(comp => (
-            <option key={comp.id} value={comp.id} className="bg-[var(--color-darker)] text-white pl-4">
+            <option key={comp.id} value={comp.id} className="bg-[var(--color-darker)] text-[var(--color-foreground)] pl-4">
               {comp.name}
             </option>
           ))}
@@ -100,9 +100,9 @@ const CompetitionWithWorldDropdown: React.FC<CompetitionWithWorldDropdownProps> 
       
       {/* International Competitions */}
       {worldCompetitions.length > 0 && (
-        <optgroup label={`International Competitions${genderSuffix}`} className="bg-[var(--color-darker)] text-white font-semibold">
+        <optgroup label={`International Competitions${genderSuffix}`} className="bg-[var(--color-darker)] text-[var(--color-foreground)] font-semibold">
           {worldCompetitions.map(comp => (
-            <option key={comp.id} value={comp.id} className="bg-[var(--color-darker)] text-white pl-4">
+            <option key={comp.id} value={comp.id} className="bg-[var(--color-darker)] text-[var(--color-foreground)] pl-4">
               {comp.name}
             </option>
           ))}

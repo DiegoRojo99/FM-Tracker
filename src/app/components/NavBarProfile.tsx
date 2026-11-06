@@ -1,11 +1,11 @@
 'use client'
 
-import Link from "next/link";
+import NavigationLink from "./NavigationLink";
 import { useAuth } from "./AuthProvider";
 import { useState, useRef, useEffect } from "react";
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/db/firebase';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface FriendRequestsCount {
   pendingCount: number
@@ -16,6 +16,10 @@ export function NavBarProfile() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
+  const accountPageActive = ['/profile', '/friends', '/add-save'].some(
+    path => pathname === path || pathname?.startsWith(`${path}/`)
+  );
   const [pendingCount, setPendingCount] = useState(0);
 
   // Close dropdown when clicking outside
@@ -77,9 +81,9 @@ export function NavBarProfile() {
   if (!user) {
     return (
       <div className="hidden md:flex items-center space-x-4">
-        <Link href="/login" className="rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-medium hover:bg-[var(--color-surface-strong)] transition-colors">
+        <NavigationLink href="/login" className="rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-medium hover:bg-[var(--color-surface-strong)] transition-colors">
           Login
-        </Link>
+        </NavigationLink>
       </div>
     );
   }
@@ -87,17 +91,19 @@ export function NavBarProfile() {
   return (
     <div className="hidden md:flex items-center space-x-4 relative" ref={dropdownRef}>
       <button
+        data-active={accountPageActive}
+        aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-3 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 px-3 py-2 text-white shadow-[0_6px_18px_var(--color-shadow-soft)] backdrop-blur-sm transition-colors hover:bg-[var(--color-dark)]"
+        className="fm-account-menu flex items-center space-x-3 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 px-3 py-2 text-[var(--color-foreground)] shadow-[0_6px_18px_var(--color-shadow-soft)] backdrop-blur-sm transition-colors hover:bg-[var(--color-dark)]"
       >
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-accent)] text-sm font-bold text-white shadow-[0_0_16px_var(--color-shadow-highlight)]">
           {user.displayName?.charAt(0)?.toUpperCase() || user.email?.charAt(0)?.toUpperCase() || '?'}
         </div>
-        <span className="max-w-32 truncate text-sm font-semibold text-white">
+        <span className="max-w-32 truncate text-sm font-semibold">
           {user.displayName || user.email}
         </span>
         <svg 
-          className={`h-4 w-4 text-gray-300 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`h-4 w-4 text-[var(--color-text-muted)] transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"
@@ -109,36 +115,36 @@ export function NavBarProfile() {
       {isOpen && (
         <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/97 shadow-2xl backdrop-blur-sm">
           <div className="border-b border-[var(--color-surface-border)] p-3">
-            <p className="text-white font-semibold truncate">{user.displayName || 'User'}</p>
-            <p className="truncate text-sm text-gray-300">{user.email}</p>
+            <p className="text-[var(--color-foreground)] font-semibold truncate">{user.displayName || 'User'}</p>
+            <p className="truncate text-sm text-[var(--color-text-muted)]">{user.email}</p>
           </div>
           
           <div className="py-2">
-            <Link 
+            <NavigationLink
               href="/profile" 
-              className="flex items-center px-4 py-2 text-gray-200 transition-colors hover:bg-[var(--color-surface-strong)] hover:text-white"
+              className="flex items-center px-4 py-2 text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-foreground)]"
               onClick={() => setIsOpen(false)}
             >
               <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
               View Profile
-            </Link>
+            </NavigationLink>
             
-            <Link 
+            <NavigationLink
               href="/add-save" 
-              className="flex items-center px-4 py-2 text-gray-200 transition-colors hover:bg-[var(--color-surface-strong)] hover:text-white"
+              className="flex items-center px-4 py-2 text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-foreground)]"
               onClick={() => setIsOpen(false)}
             >
               <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
               Add Save
-            </Link>
+            </NavigationLink>
             
-            <Link 
+            <NavigationLink
               href="/friends" 
-              className="flex items-center px-4 py-2 text-gray-200 transition-colors hover:bg-[var(--color-surface-strong)] hover:text-white"
+              className="flex items-center px-4 py-2 text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-foreground)]"
               onClick={() => setIsOpen(false)}
             >
               <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,13 +158,13 @@ export function NavBarProfile() {
                   </span>
                 )}
               </div>
-            </Link>
+            </NavigationLink>
           </div>
 
           <div className="border-t border-[var(--color-surface-border)] py-2">
             <button 
               onClick={handleLogout}
-              className="flex w-full items-center px-4 py-2 text-red-300 transition-colors hover:bg-red-500/20 hover:text-red-200"
+              className="flex w-full items-center px-4 py-2 text-red-700 dark:text-red-300 transition-colors hover:bg-red-500/20 hover:text-red-700 dark:hover:text-red-200"
             >
               <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

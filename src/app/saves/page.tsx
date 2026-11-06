@@ -137,15 +137,15 @@ export default function SavesPage() {
             <div className="h-8 w-48 rounded bg-[var(--color-surface-soft)]" />
             <div className="h-4 w-40 rounded bg-[var(--color-surface-soft)]" />
           </div>
-          <div className="h-10 w-44 rounded-xl bg-[var(--color-surface-soft)]" />
+          <div className="h-10 w-44 rounded-md bg-[var(--color-surface-soft)]" />
         </div>
 
-        <div className="mb-7 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-lg backdrop-blur-sm">
+        <div className="mb-5 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-dark)] p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="h-5 w-20 rounded bg-[var(--color-surface-soft)]" />
             <div className="grid w-full gap-3 sm:w-auto sm:grid-cols-2">
-              <div className="h-[58px] w-full rounded-xl bg-[var(--color-surface-soft)] sm:w-64" />
-              <div className="h-[58px] w-full rounded-xl bg-[var(--color-surface-soft)] sm:w-44" />
+              <div className="h-[58px] w-full rounded-md bg-[var(--color-surface-soft)] sm:w-64" />
+              <div className="h-[58px] w-full rounded-md bg-[var(--color-surface-soft)] sm:w-44" />
             </div>
           </div>
         </div>
@@ -162,8 +162,8 @@ export default function SavesPage() {
   if (!user) {
     return (
       <div className="mx-auto max-w-5xl p-6 sm:p-8">
-        <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-6 text-center shadow-xl backdrop-blur-sm sm:p-8">
-          <h1 className="text-2xl font-bold text-white">Your Saves</h1>
+        <div className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-dark)] p-6 text-center sm:p-8">
+          <h1 className="text-2xl font-bold text-[var(--color-foreground)]">Your Saves</h1>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Please log in to view and manage your career saves.</p>
           <Link href="/login" className="mt-5 inline-block">
             <GradientButton>
@@ -187,26 +187,26 @@ export default function SavesPage() {
       <div className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Career Hub</p>
-            <h1 className="mt-1 text-3xl font-black text-white">Your Saves</h1>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Career Hub</p>
+            <h1 className="mt-1 text-3xl font-semibold text-[var(--color-foreground)]">Your Saves</h1>
             <p className="mt-2 text-sm text-[var(--color-text-muted)]">Build your timeline, one save at a time.</p>
           </div>
           <Link href="/add-save" className="inline-block">
-            <GradientButton className="inline-flex items-center gap-2">
+            <GradientButton size="sm" className="inline-flex items-center gap-2">
               <PlusCircle className="h-4 w-4" />
               Create New Save
             </GradientButton>
           </Link>
         </div>
 
-        <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-8 text-center shadow-xl backdrop-blur-sm">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-surface-soft)] text-[var(--color-highlight)]">
+        <div className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-dark)] p-8 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg bg-[var(--color-surface-soft)] text-[var(--color-accent)]">
             <SaveIcon className="h-7 w-7" />
           </div>
-          <h2 className="text-xl font-bold text-white">No saves yet</h2>
+          <h2 className="text-xl font-bold text-[var(--color-foreground)]">No saves yet</h2>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Create your first save and start tracking your FM legacy.</p>
           <div className="mt-5">
-            <Link href="/trophies" className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+            <Link href="/trophies" className="inline-flex rounded-md border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-[var(--color-foreground)] transition hover:border-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]">
               Explore Trophy Tracker
             </Link>
           </div>
@@ -218,35 +218,35 @@ export default function SavesPage() {
   return (
     <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
       {createdContext && (
-        <div className="mb-6 rounded-2xl border border-[var(--color-highlight)]/45 bg-[var(--color-highlight)]/10 p-5 shadow-lg backdrop-blur-sm">
-          <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">
+        <div className="mb-6 rounded-lg border border-[var(--color-success)]/40 bg-[var(--color-dark)] p-4">
+          <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-success)]">
             <CheckCircle2 className="h-3.5 w-3.5" />
             First Value Unlocked
           </p>
-          <h2 className="mt-2 text-2xl font-black text-white">Your save is live. Keep momentum going.</h2>
+          <h2 className="mt-2 text-xl font-semibold text-[var(--color-foreground)]">Your save is live. Keep momentum going.</h2>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Start by logging milestones and growing your career timeline.</p>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/70 p-3">
               <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Saves</p>
-              <p className="mt-1 text-2xl font-black text-white">{saves.length}</p>
+              <p className="mt-1 text-2xl font-black text-[var(--color-foreground)]">{saves.length}</p>
             </div>
             <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/70 p-3">
               <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Trophy Groups Won</p>
-              <p className="mt-1 text-2xl font-black text-white">{trophyGroupsCount}</p>
+              <p className="mt-1 text-2xl font-black text-[var(--color-foreground)]">{trophyGroupsCount}</p>
             </div>
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <Link href="/trophies" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+            <Link href="/trophies" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-[var(--color-foreground)] transition hover:border-[var(--color-highlight)]">
               <Trophy className="h-4 w-4" />
               Log Trophy Progress
             </Link>
-            <Link href="/friends" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+            <Link href="/friends" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-[var(--color-foreground)] transition hover:border-[var(--color-highlight)]">
               <Users className="h-4 w-4" />
               Discover Friends
             </Link>
-            <Link href="/profile" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+            <Link href="/profile" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-[var(--color-foreground)] transition hover:border-[var(--color-highlight)]">
               <Compass className="h-4 w-4" />
               Open Profile
             </Link>
@@ -256,15 +256,15 @@ export default function SavesPage() {
 
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Career Hub</p>
-          <h1 className="mt-1 text-3xl font-black text-white">Your Saves</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Career Hub</p>
+          <h1 className="mt-1 text-3xl font-semibold text-[var(--color-foreground)]">Your Saves</h1>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">
             {filteredSaves.length} of {saves.length} saves visible
           </p>
         </div>
 
         <Link href="/add-save" className="inline-block">
-          <GradientButton className="inline-flex items-center gap-2">
+          <GradientButton size="sm" className="inline-flex items-center gap-2">
             <PlusCircle className="h-4 w-4" />
             Create New Save
           </GradientButton>
@@ -272,11 +272,11 @@ export default function SavesPage() {
       </div>
 
       {showOnboardingChecklist && (
-        <div className="mb-7 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-lg backdrop-blur-sm">
+        <div className="mb-5 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-dark)] p-4">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Onboarding Checklist</p>
-              <h2 className="mt-1 text-xl font-black text-white">Complete your first milestone loop</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Onboarding Checklist</p>
+              <h2 className="mt-1 text-lg font-semibold text-[var(--color-foreground)]">Complete your first milestone loop</h2>
             </div>
             <span className="rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs font-semibold text-[var(--color-text-muted)]">
               {onboardingStepsDone}/2 complete
@@ -284,35 +284,35 @@ export default function SavesPage() {
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className={`rounded-xl border p-3 ${hasFirstSave ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
-              <p className="text-sm font-semibold text-white">First Save</p>
+            <div className={`rounded-md border p-3 ${hasFirstSave ? 'border-[var(--color-success)]/40 bg-[var(--color-success)]/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
+              <p className="text-sm font-semibold text-[var(--color-foreground)]">First Save</p>
               <p className="mt-1 text-xs text-[var(--color-text-muted)]">Choose FM27 or an older game version and create your first tracked career save.</p>
             </div>
-            <div className={`rounded-xl border p-3 ${hasFirstMilestone ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
-              <p className="text-sm font-semibold text-white">First Milestone</p>
+            <div className={`rounded-md border p-3 ${hasFirstMilestone ? 'border-[var(--color-success)]/40 bg-[var(--color-success)]/10' : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]'}`}>
+              <p className="text-sm font-semibold text-[var(--color-foreground)]">First Milestone</p>
               <p className="mt-1 text-xs text-[var(--color-text-muted)]">Record your first trophy milestone.</p>
             </div>
           </div>
         </div>
       )}
       
-      <div className="mb-7 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-lg backdrop-blur-sm">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div className="inline-flex items-center gap-2 pt-2 text-sm font-semibold text-gray-200">
-            <SlidersHorizontal className="h-4 w-4 text-[var(--color-highlight)]" />
+      <div className="mb-5 rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-dark)] p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-foreground)]">
+            <SlidersHorizontal className="h-4 w-4 text-[var(--color-accent)]" />
             Filters
           </div>
 
           <div className="grid w-full gap-3 sm:w-auto sm:grid-cols-2">
             <div className="w-full sm:w-64">
-              <label htmlFor="gameFilter" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-300">
+              <label htmlFor="gameFilter" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
                 Game Version
               </label>
               <select
                 id="gameFilter"
                 value={selectedGameFilter}
                 onChange={(e) => setSelectedGameFilter(e.target.value)}
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-white focus:border-[var(--color-accent)] focus:outline-none"
+                className="min-h-11 w-full rounded-md border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
               >
                 <option value="all">All Games</option>
                 {games.map((game) => (
@@ -324,14 +324,14 @@ export default function SavesPage() {
             </div>
 
             <div className="w-full sm:w-44">
-              <label htmlFor="sortOrder" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-300">
+              <label htmlFor="sortOrder" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
                 Sort by
               </label>
               <select
                 id="sortOrder"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value as 'latest' | 'oldest')}
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-white focus:border-[var(--color-accent)] focus:outline-none"
+                className="min-h-11 w-full rounded-md border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
               >
                 <option value="latest">Latest updated</option>
                 <option value="oldest">Oldest updated</option>
@@ -342,14 +342,14 @@ export default function SavesPage() {
       </div>
 
       {filteredSaves.length === 0 ? (
-        <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 py-12 text-center shadow-lg backdrop-blur-sm">
+        <div className="rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-dark)] px-4 py-12 text-center">
           <p className="text-sm text-[var(--color-text-muted)]">
             {selectedGameFilter === 'all'
               ? 'No saves found yet. Create one to start tracking your FM legacy.'
               : `No saves found for ${selectedGameName}. Try switching the game filter.`}
           </p>
           <Link href="/add-save" className="mt-4 inline-block">
-            <GradientButton className="inline-flex items-center gap-2">
+            <GradientButton size="sm" className="inline-flex items-center gap-2">
               <PlusCircle className="h-4 w-4" />
               Create New Save
             </GradientButton>

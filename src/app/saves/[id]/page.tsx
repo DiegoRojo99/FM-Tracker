@@ -73,29 +73,24 @@ export default function SavePage() {
 
   return (
     <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
-      <section className="relative overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-5 shadow-2xl backdrop-blur-sm sm:p-8">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute left-[8%] top-[-3rem] h-40 w-40 rounded-full bg-[var(--color-highlight)]/15 blur-3xl" />
-          <div className="absolute right-[8%] top-[10%] h-48 w-48 rounded-full bg-[var(--color-accent)]/20 blur-3xl" />
-        </div>
-
+      <section className="fm-panel p-4 sm:p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-          <div>
+          <div className="min-w-0">
             <Link
               href="/saves"
-              className="mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)] transition hover:opacity-90"
+              className="mb-3 inline-flex min-h-11 items-center gap-2 rounded text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)] transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               Back to Saves
             </Link>
 
-            <h1 className="text-3xl font-black text-white sm:text-4xl">{saveLabel}</h1>
+            <h1 className="break-words text-3xl font-semibold text-[var(--color-foreground)]">{saveLabel}</h1>
             <p className="mt-2 text-sm text-[var(--color-text-muted)]">
               {saveDetails.game?.name || 'FM Save'} | Current season {saveDetails.season}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3">
+          <div className="grid shrink-0 grid-cols-3 gap-2">
             <StatChip
               label="Stints"
               value={String(stintsCount)}
@@ -119,20 +114,20 @@ export default function SavePage() {
 
       </section>
 
-      <div className="mt-6 grid gap-6">
-        <section id="stints" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+      <div className="mt-5 grid gap-5">
+        <section id="stints" className="fm-panel p-4 sm:p-5">
           <CareerStintsSection saveDetails={saveDetails} setRefresh={setRefresh} />
         </section>
 
-        <section id="seasons" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+        <section id="seasons" className="fm-panel p-4 sm:p-5">
           <SeasonSection saveDetails={saveDetails} setRefresh={setRefresh} />
         </section>
 
-        <section id="trophies" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+        <section id="trophies" className="fm-panel p-4 sm:p-5">
           <TrophyCase save={saveDetails} setRefresh={setRefresh} />
         </section>
 
-        <section id="challenges" className="min-w-0 overflow-hidden rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 p-4 shadow-xl backdrop-blur-sm sm:p-6">
+        <section id="challenges" className="fm-panel p-4 sm:p-5">
           <ChallengeSection challenges={saveDetails.challenges ?? []} />
         </section>
       </div>
@@ -152,13 +147,13 @@ function StatChip({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-3">
-      <div className="flex items-center gap-2 text-[var(--color-highlight)]">
+    <div className="fm-inset p-3">
+      <div className="flex items-center gap-2 text-[var(--color-accent)]">
         {icon}
         <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{label}</p>
       </div>
-      <div className="mt-4 flex items-baseline justify-start gap-2">
-        <p className="text-xl font-black leading-none text-white">{value}</p>
+      <div className="mt-2 flex flex-wrap items-baseline justify-start gap-1">
+        <p className="font-mono text-xl font-semibold leading-none text-[var(--color-foreground)]">{value}</p>
         <p className="text-[12px] leading-none text-[var(--color-text-muted)]">{subtitle}</p>
       </div>
     </div>

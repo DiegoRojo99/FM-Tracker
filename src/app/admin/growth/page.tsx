@@ -73,7 +73,7 @@ export default function AdminGrowthPage() {
   }, [user, userLoading, fetchStats]);
 
   const cardClass = 'rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-xl';
-  const numClass = 'text-3xl font-black text-white';
+  const numClass = 'text-3xl font-black text-[var(--color-foreground)]';
   const labelClass = 'mt-1 text-sm text-[var(--color-text-muted)]';
 
   return (
@@ -84,7 +84,7 @@ export default function AdminGrowthPage() {
             <Activity className="h-3.5 w-3.5" />
             Growth & Engagement
           </p>
-          <h1 className="mt-2 text-3xl font-black text-white sm:text-4xl">Funnel & Retention</h1>
+          <h1 className="mt-2 text-3xl font-black text-[var(--color-foreground)] sm:text-4xl">Funnel & Retention</h1>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">
             Computed from the first-party AnalyticsEvent table (Vercel&apos;s Hobby plan doesn&apos;t visualize custom events).
             Two separate funnels, matching the Growth & Engagement Roadmap: top-of-funnel (anonymous) and post-signup (per-user).
@@ -98,7 +98,7 @@ export default function AdminGrowthPage() {
         ) : stats ? (
           <div className="space-y-8">
             <section>
-              <h2 className="mb-3 text-lg font-bold text-white">Top-of-Funnel (last {stats.windowDays} days, anonymous)</h2>
+              <h2 className="mb-3 text-lg font-bold text-[var(--color-foreground)]">Top-of-Funnel (last {stats.windowDays} days, anonymous)</h2>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div className={cardClass}>
                   <div className={numClass}>{stats.topOfFunnel.landingVisitors.toLocaleString()}</div>
@@ -116,7 +116,7 @@ export default function AdminGrowthPage() {
             </section>
 
             <section>
-              <h2 className="mb-3 text-lg font-bold text-white">Post-Signup Activation (last {stats.windowDays} days, per-user)</h2>
+              <h2 className="mb-3 text-lg font-bold text-[var(--color-foreground)]">Post-Signup Activation (last {stats.windowDays} days, per-user)</h2>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div className={cardClass}>
                   <div className={numClass}>{stats.activation.totalSignups.toLocaleString()}</div>
@@ -134,7 +134,7 @@ export default function AdminGrowthPage() {
             </section>
 
             <section>
-              <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-white">
+              <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-[var(--color-foreground)]">
                 <Users className="h-4 w-4" /> Active Users & Retention
               </h2>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
@@ -158,7 +158,7 @@ export default function AdminGrowthPage() {
             </section>
 
             <section>
-              <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-white">
+              <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-[var(--color-foreground)]">
                 <TrendingUp className="h-4 w-4" /> Per-Feature Engagement (last {stats.windowDays} days)
               </h2>
               <div className="overflow-hidden rounded-2xl border border-[var(--color-surface-border)]">
@@ -178,7 +178,7 @@ export default function AdminGrowthPage() {
                     ) : (
                       stats.perFeature.map((row) => (
                         <tr key={row.event} className="border-t border-[var(--color-surface-border)]">
-                          <td className="px-4 py-3 text-white">{row.event}</td>
+                          <td className="px-4 py-3 text-[var(--color-foreground)]">{row.event}</td>
                           <td className="px-4 py-3 text-[var(--color-text-muted)]">{row.totalEvents.toLocaleString()}</td>
                           <td className="px-4 py-3 text-[var(--color-text-muted)]">{row.distinctUsers.toLocaleString()}</td>
                         </tr>

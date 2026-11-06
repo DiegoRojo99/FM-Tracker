@@ -58,15 +58,15 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
 
   if (friends.length === 0) {
     return (
-      <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/55 py-12 text-center">
-        <div className="mb-4 text-6xl">👫</div>
-        <h3 className="mb-2 text-xl font-semibold text-white">
+      <div className="fm-inset px-4 py-8 text-center">
+        <div className="mb-3 text-3xl">👫</div>
+        <h3 className="mb-2 text-xl font-semibold text-[var(--color-foreground)]">
           No friends yet
         </h3>
         <p className="mb-6 text-[var(--color-text-muted)]">
           Start building your network by searching for friends to connect with!
         </p>
-        <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs text-gray-200">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-1 text-xs text-[var(--color-text-muted)]">
           <UserRoundPlus className="h-3.5 w-3.5" />
           Use Add Friends to begin
         </span>
@@ -77,7 +77,7 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-white">
+        <h2 className="text-xl font-bold text-[var(--color-foreground)]">
           Your Friends ({friends.length})
         </h2>
       </div>
@@ -86,17 +86,17 @@ export default function FriendsList({ friends, onUpdate, user }: FriendsListProp
         {friends.map((friend) => (
           <div
             key={friend.uid}
-            className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/80 p-5 transition hover:-translate-y-0.5 hover:border-[var(--color-accent)]/60"
+            className="fm-inset p-4 transition-colors hover:border-[var(--color-accent)]/60"
           >
             <div className="flex items-center space-x-4 mb-4">
-              <div className="w-12 h-12 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white font-bold text-lg">
+              <div className="h-10 w-10 shrink-0 rounded-md bg-[var(--color-primary)]/15 flex items-center justify-center text-[var(--color-accent)] font-semibold text-lg">
                 {friend.displayName.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-white font-semibold truncate">
+                <h3 className="text-[var(--color-foreground)] font-semibold truncate">
                   {friend.displayName}
                 </h3>
-                <p className="text-gray-300 text-sm truncate">
+                <p className="text-[var(--color-text-muted)] text-sm truncate">
                   {friend.email}
                 </p>
               </div>

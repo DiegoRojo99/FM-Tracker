@@ -72,22 +72,22 @@ export default function TrophyCase({ save, setRefresh }: Props) {
 
   return (
     <section className="mt-0 min-w-0">
-      <div className="mb-4 overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[linear-gradient(135deg,#ffffff14_0%,#ffffff08_42%,#ffffff03_100%)] p-4 shadow-[0_16px_48px_var(--color-shadow-soft)] sm:p-5">
+      <div className="mb-4">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-highlight)]">Honours</p>
-            <h2 className="mt-1 text-2xl font-black text-white">Honours Cabinet</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Honours</p>
+            <h2 className="mt-1 text-xl font-semibold text-[var(--color-foreground)]">Honours Cabinet</h2>
             <p className="mt-1 text-sm text-[var(--color-text-muted)]">Every final won, grouped by competition.</p>
           </div>
 
           <div className="grid grid-cols-2 gap-2 md:min-w-[18rem]">
-            <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-3">
+            <div className="fm-inset p-3">
               <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Trophies</p>
-              <p className="mt-2 text-2xl font-black leading-none text-white">{totalTrophies}</p>
+              <p className="mt-2 text-2xl font-black leading-none text-[var(--color-foreground)]">{totalTrophies}</p>
             </div>
-            <div className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-3">
+            <div className="fm-inset p-3">
               <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Competitions</p>
-              <p className="mt-2 text-2xl font-black leading-none text-white">{totalCompetitions}</p>
+              <p className="mt-2 text-2xl font-black leading-none text-[var(--color-foreground)]">{totalCompetitions}</p>
             </div>
           </div>
         </div>
@@ -95,6 +95,7 @@ export default function TrophyCase({ save, setRefresh }: Props) {
         {save.isOwner && (
           <div className="mt-4 sm:mt-5">
             <GradientButton
+              size="sm"
               className="w-full sm:w-auto"
               onClick={() => setShowModal(true)}
             >
@@ -105,7 +106,7 @@ export default function TrophyCase({ save, setRefresh }: Props) {
       </div>
 
       {trophies.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]/70 px-5 py-8 text-center">
+        <div className="fm-inset border-dashed px-5 py-6 text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--color-text-muted)]">No silverware yet</p>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Log your first cup or league title to start building this wall.</p>
         </div>
@@ -172,7 +173,7 @@ function TrophyGroupCard({
 }) {
   if (!trophies?.trophies?.length) {
     return (
-      <div className="overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 shadow-xl backdrop-blur-sm">
+      <div className="fm-inset overflow-hidden">
         <div className="flex flex-col items-center p-4">
           <div className="text-sm text-[var(--color-text-muted)]">No trophies won</div>
         </div>
@@ -183,10 +184,10 @@ function TrophyGroupCard({
   const sortedTrophies = [...trophies.trophies].sort((a, b) => b.season.localeCompare(a.season));
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/88 shadow-xl backdrop-blur-sm">
-      <div className="group rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]/50 p-4 transition duration-300 hover:border-[var(--color-highlight)]/50 hover:shadow-[0_10px_30px_var(--color-shadow-highlight)]">
+    <div className="fm-inset overflow-hidden">
+      <div className="p-4">
         <div className="flex items-start gap-3 border-b border-[var(--color-surface-border)] pb-3">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-white/55 bg-[linear-gradient(160deg,#ffffff_0%,#eef2ff_100%)] shadow-[inset_0_0_0_1px_#ffffff80,0_8px_16px_#00000030]">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[var(--fm-air)]">
             {trophies.competitionGroup.logoUrl ? (
               <Image
                 src={trophies.competitionGroup.logoUrl}
@@ -200,7 +201,7 @@ function TrophyGroupCard({
             )}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-base font-bold text-white">{trophies.competitionGroup.name}</p>
+            <p className="truncate text-base font-bold text-[var(--color-foreground)]">{trophies.competitionGroup.name}</p>
             <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
               {sortedTrophies.length} {sortedTrophies.length === 1 ? 'title' : 'titles'}
             </p>
@@ -220,7 +221,7 @@ function TrophyGroupCard({
                 />
 
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-white">{trophyItem.team.name}</p>
+                  <p className="truncate text-sm font-semibold text-[var(--color-foreground)]">{trophyItem.team.name}</p>
                   <p className="text-xs font-medium text-[var(--color-text-muted)]">{trophyItem.season}</p>
                 </div>
 
@@ -231,7 +232,7 @@ function TrophyGroupCard({
                         e.stopPropagation();
                         onEditTrophy?.(trophyItem);
                       }}
-                      className="rounded-md border border-[var(--color-surface-border)] p-1.5 text-xs hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-soft)]"
+                      className="fm-secondary h-11 w-11 p-0"
                       title="Edit Trophy"
                     >
                       <Image
@@ -247,7 +248,7 @@ function TrophyGroupCard({
                         e.stopPropagation();
                         onDeleteTrophy?.(trophyItem);
                       }}
-                      className="rounded-md border border-[var(--color-danger-soft-border)]/60 p-1.5 text-xs hover:border-[var(--color-danger-soft-border)] hover:bg-[var(--color-danger-soft-bg)]"
+                      className="fm-secondary h-11 w-11 p-0 text-[var(--color-danger-soft-text)]"
                       title="Delete Trophy"
                     >
                       <Image

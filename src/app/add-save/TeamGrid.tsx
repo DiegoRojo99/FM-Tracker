@@ -12,7 +12,7 @@ type Props = {
 export default function TeamGrid({ teams, selectedTeamId, onSelect }: Props) {
   if (teams.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-400">
+      <div className="text-center py-8 text-[var(--color-text-muted)]">
         <div className="text-4xl mb-2">⚽</div>
         <p>No teams available</p>
       </div>
@@ -20,14 +20,14 @@ export default function TeamGrid({ teams, selectedTeamId, onSelect }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4 max-h-96 overflow-y-auto pr-2">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mt-3 max-h-96 overflow-y-auto p-1">
       {teams.map((team) => (
         <button
           type="button"
           key={team.id}
           onClick={() => onSelect(team.id.toString())}
           aria-pressed={selectedTeamId === team.id.toString()}
-          className={`min-w-0 rounded-xl border p-4 cursor-pointer text-center shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]
+          className={`min-w-0 rounded-md border p-3 cursor-pointer text-center transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]
             ${selectedTeamId === team.id.toString()
               ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/15'
               : 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] hover:border-[var(--color-accent)]/60'}`}
@@ -40,7 +40,7 @@ export default function TeamGrid({ teams, selectedTeamId, onSelect }: Props) {
             height={48}
             loading="lazy"
           />
-          <p className="break-words text-sm font-medium text-white leading-tight">{team.name}</p>
+          <p className="break-words text-sm font-medium text-[var(--color-foreground)] leading-tight">{team.name}</p>
         </button>
       ))}
     </div>

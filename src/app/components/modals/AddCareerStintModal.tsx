@@ -181,7 +181,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
               name="startDate"
               value={form.startDate}
               onChange={handleChange}
-              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
               required
             />
           </div>
@@ -192,7 +192,7 @@ export const AddCareerStintModal: React.FC<AddCareerStintModalProps> = ({
               name="endDate"
               value={form.endDate}
               onChange={handleChange}
-              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
             />
           </div>
         </div>

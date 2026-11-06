@@ -79,19 +79,14 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden px-4 py-12 sm:px-6 sm:py-16">
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute left-[10%] top-[12%] h-40 w-40 rounded-full bg-[var(--color-accent)]/20 blur-3xl" />
-        <div className="absolute right-[10%] top-[18%] h-48 w-48 rounded-full bg-[var(--color-highlight)]/20 blur-3xl" />
-      </div>
-
+    <div className="px-4 py-8 sm:px-6 sm:py-12">
       <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
         <div className="hidden lg:block">
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-highlight)]">
+          <p className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
             <Sparkles className="h-3.5 w-3.5" />
             Welcome Back
           </p>
-          <h1 className="text-4xl font-black leading-tight text-white">
+          <h1 className="text-4xl font-semibold leading-tight text-[var(--color-foreground)]">
             Continue your Football Manager legacy.
           </h1>
           <p className="mt-5 max-w-md text-sm leading-7 text-[var(--color-text-muted)]">
@@ -99,26 +94,26 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <div className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
-          <h2 className="text-2xl font-bold text-white">Login to FM Tracker</h2>
+        <div className="fm-panel p-5 sm:p-6">
+          <h2 className="text-2xl font-semibold text-[var(--color-foreground)]">Login to FM Tracker</h2>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Use your account to pick up where you left off.</p>
 
           {error && (
-            <p className="mt-4 rounded-lg border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] px-4 py-3 text-sm text-[var(--color-danger-soft-text)]">
+            <p role="alert" className="mt-4 rounded-md border border-[var(--color-danger-soft-border)] bg-[var(--color-danger-soft-bg)] px-4 py-3 text-sm text-[var(--color-danger-soft-text)]">
               {error}
             </p>
           )}
 
           <form onSubmit={handleEmailSignIn} className="mt-6 space-y-4">
             <label className="block">
-              <span className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-gray-200">
+              <span className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)]">
                 <Mail className="h-4 w-4" />
                 Email
               </span>
               <input
                 type="email"
                 placeholder="you@club.com"
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-4 py-3 text-white placeholder:text-gray-400 focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-highlight)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-dark)]"
+                className="fm-field placeholder:text-[var(--color-text-muted)]/70"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
@@ -126,14 +121,14 @@ export default function LoginPage() {
             </label>
 
             <label className="block">
-              <span className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-gray-200">
+              <span className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)]">
                 <Lock className="h-4 w-4" />
                 Password
               </span>
               <input
                 type="password"
                 placeholder="Enter password"
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-4 py-3 text-white placeholder:text-gray-400 focus:border-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-highlight)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-dark)]"
+                className="fm-field placeholder:text-[var(--color-text-muted)]/70"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
@@ -142,7 +137,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] px-4 py-3 font-semibold text-white shadow-lg transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-highlight)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-dark)] disabled:cursor-not-allowed disabled:opacity-50"
+              className="fm-action w-full"
               disabled={!email || !password || loadingEmailSignIn || loadingGoogleSignIn}
             >
               <LogIn className="h-4 w-4" />
@@ -150,11 +145,11 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="my-6 text-center text-xs uppercase tracking-[0.18em] text-gray-400">or</div>
+          <div className="my-6 text-center text-xs uppercase tracking-[0.18em] text-[var(--color-text-muted)]">or</div>
 
           <button
             onClick={handleGoogleSignIn}
-            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-3 font-semibold text-white transition hover:bg-[var(--color-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-highlight)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-dark)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="fm-secondary w-full"
             disabled={loadingEmailSignIn || loadingGoogleSignIn}
           >
             {loadingGoogleSignIn ? 'Connecting...' : 'Sign In with Google'}

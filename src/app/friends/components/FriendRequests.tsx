@@ -55,10 +55,10 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'PENDING': return 'text-yellow-400'
-      case 'REJECTED': return 'text-red-400'
+      case 'PENDING': return 'text-yellow-700 dark:text-yellow-400'
+      case 'REJECTED': return 'text-red-700 dark:text-red-400'
       case 'BLOCKED': return 'text-red-600'
-      default: return 'text-gray-400'
+      default: return 'text-[var(--color-text-muted)]'
     }
   }
 
@@ -73,18 +73,15 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
 
   const pendingReceived = receivedRequests.filter(req => req.status === 'PENDING')
   const processedReceived = receivedRequests.filter(req => req.status !== 'PENDING')
-  const subTabClass = (tab: 'received' | 'sent') => `flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
-    activeSubTab === tab
-      ? 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white shadow-lg'
-      : 'text-gray-300 hover:bg-[var(--color-surface-soft)] hover:text-white'
-  }`
+  const subTabClass = 'fm-choice flex-1 flex-wrap';
 
   return (
     <div>
-      <div className="mb-6 flex space-x-2 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-2">
+      <div className="mb-5 flex gap-2 p-1">
         <button
           onClick={() => setActiveSubTab('received')}
-          className={subTabClass('received')}
+          aria-pressed={activeSubTab === 'received'}
+          className={subTabClass}
         >
           Received ({receivedRequests.length})
           {pendingReceived.length > 0 && (
@@ -95,7 +92,8 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
         </button>
         <button
           onClick={() => setActiveSubTab('sent')}
-          className={subTabClass('sent')}
+          aria-pressed={activeSubTab === 'sent'}
+          className={subTabClass}
         >
           Sent ({sentRequests.length})
         </button>
@@ -106,32 +104,32 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
         <div>
           {pendingReceived.length > 0 && (
             <>
-              <h3 className="text-lg font-semibold text-white mb-4">
+              <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-4">
                 ⏳ Pending Requests ({pendingReceived.length})
               </h3>
               <div className="grid gap-4 mb-8">
                 {pendingReceived.map((request) => (
                   <div
                     key={request.id}
-                    className="rounded-2xl border border-yellow-400/40 bg-[var(--color-darker)]/80 p-5"
+                    className="fm-inset border-yellow-400/40 p-4"
                   >
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <div className="h-10 w-10 shrink-0 bg-[var(--color-primary)]/15 rounded-md flex items-center justify-center text-[var(--color-accent)] font-semibold text-lg">
                           {request.requester?.displayName.charAt(0).toUpperCase()}
                         </div>
-                        <div>
-                          <h4 className="text-white font-semibold">
+                        <div className="min-w-0 break-words">
+                          <h4 className="text-[var(--color-foreground)] font-semibold">
                             {request.requester?.displayName}
                           </h4>
-                          <p className="text-gray-300 text-sm">
+                          <p className="break-all text-[var(--color-text-muted)] text-sm">
                             {request.requester?.email}
                           </p>
-                          <p className="text-gray-400 text-xs">
+                          <p className="text-[var(--color-text-muted)] text-xs">
                             {formatDate(request.requestedAt)}
                           </p>
                           {request.message && (
-                            <p className="text-gray-300 text-sm mt-2 italic">
+                            <p className="text-[var(--color-text-muted)] text-sm mt-2 italic">
                               &ldquo;{request.message}&rdquo;
                             </p>
                           )}
@@ -176,25 +174,25 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
 
           {processedReceived.length > 0 && (
             <>
-              <h3 className="text-lg font-semibold text-white mb-4">
+              <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-4">
                 📋 Request History ({processedReceived.length})
               </h3>
               <div className="grid gap-3">
                 {processedReceived.map((request) => (
                   <div
                     key={request.id}
-                    className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/65 p-4 opacity-85"
+                    className="fm-inset p-3"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-[var(--color-foreground)] font-bold text-sm">
                           {request.requester?.displayName.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <span className="text-white text-sm">
+                          <span className="text-[var(--color-foreground)] text-sm">
                             {request.requester?.displayName}
                           </span>
-                          <p className="text-gray-400 text-xs">
+                          <p className="text-[var(--color-text-muted)] text-xs">
                             {formatDate(request.requestedAt)}
                           </p>
                         </div>
@@ -212,10 +210,10 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
           {receivedRequests.length === 0 && (
             <div className="text-center py-12">
               <div className="text-4xl mb-4">📭</div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-2">
                 No friend requests received
               </h3>
-              <p className="text-gray-300">
+              <p className="text-[var(--color-text-muted)]">
                 When someone sends you a friend request, it will appear here.
               </p>
             </div>
@@ -231,25 +229,25 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
               {sentRequests.map((request) => (
                 <div
                   key={request.id}
-                  className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/75 p-4"
+                  className="fm-inset p-3"
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="h-10 w-10 shrink-0 bg-[var(--color-primary)]/15 rounded-md flex items-center justify-center text-[var(--color-accent)] font-semibold">
                         {request.receiver?.displayName.charAt(0).toUpperCase()}
                       </div>
-                      <div>
-                        <h4 className="text-white font-medium">
+                      <div className="min-w-0 break-words">
+                        <h4 className="text-[var(--color-foreground)] font-medium">
                           {request.receiver?.displayName}
                         </h4>
-                        <p className="text-gray-300 text-sm">
+                        <p className="break-all text-[var(--color-text-muted)] text-sm">
                           {request.receiver?.email}
                         </p>
-                        <p className="text-gray-400 text-xs">
+                        <p className="text-[var(--color-text-muted)] text-xs">
                           Sent {formatDate(request.requestedAt)}
                         </p>
                         {request.respondedAt && (
-                          <p className="text-gray-400 text-xs">
+                          <p className="text-[var(--color-text-muted)] text-xs">
                             Responded {formatDate(request.respondedAt)}
                           </p>
                         )}
@@ -260,7 +258,7 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
                         {getStatusText(request.status)}
                       </span>
                       {request.message && (
-                        <p className="text-gray-400 text-xs mt-1">
+                        <p className="text-[var(--color-text-muted)] text-xs mt-1">
                           Message sent
                         </p>
                       )}
@@ -272,10 +270,10 @@ export default function FriendRequests({ sentRequests, receivedRequests, onUpdat
           ) : (
             <div className="text-center py-12">
               <div className="text-4xl mb-4">📤</div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-2">
                 No friend requests sent
               </h3>
-              <p className="text-gray-300">
+              <p className="text-[var(--color-text-muted)]">
                 Start connecting with people by searching for friends to add!
               </p>
             </div>

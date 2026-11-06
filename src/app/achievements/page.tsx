@@ -51,10 +51,10 @@ const CATEGORY_ORDER: AchievementCategory[] = [
 ];
 
 const RARITY_STYLES: Record<AchievementRarity, string> = {
-  COMMON: 'bg-slate-500/20 text-slate-200 border-slate-400/30',
-  RARE: 'bg-sky-500/20 text-sky-200 border-sky-400/30',
-  EPIC: 'bg-fuchsia-500/20 text-fuchsia-200 border-fuchsia-400/30',
-  LEGENDARY: 'bg-amber-500/20 text-amber-200 border-amber-400/30',
+  COMMON: 'bg-slate-500/20 text-[var(--color-text-muted)] border-slate-400/30',
+  RARE: 'bg-sky-500/20 text-sky-700 dark:text-sky-200 border-sky-400/30',
+  EPIC: 'bg-fuchsia-500/20 text-fuchsia-700 dark:text-fuchsia-200 border-fuchsia-400/30',
+  LEGENDARY: 'bg-amber-500/20 text-amber-700 dark:text-amber-200 border-amber-400/30',
 };
 
 const RARITY_ORDER: Record<AchievementRarity, number> = {
@@ -178,7 +178,7 @@ export default function AchievementsPage() {
     return (
       <div className="mx-auto max-w-5xl p-6 sm:p-8">
         <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/92 p-6 text-center shadow-xl backdrop-blur-sm sm:p-8">
-          <h1 className="text-2xl font-bold text-white">Achievements</h1>
+          <h1 className="text-2xl font-bold text-[var(--color-foreground)]">Achievements</h1>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Log in to track your FM milestones and unlock rewards.</p>
         </div>
       </div>
@@ -198,7 +198,7 @@ export default function AchievementsPage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Legacy Progress</p>
-            <h1 className="mt-1 text-3xl font-black text-white sm:text-4xl">Achievements</h1>
+            <h1 className="mt-1 text-3xl font-black text-[var(--color-foreground)] sm:text-4xl">Achievements</h1>
             <p className="mt-2 text-sm text-[var(--color-text-muted)]">Unlock milestones across trophies, promotions, challenges, and long-term career consistency.</p>
           </div>
 
@@ -213,14 +213,14 @@ export default function AchievementsPage() {
         </div>
 
         <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-4">
-          <SummaryStat label="Unlocked" value={`${summary.unlockedCount}/${summary.totalCount}`} icon={<CheckCircle2 className="h-5 w-5 text-emerald-300" />} />
+          <SummaryStat label="Unlocked" value={`${summary.unlockedCount}/${summary.totalCount}`} icon={<CheckCircle2 className="h-5 w-5 text-emerald-700 dark:text-emerald-300" />} />
           <SummaryStat label="Completion" value={`${summary.progressPercent}%`} icon={<Sparkles className="h-5 w-5 text-[var(--color-highlight)]" />} />
-          <SummaryStat label="Total Points" value={`${summary.totalPoints}`} icon={<Star className="h-5 w-5 text-amber-300" />} />
-          <SummaryStat label="Locked" value={`${Math.max(summary.totalCount - summary.unlockedCount, 0)}`} icon={<Lock className="h-5 w-5 text-slate-300" />} />
+          <SummaryStat label="Total Points" value={`${summary.totalPoints}`} icon={<Star className="h-5 w-5 text-amber-700 dark:text-amber-300" />} />
+          <SummaryStat label="Locked" value={`${Math.max(summary.totalCount - summary.unlockedCount, 0)}`} icon={<Lock className="h-5 w-5 text-[var(--color-text-muted)]" />} />
         </div>
 
         {error && (
-          <div className="mt-4 flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+          <div className="mt-4 flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-200">
             <AlertTriangle className="mt-0.5 h-4 w-4" />
             <p>{error}</p>
           </div>
@@ -238,7 +238,7 @@ export default function AchievementsPage() {
               className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-lg backdrop-blur-sm"
             >
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-bold text-white">{CATEGORY_LABELS[category]}</h2>
+                <h2 className="text-xl font-bold text-[var(--color-foreground)]">{CATEGORY_LABELS[category]}</h2>
                 <span className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
                   {definitions.length} achievements
                 </span>
@@ -264,7 +264,7 @@ export default function AchievementsPage() {
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <h3 className="text-base font-semibold text-white">{definition.title}</h3>
+                          <h3 className="text-base font-semibold text-[var(--color-foreground)]">{definition.title}</h3>
                           <p className="mt-1 text-sm text-[var(--color-text-muted)]">{definition.description}</p>
                         </div>
                         <span className={`shrink-0 rounded-full border px-2 py-1 text-[11px] font-semibold uppercase ${RARITY_STYLES[definition.rarity]}`}>
@@ -286,14 +286,14 @@ export default function AchievementsPage() {
                       </div>
 
                       <div className="mt-4 flex items-center justify-between text-sm">
-                        <span className="font-semibold text-amber-300">{definition.points} pts</span>
+                        <span className="font-semibold text-amber-700 dark:text-amber-300">{definition.points} pts</span>
                         {isUnlocked ? (
-                          <span className="inline-flex items-center gap-1 text-emerald-300">
+                          <span className="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-300">
                             <CheckCircle2 className="h-4 w-4" />
                             Unlocked
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-slate-300">
+                          <span className="inline-flex items-center gap-1 text-[var(--color-text-muted)]">
                             <Lock className="h-4 w-4" />
                             Locked
                           </span>
@@ -326,7 +326,7 @@ function SummaryStat({
         <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">{label}</p>
         {icon}
       </div>
-      <p className="mt-2 text-3xl font-black text-white">{value}</p>
+      <p className="mt-2 text-3xl font-black text-[var(--color-foreground)]">{value}</p>
     </div>
   );
 }

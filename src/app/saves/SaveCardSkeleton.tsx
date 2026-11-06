@@ -1,20 +1,25 @@
 export function SaveCardSkeleton() {
   return (
     <div
-      className="animate-pulse overflow-hidden rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-4 shadow-lg backdrop-blur-sm"
+      className="animate-pulse overflow-hidden rounded-lg border border-[var(--color-surface-border)] bg-[var(--color-dark)]"
       aria-hidden="true"
     >
-      <div className="mb-3 flex items-start justify-between gap-2">
-        <div className="space-y-2">
-          <div className="h-3.5 w-16 rounded bg-[var(--color-surface-soft)]" />
-          <div className="h-2.5 w-20 rounded bg-[var(--color-surface-soft)]" />
+      <div className="p-4">
+        <div className="mb-4 flex items-center justify-between">
+          <div className="h-6 w-16 rounded bg-[var(--color-surface-soft)]" />
+          <div className="h-4 w-4 rounded bg-[var(--color-surface-soft)]" />
         </div>
-        <div className="h-10 w-10 rounded-lg bg-[var(--color-surface-soft)]" />
+        <div className="flex items-center gap-3">
+          <div className="h-12 w-12 shrink-0 rounded bg-[var(--color-surface-soft)]" />
+          <div className="space-y-2">
+            <div className="h-4 w-28 rounded bg-[var(--color-surface-soft)]" />
+            <div className="h-3 w-16 rounded bg-[var(--color-surface-soft)]" />
+          </div>
+        </div>
       </div>
-
-      <div className="flex min-h-[150px] flex-col items-center justify-center gap-3 pb-6">
-        <div className="h-20 w-20 rounded-full bg-[var(--color-surface-soft)]" />
-        <div className="h-4 w-28 rounded bg-[var(--color-surface-soft)]" />
+      <div className="flex items-center justify-between border-t border-[var(--color-surface-border)] px-4 py-2">
+        <div className="h-3 w-28 rounded bg-[var(--color-surface-soft)]" />
+        <div className="h-11 w-11 rounded-md bg-[var(--color-surface-soft)]" />
       </div>
     </div>
   );

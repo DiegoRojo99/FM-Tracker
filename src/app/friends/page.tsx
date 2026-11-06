@@ -34,11 +34,7 @@ export default function FriendsPage() {
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const tabClass = (tab: TabType) => `inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
-    activeTab === tab
-      ? 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-highlight)] text-white shadow-lg'
-      : 'text-gray-300 hover:bg-[var(--color-surface-soft)] hover:text-white'
-  }`
+  const tabClass = 'fm-choice shrink-0 whitespace-nowrap';
 
   useEffect(() => {
     if (!user) return;
@@ -103,8 +99,8 @@ export default function FriendsPage() {
   if (!user) {
     return (
       <div className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
-        <div className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-8 text-center shadow-xl backdrop-blur-sm">
-          <h1 className="text-2xl font-black text-white">Friends & Social</h1>
+        <div className="fm-panel p-6 text-center">
+          <h1 className="text-2xl font-semibold text-[var(--color-foreground)]">Friends & Social</h1>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">Login to view your social hub and leaderboard.</p>
         </div>
       </div>
@@ -115,36 +111,36 @@ export default function FriendsPage() {
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-6 rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-xl backdrop-blur-sm sm:p-7">
+        <div className="fm-panel mb-5 p-4 sm:p-5">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">
+              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">
                 <Sparkles className="h-3.5 w-3.5" />
                 Social Hub
               </p>
-              <h1 className="mt-2 text-3xl font-black text-white sm:text-4xl">Friends & Social</h1>
+              <h1 className="mt-2 text-3xl font-semibold text-[var(--color-foreground)]">Friends & Social</h1>
               <p className="mt-2 text-sm text-[var(--color-text-muted)]">Grow your network, manage requests, and compare progress.</p>
             </div>
 
-            <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-3 text-sm text-[var(--color-text-muted)]">
-              <span className="font-semibold text-white">{data.friends.length}</span> friends • <span className="font-semibold text-white">{pendingRequestsCount}</span> pending requests
+            <div className="fm-inset px-3 py-2 text-sm text-[var(--color-text-muted)]">
+              <span className="font-semibold text-[var(--color-foreground)]">{data.friends.length}</span> friends • <span className="font-semibold text-[var(--color-foreground)]">{pendingRequestsCount}</span> pending requests
             </div>
           </div>
 
-          <div className="mt-5 flex gap-2 overflow-x-auto rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-darker)]/60 p-2">
-            <button onClick={() => setActiveTab('feed')} className={tabClass('feed')}>
+          <div aria-label="Social views" className="mt-4 flex gap-2 overflow-x-auto p-1">
+            <button onClick={() => setActiveTab('feed')} aria-pressed={activeTab === 'feed'} className={tabClass}>
               <Activity className="h-4 w-4" />
               Feed
             </button>
-            <button onClick={() => setActiveTab('leaderboard')} className={tabClass('leaderboard')}>
+            <button onClick={() => setActiveTab('leaderboard')} aria-pressed={activeTab === 'leaderboard'} className={tabClass}>
               <Trophy className="h-4 w-4" />
               Leaderboard
             </button>
-            <button onClick={() => setActiveTab('friends')} className={tabClass('friends')}>
+            <button onClick={() => setActiveTab('friends')} aria-pressed={activeTab === 'friends'} className={tabClass}>
               <Users className="h-4 w-4" />
               Friends ({data.friends.length})
             </button>
-            <button onClick={() => setActiveTab('requests')} className={`${tabClass('requests')} relative`}>
+            <button onClick={() => setActiveTab('requests')} aria-pressed={activeTab === 'requests'} className={`${tabClass} relative`}>
               <Inbox className="h-4 w-4" />
               Requests
               {pendingRequestsCount > 0 && (
@@ -153,14 +149,14 @@ export default function FriendsPage() {
                 </span>
               )}
             </button>
-            <button onClick={() => setActiveTab('search')} className={tabClass('search')}>
+            <button onClick={() => setActiveTab('search')} aria-pressed={activeTab === 'search'} className={tabClass}>
               <Search className="h-4 w-4" />
               Add Friends
             </button>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-4 shadow-2xl backdrop-blur-sm sm:p-7">
+        <div className="fm-panel p-4 sm:p-5">
           {loading && (
             <div className="py-12">
               <FootballLoader />
@@ -182,9 +178,9 @@ export default function FriendsPage() {
           {!loading && !error && (
             <>
               {activeTab === 'feed' && (
-                <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/80 p-4 shadow-lg backdrop-blur-sm">
+                <div>
                   <div className="mb-4">
-                    <h2 className="text-xl font-semibold text-white">Activity Feed</h2>
+                    <h2 className="text-xl font-semibold text-[var(--color-foreground)]">Activity Feed</h2>
                     <p className="mt-1 text-sm text-[var(--color-text-muted)]">Recent save milestones, challenge completions, trophies, and friend activity.</p>
                   </div>
                   <SocialFeed />

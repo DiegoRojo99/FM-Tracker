@@ -26,13 +26,13 @@ const TrophiesHeader: React.FC<TrophiesHeaderProps> = ({
     : 0;
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-xl backdrop-blur-sm sm:p-7">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between md:mb-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Silverware Tracker</p>
-          <h1 className="mt-1 flex items-center gap-3 text-3xl font-black text-white sm:text-4xl">
-            <Trophy className="h-8 w-8 text-[var(--color-highlight)]" />
+    <div>
+      <div className="fm-panel p-4 sm:p-5">
+        <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Silverware Tracker</p>
+          <h1 className="mt-1 flex items-center gap-3 text-3xl font-semibold text-[var(--color-foreground)]">
+            <Trophy className="h-7 w-7 shrink-0 text-[var(--color-accent)]" />
             <span>Trophy Cabinet</span>
           </h1>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">
@@ -41,9 +41,9 @@ const TrophiesHeader: React.FC<TrophiesHeaderProps> = ({
         </div>
         
         {games.length > 0 && (
-          <div className="grid w-full grid-cols-1 gap-3 sm:w-[28rem] sm:grid-cols-2">
+          <div className="grid w-full shrink-0 grid-cols-1 gap-3 sm:grid-cols-2 lg:w-[28rem]">
             <div>
-              <label htmlFor="game-select" className="mb-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-300">
+              <label htmlFor="game-select" className="mb-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
                 <SlidersHorizontal className="h-3.5 w-3.5 text-[var(--color-highlight)]" />
                 Filter by Game
               </label>
@@ -51,7 +51,7 @@ const TrophiesHeader: React.FC<TrophiesHeaderProps> = ({
                 id="game-select"
                 value={selectedGame}
                 onChange={(e) => onGameChange(e.target.value)}
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+                className="fm-field"
               >
                 <option value="all">All Games</option>
                 {games.map(game => (
@@ -61,7 +61,7 @@ const TrophiesHeader: React.FC<TrophiesHeaderProps> = ({
             </div>
 
             <div>
-              <label htmlFor="gender-select" className="mb-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-300">
+              <label htmlFor="gender-select" className="mb-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
                 <SlidersHorizontal className="h-3.5 w-3.5 text-[var(--color-highlight)]" />
                 Filter by Gender
               </label>
@@ -69,7 +69,7 @@ const TrophiesHeader: React.FC<TrophiesHeaderProps> = ({
                 id="gender-select"
                 value={selectedGender}
                 onChange={(e) => onGenderChange(e.target.value as 'all' | 'men' | 'women')}
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+                className="fm-field"
               >
                 <option value="all">All</option>
                 <option value="women">Women</option>
@@ -81,17 +81,17 @@ const TrophiesHeader: React.FC<TrophiesHeaderProps> = ({
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
+        <div className="fm-inset p-3">
           <div className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Trophies Won</div>
-          <div className="mt-1 text-3xl font-black text-white">{totalTrophies}</div>
+          <div className="mt-1 font-mono text-2xl font-semibold text-[var(--color-foreground)]">{totalTrophies}</div>
         </div>
-        <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
+        <div className="fm-inset p-3">
           <div className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Competitions</div>
-          <div className="mt-1 text-3xl font-black text-white">{totalCompetitions}</div>
+          <div className="mt-1 font-mono text-2xl font-semibold text-[var(--color-foreground)]">{totalCompetitions}</div>
         </div>
-        <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
+        <div className="fm-inset p-3">
           <div className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Completion</div>
-          <div className="mt-1 text-3xl font-black text-white">{completionPercentage}%</div>
+          <div className="mt-1 font-mono text-2xl font-semibold text-[var(--color-foreground)]">{completionPercentage}%</div>
         </div>
       </div>
       </div>

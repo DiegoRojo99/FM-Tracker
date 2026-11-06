@@ -7,9 +7,9 @@ type MiniChallengeCardProps = {
 };
 
 const statusStyles = {
-  completed: 'border-emerald-400/80 bg-emerald-500/12',
-  'in-progress': 'border-[var(--color-highlight)]/70 bg-[var(--color-highlight)]/10',
-  'not-started': 'border-[var(--color-surface-border)] bg-[var(--color-surface-soft)]',
+  completed: 'border-[var(--color-success)]/50',
+  'in-progress': 'border-[var(--color-accent)]/50',
+  'not-started': 'border-[var(--color-surface-border)]',
 };
 
 const statusLabels = {
@@ -41,15 +41,15 @@ const MiniChallengeCard: React.FC<MiniChallengeCardProps> = ({ userChallenge }) 
   return (
     <Link
       href={`/challenges/${challengeSlug}`}
-      className={`group relative flex aspect-square w-full flex-col overflow-hidden rounded-xl border ${cardStyle} p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-highlight)]`}
+      className={`fm-inset group flex min-h-36 w-full flex-col ${cardStyle} p-3 transition-colors hover:border-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]`}
       title={challengeName}
     >
       <span className="inline-flex w-fit self-start rounded-full border border-[var(--color-surface-border)] bg-black/25 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
         {statusLabels[status]}
       </span>
 
-      <div className="flex flex-1 items-center justify-center px-1">
-        <span className="line-clamp-3 text-center text-sm font-bold text-white sm:text-base">
+      <div className="flex flex-1 items-center py-3">
+        <span className="break-words text-sm font-semibold text-[var(--color-foreground)]">
           {challengeName}
         </span>
       </div>
@@ -71,7 +71,7 @@ function ChallengeProgressBar({ userChallenge }: { userChallenge?: CareerChallen
     <div className="mt-2 w-full">
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/25">
         <div
-          className="h-full bg-[var(--color-highlight)] transition-all duration-300"
+          className="h-full bg-[var(--color-accent)] transition-all duration-300"
           style={{ width: `${pctCompleted}%` }}
         />
       </div>

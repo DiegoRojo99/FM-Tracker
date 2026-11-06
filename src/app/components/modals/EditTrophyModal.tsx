@@ -150,7 +150,7 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
             <select
               value={selectedTeam ? selectedTeam.id : ''}
               onChange={async (e) => selectTeam(e.target.value)}
-              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
               disabled={saving}
             >
               <option value="">Select a team</option>
@@ -188,7 +188,7 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
             </p>
           )}
           {competition && (
-            <p className="mt-1.5 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm font-semibold text-white">
+            <p className="mt-1.5 rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-3 py-2 text-sm font-semibold text-[var(--color-foreground)]">
               {competition.name}
             </p>
           )}
@@ -201,7 +201,7 @@ export default function EditTrophyModal({ open, onClose, saveId, saveDetails, tr
             type="date"
             value={dateWon}
             onChange={(e) => setDateWon(e.target.value)}
-            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+            className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-[var(--color-foreground)] focus:border-[var(--color-accent)] focus:outline-none"
             required
             disabled={saving}
           />

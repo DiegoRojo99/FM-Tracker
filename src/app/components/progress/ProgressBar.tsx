@@ -20,13 +20,13 @@ export default function ProgressBar({
   return (
     <div className="w-full space-y-1">
       {showText && (
-        <div className="text-sm text-gray-600 dark:text-gray-300 text-right">
+        <div className="text-sm text-[var(--color-text-muted)] text-right">
           {completed}/{total}
         </div>
       )}
 
       <div
-        className={`bg-gray-200 dark:bg-zinc-800 w-full border overflow-hidden ${
+        className={`bg-[var(--color-surface-strong)] border-[var(--color-surface-border)] w-full border overflow-hidden ${
           rounded ? 'rounded-full' : ''
         }`}
         style={{ height }}

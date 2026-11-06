@@ -144,17 +144,17 @@ export default function ChallengesPage() {
 
   return (
     <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
-      <div className="rounded-3xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-5 shadow-xl backdrop-blur-sm sm:p-7">
+      <div className="fm-panel p-4 sm:p-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-highlight)]">Progress Board</p>
-            <h1 className="mt-1 text-3xl font-black text-white sm:text-4xl">Challenges</h1>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">Progress Board</p>
+            <h1 className="mt-1 text-3xl font-semibold text-[var(--color-foreground)]">Challenges</h1>
             <p className="mt-2 text-sm text-[var(--color-text-muted)]">Track long-term goals and milestone runs across saves.</p>
           </div>
 
           {gameOptions.length > 0 && (
             <div className="w-full sm:w-72">
-              <label htmlFor="game-select" className="mb-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-300">
+              <label htmlFor="game-select" className="mb-1 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
                 <SlidersHorizontal className="h-3.5 w-3.5 text-[var(--color-highlight)]" />
                 Filter by Game
               </label>
@@ -162,7 +162,7 @@ export default function ChallengesPage() {
                 id="game-select"
                 value={selectedGame}
                 onChange={e => setSelectedGame(e.target.value)}
-                className="w-full rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-darker)] px-3 py-2 text-sm text-white focus:border-[var(--color-accent)] focus:outline-none"
+                className="fm-field"
               >
                 <option value="">All Games</option>
                 {gameOptions.map(game => (
@@ -175,15 +175,12 @@ export default function ChallengesPage() {
 
         {allTags.length > 0 && (
           <div className="mt-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Filter by Type</p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Filter by Type</p>
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setSelectedTag('')}
-                className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
-                  selectedTag === ''
-                    ? 'border-[var(--color-highlight)] bg-[var(--color-highlight)]/20 text-white'
-                    : 'border-[var(--color-surface-border)] bg-transparent text-[var(--color-text-muted)] hover:border-[var(--color-highlight)]/50 hover:text-white'
-                }`}
+                aria-pressed={selectedTag === ''}
+                className="fm-choice"
               >
                 All
               </button>
@@ -191,11 +188,8 @@ export default function ChallengesPage() {
                 <button
                   key={tag}
                   onClick={() => setSelectedTag(tag === selectedTag ? '' : tag)}
-                  className={`rounded-full border px-3 py-1 text-xs font-semibold capitalize transition ${
-                    selectedTag === tag
-                      ? 'border-[var(--color-highlight)] bg-[var(--color-highlight)]/20 text-white'
-                      : 'border-[var(--color-surface-border)] bg-transparent text-[var(--color-text-muted)] hover:border-[var(--color-highlight)]/50 hover:text-white'
-                  }`}
+                  aria-pressed={selectedTag === tag}
+                  className="fm-choice capitalize"
                 >
                   {tag.replace(/-/g, ' ')}
                 </button>
@@ -204,34 +198,34 @@ export default function ChallengesPage() {
           </div>
         )}
 
-        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="fm-inset p-3">
             <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Total Challenges</p>
-            <p className="mt-1 text-3xl font-black text-white">{totalCount}</p>
+            <p className="mt-1 font-mono text-2xl font-semibold text-[var(--color-foreground)]">{totalCount}</p>
           </div>
-          <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
+          <div className="fm-inset p-3">
             <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">In Progress</p>
-            <p className="mt-1 text-3xl font-black text-white">{inProgressCount}</p>
+            <p className="mt-1 font-mono text-2xl font-semibold text-[var(--color-foreground)]">{inProgressCount}</p>
           </div>
-          <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] p-4">
+          <div className="fm-inset p-3">
             <p className="text-xs uppercase tracking-wide text-[var(--color-text-muted)]">Completed</p>
-            <p className="mt-1 text-3xl font-black text-white">{completedCount}</p>
+            <p className="mt-1 font-mono text-2xl font-semibold text-[var(--color-foreground)]">{completedCount}</p>
           </div>
         </div>
       </div>
 
-      <div className="mt-8 space-y-8">
+      <div className="mt-5 space-y-5">
         {user && totalCount > 0 && filteredUserChallenges.length === 0 && (
-          <div className="rounded-2xl border border-[var(--color-highlight)]/35 bg-[var(--color-highlight)]/10 p-5 shadow-lg">
-            <h2 className="text-lg font-bold text-white">No active challenges yet</h2>
+          <div className="fm-panel border-[var(--color-accent)]/35 p-4">
+            <h2 className="text-lg font-bold text-[var(--color-foreground)]">No active challenges yet</h2>
             <p className="mt-1 text-sm text-[var(--color-text-muted)]">
               Start one challenge now to unlock progression, achievement momentum, and clearer next steps for this save.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
-              <a href="#challenge-sections" className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-[var(--color-background)] transition hover:opacity-90">
+              <a href="#challenge-sections" className="fm-action">
                 Pick a Starter Challenge
               </a>
-              <Link href="/saves" className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+              <Link href="/saves" className="fm-secondary">
                 Back to Saves
               </Link>
             </div>
@@ -239,21 +233,21 @@ export default function ChallengesPage() {
         )}
 
         {totalCount === 0 && (
-          <div className="rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-dark)]/90 p-8 text-center shadow-lg">
+          <div className="fm-panel p-6 text-center">
             <Flag className="mx-auto h-8 w-8 text-[var(--color-highlight)]" />
             <p className="mt-3 text-sm text-[var(--color-text-muted)]">No challenges available right now.</p>
             <div className="mt-4 flex flex-wrap justify-center gap-3">
-              <Link href="/saves" className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-[var(--color-background)] transition hover:opacity-90">
+              <Link href="/saves" className="fm-action">
                 Create or Open a Save
               </Link>
-              <Link href="/trophies" className="rounded-xl border border-[var(--color-surface-border)] bg-[var(--color-surface-soft)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--color-highlight)]">
+              <Link href="/trophies" className="fm-secondary">
                 Explore Trophy Tracker
               </Link>
             </div>
           </div>
         )}
 
-        <div id="challenge-sections" className="space-y-8">
+        <div id="challenge-sections" className="space-y-5">
           {sectionOrder.map(section => {
             const sectionChallenges = challengeGroups[section.key];
             return (
@@ -275,6 +269,5 @@ export default function ChallengesPage() {
 
 
 // MiniChallengeCard component removed as it is no longer used
-
 
 
