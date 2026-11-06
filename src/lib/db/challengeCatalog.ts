@@ -3,6 +3,7 @@ import { prisma } from './prisma';
 import { CHALLENGE_CATALOG } from '../challenges/catalog';
 import { readTeamKey, TEAM_RESOLVER } from './challengeTeamResolver';
 import { invalidateChallengeCatalogCache } from './challenges';
+import { deleteCacheKey } from '../cache/redis';
 
 type CompetitionKey =
   | 'uefa.champions-league'
@@ -567,6 +568,7 @@ export async function seedChallengeCatalog(): Promise<SeedChallengeCatalogResult
   });
 
   await invalidateChallengeCatalogCache();
+  await deleteCacheKey('stats:global');
 
   return result;
 }

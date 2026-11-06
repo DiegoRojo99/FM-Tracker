@@ -15,5 +15,9 @@ export async function fetchFromApi(endpoint: string) {
   if (!res.ok) throw new Error(`API error: ${res.status}`);
 
   const data = await res.json();
+  if (data.errors && Object.keys(data.errors).length > 0) {
+    throw new Error(`API-Football errors: ${JSON.stringify(data.errors)}`);
+  }
+  if (!Array.isArray(data.response)) throw new Error('Invalid API-Football response');
   return data.response;
 }

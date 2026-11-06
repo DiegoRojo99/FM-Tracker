@@ -16,6 +16,18 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Tracking FM27
+
+New saves default to FM27 (starting season `2026/27`). Choose another active game
+version to track an older career; existing saves retain their original version.
+For a club start, choose a country, a men's or women's domestic league, and a
+team. Changing the game version, country, or league clears dependent selections.
+Review the displayed game and team names before creating the save, or choose
+Unemployed and add your first appointment later.
+
+Game selectors use game names and save cards use short names such as `FM27`.
+FM27 uses the existing FM Tracker branding; no third-party FM27 artwork is needed.
+
 ## Analytics
 
 Vercel Analytics is enabled in the root layout via `@vercel/analytics`.
@@ -43,6 +55,19 @@ Each cached response includes an `x-cache` header with one of:
 - `miss` (fetched from DB and stored in Redis)
 - `disabled` (Redis unavailable or not configured)
 
+Global statistics aggregate all game versions, including FM27. Profile statistics
+are uncached, and the friends leaderboard filters by the requested `gameId`.
+Save-preview invalidation also clears global statistics after save, season, and
+career changes. Trophy additions/deletions, user creation, and challenge catalog
+seeding clear global statistics separately, including trophies added after a
+season response.
+
+## Firebase Admin
+
+Firebase initialization does not assign administrator permissions. Manage admin
+custom claims explicitly through trusted administrative tooling; builds and
+server imports must not modify them. Existing custom claims remain unchanged.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
@@ -57,6 +82,14 @@ To learn more about Next.js, take a look at the following resources:
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
 ## Deploy on Vercel
+
+Install dependencies with `npm ci` to use the committed lockfile. Keep Next.js
+and `eslint-config-next` on matching versions, and keep the resolved Sharp
+version at `0.35.5` or newer for the image-optimization security fix.
+
+Before deploying dependency updates, run `npm run lint`, `npm test`, and
+`npm run build`. Production builds continue to use Webpack; Turbopack is enabled
+only for development.
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 

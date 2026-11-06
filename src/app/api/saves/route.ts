@@ -8,7 +8,6 @@ import { Save } from '@/lib/types/prisma/Save';
 import { fetchTeam } from '@/lib/db/teams';
 import { prisma } from '@/lib/db/prisma';
 import { CareerStint } from '@/lib/types/prisma/Career';
-import { deleteCacheKey } from '@/lib/cache/redis';
 import { readThroughCache } from '@/lib/cache/redis';
 import { safeRecomputeSaveProgress } from '@/lib/db/progress';
 
@@ -45,6 +44,7 @@ function getSeasonFromGameId(gameId: string): string {
   if (gameId.includes('fm24')) return '2023/24';
   if (gameId.includes('fm25')) return '2024/25';
   if (gameId.includes('fm26')) return '2025/26';
+  if (gameId.includes('fm27')) return '2026/27';
   return '2023/24';
 }
 
@@ -52,6 +52,7 @@ function getStartDateFromGameId(gameId: string): string {
   if (gameId.includes('fm24')) return '2023-07-01';
   if (gameId.includes('fm25')) return '2024-07-01';
   if (gameId.includes('fm26')) return '2025-07-01';
+  if (gameId.includes('fm27')) return '2026-07-01';
   return '2023-07-01';
 }
 
@@ -235,10 +236,12 @@ export async function POST(req: NextRequest) {
 
       if (createdNewSave) {
         // Keep cache consistency work in the critical path.
-        await Promise.allSettled([
-          deleteCacheKey('stats:global'),
+        const cacheResults = await Promise.allSettled([
           invalidateUserPreviewSavesCache(uid),
         ]);
+        for (const result of cacheResults) {
+          if (result.status === 'rejected') console.error('Save creation cache invalidation failed:', result.reason);
+        }
 
         // Non-critical work should not delay save creation response.
         const optionalSideEffects = [

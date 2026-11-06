@@ -7,6 +7,7 @@ import { prisma } from './prisma';
 import { FullTrophy } from '../types/prisma/Trophy';
 import { fetchTeam } from './teams';
 import { isCupWinningRound } from './seasons';
+import { deleteCacheKey } from '../cache/redis';
 
 function isPrismaP2002(error: unknown): boolean {
   return typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === 'P2002';
@@ -133,6 +134,7 @@ async function runTrophySideEffects(params: {
   gameId: string;
   skipProgress?: boolean;
 }): Promise<void> {
+  await deleteCacheKey('stats:global');
   if (params.skipProgress) return;
   await safeRecomputeSaveProgress({
     userId: params.uid,
@@ -347,6 +349,8 @@ export async function backfillTrophiesFromSeasonResults(): Promise<{
     }
   }
 
+  await deleteCacheKey('stats:global');
+
   return {
     seasonsProcessed: seasons.length,
     leagueTrophiesCreated,
@@ -415,6 +419,7 @@ export async function deleteTrophy(trophyId: number): Promise<boolean> {
     const deletedTrophy = await prisma.trophy.delete({
       where: { id: trophyId }
     });
+    await deleteCacheKey('stats:global');
     return !!deletedTrophy;
   } 
   catch (error) {

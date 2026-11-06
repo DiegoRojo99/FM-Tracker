@@ -45,8 +45,9 @@ export default function ChallengesPage() {
   const [selectedGame, setSelectedGame] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState<string>('');
 
-  // Compute unique games from userChallenges
-  const gameOptions = Array.from(new Set(userChallenges.map(uc => uc.gameId).filter(Boolean)));
+  const gameOptions = Array.from(
+    new Map(userChallenges.map(attempt => [attempt.gameId, attempt.game])).values()
+  );
   
   useEffect(() => {
     async function fetchUserChallenges(): Promise<CareerChallengeWithDetails[] | undefined> {
@@ -165,7 +166,7 @@ export default function ChallengesPage() {
               >
                 <option value="">All Games</option>
                 {gameOptions.map(game => (
-                  <option key={game} value={game}>{game}</option>
+                  <option key={game.id} value={game.id}>{game.name}</option>
                 ))}
               </select>
             </div>
@@ -274,7 +275,6 @@ export default function ChallengesPage() {
 
 
 // MiniChallengeCard component removed as it is no longer used
-
 
 
 
