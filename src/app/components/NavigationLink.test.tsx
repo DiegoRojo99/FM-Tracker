@@ -21,7 +21,7 @@ describe('active navigation', () => {
     ['/saves', '/saves', true],
     ['/saves/career-1', '/saves', true],
     ['/challenges/league-title', '/challenges', true],
-    ['/admin/teams', '/admin', true],
+    ['/admin/growth', '/admin', true],
     ['/profile/user-1', '/profile', true],
     ['/friends', '/friends', true],
     ['/add-save', '/add-save', true],

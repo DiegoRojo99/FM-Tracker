@@ -20,16 +20,6 @@ export async function fetchTeamsByName(name: string): Promise<Team[]> {
   });
 }
 
-export async function fetchTeamsByIds(ids: number[]) {
-  return await prisma.team.findMany({
-    where: {
-      id: {
-        in: ids,
-      },
-    },
-  });
-}
-
 export async function fetchAllTeams() {
   return await prisma.team.findMany();
 }
