@@ -11,6 +11,7 @@ const state = vi.hoisted(() => ({
 
 vi.mock('./auth/AuthProvider', () => ({ useAuth: () => state, logout: vi.fn() }));
 vi.mock('react-native', () => ({ ActivityIndicator: 'progress', Text: 'span', View: 'div' }));
+vi.mock('react-native-safe-area-context', () => ({ useSafeAreaInsets: () => ({ top: 0, right: 0, bottom: 0, left: 0 }) }));
 vi.mock('./components/ui', () => ({ Button: ({ title }: { title: string }) => <button>{title}</button>, Icon: () => null }));
 vi.mock('./theme', () => ({ colors: {}, styles: {} }));
 vi.mock('./screens/LoginScreen', () => ({ LoginScreen: () => <div>Login required</div> }));

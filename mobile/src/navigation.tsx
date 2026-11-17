@@ -2,6 +2,7 @@ import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ActivityIndicator, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { logout, useAuth } from './auth/AuthProvider';
 import { Button, Icon, type IconName } from './components/ui';
@@ -52,6 +53,7 @@ function SavesNavigator() {
 }
 
 export function AppNavigator() {
+  const insets = useSafeAreaInsets();
   const { user, loading, error, retry } = useAuth();
   const [logoutError, setLogoutError] = useState<string | null>(null);
 
@@ -81,7 +83,7 @@ export function AppNavigator() {
         headerShown: false,
         tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: '#9e96b8',
-        tabBarStyle: { backgroundColor: colors.panel, borderTopColor: colors.border },
+        tabBarStyle: { backgroundColor: colors.panel, borderTopColor: colors.border, height: 60 + insets.bottom, paddingTop: 5, paddingBottom: 5 + insets.bottom },
         tabBarItemStyle: { overflow: 'hidden' },
         tabBarLabelStyle: { fontSize: 10, fontWeight: '600' },
         tabBarIcon: ({ color, size }) => <Icon name={icons[route.name]} color={color} size={size} />,
