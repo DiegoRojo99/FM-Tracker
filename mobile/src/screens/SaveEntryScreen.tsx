@@ -84,7 +84,7 @@ function TeamSearch({ selected, onChange, disabled }: { selected: CareerTeam | n
   const teams = resource.data?.search === search ? resource.data.items : [];
   return <>
     <TextField label="Team search" placeholder="Enter at least 2 characters" value={query} onChangeText={setQuery} editable={!disabled} autoCapitalize="none" />
-    <Button title="Search teams" secondary disabled={disabled || query.trim().length < 2 || resource.loading} onPress={() => {
+    <Button title="Search teams" disabled={disabled || query.trim().length < 2 || resource.loading} onPress={() => {
       onChange(null);
       if (search === query.trim()) resource.refresh();
       else setSearch(query.trim());
@@ -167,7 +167,7 @@ function SeasonForm({ save, onSaved }: FormProps) {
         <SelectField label={`Round reached ${index + 1}`} value={cup.reachedRound} options={CUP_ROUNDS.map(round => ({ value: round, label: round }))} disabled={blocked} onChange={value => setCups(items => items.map(item => item.key === cup.key ? { ...item, reachedRound: value } : item))} />
         <Button title={`Remove cup ${index + 1}`} secondary disabled={blocked} onPress={() => setCups(items => items.filter(item => item.key !== cup.key))} />
       </View>)}
-      <Button title="Add cup result" secondary disabled={blocked} onPress={() => {
+      <Button title="Add cup result" disabled={blocked} onPress={() => {
         const key = ++cupKey.current;
         setCups(items => [...items, { key, competitionId: '', reachedRound: CUP_ROUNDS[0] }]);
       }} />
