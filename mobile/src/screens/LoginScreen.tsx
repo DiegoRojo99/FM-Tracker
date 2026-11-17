@@ -62,11 +62,6 @@ export function LoginScreen() {
               <Text style={styles.eyebrow}>Your career companion</Text>
             </View>
           </View>
-          <View style={{ gap: 12 }}>
-            <Text style={styles.eyebrow}>Welcome back, manager</Text>
-            <Text style={[styles.title, { fontSize: 36 }]}>Your legacy.{'\n'}Always with you.</Text>
-            <Text style={styles.body}>Track your saves, chase silverware, and build your Football Manager story.</Text>
-          </View>
           <View style={styles.panel}>
             <Text accessibilityRole="header" style={styles.heading}>Login to FM Tracker</Text>
             <Text style={styles.body}>Sign in to pick up where you left off.</Text>
