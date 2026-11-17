@@ -49,7 +49,9 @@ do not require browser CORS changes.
 Data comes from the existing `/api` endpoints using refreshed Firebase ID tokens.
 There is no sample-data fallback. This initial mobile version is a **read-only
 companion**: create/edit saves, seasons, and trophies on the website, then refresh
-on mobile. Email/password is supported; browser popup Google sign-in is not used
+on mobile. Register or sign in with email/password on mobile or the website;
+both use the same Firebase account. Email/password authentication must be enabled
+in the Firebase project. Browser popup Google sign-in is not used
 because it does not work in native Expo Go. Google-only accounts need an
 email/password provider linked in Firebase before using this login.
 
@@ -73,7 +75,7 @@ npm run check:expo
 npx expo export --platform all
 ```
 
-Before shipping, also smoke-test a real account in Expo Go: login, all five tabs,
+Before shipping, also smoke-test a real account in Expo Go: registration, login, all five tabs,
 save details, Android back/iOS swipe back, refresh, restart/session restoration,
 sign-out, bad credentials, and offline/retry. Export/type checks do not replace
 physical-device verification.
