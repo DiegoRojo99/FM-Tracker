@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "FM Tracker",
+    "slug": "fm-tracker-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0a0f1e",
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "name": "FM Tracker Mobile"
+    },
+    "plugins": [
+      "expo-status-bar"
+    ]
+  }
+}

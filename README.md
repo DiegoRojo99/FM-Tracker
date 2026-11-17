@@ -16,6 +16,15 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Mobile app
+
+The Expo Go-compatible React Native app lives in [`mobile/`](mobile/README.md).
+It shares this project's Firebase accounts and API, with mandatory login, Saves
+as the main tab, save details, Challenges, Achievements, Trophies, and Profile.
+See the mobile README for device setup and environment configuration.
+Users can register or sign in with email and password on both web and mobile
+when the Firebase project's email/password provider is enabled.
+
 ## Tracking FM27
 
 New saves default to FM27 (starting season `2026/27`). Choose another active game
