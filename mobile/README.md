@@ -40,6 +40,9 @@ do not require browser CORS changes.
   Login restoration and backend account setup finish before any tabs are mounted.
   Sign-out destroys protected navigation and its cached screen state.
 - Saves is the default tab, with search, game filtering, and tappable save cards.
+- Create saves from the Saves tab: choose an active game version, start with a
+  club (country, men's/women's domestic league, team) or unemployed, then review.
+  Successful creation opens the save details; returning refreshes the saves list.
 - Save details includes appointments, season/league/cup results, trophies, and
   challenge goal progress, with native back navigation.
 - Challenges, achievements, grouped trophies, and account statistics/profile.
@@ -47,10 +50,10 @@ do not require browser CORS changes.
   pull-to-refresh, loading, retry, and empty states.
 
 Data comes from the existing `/api` endpoints using refreshed Firebase ID tokens.
-There is no sample-data fallback. This initial mobile version is a **read-only
-companion**: create/edit saves, seasons, and trophies on the website, then refresh
-on mobile. Register or sign in with email/password on mobile or the website;
-both use the same Firebase account. Email/password authentication must be enabled
+There is no sample-data fallback. Save creation is available on mobile;
+editing saves and logging seasons, appointments, and trophies still use the
+website, then refresh on mobile. Register or sign in with email/password on mobile
+or the website; both use the same Firebase account. Email/password authentication must be enabled
 in the Firebase project. Browser popup Google sign-in is not used
 because it does not work in native Expo Go. Google-only accounts need an
 email/password provider linked in Firebase before using this login.
@@ -75,7 +78,7 @@ npm run check:expo
 npx expo export --platform all
 ```
 
-Before shipping, also smoke-test a real account in Expo Go: registration, login, all five tabs,
-save details, Android back/iOS swipe back, refresh, restart/session restoration,
-sign-out, bad credentials, and offline/retry. Export/type checks do not replace
-physical-device verification.
+Before shipping, also smoke-test a real account in Expo Go: registration, login,
+all five tabs, club/unemployed save creation, save details, Android back/iOS swipe
+back, refresh, restart/session restoration, sign-out, bad credentials, and
+offline/retry. Export/type checks do not replace physical-device verification.

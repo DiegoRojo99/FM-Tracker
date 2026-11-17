@@ -7,6 +7,7 @@ import { logout, useAuth } from './auth/AuthProvider';
 import { Button, Icon, type IconName } from './components/ui';
 import { LoginScreen } from './screens/LoginScreen';
 import { SavesScreen } from './screens/SavesScreen';
+import { CreateSaveScreen } from './screens/CreateSaveScreen';
 import { SaveDetailsScreen } from './screens/SaveDetailsScreen';
 import { ChallengesScreen } from './screens/ChallengesScreen';
 import { AchievementsScreen } from './screens/AchievementsScreen';
@@ -16,6 +17,7 @@ import { colors, styles } from './theme';
 
 export type SavesStackParams = {
   SavesList: undefined;
+  CreateSave: undefined;
   SaveDetails: { id: string };
 };
 type TabParams = {
@@ -40,6 +42,7 @@ function SavesNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: colors.background }, headerTintColor: colors.text, contentStyle: { backgroundColor: colors.background }, headerShadowVisible: false }}>
       <Stack.Screen name="SavesList" component={SavesScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="CreateSave" component={CreateSaveScreen} options={{ title: 'New save', headerBackButtonDisplayMode: 'minimal' }} />
       <Stack.Screen name="SaveDetails" component={SaveDetailsScreen} options={{ title: 'Save details', headerBackButtonDisplayMode: 'minimal' }} />
     </Stack.Navigator>
   );

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Crest, Empty, Icon, ResourceState, Screen } from '../components/ui';
+import { Button, Crest, Empty, Icon, ResourceState, Screen } from '../components/ui';
 import { useResource } from '../hooks/useResource';
 import type { ApiClient } from '../lib/api';
 import type { SavePreview } from '../lib/types';
@@ -22,6 +22,7 @@ export function SavesScreen({ navigation }: NativeStackScreenProps<SavesStackPar
 
   return (
     <Screen title="Your saves" eyebrow="The dugout" subtitle="Every career has a story. Pick up yours." refreshing={resource.loading && Boolean(resource.data)} onRefresh={resource.refresh}>
+      <Button title="Create new save" icon="add-outline" onPress={() => navigation.navigate('CreateSave')} />
       <View style={[styles.row, styles.input]}>
         <Icon name="search-outline" size={20} color={colors.muted} />
         <TextInput accessibilityLabel="Search saves" placeholder="Search teams, leagues, seasons..." placeholderTextColor="#8d85a8" value={search} onChangeText={setSearch} style={{ flex: 1, color: colors.text, fontSize: 14 }} />
@@ -63,7 +64,7 @@ export function SavesScreen({ navigation }: NativeStackScreenProps<SavesStackPar
             </Pressable>
           );
         })}
-        {!saves.length && <Empty title={resource.data.length ? 'No matching saves' : 'Your next chapter awaits'} message={resource.data.length ? 'Try another search or game filter.' : 'Create your first save on the FM Tracker website. It will appear here when you refresh.'} />}
+        {!saves.length && <Empty title={resource.data.length ? 'No matching saves' : 'Your next chapter awaits'} message={resource.data.length ? 'Try another search or game filter.' : 'Tap Create new save to start your first career.'} />}
       </>}
     </Screen>
   );

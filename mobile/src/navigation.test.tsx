@@ -15,6 +15,7 @@ vi.mock('./components/ui', () => ({ Button: ({ title }: { title: string }) => <b
 vi.mock('./theme', () => ({ colors: {}, styles: {} }));
 vi.mock('./screens/LoginScreen', () => ({ LoginScreen: () => <div>Login required</div> }));
 vi.mock('./screens/SavesScreen', () => ({ SavesScreen: () => null }));
+vi.mock('./screens/CreateSaveScreen', () => ({ CreateSaveScreen: () => null }));
 vi.mock('./screens/SaveDetailsScreen', () => ({ SaveDetailsScreen: () => null }));
 vi.mock('./screens/ChallengesScreen', () => ({ ChallengesScreen: () => null }));
 vi.mock('./screens/AchievementsScreen', () => ({ AchievementsScreen: () => null }));
