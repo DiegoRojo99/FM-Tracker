@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Crest, Empty, Icon, Progress, ResourceState, Screen, Stats } from '../components/ui';
+import { Button, Crest, Empty, Icon, Progress, ResourceState, Screen, Stats } from '../components/ui';
 import { useResource } from '../hooks/useResource';
 import type { ApiClient } from '../lib/api';
 import type { SaveDetails } from '../lib/types';
@@ -9,7 +9,7 @@ import { challengePercent } from '../lib/progress';
 import type { SavesStackParams } from '../navigation';
 import { colors, styles } from '../theme';
 
-export function SaveDetailsScreen({ route }: NativeStackScreenProps<SavesStackParams, 'SaveDetails'>) {
+export function SaveDetailsScreen({ route, navigation }: NativeStackScreenProps<SavesStackParams, 'SaveDetails'>) {
   const load = useCallback((api: ApiClient) => api<SaveDetails>(`/api/saves/${encodeURIComponent(route.params.id)}`), [route.params.id]);
   const resource = useResource(load);
   const save = resource.data;
@@ -32,6 +32,7 @@ export function SaveDetailsScreen({ route }: NativeStackScreenProps<SavesStackPa
 
         <View style={styles.panel}>
           <View style={styles.row}><Icon name="git-branch-outline" /><Text accessibilityRole="header" style={styles.heading}>Career timeline</Text></View>
+          {save.isOwner && <Button title="Add stint" icon="add-outline" secondary onPress={() => navigation.navigate('AddSaveEntry', { id: save.id, kind: 'stint' })} />}
           {[...save.careerStints].sort((a, b) => b.startDate.localeCompare(a.startDate)).map(stint => (
             <View key={stint.id} style={styles.inset}>
               <View style={styles.row}>
@@ -49,6 +50,7 @@ export function SaveDetailsScreen({ route }: NativeStackScreenProps<SavesStackPa
 
         <View style={styles.panel}>
           <View style={styles.row}><Icon name="calendar-outline" /><Text accessibilityRole="header" style={styles.heading}>Season history</Text></View>
+          {save.isOwner && <Button title="Add season" icon="add-outline" secondary onPress={() => navigation.navigate('AddSaveEntry', { id: save.id, kind: 'season' })} />}
           {[...save.seasons].sort((a, b) => b.season.localeCompare(a.season)).map(season => (
             <View key={season.id} style={styles.inset}>
               <View style={styles.between}><Text style={styles.heading}>{season.season}</Text><Text style={styles.badge}>{season.team.name}</Text></View>
@@ -65,6 +67,7 @@ export function SaveDetailsScreen({ route }: NativeStackScreenProps<SavesStackPa
 
         <View style={styles.panel}>
           <View style={styles.row}><Icon name="trophy-outline" /><Text accessibilityRole="header" style={styles.heading}>Trophy cabinet</Text></View>
+          {save.isOwner && <Button title="Add trophy" icon="add-outline" secondary onPress={() => navigation.navigate('AddSaveEntry', { id: save.id, kind: 'trophy' })} />}
           {[...save.trophies].sort((a, b) => b.dateWon.localeCompare(a.dateWon)).map(trophy => (
             <View key={trophy.id} style={styles.row}>
               <Crest path={trophy.competitionGroup.logoUrl} name={trophy.competitionGroup.name} size={36} />

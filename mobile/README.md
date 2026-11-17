@@ -45,13 +45,17 @@ do not require browser CORS changes.
   Successful creation opens the save details; returning refreshes the saves list.
 - Save details includes appointments, season/league/cup results, trophies, and
   challenge goal progress, with native back navigation.
+- Owners can add club/national-team stints, seasons with optional league/cup
+  results, and trophies from save details. Season/trophy teams come from career
+  history; add a stint first for unemployed saves. Dates use `YYYY-MM-DD`.
+  Returning after a successful submission refreshes the save.
 - Challenges, achievements, grouped trophies, and account statistics/profile.
 - Midnight, violet, and lavender styling matching the web app, safe areas,
   pull-to-refresh, loading, retry, and empty states.
 
 Data comes from the existing `/api` endpoints using refreshed Firebase ID tokens.
-There is no sample-data fallback. Save creation is available on mobile;
-editing saves and logging seasons, appointments, and trophies still use the
+There is no sample-data fallback. Creating saves and adding seasons, appointments,
+and trophies are available on mobile; editing/deleting entries still uses the
 website, then refresh on mobile. Register or sign in with email/password on mobile
 or the website; both use the same Firebase account. Email/password authentication must be enabled
 in the Firebase project. Browser popup Google sign-in is not used
@@ -79,6 +83,7 @@ npx expo export --platform all
 ```
 
 Before shipping, also smoke-test a real account in Expo Go: registration, login,
-all five tabs, club/unemployed save creation, save details, Android back/iOS swipe
+all five tabs, club/unemployed save creation, adding stints/seasons/trophies,
+save details, Android back/iOS swipe
 back, refresh, restart/session restoration, sign-out, bad credentials, and
 offline/retry. Export/type checks do not replace physical-device verification.

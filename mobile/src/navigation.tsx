@@ -9,6 +9,7 @@ import { LoginScreen } from './screens/LoginScreen';
 import { SavesScreen } from './screens/SavesScreen';
 import { CreateSaveScreen } from './screens/CreateSaveScreen';
 import { SaveDetailsScreen } from './screens/SaveDetailsScreen';
+import { SaveEntryScreen } from './screens/SaveEntryScreen';
 import { ChallengesScreen } from './screens/ChallengesScreen';
 import { AchievementsScreen } from './screens/AchievementsScreen';
 import { TrophiesScreen } from './screens/TrophiesScreen';
@@ -19,6 +20,7 @@ export type SavesStackParams = {
   SavesList: undefined;
   CreateSave: undefined;
   SaveDetails: { id: string };
+  AddSaveEntry: { id: string; kind: 'stint' | 'season' | 'trophy' };
 };
 type TabParams = {
   Saves: undefined;
@@ -44,6 +46,7 @@ function SavesNavigator() {
       <Stack.Screen name="SavesList" component={SavesScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CreateSave" component={CreateSaveScreen} options={{ title: 'New save', headerBackButtonDisplayMode: 'minimal' }} />
       <Stack.Screen name="SaveDetails" component={SaveDetailsScreen} options={{ title: 'Save details', headerBackButtonDisplayMode: 'minimal' }} />
+      <Stack.Screen name="AddSaveEntry" component={SaveEntryScreen} options={{ title: 'Update career', headerBackButtonDisplayMode: 'minimal' }} />
     </Stack.Navigator>
   );
 }

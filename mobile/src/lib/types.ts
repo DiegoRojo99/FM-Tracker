@@ -1,6 +1,8 @@
 // JSON contracts for the existing Next.js API; dates are serialized strings.
 export type Team = { id: number; name: string; logo: string | null };
 export type Competition = { id: number; name: string; logoUrl: string | null };
+export type CareerTeam = Team & { countryCode: string; national: boolean; isFemale: boolean | null };
+export type SaveCompetition = Competition & { countryCode: string; tier: number | null; isFemale: boolean | null };
 export type Game = { id: string; name: string; shortName: string };
 
 export type SavePreview = {
@@ -44,7 +46,7 @@ export type SaveDetails = SavePreview & {
   isOwner: boolean;
   careerStints: {
     id: number;
-    team: Team;
+    team: CareerTeam;
     startDate: string;
     endDate: string | null;
     isNational: boolean;
