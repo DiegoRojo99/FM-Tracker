@@ -17,7 +17,7 @@ function getFriendlyAuthError(err: unknown, registering = false): string {
     'auth/user-not-found': 'Invalid email or password. Please try again.',
     'auth/invalid-email': 'Please enter a valid email address.',
     'auth/missing-password': 'Please enter your password.',
-    'auth/email-already-in-use': 'An account already exists for this email. Please sign in instead.',
+    'auth/email-already-in-use': 'An account already exists for this email. Sign in, or use Google on the website and set up a password in your profile.',
     'auth/weak-password': 'Password is too weak. Please choose a stronger password.',
     'auth/operation-not-allowed': 'Email/password authentication is not enabled. Please contact support.',
     'auth/too-many-requests': 'Too many login attempts. Please wait a few minutes and try again.',

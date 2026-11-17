@@ -24,6 +24,10 @@ as the main tab, save details, Challenges, Achievements, Trophies, and Profile.
 See the mobile README for device setup and environment configuration.
 Users can register or sign in with email and password on both web and mobile
 when the Firebase project's email/password provider is enabled.
+For an existing Google account, sign in with Google on the website, open your
+profile, and use **Set up password**. Google verification links the password to
+the same Firebase UID, preserving saves and Google sign-in. Registering again
+with the same email does not link accounts.
 
 ## Tracking FM27
 

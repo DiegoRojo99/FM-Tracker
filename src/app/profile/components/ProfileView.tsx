@@ -8,6 +8,7 @@ import { UserStats } from '@/lib/types/prisma/Stats'
 import { GradientButton } from '@/app/components/GradientButton'
 import FootballLoader from '@/app/components/FootBallLoader'
 import { Calendar, Crown, Flag, ShieldCheck, Sparkles, Star, Trophy, TrendingUp, Users } from 'lucide-react'
+import SetPasswordForm from './SetPasswordForm'
 
 interface ProfileViewProps {
   userId?: string // If provided, show that user's profile; otherwise show current user
@@ -281,6 +282,10 @@ export default function ProfileView({ userId }: ProfileViewProps) {
             </div>
           </div>
         </div>
+
+        {profile.isOwnProfile && currentUser?.uid === profile.user.uid && (
+          <SetPasswordForm key={currentUser.uid} user={currentUser} />
+        )}
 
         <div className="fm-panel p-4 sm:p-5">
           <h2 className="mb-4 break-words text-xl font-semibold text-[var(--color-foreground)]">

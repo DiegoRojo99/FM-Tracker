@@ -14,7 +14,7 @@ function authMessage(error: unknown, registering = false) {
     'auth/user-not-found': 'Invalid email or password. Please try again.',
     'auth/wrong-password': 'Invalid email or password. Please try again.',
     'auth/invalid-email': 'Please enter a valid email address.',
-    'auth/email-already-in-use': 'An account already exists for this email. Please sign in instead.',
+    'auth/email-already-in-use': 'An account already exists for this email. Sign in, or use Google on the website and set up a password in your profile.',
     'auth/weak-password': 'Password is too weak. Please choose a stronger password.',
     'auth/too-many-requests': 'Too many attempts. Please wait a few minutes and try again.',
     'auth/network-request-failed': 'Unable to connect. Check your internet connection.',
