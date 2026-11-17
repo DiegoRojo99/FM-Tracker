@@ -1,0 +1,39 @@
+import { StyleSheet } from 'react-native';
+
+export const colors = {
+  background: '#0a0f1e',
+  panel: '#10162a',
+  surface: '#182036',
+  border: '#ffffff1a',
+  text: '#e6e6fa',
+  muted: '#d2c8f5',
+  accent: '#af78ff',
+  primary: '#6e0fd7',
+  pink: '#ff0073',
+  success: '#6ee7b7',
+  danger: '#ff9e9e',
+};
+
+export const styles = StyleSheet.create({
+  fill: { flex: 1, backgroundColor: colors.background },
+  content: { padding: 20, gap: 18, paddingBottom: 32, width: '100%', maxWidth: 720, alignSelf: 'center' },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 28, gap: 18, backgroundColor: colors.background },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  between: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
+  grow: { flex: 1, gap: 5 },
+  panel: { padding: 20, gap: 16, borderRadius: 18, backgroundColor: colors.panel, borderWidth: 1, borderColor: colors.border },
+  inset: { padding: 14, gap: 8, borderRadius: 12, backgroundColor: colors.surface },
+  title: { color: colors.text, fontSize: 30, fontWeight: '700', letterSpacing: -0.8 },
+  heading: { color: colors.text, fontSize: 19, fontWeight: '600' },
+  body: { color: colors.muted, fontSize: 14, lineHeight: 22 },
+  small: { color: colors.muted, fontSize: 12, lineHeight: 18 },
+  eyebrow: { color: colors.accent, fontSize: 11, letterSpacing: 2, fontWeight: '700', textTransform: 'uppercase' },
+  badge: { color: colors.accent, fontSize: 11, fontWeight: '700', backgroundColor: '#6e0fd726', borderRadius: 6, paddingHorizontal: 9, paddingVertical: 5, overflow: 'hidden', alignSelf: 'flex-start' },
+  input: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.background, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 14, color: colors.text, fontSize: 16, minHeight: 50 },
+  button: { minHeight: 48, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', gap: 8 },
+  secondary: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
+  buttonText: { color: colors.text, fontSize: 14, fontWeight: '600', textAlign: 'center' },
+  error: { color: colors.danger, fontSize: 14, lineHeight: 21 },
+  divider: { height: 1, backgroundColor: colors.border },
+  wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+});
