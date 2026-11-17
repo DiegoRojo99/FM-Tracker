@@ -1,12 +1,14 @@
 import { useState, type ComponentProps, type ReactNode } from 'react';
 import { ActivityIndicator, Image, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { GradientButton } from './GradientButton';
 import { colors, styles } from '../theme';
 import { assetUrl } from '../lib/config';
 
 export type IconName = ComponentProps<typeof Ionicons>['name'];
+export { GradientButton } from './GradientButton';
+export type { GradientButtonProps } from './GradientButton';
 
 export function Icon({ name, size = 22, color = colors.accent }: { name: IconName; size?: number; color?: string }) {
   return <Ionicons name={name} size={size} color={color} />;
@@ -15,6 +17,9 @@ export function Icon({ name, size = 22, color = colors.accent }: { name: IconNam
 export function Button({ title, onPress, disabled, busy, secondary = false, icon }: {
   title: string; onPress: () => void; disabled?: boolean; busy?: boolean; secondary?: boolean; icon?: IconName;
 }) {
+  if (!secondary) {
+    return <GradientButton title={title} onPress={onPress} disabled={disabled} busy={busy} icon={icon ? <Icon name={icon} size={18} color="#ffffff" /> : undefined} />;
+  }
   const content = <>
     {busy ? <ActivityIndicator color={colors.text} /> : icon && <Icon name={icon} size={18} color={colors.text} />}
     <Text style={styles.buttonText}>{title}</Text>
@@ -27,9 +32,7 @@ export function Button({ title, onPress, disabled, busy, secondary = false, icon
       onPress={onPress}
       style={({ pressed }) => ({ opacity: disabled || busy ? 0.5 : pressed ? 0.75 : 1 })}
     >
-      {secondary
-        ? <View style={[styles.button, styles.secondary]}>{content}</View>
-        : <LinearGradient colors={[colors.primary, '#9620db']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.button}>{content}</LinearGradient>}
+      <View style={[styles.button, styles.secondary]}>{content}</View>
     </Pressable>
   );
 }

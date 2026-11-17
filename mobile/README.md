@@ -62,6 +62,14 @@ in the Firebase project. Browser popup Google sign-in is not used
 because it does not work in native Expo Go. Google-only accounts need an
 email/password provider linked in Firebase before using this login.
 
+## Shared buttons
+
+Primary buttons use the shared `GradientButton` (also exported from
+`src/components/ui.tsx`), matching the website's pink-to-violet action gradient.
+It accepts `title`, `onPress`, an optional icon element, `busy`, `disabled`,
+container `style`, and native pressable/accessibility props. Existing `Button`
+calls use it by default; `secondary` keeps the flat secondary appearance.
+
 ## Dependency policy
 
 Use JavaScript libraries or native modules already shipped in Expo Go. Navigation

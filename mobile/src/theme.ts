@@ -10,6 +10,7 @@ export const colors = {
   accent: '#af78ff',
   primary: '#6e0fd7',
   pink: '#ff0073',
+  highlightViolet: '#bf00ff',
   success: '#6ee7b7',
   danger: '#ff9e9e',
 };
