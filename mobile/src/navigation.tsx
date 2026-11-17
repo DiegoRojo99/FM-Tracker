@@ -76,6 +76,7 @@ export function AppNavigator() {
         tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: '#9e96b8',
         tabBarStyle: { backgroundColor: colors.panel, borderTopColor: colors.border },
+        tabBarItemStyle: { overflow: 'hidden' },
         tabBarLabelStyle: { fontSize: 10, fontWeight: '600' },
         tabBarIcon: ({ color, size }) => <Icon name={icons[route.name]} color={color} size={size} />,
       })}>
